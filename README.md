@@ -2,16 +2,31 @@
 
 ROGII Python SDK designed for making data scientists' work easier
 
-## Инструкция по установке для разработчика
-_Для операционной системы Windows_
+## User's manual
+Requirements
+------------
 
-По умолчанию Python SDK устанавливается из ?приватного? pypi репозитория gitlab. Если необходимо изменять SDK и 
-тестировать изменения локально в связке с Solo Connect, то необходимо установить SDK из локальной директории 
-в режиме редактирования ('-e').
+Instalation
+------------
 
-1. Клонируем репозиторий SDK
+Usage
+-----
+
+
+## Developer's manual
+_for MS Windows_
+
+By default, the Python SDK is installed from a private gitlab repository. Set Python SDK 
+from local directory in edit mode ('-e') if you need to modify and to test SDK locally with Solo Connect. 
+
+
+1. Cloning the Python SDK repository
     ```bash
     git clone ssh://git@gitlab.rogii.com:63022/SOLO-band/python-sdk.git
     ```
 	
 2. ...
+
+
+
+
