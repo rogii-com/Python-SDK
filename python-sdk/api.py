@@ -2,9 +2,9 @@ from typing import Optional
 
 class PyRogii:
     def __init__(self,
-                 project_id: int,
-                 client_id: int,
-                 client_secret: Optional[str] = None,
+                 project_id: str,
+                 client_id: str,
+                 client_secret: str,
                  solo_username: Optional[str] = None,
                  solo_password: Optional[str] = None
                 ):
