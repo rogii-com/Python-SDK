@@ -13,7 +13,6 @@ class PyRogii:
                  solo_password: str,
                  papi_domain_name: str = SOLO_PAPI_DEFAULT_DOMAIN_NAME
                  ):
-
         self.papi_client = PapiClient(
             SettingsAuth(
                 client_id=client_id,
@@ -23,7 +22,6 @@ class PyRogii:
                 papi_domain_name=papi_domain_name
             )
         )
-
 
     def fetch_projects(self, project_filter: str = None):
         return self.papi_client.fetch_projects(project_filter=project_filter)
