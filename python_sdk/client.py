@@ -25,7 +25,5 @@ class PyRogii:
         )
 
 
-    def fetch_projects(self,
-                       project_filter: str = None
-                       ):
+    def fetch_projects(self, project_filter: str = None):
         return self.papi_client.fetch_projects(project_filter=project_filter)

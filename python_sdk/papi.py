@@ -13,7 +13,6 @@ from .utils.settings import SettingsAuth
 
 class PapiClient(SdkPapiClient):
     def __init__(self, settings_auth: SettingsAuth):
-        print('settings_auth:', settings_auth)
         app_id = base64.standard_b64encode(PYTHON_SDK_APP_ID.encode()).decode()
 
         FINGERPRINT = hashlib.sha256(str(uuid.uuid4()).encode()).hexdigest()
@@ -24,7 +23,6 @@ class PapiClient(SdkPapiClient):
 
         papi_url = urljoin(settings_auth.papi_domain_name, SOLO_PAPI_URL)
         papi_auth_url = urljoin(settings_auth.papi_domain_name, SOLO_OPEN_AUTH_SERVICE_URL)
-        print(f'papi_url={papi_url}\n  papi_auth_url={papi_auth_url}')
 
         super().__init__(
             papi_url = papi_url,

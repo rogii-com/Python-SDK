@@ -7,5 +7,3 @@ class SettingsAuth(NamedTuple):
     solo_username: str
     solo_password: str
     papi_domain_name: str
-
-
