@@ -1,4 +1,4 @@
-from typing import Optional
+import pandas as pd
 
 from .papi import PapiClient
 from .utils.constants import SOLO_PAPI_DEFAULT_DOMAIN_NAME
@@ -23,5 +23,8 @@ class PyRogii:
             )
         )
 
-    def fetch_projects(self, project_filter: str = None):
-        return self.papi_client.fetch_projects(project_filter=project_filter)
+    def _to_pandas_dataframe(self, src) -> pd.DataFrame:
+        return pd.DataFrame(src.get('content', None))
+
+    def fetch_projects(self, project_filter: str = None) -> pd.DataFrame:
+        return self._to_pandas_dataframe(self.papi_client.fetch_projects(project_filter=project_filter))
