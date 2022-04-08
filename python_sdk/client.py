@@ -23,8 +23,25 @@ class PyRogii:
             )
         )
 
-    def _to_pandas_dataframe(self, src) -> pd.DataFrame:
-        return pd.DataFrame(src.get('content', None))
+    def to_pandas_dataframe(self, list) -> pd.DataFrame:
+        return pd.DataFrame(list)
 
-    def fetch_projects(self, project_filter: str = None) -> pd.DataFrame:
-        return self._to_pandas_dataframe(self.papi_client.fetch_projects(project_filter=project_filter))
+    def fetch_projects(self, project_filter: str = None):
+        return self.papi_client.fetch_projects(project_filter=project_filter)
+
+    def get_projects(self, project_filter: str = None) -> pd.DataFrame:
+        return self.to_pandas_dataframe(self.fetch_projects(project_filter=project_filter)['content'])
+
+    def fetch_project_wells(self, project_uuid: str,  well_filter: str = None):
+        return self.papi_client.fetch_project_wells(project_uuid=project_uuid, well_filter=well_filter)
+
+    def get_project_wells(self, project_uuid: str,  well_filter: str = None):
+        data = self.papi_client.fetch_project_wells(project_uuid=project_uuid, well_filter=well_filter)
+        return self.to_pandas_dataframe(data['content'])
+
+    def fetch_well(self, well_uuid: str):
+        return self.papi_client.fetch_well(well_uuid=well_uuid)
+
+    def get_well(self, well_uuid: str):
+        data = self.papi_client.fetch_well(well_uuid=well_uuid)
+        return self.to_pandas_dataframe([data, ])
