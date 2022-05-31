@@ -3,12 +3,11 @@ from typing import List
 
 from pandas import DataFrame
 
-from .base import calc_segment_dip, get_nearest_values, get_most_common#, interpolate_linear
+from .base import calc_segment_dip, get_nearest_values, get_most_common
 
 from .trajectory import interpolate_trajectory_point
 from .constants import DELTA
 from .enums import EMeasureUnits
-# from .utils.objects import find_by_md, find_last_by_md
 
 
 def _calc_segments_dip(segments: List, assembled_horizons: DataFrame):
@@ -75,7 +74,6 @@ def get_segments(
         mds_map[point['md']] = i
 
     segments = []
-    # for i, assembled_segment in enumerate(assembled_segments):
     for i, assembled_segment in assembled_segments.iterrows():
         nearest_mds = get_nearest_values(
             value=assembled_segment['md'],
@@ -98,7 +96,6 @@ def get_segments(
                 md=assembled_segment['md'],
                 well=well,
                 measure_unit=measure_unit,
-                get_converted=False
             )
 
         segments.append(dict(

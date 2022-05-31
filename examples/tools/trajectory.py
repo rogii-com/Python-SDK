@@ -1,16 +1,11 @@
 import copy
-from enum import Enum
 from math import acos, cos, fabs, pi, sin, degrees
 from typing import Optional
 
 from pandas import DataFrame
 
 from .base import calc_atan2, calc_hypotenuse_length, calc_vs, calc_shape_factor, normalize_angle
-# from .models import Trajectory, TrajectoryPoint, Well
-# from .utils.constants import DELTA
-# from .utils.converters import convert_to_meters, convert_value, get_dls_unit_coefficient
 from .enums import EMeasureUnits
-
 from .constants import DELTA, FEET_TO_METERS
 
 
@@ -32,7 +27,6 @@ def calculate_trajectory(
             curr_point=_prepare_trajectory_point(point_dict, well['convergence']),
             well=well,
             measure_unit=measure_unit,
-            get_converted=False
         )
         calculated_trajectory.append(calculated_point)
         prev_point = calculated_point
@@ -45,7 +39,6 @@ def calculate_trajectory_point(
         curr_point: dict,
         well: dict,
         measure_unit: EMeasureUnits,
-        get_converted: bool = True
 ):
     if not prev_point:
         return _calculate_initial_trajectory_point(curr_point, well)
@@ -99,7 +92,6 @@ def interpolate_trajectory_point(
         md: float,
         well: dict,
         measure_unit: EMeasureUnits,
-        get_converted: bool = True
 ):
     if fabs(md - left_point['md']) < DELTA:
         return left_point

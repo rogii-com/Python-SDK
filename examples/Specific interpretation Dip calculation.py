@@ -11,7 +11,7 @@ from python_sdk.client import PyRogii
 PROJECT_NAME = 'nsapegin (ft)'
 WELL_NAME = 'Lateral1'
 INTERPRETATION_NAME = 'Interpretation1'
-measure_unit = EMeasureUnits.METER_FOOT
+MEASURE_UNIT = EMeasureUnits.METER_FOOT
 
 
 pr = PyRogii(
@@ -33,7 +33,7 @@ def interpretation_dip_calculation():
 
     well_trajectory = pr.get_well_trajectory(well_name=WELL_NAME)
 
-    calculated_trajectory = calculate_trajectory(well_trajectory, papi_well, measure_unit=measure_unit)
+    calculated_trajectory = calculate_trajectory(well_trajectory, papi_well, measure_unit=MEASURE_UNIT)
 
     interpretation = pr.get_well_starred_interpretation(well_name=WELL_NAME)
 
@@ -51,17 +51,17 @@ def interpretation_dip_calculation():
         assembled_segments=interpretation['segments'],
         assembled_horizons=interpretation['horizons'],
         calculated_trajectory=calculated_trajectory,
-        measure_unit=measure_unit
+        measure_unit=MEASURE_UNIT
     )
 
-    _df = DataFrame(segments, columns=['md', 'dip'])
-    np_array = _df.to_numpy()
-    axe = np.arange(np_array[0, 0], np_array[-1, 0], 50.0)
-    axe = np.unique(np.append(axe, np_array[:, 0]))
-    axe.sort()
-    interpolated_dip = np.interp(axe, np_array[:, 0], np_array[:, 1])
-    _result_df = DataFrame((axe, interpolated_dip), index=['md', 'dip']).transpose()
-    return _df, _result_df
+    calculated_dips = DataFrame(segments, columns=['md', 'dip'])
+    np_calculated_dips = calculated_dips.to_numpy()
+    interpolated_md = np.arange(np_calculated_dips[0, 0], np_calculated_dips[-1, 0], 50.0)
+    interpolated_md = np.unique(np.append(interpolated_md, np_calculated_dips[:, 0]))
+    interpolated_md.sort()
+    np_interpolated_dips = np.interp(interpolated_md, np_calculated_dips[:, 0], np_calculated_dips[:, 1])
+    interpolated_dips = DataFrame((interpolated_md, np_interpolated_dips), index=['md', 'dip']).transpose()
+    return calculated_dips, interpolated_dips
 
 
 if __name__ == '__main__':
