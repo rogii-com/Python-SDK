@@ -2,9 +2,9 @@ from os import environ
 
 import numpy as np
 from pandas import DataFrame
-from tools.interpretation import get_segments
-from tools.trajectory import calculate_trajectory
-from tools.enums import EMeasureUnits
+from calculations.interpretation import get_segments
+from calculations.trajectory import calculate_trajectory
+from calculations.enums import EMeasureUnits
 from python_sdk.client import PyRogii
 
 
@@ -28,7 +28,7 @@ def interpretation_dip_calculation():
     papi_well = pr.get_well(well_name=WELL_NAME)
 
     if not papi_well:
-        print(f'Well "{papi_well["name"]}" not found')
+        print(f'Well "{papi_well["name"]}" not found.')
         return
 
     well_trajectory = pr.get_well_trajectory(well_name=WELL_NAME)
@@ -43,7 +43,7 @@ def interpretation_dip_calculation():
         )
 
     if not interpretation:
-        print(f'Interpretation "{INTERPRETATION_NAME}" in the well "{WELL_NAME}" not found')
+        print(f'Interpretation "{INTERPRETATION_NAME}" in the well "{WELL_NAME}" not found.')
         return
 
     segments = get_segments(
@@ -56,11 +56,17 @@ def interpretation_dip_calculation():
 
     calculated_dips = DataFrame(segments, columns=['md', 'dip'])
     np_calculated_dips = calculated_dips.to_numpy()
-    interpolated_md = np.arange(np_calculated_dips[0, 0], np_calculated_dips[-1, 0], 50.0)
-    interpolated_md = np.unique(np.append(interpolated_md, np_calculated_dips[:, 0]))
-    interpolated_md.sort()
+    interpolated_md = sorted(
+        np.unique(
+            np.append(
+                np.arange(np_calculated_dips[0, 0], np_calculated_dips[-1, 0], 50.0),
+                np_calculated_dips[:, 0]
+            )
+        )
+    )
     np_interpolated_dips = np.interp(interpolated_md, np_calculated_dips[:, 0], np_calculated_dips[:, 1])
     interpolated_dips = DataFrame((interpolated_md, np_interpolated_dips), index=['md', 'dip']).transpose()
+
     return calculated_dips, interpolated_dips
 
 

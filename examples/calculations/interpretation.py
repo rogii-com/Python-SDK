@@ -10,7 +10,7 @@ from .constants import DELTA
 from .enums import EMeasureUnits
 
 
-def _calc_segments_dip(segments: List, assembled_horizons: DataFrame):
+def calc_segments_dip(segments: List, assembled_horizons: DataFrame):
     segments_with_dip = segments.copy()
     horizons = assembled_horizons.transpose().to_dict()
 
@@ -113,4 +113,4 @@ def get_segments(
         horizon_shifts=segments[-1]['horizon_shifts'],
     ))
 
-    return _calc_segments_dip(segments=segments, assembled_horizons=assembled_horizons)
+    return calc_segments_dip(segments=segments, assembled_horizons=assembled_horizons)
