@@ -4,7 +4,7 @@ from typing import Optional
 
 from pandas import DataFrame
 
-from .base import calc_atan2, calc_hypotenuse_length, calc_vs, calc_shape_factor, normalize_angle
+from .base import calc_atan2, calc_hypotenuse_length, calc_shape_factor, normalize_angle, calc_vs as base_calc_vs
 from .enums import EMeasureUnits
 from .constants import DELTA, FEET_TO_METERS
 
@@ -24,7 +24,7 @@ def calculate_trajectory(
         point_dict = raw.to_dict()
         calculated_point = calculate_trajectory_point(
             prev_point=prev_point,
-            curr_point=_prepare_trajectory_point(point_dict, well['convergence']),
+            curr_point=prepare_trajectory_point(point_dict, well['convergence']),
             well=well,
             measure_unit=measure_unit,
         )
@@ -41,7 +41,7 @@ def calculate_trajectory_point(
         measure_unit: EMeasureUnits,
 ):
     if not prev_point:
-        return _calculate_initial_trajectory_point(curr_point, well)
+        return calculate_initial_trajectory_point(curr_point, well)
 
     course_length = curr_point['md'] - prev_point['md']
 
@@ -59,8 +59,8 @@ def calculate_trajectory_point(
         * (1.0 - cos(curr_azim - prev_point['azim']))
     )
 
-    dls = _calc_dls(dog_leg, course_length, measure_unit=measure_unit)
-    shape = _calc_shape(dog_leg, course_length)
+    dls = calc_dls(dog_leg, course_length, measure_unit=measure_unit)
+    shape = calc_shape(dog_leg, course_length)
 
     tvd = prev_point['tvd'] + shape * (curr_incl_cos + prev_incl_cos)
 
@@ -73,12 +73,12 @@ def calculate_trajectory_point(
         azim=curr_azim,
         tvd=tvd,
         tvt=tvd,
-        tvdss=_calc_tvdss(well['kb'], tvd),
+        tvdss=calc_tvdss(well['kb'], tvd),
         ns=ns,
         ew=ew,
-        x=_calc_x(ew, well['xsrf_real']),
-        y=_calc_y(ns, well['ysrf_real']),
-        vs=_calc_vs(ns, ew, well['azimuth']),
+        x=calc_x(ew, well['xsrf_real']),
+        y=calc_y(ns, well['ysrf_real']),
+        vs=calc_vs(ns, ew, well['azimuth']),
         dls=dls,
         dog_leg=dog_leg
     )
@@ -103,7 +103,7 @@ def interpolate_trajectory_point(
     course_length = md - left_point['md']
     dog_leg = (course_length / point_course_length) * right_point['dog_leg']
 
-    shape = _calc_shape(dog_leg, course_length)
+    shape = calc_shape(dog_leg, course_length)
 
     left_incl_sin = sin(left_point['incl'])
     left_incl_cos = cos(left_point['incl'])
@@ -167,9 +167,9 @@ def interpolate_trajectory_point(
     ns = left_point['ns'] + shape * (ext_delta_ns + left_incl_sin * left_azim_cos)
     ew = left_point['ew'] + shape * (ext_delta_ew + left_incl_sin * left_azim_sin)
 
-    x = _calc_x(ew, well['xsrf_real'])
-    y = _calc_y(ns, well['ysrf_real'])
-    vs = _calc_vs(ns, ew, well['azimuth'])
+    x = calc_x(ew, well['xsrf_real'])
+    y = calc_y(ns, well['ysrf_real'])
+    vs = calc_vs(ns, ew, well['azimuth'])
 
     incl = calc_atan2(calc_hypotenuse_length(ext_delta_ns, ext_delta_ew), ext_delta_tvd)
 
@@ -178,7 +178,7 @@ def interpolate_trajectory_point(
 
     azim = normalize_angle(calc_atan2(ext_delta_ew, ext_delta_ns))
 
-    dls = _calc_dls(dog_leg, course_length, measure_unit=measure_unit)
+    dls = calc_dls(dog_leg, course_length, measure_unit=measure_unit)
     point = dict(
         md=md,
         incl=incl,
@@ -189,7 +189,7 @@ def interpolate_trajectory_point(
         ew=ew,
         x=x,
         y=y,
-        tvdss=_calc_tvdss(kb=well['kb'], tvd=tvd),
+        tvdss=calc_tvdss(kb=well['kb'], tvd=tvd),
         vs=vs,
         dls=dls,
         dog_leg=dog_leg
@@ -198,7 +198,7 @@ def interpolate_trajectory_point(
     return point
 
 
-def _calculate_initial_trajectory_point(
+def calculate_initial_trajectory_point(
         point: dict,
         well: dict,
 ):
@@ -210,36 +210,36 @@ def _calculate_initial_trajectory_point(
         azim=normalize_angle(point['azim']),
         tvd=tvd,
         tvt=tvd,
-        tvdss=_calc_tvdss(well['kb'], tvd),
+        tvdss=calc_tvdss(well['kb'], tvd),
         ns=well['tie_in_ns'],
         ew=well['tie_in_ew'],
-        x=_calc_x(well['tie_in_ew'], well['xsrf_real']),
-        y=_calc_y(well['tie_in_ns'], well['ysrf_real']),
-        vs=_calc_vs(well['tie_in_ns'], well['tie_in_ew'], well['azimuth']),
+        x=calc_x(well['tie_in_ew'], well['xsrf_real']),
+        y=calc_y(well['tie_in_ns'], well['ysrf_real']),
+        vs=calc_vs(well['tie_in_ns'], well['tie_in_ew'], well['azimuth']),
         dls=0,
         dog_leg=0
     )
     return point
 
 
-def _calc_x(ew: float, xsrf: Optional[float]) -> Optional[float]:
+def calc_x(ew: float, xsrf: Optional[float]) -> Optional[float]:
     if xsrf is not None:
         return (ew or 0) + xsrf
 
 
-def _calc_y(ns: float, ysrf: Optional[float]) -> Optional[float]:
+def calc_y(ns: float, ysrf: Optional[float]) -> Optional[float]:
     if ysrf is not None:
         return (ns or 0) + ysrf
 
 
-def _calc_vs(ns: float, ew: float, azimuth: float) -> float:
+def calc_vs(ns: float, ew: float, azimuth: float) -> float:
     closure_distance = calc_hypotenuse_length(ns, ew)
     closure_direction = calc_atan2(ew, ns)
 
-    return calc_vs(azimuth, closure_distance, closure_direction)
+    return base_calc_vs(azimuth, closure_distance, closure_direction)
 
 
-def _calc_tvdss(kb: Optional[float], tvd: float) -> Optional[float]:
+def calc_tvdss(kb: Optional[float], tvd: float) -> Optional[float]:
     if kb is None:
         return
 
@@ -257,15 +257,15 @@ def get_dls_unit_coefficient(measure_unit: EMeasureUnits) -> float:
     return DLS_RADIANS_MAP[measure_unit]
 
 
-def _calc_dls(dog_leg: float, md_delta: float, measure_unit: EMeasureUnits) -> float:
+def calc_dls(dog_leg: float, md_delta: float, measure_unit: EMeasureUnits) -> float:
     return degrees(dog_leg) * (get_dls_unit_coefficient(measure_unit) / md_delta)
 
 
-def _calc_shape(dog_leg: float, course_length: float) -> float:
+def calc_shape(dog_leg: float, course_length: float) -> float:
     return 0.5 * calc_shape_factor(dog_leg) * course_length
 
 
-def _prepare_trajectory_point(point: dict, convergence: float):
+def prepare_trajectory_point(point: dict, convergence: float):
     prepared_point = copy.deepcopy(point)
     prepared_point['azim'] = prepared_point['azim'] - convergence
 
