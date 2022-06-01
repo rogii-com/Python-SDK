@@ -14,6 +14,14 @@ INTERPRETATION_NAME = 'Interpretation1'
 MEASURE_UNIT = EMeasureUnits.METER_FOOT
 
 
+def pd_to_dict(dataframe):
+    if isinstance(dataframe, DataFrame):
+        if not dataframe.empty:
+            return dataframe.loc[0].to_dict()
+
+    return None
+
+
 def interpretation_dip_calculation():
     pr = PyRogii(
         client_id=environ.get('CLIENT_ID'),
@@ -25,12 +33,13 @@ def interpretation_dip_calculation():
 
     pr.set_project(project_name=PROJECT_NAME)
 
-    papi_well = pr.get_well(well_name=WELL_NAME)
+    pd_papi_well = pr.get_well(well_name=WELL_NAME)
 
-    if not papi_well:
-        print(f'Well "{papi_well["name"]}" not found.')
+    if pd_papi_well is None:
+        print(f'Well "{WELL_NAME}" not found.')
         return
 
+    papi_well = pd_to_dict(pd_papi_well)
     well_trajectory = pr.get_well_trajectory(well_name=WELL_NAME)
 
     calculated_trajectory = calculate_trajectory(well_trajectory, papi_well, measure_unit=MEASURE_UNIT)

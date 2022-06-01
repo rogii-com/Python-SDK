@@ -28,8 +28,6 @@ def python_sdk_project_checker(method):
 
 
 class PyRogii:
-    _project: dict
-
     def __init__(self,
                  client_id: str,
                  client_secret: str,
@@ -78,7 +76,7 @@ class PyRogii:
         if not well:
             return None
 
-        return self._parse_dict(well)
+        return to_pandas_dataframe([self._parse_dict(well)])
 
     @python_sdk_project_checker
     def get_well_trajectory(self, well_name: str):
@@ -145,7 +143,7 @@ class PyRogii:
         if not target_line:
             return None
 
-        return self._parse_dict(target_line)
+        return to_pandas_dataframe([self._parse_dict(target_line)])
 
     @python_sdk_project_checker
     def get_well_starred_target_line(self, well_name: str):
@@ -157,7 +155,7 @@ class PyRogii:
         if not target_line:
             return None
 
-        return self._parse_dict(target_line)
+        return to_pandas_dataframe([self._parse_dict(target_line)])
 
     @python_sdk_project_checker
     def create_nested_well(self,
@@ -239,7 +237,7 @@ class PyRogii:
         if not nested_well:
             return None
 
-        return self._parse_dict(nested_well)
+        return to_pandas_dataframe([self._parse_dict(nested_well)])
 
     def _parse_dict(self, obj: Any, default: Any = None) -> Any:
         """
@@ -316,7 +314,7 @@ class PyRogii:
             assembled_segments['horizons'][horizon['uuid']]['name'] = horizon['name']
 
         return {
-            'meta': interpretation,
+            'meta': to_pandas_dataframe([interpretation]),
             'horizons': DataFrame(self._parse_dict(assembled_segments['horizons'])).transpose(),
             'segments': to_pandas_dataframe(self._parse_dict(assembled_segments['segments']))
         }

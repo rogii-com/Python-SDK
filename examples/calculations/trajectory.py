@@ -14,7 +14,7 @@ def calculate_trajectory(
         well: dict,
         measure_unit: EMeasureUnits,
 ):
-    if not len(raw_trajectory.index) or not well:
+    if raw_trajectory.empty or not well:
         return []
 
     calculated_trajectory = []
