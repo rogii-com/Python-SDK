@@ -10,21 +10,20 @@ from .constants import DELTA, FEET_TO_METERS
 
 
 def calculate_trajectory(
-        raw_trajectory: DataFrame,
+        raw_trajectory: list,
         well: dict,
         measure_unit: EMeasureUnits,
 ):
-    if not len(raw_trajectory.index) or not well:
+    if not raw_trajectory or not well:
         return []
 
     calculated_trajectory = []
     prev_point = None
 
-    for i, raw in raw_trajectory.iterrows():
-        point_dict = raw.to_dict()
+    for point in raw_trajectory:
         calculated_point = calculate_trajectory_point(
             prev_point=prev_point,
-            curr_point=prepare_trajectory_point(point_dict, well['convergence']),
+            curr_point=prepare_trajectory_point(point, well['convergence']),
             well=well,
             measure_unit=measure_unit,
         )

@@ -1,8 +1,9 @@
+from functools import wraps
 from typing import Any
 
 from pandas import DataFrame
 
-from .exceptions import ProjectNotFound
+from .exceptions import ProjectNotFound, ProjectNotSelected
 from .models import SettingsAuth
 from .papi import PapiClient
 from .utils.constants import SOLO_PAPI_DEFAULT_DOMAIN_NAME
@@ -15,11 +16,21 @@ from .utils.objects import (
 )
 
 
+def python_sdk_project_checker(method):
+    @wraps(method)
+    def wrapped(*args, **kwargs):
+        if not args[0]._project:
+            raise ProjectNotSelected('Project is not selected.')
+
+        return method(*args, **kwargs)
+
+    return wrapped
+
+
 class PyRogii:
     def __init__(self,
                  client_id: str,
                  client_secret: str,
-                 project_name: str,
                  solo_username: str,
                  solo_password: str,
                  papi_domain_name: str = SOLO_PAPI_DEFAULT_DOMAIN_NAME
@@ -33,7 +44,9 @@ class PyRogii:
                 papi_domain_name=papi_domain_name
             )
         )
+        self._project = None
 
+    def set_project(self, project_name: str):
         projects = self._fetch_projects(project_filter=project_name)
         self._project = find_by_key(key='name', value=project_name, input_list=projects)
 
@@ -46,6 +59,7 @@ class PyRogii:
 
         return to_pandas_dataframe(parsed_projects)
 
+    @python_sdk_project_checker
     def get_project_wells(self,  well_filter: str = None):
         project_wells = _request_all_pages_with_content(
             func=self._papi_client.fetch_project_wells,
@@ -54,14 +68,16 @@ class PyRogii:
         )
         return to_pandas_dataframe([self._parse_dict(item) for item in project_wells])
 
+    @python_sdk_project_checker
     def get_well(self, well_name: str):
         well = self._fetch_well(well_name=well_name)
 
         if not well:
             return None
 
-        return self._parse_dict(well)
+        return to_pandas_dataframe([self._parse_dict(well)])
 
+    @python_sdk_project_checker
     def get_well_trajectory(self, well_name: str):
         well_uuid = self._find_well_uuid(well_name=well_name)
 
@@ -75,6 +91,7 @@ class PyRogii:
 
         return to_pandas_dataframe([self._parse_dict(d) for d in well_raw_trajectory])
 
+    @python_sdk_project_checker
     def get_well_interpretation(self, well_name: str, interpretation_name: str):
         well_uuid = self._find_well_uuid(well_name=well_name)
 
@@ -91,6 +108,7 @@ class PyRogii:
 
         return self._get_interpretation_data(interpretation=interpretation)
 
+    @python_sdk_project_checker
     def get_well_starred_interpretation(self, well_name: str):
         well = self._fetch_well(well_name=well_name)
         starred_interpretation_uuid = find_by_path(well, 'starred.interpretation')
@@ -107,6 +125,7 @@ class PyRogii:
 
         return self._get_interpretation_data(interpretation=starred_interpretation)
 
+    @python_sdk_project_checker
     def get_well_target_lines(self, well_name: str):
         target_lines = self._fetch_well_target_lines(well_name=well_name)
 
@@ -115,6 +134,7 @@ class PyRogii:
 
         return to_pandas_dataframe([self._parse_dict(item) for item in target_lines])
 
+    @python_sdk_project_checker
     def get_well_target_line(self, well_name: str, target_line_name: str):
         target_lines = self._fetch_well_target_lines(well_name=well_name)
         target_line = find_by_key(key='name', value=target_line_name, input_list=target_lines)
@@ -122,8 +142,9 @@ class PyRogii:
         if not target_line:
             return None
 
-        return self._parse_dict(target_line)
+        return to_pandas_dataframe([self._parse_dict(target_line)])
 
+    @python_sdk_project_checker
     def get_well_starred_target_line(self, well_name: str):
         well = self._fetch_well(well_name)
         starred_target_line_uuid = find_by_path(well, 'starred.target_line')
@@ -133,8 +154,9 @@ class PyRogii:
         if not target_line:
             return None
 
-        return self._parse_dict(target_line)
+        return to_pandas_dataframe([self._parse_dict(target_line)])
 
+    @python_sdk_project_checker
     def create_nested_well(self,
                            well_name: str,
                            nested_well_name: str,
@@ -165,6 +187,7 @@ class PyRogii:
             tie_in_ew=prepare_papi_var(tie_in_ew)
         )
 
+    @python_sdk_project_checker
     def replace_nested_well_trajectory(self,
                                        well_name: str,
                                        md_uom: str,
@@ -196,6 +219,7 @@ class PyRogii:
             trajectory_stations=fixed_wrapped_trajectory_stations
         )
 
+    @python_sdk_project_checker
     def get_well_nested_wells(self, well_name: str):
         nested_wells = self._fetch_well_nested_wells(well_name=well_name)
 
@@ -204,6 +228,7 @@ class PyRogii:
 
         return to_pandas_dataframe([self._parse_dict(item) for item in nested_wells])
 
+    @python_sdk_project_checker
     def get_well_nested_well(self, well_name: str, nested_well_name: str):
         nested_wells = self._fetch_well_nested_wells(well_name=well_name)
         nested_well = find_by_key(key='name', value=nested_well_name, input_list=nested_wells)
@@ -211,7 +236,7 @@ class PyRogii:
         if not nested_well:
             return None
 
-        return self._parse_dict(nested_well)
+        return to_pandas_dataframe([self._parse_dict(nested_well)])
 
     def _parse_dict(self, obj: Any, default: Any = None) -> Any:
         """
@@ -288,7 +313,7 @@ class PyRogii:
             assembled_segments['horizons'][horizon['uuid']]['name'] = horizon['name']
 
         return {
-            'meta': interpretation,
+            'meta': to_pandas_dataframe([interpretation]),
             'horizons': DataFrame(self._parse_dict(assembled_segments['horizons'])).transpose(),
             'segments': to_pandas_dataframe(self._parse_dict(assembled_segments['segments']))
         }
