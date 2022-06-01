@@ -53,7 +53,6 @@ class PyRogii:
         if not self._project:
             raise ProjectNotFound('Project not found.')
 
-    @python_sdk_project_checker
     def get_projects(self, project_filter: str = None) -> DataFrame:
         projects = self._fetch_projects(project_filter=project_filter)
         parsed_projects = [self._parse_dict(item) for item in projects]
