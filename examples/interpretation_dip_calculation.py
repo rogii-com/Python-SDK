@@ -40,7 +40,9 @@ def interpretation_dip_calculation():
         return
 
     papi_well = pd_to_dict(pd_papi_well)
-    well_trajectory = pr.get_well_trajectory(well_name=WELL_NAME)
+
+    pd_well_trajectory: DataFrame = pr.get_well_trajectory(well_name=WELL_NAME)
+    well_trajectory = [raw.to_dict() for _, raw in pd_well_trajectory.iterrows()]
 
     calculated_trajectory = calculate_trajectory(well_trajectory, papi_well, measure_unit=MEASURE_UNIT)
 
