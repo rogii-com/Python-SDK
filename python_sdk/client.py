@@ -289,7 +289,7 @@ class PyRogii:
 
         return {
             'meta': interpretation,
-            'horizons': to_pandas_dataframe(self._parse_dict(assembled_segments['horizons'])),
+            'horizons': DataFrame(self._parse_dict(assembled_segments['horizons'])).transpose(),
             'segments': to_pandas_dataframe(self._parse_dict(assembled_segments['segments']))
         }
 
