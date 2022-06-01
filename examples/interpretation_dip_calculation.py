@@ -14,17 +14,17 @@ INTERPRETATION_NAME = 'Interpretation1'
 MEASURE_UNIT = EMeasureUnits.METER_FOOT
 
 
-pr = PyRogii(
-    client_id=environ.get('CLIENT_ID'),
-    client_secret=environ.get('CLIENT_SECRET'),
-    project_name=PROJECT_NAME,
-    solo_username=environ.get('SOLO_USERNAME'),
-    solo_password=environ.get('SOLO_PASSWORD'),
-    papi_domain_name=environ.get('PAPI_DOMAIN_NAME')
-)
-
-
 def interpretation_dip_calculation():
+    pr = PyRogii(
+        client_id=environ.get('CLIENT_ID'),
+        client_secret=environ.get('CLIENT_SECRET'),
+        solo_username=environ.get('SOLO_USERNAME'),
+        solo_password=environ.get('SOLO_PASSWORD'),
+        papi_domain_name=environ.get('PAPI_DOMAIN_NAME')
+    )
+
+    pr.set_project(project_name=PROJECT_NAME)
+
     papi_well = pr.get_well(well_name=WELL_NAME)
 
     if not papi_well:
