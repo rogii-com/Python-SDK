@@ -9,11 +9,12 @@ WELL_NAME = 'Lateral1'
 pr = PyRogii(
     client_id=environ.get('CLIENT_ID'),
     client_secret=environ.get('CLIENT_SECRET'),
-    project_name=PROJECT_NAME,
     solo_username=environ.get('SOLO_USERNAME'),
     solo_password=environ.get('SOLO_PASSWORD'),
     papi_domain_name=environ.get('PAPI_DOMAIN_NAME')
 )
+
+pr.set_project(project_name=PROJECT_NAME)
 
 wells = pr.get_project_wells()
 print('Wells in the project (all information in the pandas format):\n', wells)
