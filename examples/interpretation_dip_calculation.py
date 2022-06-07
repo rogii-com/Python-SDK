@@ -2,10 +2,12 @@ from os import environ
 
 import numpy as np
 from pandas import DataFrame
+
 from calculations.interpretation import get_segments
 from calculations.trajectory import calculate_trajectory
 from calculations.enums import EMeasureUnits
 from python_sdk.client import PyRogii
+from python_sdk.utils.objects import pd_to_dict
 
 
 PROJECT_NAME = 'nsapegin (ft)'
@@ -14,15 +16,7 @@ INTERPRETATION_NAME = 'Interpretation1'
 MEASURE_UNIT = EMeasureUnits.METER_FOOT
 
 
-def pd_to_dict(dataframe):
-    if isinstance(dataframe, DataFrame):
-        if not dataframe.empty:
-            return dataframe.loc[0].to_dict()
-
-    return None
-
-
-def interpretation_dip_calculation():
+def calc_interpretation_dip():
     pr = PyRogii(
         client_id=environ.get('CLIENT_ID'),
         client_secret=environ.get('CLIENT_SECRET'),
@@ -33,18 +27,18 @@ def interpretation_dip_calculation():
 
     pr.set_project(project_name=PROJECT_NAME)
 
-    pd_papi_well = pr.get_well(well_name=WELL_NAME)
+    pd_well = pr.get_well(well_name=WELL_NAME)
 
-    if pd_papi_well is None:
+    if pd_well is None:
         print(f'Well "{WELL_NAME}" not found.')
         return
 
-    papi_well = pd_to_dict(pd_papi_well)
+    well = pd_to_dict(pd_well)
 
     pd_well_trajectory: DataFrame = pr.get_well_trajectory(well_name=WELL_NAME)
     well_trajectory = [raw.to_dict() for _, raw in pd_well_trajectory.iterrows()]
 
-    calculated_trajectory = calculate_trajectory(well_trajectory, papi_well, measure_unit=MEASURE_UNIT)
+    calculated_trajectory = calculate_trajectory(well_trajectory, well, measure_unit=MEASURE_UNIT)
 
     interpretation = pr.get_well_starred_interpretation(well_name=WELL_NAME)
 
@@ -58,7 +52,7 @@ def interpretation_dip_calculation():
         return
 
     segments = get_segments(
-        papi_well,
+        well,
         assembled_segments=interpretation['segments'],
         assembled_horizons=interpretation['horizons'],
         calculated_trajectory=calculated_trajectory,
@@ -82,6 +76,6 @@ def interpretation_dip_calculation():
 
 
 if __name__ == '__main__':
-    dips, interpolated_dips = interpretation_dip_calculation()
+    dips, interpolated_dips = calc_interpretation_dip()
     print(dips)
     print(interpolated_dips)
