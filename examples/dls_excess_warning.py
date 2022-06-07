@@ -1,9 +1,11 @@
 from os import environ
 
 from pandas import DataFrame
+
 from calculations.trajectory import calculate_trajectory
 from calculations.enums import EMeasureUnits
 from python_sdk.client import PyRogii
+from python_sdk.utils.objects import pd_to_dict
 
 
 PROJECT_NAME = 'nsapegin (ft)'
@@ -14,15 +16,7 @@ MEASURE_UNIT = EMeasureUnits.METER_FOOT
 THRESHOLD = 0.5
 
 
-def pd_to_dict(dataframe):
-    if isinstance(dataframe, DataFrame):
-        if not dataframe.empty and len(dataframe.index) == 1:
-            return dataframe.loc[0].to_dict()
-
-    return None
-
-
-def dls_excess_warning():
+def check_dls_excess():
     pr = PyRogii(
         client_id=environ.get('CLIENT_ID'),
         client_secret=environ.get('CLIENT_SECRET'),
@@ -47,7 +41,11 @@ def dls_excess_warning():
     calculated_trajectory = calculate_trajectory(well_trajectory, well, measure_unit=MEASURE_UNIT)
 
     dls_list = [
-        {'md': row['md'], 'dls': row['dls'], 'exceeds': row['dls'] > THRESHOLD}
+        {
+            'md': row['md'],
+            'dls': row['dls'],
+            'exceeds': row['dls'] > THRESHOLD
+        }
         for row in calculated_trajectory
     ]
 
@@ -59,4 +57,4 @@ def dls_excess_warning():
 
 
 if __name__ == '__main__':
-    pd_dlses = dls_excess_warning()
+    pd_dlses = check_dls_excess()

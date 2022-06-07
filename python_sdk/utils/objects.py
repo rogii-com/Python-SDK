@@ -6,6 +6,14 @@ def to_pandas_dataframe(row_list: list) -> DataFrame:
     return DataFrame(row_list)
 
 
+def pd_to_dict(dataframe):
+    if isinstance(dataframe, DataFrame):
+        if not dataframe.empty and len(dataframe.index) == 1:
+            return dataframe.loc[0].to_dict()
+
+    return None
+
+
 def is_data_dict(value):
     if isinstance(value, dict):
         # TODO: refine expression
