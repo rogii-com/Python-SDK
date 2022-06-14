@@ -7,13 +7,7 @@ from .exceptions import ProjectNotFound, ProjectNotSelected
 from .models import SettingsAuth
 from .papi import PapiClient
 from .utils.constants import SOLO_PAPI_DEFAULT_DOMAIN_NAME
-from .utils.objects import (
-    find_by_key,
-    find_by_path,
-    is_data_dict,
-    prepare_papi_var,
-    to_pandas_dataframe
-)
+from .utils.objects import find_by_key, find_by_path, is_data_dict, prepare_papi_var, to_pandas_dataframe
 
 
 def python_sdk_project_checker(method):

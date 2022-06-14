@@ -3,11 +3,10 @@ from typing import List
 
 from pandas import DataFrame
 
-from .base import calc_segment_dip, get_nearest_values, get_most_common
-
-from .trajectory import interpolate_trajectory_point
+from .base import calc_segment_dip, get_most_common, get_nearest_values
 from .constants import DELTA
 from .enums import EMeasureUnits
+from .trajectory import interpolate_trajectory_point
 
 
 def calc_segments_dip(segments: List, assembled_horizons: DataFrame):

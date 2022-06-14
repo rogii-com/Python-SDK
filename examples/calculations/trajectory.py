@@ -1,12 +1,12 @@
 import copy
-from math import acos, cos, fabs, pi, sin, degrees
+from math import acos, cos, degrees, fabs, pi, sin
 from typing import Optional
 
-from pandas import DataFrame
-
-from .base import calc_atan2, calc_hypotenuse_length, calc_shape_factor, normalize_angle, calc_vs as base_calc_vs
-from .enums import EMeasureUnits
+from .base import calc_atan2, calc_hypotenuse_length, calc_shape_factor
+from .base import calc_vs as base_calc_vs
+from .base import normalize_angle
 from .constants import DELTA, FEET_TO_METERS
+from .enums import EMeasureUnits
 
 
 def calculate_trajectory(

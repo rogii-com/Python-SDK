@@ -1,12 +1,11 @@
 from os import environ
 
+from calculations.enums import EMeasureUnits
+from calculations.trajectory import calculate_trajectory
 from pandas import DataFrame
 
-from calculations.trajectory import calculate_trajectory
-from calculations.enums import EMeasureUnits
 from python_sdk.client import PyRogii
 from python_sdk.utils.objects import pd_to_dict
-
 
 PROJECT_NAME = 'nsapegin (ft)'
 WELL_NAME = 'Lateral1'

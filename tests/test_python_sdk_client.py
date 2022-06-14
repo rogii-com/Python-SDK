@@ -1,4 +1,3 @@
-import pytest
 import random
 from os import environ
 
@@ -18,6 +17,7 @@ pr = PyRogii(
     papi_domain_name=environ.get('PAPI_DOMAIN_NAME')
 )
 pr.set_project(project_name)
+
 
 def test_auth():
     assert pr._papi_client is not None
