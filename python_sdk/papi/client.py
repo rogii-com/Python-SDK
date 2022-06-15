@@ -3,12 +3,11 @@ import hashlib
 import uuid
 from urllib.parse import urljoin
 
-from solo_connect_sdk import PapiClient as SdkPapiClient
-
 from python_sdk import __version__
+from python_sdk.models import SettingsAuth
+from python_sdk.utils.constants import PYTHON_SDK_APP_ID, SOLO_OPEN_AUTH_SERVICE_URL, SOLO_PAPI_URL
 
-from .models import SettingsAuth
-from .utils.constants import PYTHON_SDK_APP_ID, SOLO_OPEN_AUTH_SERVICE_URL, SOLO_PAPI_URL
+from .base import PapiClient as SdkPapiClient
 
 
 class PapiClient(SdkPapiClient):

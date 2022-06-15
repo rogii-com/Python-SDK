@@ -1,2 +1,0 @@
---extra-index-url https://__token__:${ACCESS_TOKEN_SDK}@gitlab.rogii.com/api/v4/projects/332/packages/pypi/simple
-solo-connect-sdk==1.4.2
