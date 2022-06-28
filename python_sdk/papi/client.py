@@ -4,7 +4,7 @@ import uuid
 from urllib.parse import urljoin
 
 from python_sdk import __version__
-from python_sdk.models import SettingsAuth
+from python_sdk.types import SettingsAuth
 from python_sdk.utils.constants import PYTHON_SDK_APP_ID, SOLO_OPEN_AUTH_SERVICE_URL, SOLO_PAPI_URL
 
 from .base import PapiClient as SdkPapiClient

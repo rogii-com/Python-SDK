@@ -1,4 +1,3 @@
-from datetime import datetime
 from typing import Any
 
 from oauthlib.oauth2 import BackendApplicationClient, LegacyApplicationClient
@@ -160,11 +159,11 @@ class PapiClient(BasePapiClient):
             proxies=proxies
         )
 
-    def fetch_project(self, project_uuid: str, headers: dict = None):
-        return self._send_request(url=f'projects/{project_uuid}', headers=headers)
+    def fetch_project(self, project_id: str, headers: dict = None):
+        return self._send_request(url=f'projects/{project_id}', headers=headers)
 
-    def fetch_raw_project(self, project_uuid: str, headers: dict = None):
-        return self._send_request(url=f'projects/{project_uuid}/raw', headers=headers)
+    def fetch_raw_project(self, project_id: str, headers: dict = None):
+        return self._send_request(url=f'projects/{project_id}/raw', headers=headers)
 
     def fetch_projects(self,
                        offset: int = BasePapiClient.DEFAULT_OFFSET,
@@ -219,7 +218,7 @@ class PapiClient(BasePapiClient):
         return data
 
     def fetch_project_wells(self,
-                            project_uuid: str,
+                            project_id: str,
                             offset: int = BasePapiClient.DEFAULT_OFFSET,
                             limit: int = BasePapiClient.DEFAULT_LIMIT,
                             well_filter: str = None,
@@ -227,7 +226,7 @@ class PapiClient(BasePapiClient):
                             ):
         """
         Fetches project wells
-        :param project_uuid:
+        :param project_id:
         :param offset:
         :param limit:
         :param well_filter
@@ -235,7 +234,7 @@ class PapiClient(BasePapiClient):
         """
 
         data = self._send_request(
-            url=f'projects/{project_uuid}/wells/raw',
+            url=f'projects/{project_id}/wells/raw',
             params={
                 'offset': offset,
                 'limit': limit,
@@ -246,25 +245,25 @@ class PapiClient(BasePapiClient):
 
         return data
 
-    def fetch_well(self, well_uuid: str, headers: dict = None):
-        return self._send_request(url=f'wells/{well_uuid}', headers=headers)
+    def fetch_well(self, well_id: str, headers: dict = None):
+        return self._send_request(url=f'wells/{well_id}', headers=headers)
 
-    def fetch_raw_well(self, well_uuid: str, headers: dict = None):
-        return self._send_request(url=f'wells/{well_uuid}/raw', headers=headers)
+    def fetch_raw_well(self, well_id: str, headers: dict = None):
+        return self._send_request(url=f'wells/{well_id}/raw', headers=headers)
 
-    def fetch_well_raw_trajectory(self, well_uuid: str, headers: dict = None):
+    def fetch_well_raw_trajectory(self, well_id: str, headers: dict = None):
         """
         Fetches well trajectory raw data
-        :param well_uuid:
+        :param well_id:
         :return:
         """
 
-        data = self._send_request(url=f'wells/{well_uuid}/trajectory/raw', headers=headers)
+        data = self._send_request(url=f'wells/{well_id}/trajectory/raw', headers=headers)
 
         return data['content']
 
     def fetch_well_logs(self,
-                        well_uuid: str,
+                        well_id: str,
                         offset: int = BasePapiClient.DEFAULT_OFFSET,
                         limit: int = BasePapiClient.DEFAULT_LIMIT,
                         filter: str = None,
@@ -272,7 +271,7 @@ class PapiClient(BasePapiClient):
                         ):
         """
         Fetches well logs
-        :param well_uuid:
+        :param well_id:
         :param offset:
         :param limit:
         :param filter:
@@ -280,7 +279,7 @@ class PapiClient(BasePapiClient):
         """
 
         data = self._send_request(
-            url=f'wells/{well_uuid}/logs',
+            url=f'wells/{well_id}/logs',
             params={
                 'offset': offset,
                 'limit': limit,
@@ -291,18 +290,18 @@ class PapiClient(BasePapiClient):
 
         return data['content']
 
-    def fetch_well_raw_log(self, log_uuid: str, headers: dict = None):
+    def fetch_well_raw_log(self, log_id: str, headers: dict = None):
         """
         Fetches log raw data
-        :param log_uuid:
+        :param log_id:
         :return:
         """
-        data = self._send_request(url=f'logs/{log_uuid}/data/raw', headers=headers)
+        data = self._send_request(url=f'logs/{log_id}/data/raw', headers=headers)
 
         return data['log_points']
 
     def fetch_well_raw_interpretations(self,
-                                       well_uuid: str,
+                                       well_id: str,
                                        offset: int = BasePapiClient.DEFAULT_OFFSET,
                                        limit: int = BasePapiClient.DEFAULT_LIMIT,
                                        filter: str = None,
@@ -310,7 +309,7 @@ class PapiClient(BasePapiClient):
                                        ):
         """
         Fetches well interpretations
-        :param well_uuid:
+        :param well_id:
         :param offset:
         :param limit:
         :param filter:
@@ -318,7 +317,7 @@ class PapiClient(BasePapiClient):
         """
 
         data = self._send_request(
-            url=f'wells/{well_uuid}/interpretations/raw',
+            url=f'wells/{well_id}/interpretations/raw',
             params={
                 'offset': offset,
                 'limit': limit,
@@ -330,7 +329,7 @@ class PapiClient(BasePapiClient):
         return data['content']
 
     def fetch_well_interpretation_horizons(self,
-                                           well_interpretation_uuid: str,
+                                           interpretation_id: str,
                                            offset: int = BasePapiClient.DEFAULT_OFFSET,
                                            limit: int = BasePapiClient.DEFAULT_LIMIT,
                                            filter: str = None,
@@ -338,7 +337,7 @@ class PapiClient(BasePapiClient):
                                            ):
         """
         Fetches interpretation horizons
-        :param well_interpretation_uuid:
+        :param interpretation_id:
         :param offset:
         :param limit:
         :param filter:
@@ -346,7 +345,7 @@ class PapiClient(BasePapiClient):
         """
 
         data = self._send_request(
-            url=f'interpretations/{well_interpretation_uuid}/horizons',
+            url=f'interpretations/{interpretation_id}/horizons',
             params={
                 'offset': offset,
                 'limit': limit,
@@ -357,14 +356,14 @@ class PapiClient(BasePapiClient):
 
         return data['content']
 
-    def fetch_well_interpretation_assembled_segments(self, well_interpretation_uuid: str, headers: dict = None):
+    def fetch_well_interpretation_assembled_segments(self, interpretation_id: str, headers: dict = None):
         """
         Fetches interpretation assembled segments
-        :param well_interpretation_uuid:
+        :param interpretation_id:
         :return:
         """
 
-        data = self._send_request(url=f'interpretations/{well_interpretation_uuid}/horizons/raw', headers=headers)
+        data = self._send_request(url=f'interpretations/{interpretation_id}/horizons/raw', headers=headers)
 
         return data['assembled_segments']
 
@@ -373,34 +372,22 @@ class PapiClient(BasePapiClient):
 
         return data
 
-    def fetch_project_raw_changes(self, project_uuid: str, last_modified: datetime, headers: dict = None):
-        last_modified = last_modified.isoformat()
-
-        url = f'projects/{project_uuid}/changes/raw'
-        request_data = {
-            'modified_since': last_modified,
-        }
-
-        data = self._send_post_request(url=url, request_data=request_data, headers=headers)
-
-        return data
-
     def fetch_well_tops(self,
-                        well_uuid: str,
+                        well_id: str,
                         offset: int = BasePapiClient.DEFAULT_OFFSET,
                         limit: int = BasePapiClient.DEFAULT_LIMIT,
                         headers: dict = None
                         ):
         """
         Fetches well tops
-        :param well_uuid:
+        :param well_id:
         :param offset:
         :param limit:
         :return:
         """
 
         return self._send_request(
-            url=f'wells/{well_uuid}/tops',
+            url=f'wells/{well_id}/tops',
             params={
                 'offset': offset,
                 'limit': limit
@@ -409,21 +396,21 @@ class PapiClient(BasePapiClient):
         )
 
     def fetch_well_nested_wells(self,
-                                well_uuid: str,
+                                well_id: str,
                                 offset: int = BasePapiClient.DEFAULT_OFFSET,
                                 limit: int = BasePapiClient.DEFAULT_LIMIT,
                                 headers: dict = None
                                 ):
         """
         Fetches well nested wells
-        :param well_uuid:
+        :param well_id:
         :param offset:
         :param limit:
         :return:
         """
 
         return self._send_request(
-            url=f'wells/{well_uuid}/nestedwells/raw',
+            url=f'wells/{well_id}/nestedwells/raw',
             params={
                 'offset': offset,
                 'limit': limit
@@ -432,21 +419,21 @@ class PapiClient(BasePapiClient):
         )
 
     def fetch_nested_well_tops(self,
-                               nested_well_uuid: str,
+                               nested_well_id: str,
                                offset: int = BasePapiClient.DEFAULT_OFFSET,
                                limit: int = BasePapiClient.DEFAULT_LIMIT,
                                headers: dict = None
                                ):
         """
         Fetches nested well tops
-        :param nested_well_uuid:
+        :param nested_well_id:
         :param offset:
         :param limit:
         :return:
         """
 
         return self._send_request(
-            url=f'nestedwells/{nested_well_uuid}/tops',
+            url=f'nestedwells/{nested_well_id}/tops',
             params={
                 'offset': offset,
                 'limit': limit
@@ -455,14 +442,14 @@ class PapiClient(BasePapiClient):
         )
 
     def fetch_well_target_lines(self,
-                                well_uuid: str,
+                                well_id: str,
                                 offset: int = BasePapiClient.DEFAULT_OFFSET,
                                 limit: int = BasePapiClient.DEFAULT_LIMIT,
                                 headers: dict = None
                                 ):
         """
         Fetches well target lines data
-        :param well_uuid:
+        :param well_id:
         :param offset:
         :param limit:
         :param filter:
@@ -470,7 +457,7 @@ class PapiClient(BasePapiClient):
         """
 
         return self._send_request(
-            url=f'wells/{well_uuid}/targetlines/data',
+            url=f'wells/{well_id}/targetlines/data',
             params={
                 'offset': offset,
                 'limit': limit,
@@ -478,51 +465,31 @@ class PapiClient(BasePapiClient):
             headers=headers
         )
 
-    def fetch_nested_well_raw_trajectory(self, nested_well_uuid: str, headers: dict = None):
+    def fetch_nested_well_raw_trajectory(self, nested_well_id: str, headers: dict = None):
         """
         Fetches nested well raw trajectory
-        :param nested_well_uuid:
+        :param nested_well_id:
         :return:
         """
 
-        data = self._send_request(url=f'nestedwells/{nested_well_uuid}/trajectory/raw', headers=headers)
+        data = self._send_request(url=f'nestedwells/{nested_well_id}/trajectory/raw', headers=headers)
 
         return data['content']
 
-    def fetch_project_object_names(self,
-                                   project_uuid: str,
-                                   object_type: str,
-                                   filter: str = None,
-                                   sort: str = None,
-                                   offset: int = BasePapiClient.DEFAULT_OFFSET,
-                                   limit: int = BasePapiClient.DEFAULT_LIMIT,
-                                   headers: dict = None
-                                   ):
-        return self._send_request(
-            url=f'projects/{project_uuid}/{object_type}/names',
-            params={
-                'filter': filter,
-                'sort': sort,
-                'offset': offset,
-                'limit': limit
-            },
-            headers=headers
-        )
-
     def create_nested_well(self,
-                           well_uuid: str,
+                           well_id: str,
                            nested_well_name: str,
                            operator: str,
                            api: str,
-                           xsrf: float,
-                           ysrf: float,
-                           kb: float,
-                           tie_in_tvd: float,
-                           tie_in_ns: float,
-                           tie_in_ew: float,
+                           xsrf: dict,
+                           ysrf: dict,
+                           kb: dict,
+                           tie_in_tvd: dict,
+                           tie_in_ns: dict,
+                           tie_in_ew: dict,
                            headers: dict = None
                            ):
-        url = f'wells/{well_uuid}/nestedwells'
+        url = f'wells/{well_id}/nestedwells'
         request_data = {
             'name': nested_well_name,
             'operator': operator,
@@ -538,14 +505,14 @@ class PapiClient(BasePapiClient):
         return self._send_post_request(url=url, request_data=request_data, headers=headers)
 
     def replace_nested_well_trajectory(self,
-                                       well_uuid: str,
+                                       nested_well_id: str,
                                        md_uom: str,
                                        incl_uom: str,
                                        azi_uom: str,
                                        trajectory_stations: list,
                                        headers: dict = None
                                        ):
-        url = f'nestedwells/{well_uuid}/trajectory'
+        url = f'nestedwells/{nested_well_id}/trajectory'
         request_data = {
             'md_uom': md_uom,
             'incl_uom': incl_uom,
