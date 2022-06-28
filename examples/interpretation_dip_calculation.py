@@ -8,9 +8,9 @@ from pandas import DataFrame
 
 from python_sdk.client import RogiiSolo
 
-PROJECT_NAME = 'nsapegin (ft)'
-WELL_NAME = 'Lateral1'
-INTERPRETATION_NAME = 'Interpretation1'
+PROJECT_NAME = 'Global project'
+WELL_NAME = 'Lateral'
+INTERPRETATION_NAME = 'Interpretation'
 MEASURE_UNIT = EMeasureUnits.METER_FOOT
 
 

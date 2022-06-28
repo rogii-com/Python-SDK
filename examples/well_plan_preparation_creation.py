@@ -3,8 +3,8 @@ from os import environ
 
 from python_sdk.client import RogiiSolo
 
-PROJECT_NAME = 'nsapegin (ft)'
-WELL_NAME = 'Lateral1'
+PROJECT_NAME = 'Global project'
+WELL_NAME = 'Lateral'
 
 client = RogiiSolo(
     client_id=environ.get('CLIENT_ID'),

@@ -3,11 +3,11 @@ from os import environ
 
 from python_sdk.client import RogiiSolo
 
-project_name = 'nsapegin (ft)'
-well_name = 'Lateral1'
-interpretation_name = 'Interpretation1'
-starred_interpretation_name = 'Interpretation1'
-target_line_name = 'Target Line1'
+project_name = 'Global project'
+well_name = 'Lateral'
+interpretation_name = 'Interpretation'
+starred_interpretation_name = 'Interpretation'
+target_line_name = 'Target Line'
 nested_well_name = 'Nested Well'
 
 client = RogiiSolo(
