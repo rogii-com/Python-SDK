@@ -1,13 +1,15 @@
+from typing import Dict, List, Optional
+
 from pandas import DataFrame
 
-from python_sdk.base import BaseObject, BaseObjectList, DataFrameable
+from python_sdk.base import ComplexObject, DataFrameable, ObjectList
 from python_sdk.interpretation import Interpretation
 from python_sdk.nested_well import NestedWell
 from python_sdk.target_line import TargetLine
 from python_sdk.trajectory import TrajectoryPoint, TrajectoryPointList
 
 
-class Well(BaseObject, DataFrameable):
+class Well(ComplexObject, DataFrameable):
     def __init__(self, papi_client, **kwargs):
         super().__init__(papi_client)
 
@@ -27,19 +29,19 @@ class Well(BaseObject, DataFrameable):
 
         self.__dict__.update(kwargs)
 
-        self._trajectory_data = []
-        self._trajectory = []
+        self._trajectory_data: List[Dict] = []
+        self._trajectory: TrajectoryPointList[TrajectoryPoint] = TrajectoryPointList(dict_list=[])
 
-        self._interpretations_data = []
-        self._interpretations = []
-        self._starred_interpretation = None
+        self._interpretations_data: List[Dict] = []
+        self._interpretations: ObjectList[Interpretation] = ObjectList(dict_list=[], object_list=[])
+        self._starred_interpretation: Optional[Interpretation] = None
 
-        self._target_lines_data = []
-        self._target_lines = []
-        self._starred_target_line = None
+        self._target_lines_data: List[Dict] = []
+        self._target_lines: ObjectList[TargetLine] = ObjectList(dict_list=[], object_list=[])
+        self._starred_target_line: Optional[TargetLine] = None
 
-        self._nested_wells_data = []
-        self._nested_wells = []
+        self._nested_wells_data: List[Dict] = []
+        self._nested_wells: ObjectList[Well] = ObjectList(dict_list=[], object_list=[])
 
     def to_dict(self):
         return {
@@ -62,10 +64,10 @@ class Well(BaseObject, DataFrameable):
         return DataFrame([self.to_dict()])
 
     @property
-    def trajectory_data(self) -> list[dict]:
+    def trajectory_data(self) -> List[Dict]:
         if not self._trajectory_data:
             self._trajectory_data = [
-                self._parse_papi_dict(trajectory_point)
+                self._parse_papi_data(trajectory_point)
                 for trajectory_point in self._papi_client.fetch_well_raw_trajectory(well_id=self.uuid)
             ]
 
@@ -79,10 +81,10 @@ class Well(BaseObject, DataFrameable):
         return self._trajectory
 
     @property
-    def interpretations_data(self) -> list[dict]:
+    def interpretations_data(self) -> List[Dict]:
         if not self._interpretations_data:
             self._interpretations_data = [
-                self._parse_papi_dict(interpretation)
+                self._parse_papi_data(interpretation)
                 for interpretation in self._request_all_pages(
                     func=self._papi_client.fetch_well_raw_interpretations,
                     well_id=self.uuid
@@ -92,11 +94,11 @@ class Well(BaseObject, DataFrameable):
         return self._interpretations_data
 
     @property
-    def interpretations(self) -> BaseObjectList[Interpretation]:
+    def interpretations(self) -> ObjectList[Interpretation]:
         if not self._interpretations:
-            self._interpretations = BaseObjectList(
-                dicts_list=self.interpretations_data,
-                objects_list=[
+            self._interpretations = ObjectList(
+                dict_list=self.interpretations_data,
+                object_list=[
                     Interpretation(papi_client=self._papi_client, **item) for item in self.interpretations_data
                 ]
             )
@@ -104,7 +106,7 @@ class Well(BaseObject, DataFrameable):
         return self._interpretations
 
     @property
-    def starred_interpretation(self) -> Interpretation:
+    def starred_interpretation(self) -> Optional[Interpretation]:
         if not self._starred_interpretation:
             starred_interpretation_id = self._find_by_path(self.starred, 'interpretation')
             self._starred_interpretation = self.interpretations.find_by_id(starred_interpretation_id)
@@ -112,10 +114,10 @@ class Well(BaseObject, DataFrameable):
         return self._starred_interpretation
 
     @property
-    def target_lines_data(self) -> list[dict]:
+    def target_lines_data(self) -> List[Dict]:
         if not self._target_lines_data:
             self._target_lines_data = [
-                self._parse_papi_dict(target_line)
+                self._parse_papi_data(target_line)
                 for target_line in self._request_all_pages_with_content(
                     func=self._papi_client.fetch_well_target_lines,
                     well_id=self.uuid
@@ -125,17 +127,17 @@ class Well(BaseObject, DataFrameable):
         return self._target_lines_data
 
     @property
-    def target_lines(self) -> BaseObjectList[TargetLine]:
+    def target_lines(self) -> ObjectList[TargetLine]:
         if not self._target_lines:
-            self._target_lines = BaseObjectList(
-                dicts_list=self.target_lines_data,
-                objects_list=[TargetLine(**item) for item in self.target_lines_data]
+            self._target_lines = ObjectList(
+                dict_list=self.target_lines_data,
+                object_list=[TargetLine(**item) for item in self.target_lines_data]
             )
 
         return self._target_lines
 
     @property
-    def starred_target_line(self) -> TargetLine:
+    def starred_target_line(self) -> Optional[TargetLine]:
         if not self._starred_target_line:
             starred_target_line_id = self._find_by_path(self.starred, 'target_line')
             self._starred_target_line = self.target_lines.find_by_id(starred_target_line_id)
@@ -143,10 +145,10 @@ class Well(BaseObject, DataFrameable):
         return self._starred_target_line
 
     @property
-    def nested_wells_data(self) -> list[dict]:
+    def nested_wells_data(self) -> List[Dict]:
         if not self._nested_wells_data:
             self._nested_wells_data = [
-                self._parse_papi_dict(nested_well)
+                self._parse_papi_data(nested_well)
                 for nested_well in self._request_all_pages_with_content(
                     func=self._papi_client.fetch_well_nested_wells,
                     well_id=self.uuid
@@ -156,11 +158,11 @@ class Well(BaseObject, DataFrameable):
         return self._nested_wells_data
 
     @property
-    def nested_wells(self) -> BaseObjectList[NestedWell]:
+    def nested_wells(self) -> ObjectList[NestedWell]:
         if not self._nested_wells:
-            self._nested_wells = BaseObjectList(
-                dicts_list=self.nested_wells_data,
-                objects_list=[NestedWell(**item) for item in self.nested_wells_data]
+            self._nested_wells = ObjectList(
+                dict_list=self.nested_wells_data,
+                object_list=[NestedWell(**item) for item in self.nested_wells_data]
             )
 
         return self._nested_wells

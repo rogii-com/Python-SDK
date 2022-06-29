@@ -4,18 +4,16 @@ from calculations.enums import EMeasureUnits
 from calculations.trajectory import calculate_trajectory
 from pandas import DataFrame
 
-from python_sdk.client import RogiiSolo
+from python_sdk.client import SoloClient
 
 PROJECT_NAME = 'Global project'
 WELL_NAME = 'Lateral'
-INTERPRETATION_NAME = 'Interpretation'
 MEASURE_UNIT = EMeasureUnits.METER_FOOT
-
 DLS_THRESHOLD = 0.5
 
 
-def check_dls_excess():
-    client = RogiiSolo(
+def get_trajectory_dls():
+    client = SoloClient(
         client_id=environ.get('CLIENT_ID'),
         client_secret=environ.get('CLIENT_SECRET'),
         solo_username=environ.get('SOLO_USERNAME'),
@@ -42,12 +40,14 @@ def check_dls_excess():
         for row in calculated_trajectory
     ]
 
+    return dls_list
+
+
+if __name__ == '__main__':
+    dls_list = get_trajectory_dls()
+
     for row in dls_list:
         if row['exceeds']:
             print(f'DLS exceeds threshold={DLS_THRESHOLD} at MD={row["md"]}')
 
-    return DataFrame(dls_list)
-
-
-if __name__ == '__main__':
-    pd_dlses = check_dls_excess()
+    print(DataFrame(dls_list))

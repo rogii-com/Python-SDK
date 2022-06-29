@@ -1,7 +1,7 @@
 import random
 from os import environ
 
-from python_sdk.client import RogiiSolo
+from python_sdk.client import SoloClient
 
 project_name = 'Global project'
 well_name = 'Lateral'
@@ -10,7 +10,7 @@ starred_interpretation_name = 'Interpretation'
 target_line_name = 'Target Line'
 nested_well_name = 'Nested Well'
 
-client = RogiiSolo(
+client = SoloClient(
     client_id=environ.get('CLIENT_ID'),
     client_secret=environ.get('CLIENT_SECRET'),
     solo_username=environ.get('SOLO_USERNAME'),
@@ -58,7 +58,16 @@ def test_get_well_starred_target_line():
 
 
 def test_get_well_trajectory():
-    assert not project.wells.find_by_name(well_name).trajectory.to_df().empty
+    trajectory = project.wells.find_by_name(well_name).trajectory
+
+    assert not trajectory.to_df().empty
+    assert trajectory.to_dict()
+
+
+def test_get_well_trajectory_point():
+    trajectory = project.wells.find_by_name(well_name).trajectory
+
+    assert trajectory.find_by_md(0) is not None
 
 
 def test_get_well_nested_wells():

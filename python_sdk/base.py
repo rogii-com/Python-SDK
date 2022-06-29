@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Any, Dict, Iterable, List, Set, Tuple
+from typing import Any, Dict, Iterable, List, Optional, Set, Tuple
 
 from pandas import DataFrame
 
@@ -11,50 +11,11 @@ class DataFrameable(ABC):
     def to_df(self) -> DataFrame:
         pass
 
+
+class BaseObject(ABC):
     @abstractmethod
-    def to_dict(self) -> dict[str, Any]:
+    def to_dict(self) -> Dict[str, Any]:
         pass
-
-
-class BaseObject:
-    def __init__(self, papi_client: PapiClient):
-        self._papi_client = papi_client
-
-    def _find_by_key(self, input_list, key, value):
-        return next((item for item in input_list if item.get(key, None) == value), {})
-
-    def _find_by_attr(self, input_list, attr, value):
-        return next((item for item in input_list if getattr(item, attr, None) == value), None)
-
-    def pd_to_dict(self, data_frame):
-        if isinstance(data_frame, DataFrame):
-            if not data_frame.empty and len(data_frame.index) == 1:
-                return data_frame.loc[0].to_dict()
-
-        return None
-
-    def _parse_papi_dict(self, obj: Any, default: Any = None) -> Any:
-        """
-        Recursive dictionary parsing. Its elements can be either of the regular type values,
-        list/dictionary, or dictionaries with "val" or "undefined" key
-        """
-        if isinstance(obj, dict):
-            if self._is_data_dict(obj):
-                return obj.get('val', default)
-            else:
-                return {item: self._parse_papi_dict(value) for item, value in obj.items()}
-        elif isinstance(obj, list):
-            return [self._parse_papi_dict(item) for item in obj]
-        else:
-            return obj
-
-    def _is_data_dict(self, value):
-        if isinstance(value, dict):
-            # TODO: refine expression
-            if len(value) == 1 and ('val' in value or 'undefined' in value):
-                return True
-
-        return False
 
     def _find_by_path(
             self,
@@ -122,6 +83,31 @@ class BaseObject:
 
         return {'val': value}
 
+
+class ComplexObject(BaseObject):
+    def __init__(self, papi_client: PapiClient):
+        super().__init__()
+
+        self._papi_client = papi_client
+
+    def to_dict(self) -> Dict[str, Any]:
+        return {}
+
+    def _parse_papi_data(self, data: Any, default: Any = None) -> Any:
+        """
+        Recursive dictionary parsing. Its elements can be either of the regular type values,
+        list/dictionary, or dictionaries with "val" or "undefined" key
+        """
+        if isinstance(data, dict):
+            if 'val' in data or 'undefined' in data:
+                return data.get('val', default)
+            else:
+                return {item: self._parse_papi_data(value) for item, value in data.items()}
+        elif isinstance(data, list):
+            return [self._parse_papi_data(item) for item in data]
+        else:
+            return data
+
     def _request_all_pages(self, func, **kwargs):
         result = []
         offset = self._papi_client.DEFAULT_OFFSET
@@ -152,21 +138,24 @@ class BaseObject:
         return result
 
 
-class BaseObjectList(list):
-    def __init__(self, dicts_list: list[dict], objects_list: list[object]):
-        super().__init__(objects_list)
+class ObjectList(list):
+    def __init__(self, dict_list: List[Dict], object_list: List[BaseObject]):
+        super().__init__(object_list)
 
-        self._dicts_list = dicts_list
-        self._objects_list = objects_list
+        self._dict_list = dict_list
+        self._object_list = object_list
 
     def to_df(self) -> DataFrame:
-        return DataFrame(self._dicts_list)
+        return DataFrame(self._dict_list)
 
-    def find_by_id(self, value):
-        return self._find_by_attr(input_list=self, attr='uuid', value=value)
+    def to_dict(self) -> List[Dict]:
+        return self._dict_list
 
-    def find_by_name(self, value):
-        return self._find_by_attr(input_list=self, attr='name', value=value)
+    def find_by_id(self, value) -> Optional[BaseObject]:
+        return self._find_by_attr(attr='uuid', value=value)
 
-    def _find_by_attr(self, input_list: list[object], attr: str, value):
-        return next((item for item in input_list if getattr(item, attr, None) == value), None)
+    def find_by_name(self, value) -> Optional[BaseObject]:
+        return self._find_by_attr(attr='name', value=value)
+
+    def _find_by_attr(self, attr: str, value) -> Optional[BaseObject]:
+        return next((item for item in self if getattr(item, attr, None) == value), None)

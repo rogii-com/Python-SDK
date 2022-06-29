@@ -2,5 +2,5 @@ class BaseRogiiSoloException(Exception):
     pass
 
 
-class ProjectNotFound(BaseRogiiSoloException):
+class ProjectNotFoundException(BaseRogiiSoloException):
     pass

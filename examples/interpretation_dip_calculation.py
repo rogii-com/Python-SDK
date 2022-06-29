@@ -6,16 +6,16 @@ from calculations.interpretation import get_segments
 from calculations.trajectory import calculate_trajectory
 from pandas import DataFrame
 
-from python_sdk.client import RogiiSolo
-
-PROJECT_NAME = 'Global project'
-WELL_NAME = 'Lateral'
-INTERPRETATION_NAME = 'Interpretation'
-MEASURE_UNIT = EMeasureUnits.METER_FOOT
+from python_sdk.client import SoloClient
 
 
 def calc_interpretation_dip():
-    client = RogiiSolo(
+    PROJECT_NAME = 'Global project'
+    WELL_NAME = 'Lateral'
+    INTERPRETATION_NAME = 'Interpretation'
+    MEASURE_UNIT = EMeasureUnits.METER_FOOT
+
+    client = SoloClient(
         client_id=environ.get('CLIENT_ID'),
         client_secret=environ.get('CLIENT_SECRET'),
         solo_username=environ.get('SOLO_USERNAME'),

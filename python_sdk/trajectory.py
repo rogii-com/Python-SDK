@@ -1,3 +1,5 @@
+from typing import Dict, List, Optional
+
 from pandas import DataFrame
 
 from .base import DataFrameable
@@ -23,16 +25,19 @@ class TrajectoryPoint(DataFrameable):
 
 
 class TrajectoryPointList(list):
-    def __init__(self, data):
-        self._data = data
+    def __init__(self, dict_list: List[Dict]):
+        self._dict_list = dict_list
 
-        super().__init__([TrajectoryPoint(**item) for item in self._data])
+        super().__init__([TrajectoryPoint(**item) for item in self._dict_list])
 
-    def to_df(self):
-        return DataFrame(self._data)
+    def to_df(self) -> DataFrame:
+        return DataFrame(self._dict_list)
 
-    def find_by_md(self, value):
-        return self._find_by_attr(input_list=self, attr='md', value=value)
+    def to_dict(self) -> List[Dict]:
+        return self._dict_list
 
-    def _find_by_attr(self, input_list: list[object], attr: str, value):
-        return next((item for item in input_list if getattr(item, attr, None) == value), None)
+    def find_by_md(self, value) -> Optional[TrajectoryPoint]:
+        return self._find_by_attr(attr='md', value=value)
+
+    def _find_by_attr(self, attr: str, value) -> Optional[TrajectoryPoint]:
+        return next((item for item in self if getattr(item, attr, None) == value), None)

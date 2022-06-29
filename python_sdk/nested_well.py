@@ -1,9 +1,9 @@
 from pandas import DataFrame
 
-from python_sdk.base import DataFrameable
+from python_sdk.base import BaseObject, DataFrameable
 
 
-class NestedWell(DataFrameable):
+class NestedWell(BaseObject, DataFrameable):
     def __init__(self, **kwargs):
         self.uuid = None
         self.name = None

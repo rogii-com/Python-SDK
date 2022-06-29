@@ -1,13 +1,15 @@
+from typing import Dict, List, Optional
+
 from python_sdk.papi.client import PapiClient
 from python_sdk.project import Project
 
-from .base import BaseObject, BaseObjectList
-from .exceptions import ProjectNotFound
+from .base import ComplexObject, ObjectList
+from .exceptions import ProjectNotFoundException
 from .types import SettingsAuth
 from .utils.constants import SOLO_PAPI_DEFAULT_DOMAIN_NAME
 
 
-class RogiiSolo(BaseObject):
+class SoloClient(ComplexObject):
     def __init__(self,
                  client_id: str,
                  client_secret: str,
@@ -15,7 +17,7 @@ class RogiiSolo(BaseObject):
                  solo_password: str,
                  papi_domain_name: str = SOLO_PAPI_DEFAULT_DOMAIN_NAME
                  ):
-        self._papi_client = PapiClient(
+        papi_client = PapiClient(
             SettingsAuth(
                 client_id=client_id,
                 client_secret=client_secret,
@@ -24,28 +26,28 @@ class RogiiSolo(BaseObject):
                 papi_domain_name=papi_domain_name
             )
         )
-        super().__init__(self._papi_client)
+        super().__init__(papi_client)
 
-        self._projects_data = []
-        self._projects = []
-        self.project: Project | None = None
+        self._projects_data: List[Dict] = []
+        self._projects: ObjectList[Project] = ObjectList(dict_list=[], object_list=[])
+        self.project: Optional[Project] = None
 
     @property
-    def projects_data(self) -> list[dict]:
+    def projects_data(self) -> List[Dict]:
         if not self._projects_data:
             self._projects_data = [
-                self._parse_papi_dict(project)
+                self._parse_papi_data(project)
                 for project in self._request_all_pages_with_content(func=self._papi_client.fetch_projects)
             ]
 
         return self._projects_data
 
     @property
-    def projects(self) -> BaseObjectList[Project]:
+    def projects(self) -> ObjectList[Project]:
         if not self._projects:
-            self._projects = BaseObjectList(
-                dicts_list=self.projects_data,
-                objects_list=[Project(papi_client=self._papi_client, **item) for item in self.projects_data]
+            self._projects = ObjectList(
+                dict_list=self.projects_data,
+                object_list=[Project(papi_client=self._papi_client, **item) for item in self.projects_data]
             )
 
         return self._projects
@@ -54,13 +56,13 @@ class RogiiSolo(BaseObject):
         self.project = self.projects.find_by_id(project_id)
 
         if not self.project:
-            raise ProjectNotFound('Project not found.')
+            raise ProjectNotFoundException('Project not found.')
 
     def set_project_by_name(self, project_name: str):
         self.project = self.projects.find_by_name(project_name)
 
         if not self.project:
-            raise ProjectNotFound('Project not found.')
+            raise ProjectNotFoundException('Project not found.')
 
     def replace_nested_well_trajectory(self,
                                        nested_well_id: str,
