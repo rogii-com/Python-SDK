@@ -5,7 +5,6 @@ from .base import DataFrameable
 
 class TrajectoryPoint(DataFrameable):
     def __init__(self, **kwargs):
-
         self.md = None
         self.incl = None
         self.azim = None
