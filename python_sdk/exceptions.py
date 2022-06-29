@@ -1,10 +1,6 @@
-class BasePyRogiiException(Exception):
+class BaseRogiiSoloException(Exception):
     pass
 
 
-class ProjectNotFound(BasePyRogiiException):
-    pass
-
-
-class ProjectNotSelected(BasePyRogiiException):
+class ProjectNotFoundException(BaseRogiiSoloException):
     pass
