@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Any, Dict, Iterable, List, Optional, Set, Tuple
+from typing import Any, Dict, Iterable, List, Literal, Optional, Set, Tuple
 
 from pandas import DataFrame
 
@@ -7,14 +7,28 @@ from python_sdk.papi.client import PapiClient
 
 
 class DataFrameable(ABC):
+    """
+    Object that can be converted to Pandas DataFrame
+    """
     @abstractmethod
     def to_df(self) -> DataFrame:
+        """
+        Convert object to DataFrame
+        :return
+        """
         pass
 
 
 class BaseObject(ABC):
+    """
+    Base data object
+    """
     @abstractmethod
     def to_dict(self) -> Dict[str, Any]:
+        """
+        Convert object to dict
+        :return
+        """
         pass
 
     def _find_by_path(
@@ -26,6 +40,16 @@ class BaseObject(ABC):
             check_none: bool = False,
             to_list: bool = False,
     ) -> Any:
+        """
+        Find nested key value in dict
+        :param obj:
+        :param path:
+        :param default:
+        :param divider:
+        :param check_none:
+        :param to_list:
+        :return:
+        """
         if not obj:
             return None if not to_list else []
 
@@ -77,14 +101,11 @@ class BaseObject(ABC):
 
         return obj if isinstance(obj, list) else [obj] if obj else []
 
-    def _prepare_papi_var(self, value: float) -> dict:
-        if value is None:
-            return {'undefined': True}
-
-        return {'val': value}
-
 
 class ComplexObject(BaseObject):
+    """
+    Object with access to PAPI
+    """
     def __init__(self, papi_client: PapiClient):
         super().__init__()
 
@@ -93,10 +114,21 @@ class ComplexObject(BaseObject):
     def to_dict(self) -> Dict[str, Any]:
         return {}
 
+    def _prepare_papi_var(self, value: float) -> Dict[Literal['val'] | Literal['undefined'], Any]:
+        """
+        Create value dict for PAPI
+        :param value:
+        :return:
+        """
+        if value is None:
+            return {'undefined': True}
+
+        return {'val': value}
+
     def _parse_papi_data(self, data: Any, default: Any = None) -> Any:
         """
-        Recursive dictionary parsing. Its elements can be either of the regular type values,
-        list/dictionary, or dictionaries with "val" or "undefined" key
+        Recursive dictionary parsing.
+        Elements can be either of the regular type values, list/dict, or dicts with "val" or "undefined" key.
         """
         if isinstance(data, dict):
             if 'val' in data or 'undefined' in data:
@@ -109,6 +141,12 @@ class ComplexObject(BaseObject):
             return data
 
     def _request_all_pages(self, func, **kwargs):
+        """
+        Retrieve PAPI data using methods which returns content right away
+        :param func:
+        :param kwargs:
+        :return:
+        """
         result = []
         offset = self._papi_client.DEFAULT_OFFSET
 
@@ -124,6 +162,12 @@ class ComplexObject(BaseObject):
         return result
 
     def _request_all_pages_with_content(self, func, **kwargs):
+        """
+        Retrieve PAPI data using methods which returns entire response
+        :param func:
+        :param kwargs:
+        :return:
+        """
         result = []
         offset = self._papi_client.DEFAULT_OFFSET
         last = False
@@ -138,23 +182,44 @@ class ComplexObject(BaseObject):
         return result
 
 
-class ObjectList(list):
-    def __init__(self, dict_list: List[Dict], object_list: List[BaseObject]):
-        super().__init__(object_list)
+class ObjectRepository(list):
+    """
+    List of objects with utility methods
+    """
+    def __init__(self, dicts: List[Dict], objects: List[BaseObject]):
+        super().__init__(objects)
 
-        self._dict_list = dict_list
-        self._object_list = object_list
+        self._dicts = dicts
+        self._objects = objects
 
     def to_df(self) -> DataFrame:
-        return DataFrame(self._dict_list)
+        """
+        Convert list to Pandas DataFrame
+        :return:
+        """
+        return DataFrame(self._dicts)
 
     def to_dict(self) -> List[Dict]:
-        return self._dict_list
+        """
+        Return list of dicts
+        :return:
+        """
+        return self._dicts
 
     def find_by_id(self, value) -> Optional[BaseObject]:
+        """
+        Find object by ID
+        :param value:
+        :return:
+        """
         return self._find_by_attr(attr='uuid', value=value)
 
     def find_by_name(self, value) -> Optional[BaseObject]:
+        """
+        Find object by name
+        :param value:
+        :return:
+        """
         return self._find_by_attr(attr='name', value=value)
 
     def _find_by_attr(self, attr: str, value) -> Optional[BaseObject]:

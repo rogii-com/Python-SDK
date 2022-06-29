@@ -2,7 +2,7 @@ from typing import Dict, List
 
 from pandas import DataFrame
 
-from python_sdk.base import ComplexObject, DataFrameable, ObjectList
+from python_sdk.base import ComplexObject, DataFrameable, ObjectRepository
 from python_sdk.well import Well
 
 
@@ -20,7 +20,7 @@ class Project(ComplexObject, DataFrameable):
         self.__dict__.update(kwargs)
 
         self._wells_data: List[Dict] = []
-        self._wells: ObjectList[Well] = ObjectList(dict_list=[], object_list=[])
+        self._wells: ObjectRepository[Well] = ObjectRepository(dicts=[], objects=[])
 
     def to_dict(self):
         return {
@@ -49,11 +49,11 @@ class Project(ComplexObject, DataFrameable):
         return self._wells_data
 
     @property
-    def wells(self) -> ObjectList[Well]:
+    def wells(self) -> ObjectRepository[Well]:
         if not self._wells:
-            self._wells = ObjectList(
-                dict_list=self.wells_data,
-                object_list=[Well(papi_client=self._papi_client, **item) for item in self.wells_data]
+            self._wells = ObjectRepository(
+                dicts=self.wells_data,
+                objects=[Well(papi_client=self._papi_client, **item) for item in self.wells_data]
             )
 
         return self._wells

@@ -2,7 +2,7 @@ from typing import Dict, List, Optional
 
 from pandas import DataFrame
 
-from python_sdk.base import ComplexObject, DataFrameable, ObjectList
+from python_sdk.base import ComplexObject, DataFrameable, ObjectRepository
 from python_sdk.interpretation import Interpretation
 from python_sdk.nested_well import NestedWell
 from python_sdk.target_line import TargetLine
@@ -33,15 +33,15 @@ class Well(ComplexObject, DataFrameable):
         self._trajectory: TrajectoryPointList[TrajectoryPoint] = TrajectoryPointList(dict_list=[])
 
         self._interpretations_data: List[Dict] = []
-        self._interpretations: ObjectList[Interpretation] = ObjectList(dict_list=[], object_list=[])
+        self._interpretations: ObjectRepository[Interpretation] = ObjectRepository(dicts=[], objects=[])
         self._starred_interpretation: Optional[Interpretation] = None
 
         self._target_lines_data: List[Dict] = []
-        self._target_lines: ObjectList[TargetLine] = ObjectList(dict_list=[], object_list=[])
+        self._target_lines: ObjectRepository[TargetLine] = ObjectRepository(dicts=[], objects=[])
         self._starred_target_line: Optional[TargetLine] = None
 
         self._nested_wells_data: List[Dict] = []
-        self._nested_wells: ObjectList[Well] = ObjectList(dict_list=[], object_list=[])
+        self._nested_wells: ObjectRepository[Well] = ObjectRepository(dicts=[], objects=[])
 
     def to_dict(self):
         return {
@@ -94,11 +94,11 @@ class Well(ComplexObject, DataFrameable):
         return self._interpretations_data
 
     @property
-    def interpretations(self) -> ObjectList[Interpretation]:
+    def interpretations(self) -> ObjectRepository[Interpretation]:
         if not self._interpretations:
-            self._interpretations = ObjectList(
-                dict_list=self.interpretations_data,
-                object_list=[
+            self._interpretations = ObjectRepository(
+                dicts=self.interpretations_data,
+                objects=[
                     Interpretation(papi_client=self._papi_client, **item) for item in self.interpretations_data
                 ]
             )
@@ -127,11 +127,11 @@ class Well(ComplexObject, DataFrameable):
         return self._target_lines_data
 
     @property
-    def target_lines(self) -> ObjectList[TargetLine]:
+    def target_lines(self) -> ObjectRepository[TargetLine]:
         if not self._target_lines:
-            self._target_lines = ObjectList(
-                dict_list=self.target_lines_data,
-                object_list=[TargetLine(**item) for item in self.target_lines_data]
+            self._target_lines = ObjectRepository(
+                dicts=self.target_lines_data,
+                objects=[TargetLine(**item) for item in self.target_lines_data]
             )
 
         return self._target_lines
@@ -158,11 +158,11 @@ class Well(ComplexObject, DataFrameable):
         return self._nested_wells_data
 
     @property
-    def nested_wells(self) -> ObjectList[NestedWell]:
+    def nested_wells(self) -> ObjectRepository[NestedWell]:
         if not self._nested_wells:
-            self._nested_wells = ObjectList(
-                dict_list=self.nested_wells_data,
-                object_list=[NestedWell(**item) for item in self.nested_wells_data]
+            self._nested_wells = ObjectRepository(
+                dicts=self.nested_wells_data,
+                objects=[NestedWell(**item) for item in self.nested_wells_data]
             )
 
         return self._nested_wells

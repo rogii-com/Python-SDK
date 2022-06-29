@@ -3,13 +3,16 @@ from typing import Dict, List, Optional
 from python_sdk.papi.client import PapiClient
 from python_sdk.project import Project
 
-from .base import ComplexObject, ObjectList
+from .base import ComplexObject, ObjectRepository
 from .exceptions import ProjectNotFoundException
 from .types import SettingsAuth
 from .utils.constants import SOLO_PAPI_DEFAULT_DOMAIN_NAME
 
 
 class SoloClient(ComplexObject):
+    """
+    Main object for retrieving Solo PAPI data
+    """
     def __init__(self,
                  client_id: str,
                  client_secret: str,
@@ -29,7 +32,7 @@ class SoloClient(ComplexObject):
         super().__init__(papi_client)
 
         self._projects_data: List[Dict] = []
-        self._projects: ObjectList[Project] = ObjectList(dict_list=[], object_list=[])
+        self._projects: ObjectRepository[Project] = ObjectRepository(dicts=[], objects=[])
         self.project: Optional[Project] = None
 
     @property
@@ -43,11 +46,11 @@ class SoloClient(ComplexObject):
         return self._projects_data
 
     @property
-    def projects(self) -> ObjectList[Project]:
+    def projects(self) -> ObjectRepository[Project]:
         if not self._projects:
-            self._projects = ObjectList(
-                dict_list=self.projects_data,
-                object_list=[Project(papi_client=self._papi_client, **item) for item in self.projects_data]
+            self._projects = ObjectRepository(
+                dicts=self.projects_data,
+                objects=[Project(papi_client=self._papi_client, **item) for item in self.projects_data]
             )
 
         return self._projects
