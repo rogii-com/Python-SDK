@@ -2,11 +2,11 @@ from typing import Dict, List
 
 from pandas import DataFrame
 
-from python_sdk.base import ComplexObject, DataFrameable, ObjectRepository
+from python_sdk.base import ComplexObject, ObjectRepository
 from python_sdk.well import Well
 
 
-class Project(ComplexObject, DataFrameable):
+class Project(ComplexObject):
     def __init__(self, papi_client, **kwargs):
         super().__init__(papi_client)
 
@@ -39,8 +39,8 @@ class Project(ComplexObject, DataFrameable):
     def wells_data(self) -> List[Dict]:
         if not self._wells_data:
             self._wells_data = [
-                self._parse_papi_data(well)
-                for well in self._request_all_pages_with_content(
+                self._papi_client._parse_papi_data(well)
+                for well in self._papi_client._request_all_pages_with_content(
                     func=self._papi_client.fetch_project_wells,
                     project_id=self.uuid
                 )

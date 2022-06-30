@@ -1,6 +1,7 @@
 import base64
 import hashlib
 import uuid
+from typing import Any, Dict, Literal
 from urllib.parse import urljoin
 
 from python_sdk import __version__
@@ -32,3 +33,70 @@ class PapiClient(SdkPapiClient):
             solo_password=settings_auth.solo_password,
             headers=headers
         )
+
+    def _prepare_papi_var(self, value: float) -> Dict[Literal['val'] | Literal['undefined'], Any]:
+        """
+        Create value dict for PAPI
+        :param value:
+        :return:
+        """
+        if value is None:
+            return {'undefined': True}
+
+        return {'val': value}
+
+    def _parse_papi_data(self, data: Any, default: Any = None) -> Any:
+        """
+        Recursive dictionary parsing.
+        Elements can be either of the regular type values, list/dict, or dicts with "val" or "undefined" key.
+        """
+        if isinstance(data, dict):
+            if 'val' in data or 'undefined' in data:
+                return data.get('val', default)
+            else:
+                return {item: self._parse_papi_data(value) for item, value in data.items()}
+        elif isinstance(data, list):
+            return [self._parse_papi_data(item) for item in data]
+        else:
+            return data
+
+    def _request_all_pages(self, func, **kwargs):
+        """
+        Retrieve PAPI data using methods which returns content right away
+        :param func:
+        :param kwargs:
+        :return:
+        """
+        result = []
+        offset = self.DEFAULT_OFFSET
+
+        while True:
+            response = func(offset=offset, **kwargs)
+
+            if not len(response):
+                break
+
+            result.extend(response)
+            offset += self.DEFAULT_LIMIT
+
+        return result
+
+    def _request_all_pages_with_content(self, func, **kwargs):
+        """
+        Retrieve PAPI data using methods which returns entire response
+        :param func:
+        :param kwargs:
+        :return:
+        """
+        result = []
+        offset = self.DEFAULT_OFFSET
+        last = False
+
+        while not last:
+            response = func(offset=offset, **kwargs)
+
+            result.extend(response['content'])
+            offset += self.DEFAULT_LIMIT
+            last = response['last']
+
+        return result

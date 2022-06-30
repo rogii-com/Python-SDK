@@ -2,7 +2,7 @@ from typing import TypedDict
 
 from pandas import DataFrame
 
-from python_sdk.base import ComplexObject, DataFrameable
+from python_sdk.base import ComplexObject
 
 
 class TypeInterpretation(TypedDict):
@@ -11,7 +11,7 @@ class TypeInterpretation(TypedDict):
     segments: DataFrame
 
 
-class Interpretation(ComplexObject, DataFrameable):
+class Interpretation(ComplexObject):
     def __init__(self, papi_client, **kwargs):
         super().__init__(papi_client)
 
@@ -39,7 +39,7 @@ class Interpretation(ComplexObject, DataFrameable):
         assembled_segments = self._papi_client.fetch_well_interpretation_assembled_segments(
             interpretation_id=self.uuid
         )
-        horizons = self._request_all_pages(
+        horizons = self._papi_client._request_all_pages(
             func=self._papi_client.fetch_well_interpretation_horizons,
             interpretation_id=self.uuid
         )
@@ -57,6 +57,6 @@ class Interpretation(ComplexObject, DataFrameable):
 
         return {
             'meta': meta,
-            'horizons': self._parse_papi_data(assembled_segments['horizons']),
-            'segments': self._parse_papi_data(assembled_segments['segments']),
+            'horizons': self._papi_client._parse_papi_data(assembled_segments['horizons']),
+            'segments': self._papi_client._parse_papi_data(assembled_segments['segments']),
         }

@@ -1,32 +1,28 @@
 from abc import ABC, abstractmethod
-from typing import Any, Dict, Iterable, List, Literal, Optional, Set, Tuple
+from typing import Any, Dict, Iterable, List, Optional, Set, Tuple
 
 from pandas import DataFrame
 
 from python_sdk.papi.client import PapiClient
 
 
-class DataFrameable(ABC):
-    """
-    Object that can be converted to Pandas DataFrame
-    """
-    @abstractmethod
-    def to_df(self) -> DataFrame:
-        """
-        Convert object to DataFrame
-        :return
-        """
-        pass
-
-
 class BaseObject(ABC):
     """
     Base data object
     """
+
     @abstractmethod
     def to_dict(self) -> Dict[str, Any]:
         """
         Convert object to dict
+        :return
+        """
+        pass
+
+    @abstractmethod
+    def to_df(self) -> DataFrame:
+        """
+        Convert object to DataFrame
         :return
         """
         pass
@@ -114,72 +110,8 @@ class ComplexObject(BaseObject):
     def to_dict(self) -> Dict[str, Any]:
         return {}
 
-    def _prepare_papi_var(self, value: float) -> Dict[Literal['val'] | Literal['undefined'], Any]:
-        """
-        Create value dict for PAPI
-        :param value:
-        :return:
-        """
-        if value is None:
-            return {'undefined': True}
-
-        return {'val': value}
-
-    def _parse_papi_data(self, data: Any, default: Any = None) -> Any:
-        """
-        Recursive dictionary parsing.
-        Elements can be either of the regular type values, list/dict, or dicts with "val" or "undefined" key.
-        """
-        if isinstance(data, dict):
-            if 'val' in data or 'undefined' in data:
-                return data.get('val', default)
-            else:
-                return {item: self._parse_papi_data(value) for item, value in data.items()}
-        elif isinstance(data, list):
-            return [self._parse_papi_data(item) for item in data]
-        else:
-            return data
-
-    def _request_all_pages(self, func, **kwargs):
-        """
-        Retrieve PAPI data using methods which returns content right away
-        :param func:
-        :param kwargs:
-        :return:
-        """
-        result = []
-        offset = self._papi_client.DEFAULT_OFFSET
-
-        while True:
-            response = func(offset=offset, **kwargs)
-
-            if not len(response):
-                break
-
-            result.extend(response)
-            offset += self._papi_client.DEFAULT_LIMIT
-
-        return result
-
-    def _request_all_pages_with_content(self, func, **kwargs):
-        """
-        Retrieve PAPI data using methods which returns entire response
-        :param func:
-        :param kwargs:
-        :return:
-        """
-        result = []
-        offset = self._papi_client.DEFAULT_OFFSET
-        last = False
-
-        while not last:
-            response = func(offset=offset, **kwargs)
-
-            result.extend(response['content'])
-            offset += self._papi_client.DEFAULT_LIMIT
-            last = response['last']
-
-        return result
+    def to_df(self) -> DataFrame:
+        return DataFrame([self.to_dict()])
 
 
 class ObjectRepository(list):

@@ -2,10 +2,10 @@ from typing import Dict, List, Optional
 
 from pandas import DataFrame
 
-from .base import DataFrameable
+from .base import BaseObject
 
 
-class TrajectoryPoint(DataFrameable):
+class TrajectoryPoint(BaseObject):
     def __init__(self, **kwargs):
         self.md = None
         self.incl = None

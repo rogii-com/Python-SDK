@@ -2,14 +2,14 @@ from typing import Dict, List, Optional
 
 from pandas import DataFrame
 
-from python_sdk.base import ComplexObject, DataFrameable, ObjectRepository
+from python_sdk.base import ComplexObject, ObjectRepository
 from python_sdk.interpretation import Interpretation
 from python_sdk.nested_well import NestedWell
 from python_sdk.target_line import TargetLine
 from python_sdk.trajectory import TrajectoryPoint, TrajectoryPointList
 
 
-class Well(ComplexObject, DataFrameable):
+class Well(ComplexObject):
     def __init__(self, papi_client, **kwargs):
         super().__init__(papi_client)
 
@@ -41,7 +41,7 @@ class Well(ComplexObject, DataFrameable):
         self._starred_target_line: Optional[TargetLine] = None
 
         self._nested_wells_data: List[Dict] = []
-        self._nested_wells: ObjectRepository[Well] = ObjectRepository(dicts=[], objects=[])
+        self._nested_wells: ObjectRepository[NestedWell] = ObjectRepository(dicts=[], objects=[])
 
     def to_dict(self):
         return {
@@ -67,7 +67,7 @@ class Well(ComplexObject, DataFrameable):
     def trajectory_data(self) -> List[Dict]:
         if not self._trajectory_data:
             self._trajectory_data = [
-                self._parse_papi_data(trajectory_point)
+                self._papi_client._parse_papi_data(trajectory_point)
                 for trajectory_point in self._papi_client.fetch_well_raw_trajectory(well_id=self.uuid)
             ]
 
@@ -84,8 +84,8 @@ class Well(ComplexObject, DataFrameable):
     def interpretations_data(self) -> List[Dict]:
         if not self._interpretations_data:
             self._interpretations_data = [
-                self._parse_papi_data(interpretation)
-                for interpretation in self._request_all_pages(
+                self._papi_client._parse_papi_data(interpretation)
+                for interpretation in self._papi_client._request_all_pages(
                     func=self._papi_client.fetch_well_raw_interpretations,
                     well_id=self.uuid
                 )
@@ -117,8 +117,8 @@ class Well(ComplexObject, DataFrameable):
     def target_lines_data(self) -> List[Dict]:
         if not self._target_lines_data:
             self._target_lines_data = [
-                self._parse_papi_data(target_line)
-                for target_line in self._request_all_pages_with_content(
+                self._papi_client._parse_papi_data(target_line)
+                for target_line in self._papi_client._request_all_pages_with_content(
                     func=self._papi_client.fetch_well_target_lines,
                     well_id=self.uuid
                 )
@@ -148,8 +148,8 @@ class Well(ComplexObject, DataFrameable):
     def nested_wells_data(self) -> List[Dict]:
         if not self._nested_wells_data:
             self._nested_wells_data = [
-                self._parse_papi_data(nested_well)
-                for nested_well in self._request_all_pages_with_content(
+                self._papi_client._parse_papi_data(nested_well)
+                for nested_well in self._papi_client._request_all_pages_with_content(
                     func=self._papi_client.fetch_well_nested_wells,
                     well_id=self.uuid
                 )
@@ -183,13 +183,13 @@ class Well(ComplexObject, DataFrameable):
             nested_well_name=nested_well_name,
             operator=operator,
             api=api,
-            xsrf=self._prepare_papi_var(xsrf),
-            ysrf=self._prepare_papi_var(ysrf),
-            kb=self._prepare_papi_var(kb),
-            tie_in_tvd=self._prepare_papi_var(tie_in_tvd),
-            tie_in_ns=self._prepare_papi_var(tie_in_ns),
-            tie_in_ew=self._prepare_papi_var(tie_in_ew)
+            xsrf=self._papi_client._prepare_papi_var(xsrf),
+            ysrf=self._papi_client._prepare_papi_var(ysrf),
+            kb=self._papi_client._prepare_papi_var(kb),
+            tie_in_tvd=self._papi_client._prepare_papi_var(tie_in_tvd),
+            tie_in_ns=self._papi_client._prepare_papi_var(tie_in_ns),
+            tie_in_ew=self._papi_client._prepare_papi_var(tie_in_ew)
         )
 
         self._nested_wells_data = []
-        self._nested_wells = []
+        self._nested_wells = ObjectRepository(dicts=[], objects=[])

@@ -1,9 +1,9 @@
 from pandas import DataFrame
 
-from python_sdk.base import BaseObject, DataFrameable
+from python_sdk.base import BaseObject
 
 
-class TargetLine(BaseObject, DataFrameable):
+class TargetLine(BaseObject):
     def __init__(self, **kwargs):
         self.uuid = None
         self.name = None

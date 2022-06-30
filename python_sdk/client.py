@@ -3,13 +3,13 @@ from typing import Dict, List, Optional
 from python_sdk.papi.client import PapiClient
 from python_sdk.project import Project
 
-from .base import ComplexObject, ObjectRepository
+from .base import ObjectRepository
 from .exceptions import ProjectNotFoundException
 from .types import SettingsAuth
 from .utils.constants import SOLO_PAPI_DEFAULT_DOMAIN_NAME
 
 
-class SoloClient(ComplexObject):
+class SoloClient:
     """
     Main object for retrieving Solo PAPI data
     """
@@ -20,7 +20,7 @@ class SoloClient(ComplexObject):
                  solo_password: str,
                  papi_domain_name: str = SOLO_PAPI_DEFAULT_DOMAIN_NAME
                  ):
-        papi_client = PapiClient(
+        self._papi_client = PapiClient(
             SettingsAuth(
                 client_id=client_id,
                 client_secret=client_secret,
@@ -29,7 +29,6 @@ class SoloClient(ComplexObject):
                 papi_domain_name=papi_domain_name
             )
         )
-        super().__init__(papi_client)
 
         self._projects_data: List[Dict] = []
         self._projects: ObjectRepository[Project] = ObjectRepository(dicts=[], objects=[])
@@ -39,8 +38,8 @@ class SoloClient(ComplexObject):
     def projects_data(self) -> List[Dict]:
         if not self._projects_data:
             self._projects_data = [
-                self._parse_papi_data(project)
-                for project in self._request_all_pages_with_content(func=self._papi_client.fetch_projects)
+                self._papi_client._parse_papi_data(project)
+                for project in self._papi_client._request_all_pages_with_content(func=self._papi_client.fetch_projects)
             ]
 
         return self._projects_data
@@ -75,7 +74,7 @@ class SoloClient(ComplexObject):
                                        trajectory_stations: list
                                        ):
         wrapped_trajectory_stations = [
-            {key: self._prepare_papi_var(value) for key, value in point.items()}
+            {key: self._papi_client._prepare_papi_var(value) for key, value in point.items()}
             for point in trajectory_stations
         ]
 
