@@ -1,7 +1,7 @@
 import random
 from os import environ
 
-from python_sdk.client import SoloClient
+from ..client import SoloClient
 
 
 def prepare_well_plan():

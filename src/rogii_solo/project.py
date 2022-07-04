@@ -2,8 +2,8 @@ from typing import Dict, List
 
 from pandas import DataFrame
 
-from python_sdk.base import ComplexObject, ObjectRepository
-from python_sdk.well import Well
+from .base import ComplexObject, ObjectRepository
+from .well import Well
 
 
 class Project(ComplexObject):

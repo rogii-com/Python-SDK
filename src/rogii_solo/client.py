@@ -1,10 +1,9 @@
 from typing import Dict, List, Optional
 
-from python_sdk.papi.client import PapiClient
-from python_sdk.project import Project
-
 from .base import ObjectRepository
 from .exceptions import ProjectNotFoundException
+from .papi.client import PapiClient
+from .project import Project
 from .types import SettingsAuth
 from .utils.constants import SOLO_PAPI_DEFAULT_DOMAIN_NAME
 
@@ -73,15 +72,9 @@ class SoloClient:
                                        azi_uom: str,
                                        trajectory_stations: list
                                        ):
-        wrapped_trajectory_stations = [
+        prepared_trajectory_stations = [
             {key: self._papi_client._prepare_papi_var(value) for key, value in point.items()}
             for point in trajectory_stations
-        ]
-
-        # FIXME: temporary fix for SOLO-5351
-        fixed_wrapped_trajectory_stations = [
-            {key if key != 'azim' else 'azi': value for key, value in point.items()}
-            for point in wrapped_trajectory_stations
         ]
 
         return self._papi_client.replace_nested_well_trajectory(
@@ -89,5 +82,5 @@ class SoloClient:
             md_uom=md_uom,
             incl_uom=incl_uom,
             azi_uom=azi_uom,
-            trajectory_stations=fixed_wrapped_trajectory_stations
+            trajectory_stations=prepared_trajectory_stations
         )

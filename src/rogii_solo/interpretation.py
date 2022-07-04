@@ -2,7 +2,7 @@ from typing import TypedDict
 
 from pandas import DataFrame
 
-from python_sdk.base import ComplexObject
+from .base import ComplexObject
 
 
 class TypeInterpretation(TypedDict):

@@ -1,0 +1,59 @@
+[build-system]
+requires = [
+    "setuptools==63.1.0",
+    "wheel==0.37.1"
+]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "rogii-solo"
+description = "ROGII Solo is a Python SDK designed for making data scientists' work easier."
+readme = "README.md"
+license = {file = "LICENSE.txt"}
+keywords = [
+    "rogii",
+    "solo",
+    "python sdk",
+    "data science",
+    "cloud data",
+    "data analysis",
+    "papi",
+    "starsteer",
+    "geology",
+    "drilling",
+    "geosteering"
+]
+requires-python = ">=3.8"
+
+# TODO: Add license classifier
+classifiers = [
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3 :: Only",
+    "Operating System :: OS Independent",
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Science/Research",
+    "Environment :: Web Environment",
+    "Topic :: Software Development :: Version Control :: Git",
+    "Topic :: Software Development :: Testing :: Unit",
+    "Topic :: Scientific/Engineering"
+]
+authors = [
+    { name = "ROGII Inc.", email = "support@rogii.com" }
+]
+dependencies = [
+    "requests==2.28.1",
+    "requests-oauthlib==1.3.1",
+    "pandas==1.4.3",
+    "numpy==1.23.0"
+]
+dynamic = ["version"]
+
+# TODO: Add documentation/homepage link
+[project.urls]
+"Knowledge Base" = "https://kb.solo.cloud"
+"Support" = "https://rogii.net/support"
+
+[tool.setuptools.dynamic]
+version = {attr = "rogii_solo.__version__"}

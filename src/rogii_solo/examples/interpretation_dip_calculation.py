@@ -6,7 +6,7 @@ from calculations.interpretation import get_segments
 from calculations.trajectory import calculate_trajectory
 from pandas import DataFrame
 
-from python_sdk.client import SoloClient
+from ..client import SoloClient
 
 
 def calc_interpretation_dip():

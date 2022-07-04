@@ -2,11 +2,11 @@ from typing import Dict, List, Optional
 
 from pandas import DataFrame
 
-from python_sdk.base import ComplexObject, ObjectRepository
-from python_sdk.interpretation import Interpretation
-from python_sdk.nested_well import NestedWell
-from python_sdk.target_line import TargetLine
-from python_sdk.trajectory import TrajectoryPoint, TrajectoryPointList
+from .base import ComplexObject, ObjectRepository
+from .interpretation import Interpretation
+from .nested_well import NestedWell
+from .target_line import TargetLine
+from .trajectory import TrajectoryPoint, TrajectoryPointList
 
 
 class Well(ComplexObject):

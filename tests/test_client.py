@@ -1,7 +1,7 @@
 import random
 from os import environ
 
-from python_sdk.client import SoloClient
+from src.rogii_solo.client import SoloClient
 
 project_name = 'Global project'
 well_name = 'Lateral'

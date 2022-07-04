@@ -1,6 +1,6 @@
 from pandas import DataFrame
 
-from python_sdk.base import BaseObject
+from .base import BaseObject
 
 
 class NestedWell(BaseObject):

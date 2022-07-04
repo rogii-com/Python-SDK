@@ -4,9 +4,9 @@ import uuid
 from typing import Any, Dict, Literal
 from urllib.parse import urljoin
 
-from python_sdk import __version__
-from python_sdk.types import SettingsAuth
-from python_sdk.utils.constants import PYTHON_SDK_APP_ID, SOLO_OPEN_AUTH_SERVICE_URL, SOLO_PAPI_URL
+from src.rogii_solo import __version__
+from src.rogii_solo.types import SettingsAuth
+from src.rogii_solo.utils.constants import PYTHON_SDK_APP_ID, SOLO_OPEN_AUTH_SERVICE_URL, SOLO_PAPI_URL
 
 from .base import PapiClient as SdkPapiClient
 
