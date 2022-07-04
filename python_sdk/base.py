@@ -118,7 +118,13 @@ class ObjectRepository(list):
     """
     List of objects with utility methods
     """
-    def __init__(self, dicts: List[Dict], objects: List[BaseObject]):
+    def __init__(self, dicts: List[Dict] = None, objects: List[BaseObject] = None):
+        if dicts is None:
+            dicts = []
+
+        if objects is None:
+            objects = []
+
         super().__init__(objects)
 
         self._dicts = dicts

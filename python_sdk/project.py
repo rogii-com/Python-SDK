@@ -20,7 +20,7 @@ class Project(ComplexObject):
         self.__dict__.update(kwargs)
 
         self._wells_data: List[Dict] = []
-        self._wells: ObjectRepository[Well] = ObjectRepository(dicts=[], objects=[])
+        self._wells: ObjectRepository[Well] = ObjectRepository()
 
     def to_dict(self):
         return {

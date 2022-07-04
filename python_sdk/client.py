@@ -31,7 +31,7 @@ class SoloClient:
         )
 
         self._projects_data: List[Dict] = []
-        self._projects: ObjectRepository[Project] = ObjectRepository(dicts=[], objects=[])
+        self._projects: ObjectRepository[Project] = ObjectRepository()
         self.project: Optional[Project] = None
 
     @property

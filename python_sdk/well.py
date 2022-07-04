@@ -30,18 +30,19 @@ class Well(ComplexObject):
         self.__dict__.update(kwargs)
 
         self._trajectory_data: List[Dict] = []
-        self._trajectory: TrajectoryPointList[TrajectoryPoint] = TrajectoryPointList(dict_list=[])
+        self._trajectory: TrajectoryPointList[TrajectoryPoint] = TrajectoryPointList()
 
         self._interpretations_data: List[Dict] = []
-        self._interpretations: ObjectRepository[Interpretation] = ObjectRepository(dicts=[], objects=[])
+        self._interpretations: ObjectRepository[Interpretation] = ObjectRepository()
         self._starred_interpretation: Optional[Interpretation] = None
 
         self._target_lines_data: List[Dict] = []
-        self._target_lines: ObjectRepository[TargetLine] = ObjectRepository(dicts=[], objects=[])
+        self._target_lines: ObjectRepository[TargetLine] = ObjectRepository()
         self._starred_target_line: Optional[TargetLine] = None
 
         self._nested_wells_data: List[Dict] = []
-        self._nested_wells: ObjectRepository[NestedWell] = ObjectRepository(dicts=[], objects=[])
+        self._nested_wells: ObjectRepository[NestedWell] = ObjectRepository()
+        self._starred_nested_well: Optional[NestedWell] = None
 
     def to_dict(self):
         return {
@@ -167,6 +168,14 @@ class Well(ComplexObject):
 
         return self._nested_wells
 
+    @property
+    def starred_nested_well(self) -> Optional[NestedWell]:
+        if not self._starred_nested_well:
+            starred_nested_well_id = self._find_by_path(self.starred, 'nested_well')
+            self._starred_nested_well = self.nested_wells.find_by_id(starred_nested_well_id)
+
+        return self._starred_nested_well
+
     def create_nested_well(self,
                            nested_well_name: str,
                            operator: str,
@@ -192,4 +201,4 @@ class Well(ComplexObject):
         )
 
         self._nested_wells_data = []
-        self._nested_wells = ObjectRepository(dicts=[], objects=[])
+        self._nested_wells = ObjectRepository()
