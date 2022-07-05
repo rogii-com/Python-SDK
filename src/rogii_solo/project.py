@@ -2,8 +2,8 @@ from typing import Dict, List
 
 from pandas import DataFrame
 
-from python_sdk.base import ComplexObject, ObjectRepository
-from python_sdk.well import Well
+from rogii_solo.base import ComplexObject, ObjectRepository
+from rogii_solo.well import Well
 
 
 class Project(ComplexObject):

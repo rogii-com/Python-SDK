@@ -4,7 +4,7 @@ from calculations.enums import EMeasureUnits
 from calculations.trajectory import calculate_trajectory
 from pandas import DataFrame
 
-from python_sdk.client import SoloClient
+from rogii_solo.client import SoloClient
 
 PROJECT_NAME = 'Global project'
 WELL_NAME = 'Lateral'

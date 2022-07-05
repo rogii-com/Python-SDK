@@ -1,11 +1,11 @@
 repos:
   - repo: https://gitlab.com/pycqa/flake8
-    rev: 3.9.2
+    rev: 4.0.1
     hooks:
       - id: flake8
-        exclude: migrations|tests
+        exclude: tests
   - repo: https://github.com/timothycrosley/isort
     rev: 5.10.1
     hooks:
       - id: isort
-        exclude: migrations
+        exclude: tests

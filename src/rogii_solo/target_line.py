@@ -1,6 +1,6 @@
 from pandas import DataFrame
 
-from python_sdk.base import BaseObject
+from rogii_solo.base import BaseObject
 
 
 class TargetLine(BaseObject):
