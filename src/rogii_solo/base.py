@@ -3,7 +3,7 @@ from typing import Any, Dict, Iterable, List, Optional, Set, Tuple
 
 from pandas import DataFrame
 
-from .papi.client import PapiClient
+from rogii_solo.papi.client import PapiClient
 
 
 class BaseObject(ABC):

@@ -2,7 +2,7 @@ from typing import Dict, List, Optional
 
 from pandas import DataFrame
 
-from .base import BaseObject
+from rogii_solo.base import BaseObject
 
 
 class TrajectoryPoint(BaseObject):
@@ -24,7 +24,7 @@ class TrajectoryPoint(BaseObject):
         return DataFrame([self.to_dict()])
 
 
-class TrajectoryPointList(list):
+class TrajectoryPointRepository(list):
     def __init__(self, dicts: List[Dict] = None):
         if dicts is None:
             dicts = []

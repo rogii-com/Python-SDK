@@ -2,11 +2,11 @@ from typing import Dict, List, Optional
 
 from pandas import DataFrame
 
-from .base import ComplexObject, ObjectRepository
-from .interpretation import Interpretation
-from .nested_well import NestedWell
-from .target_line import TargetLine
-from .trajectory import TrajectoryPoint, TrajectoryPointList
+from rogii_solo.base import ComplexObject, ObjectRepository
+from rogii_solo.interpretation import Interpretation
+from rogii_solo.nested_well import NestedWell
+from rogii_solo.target_line import TargetLine
+from rogii_solo.trajectory import TrajectoryPoint, TrajectoryPointRepository
 
 
 class Well(ComplexObject):
@@ -30,7 +30,7 @@ class Well(ComplexObject):
         self.__dict__.update(kwargs)
 
         self._trajectory_data: List[Dict] = []
-        self._trajectory: TrajectoryPointList[TrajectoryPoint] = TrajectoryPointList()
+        self._trajectory: TrajectoryPointRepository[TrajectoryPoint] = TrajectoryPointRepository()
 
         self._interpretations_data: List[Dict] = []
         self._interpretations: ObjectRepository[Interpretation] = ObjectRepository()
@@ -75,9 +75,9 @@ class Well(ComplexObject):
         return self._trajectory_data
 
     @property
-    def trajectory(self) -> TrajectoryPointList[TrajectoryPoint]:
+    def trajectory(self) -> TrajectoryPointRepository[TrajectoryPoint]:
         if not self._trajectory:
-            self._trajectory = TrajectoryPointList(self.trajectory_data)
+            self._trajectory = TrajectoryPointRepository(self.trajectory_data)
 
         return self._trajectory
 

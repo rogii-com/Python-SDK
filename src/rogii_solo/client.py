@@ -1,11 +1,11 @@
 from typing import Dict, List, Optional
 
-from .base import ObjectRepository
-from .exceptions import ProjectNotFoundException
-from .papi.client import PapiClient
-from .project import Project
-from .types import SettingsAuth
-from .utils.constants import SOLO_PAPI_DEFAULT_DOMAIN_NAME
+from rogii_solo.base import ObjectRepository
+from rogii_solo.exceptions import ProjectNotFoundException
+from rogii_solo.papi.client import PapiClient
+from rogii_solo.project import Project
+from rogii_solo.types import SettingsAuth
+from rogii_solo.utils.constants import SOLO_PAPI_DEFAULT_DOMAIN_NAME
 
 
 class SoloClient:
