@@ -86,7 +86,7 @@ class Well(ComplexObject):
         if not self._interpretations_data:
             self._interpretations_data = [
                 self._papi_client._parse_papi_data(interpretation)
-                for interpretation in self._papi_client._request_all_pages(
+                for interpretation in self._papi_client._fetch_all_pages(
                     func=self._papi_client.fetch_well_raw_interpretations,
                     well_id=self.uuid
                 )
@@ -119,7 +119,7 @@ class Well(ComplexObject):
         if not self._target_lines_data:
             self._target_lines_data = [
                 self._papi_client._parse_papi_data(target_line)
-                for target_line in self._papi_client._request_all_pages_with_content(
+                for target_line in self._papi_client._fetch_all_pages(
                     func=self._papi_client.fetch_well_target_lines,
                     well_id=self.uuid
                 )
@@ -150,7 +150,7 @@ class Well(ComplexObject):
         if not self._nested_wells_data:
             self._nested_wells_data = [
                 self._papi_client._parse_papi_data(nested_well)
-                for nested_well in self._papi_client._request_all_pages_with_content(
+                for nested_well in self._papi_client._fetch_all_pages(
                     func=self._papi_client.fetch_well_nested_wells,
                     well_id=self.uuid
                 )
@@ -187,7 +187,7 @@ class Well(ComplexObject):
                            tie_in_ns: float,
                            tie_in_ew: float
                            ):
-        self._papi_client.create_nested_well(
+        self._papi_client.create_well_nested_well(
             well_id=self.uuid,
             nested_well_name=nested_well_name,
             operator=operator,

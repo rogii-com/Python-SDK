@@ -1,14 +1,13 @@
 import base64
 import hashlib
 import uuid
-from typing import Any, Dict, Literal
+from typing import Any
 from urllib.parse import urljoin
 
 from rogii_solo import __version__
-from rogii_solo.types import SettingsAuth
+from rogii_solo.papi.base import PapiClient as SdkPapiClient
+from rogii_solo.papi.types import PapiVar, SettingsAuth
 from rogii_solo.utils.constants import PYTHON_SDK_APP_ID, SOLO_OPEN_AUTH_SERVICE_URL, SOLO_PAPI_URL
-
-from .base import PapiClient as SdkPapiClient
 
 
 class PapiClient(SdkPapiClient):
@@ -29,12 +28,10 @@ class PapiClient(SdkPapiClient):
             papi_auth_url=papi_auth_url,
             papi_client_id=settings_auth.client_id,
             papi_client_secret=settings_auth.client_secret,
-            solo_username=settings_auth.solo_username,
-            solo_password=settings_auth.solo_password,
             headers=headers
         )
 
-    def _prepare_papi_var(self, value: float) -> Dict[Literal['val'] | Literal['undefined'], Any]:
+    def _prepare_papi_var(self, value: float) -> PapiVar:
         """
         Create value dict for PAPI
         :param value:
@@ -60,30 +57,9 @@ class PapiClient(SdkPapiClient):
         else:
             return data
 
-    def _request_all_pages(self, func, **kwargs):
+    def _fetch_all_pages(self, func, **kwargs):
         """
-        Retrieve PAPI data using methods which returns content right away
-        :param func:
-        :param kwargs:
-        :return:
-        """
-        result = []
-        offset = self.DEFAULT_OFFSET
-
-        while True:
-            response = func(offset=offset, **kwargs)
-
-            if not len(response):
-                break
-
-            result.extend(response)
-            offset += self.DEFAULT_LIMIT
-
-        return result
-
-    def _request_all_pages_with_content(self, func, **kwargs):
-        """
-        Retrieve PAPI data using methods which returns entire response
+        Retrieve all pages' data
         :param func:
         :param kwargs:
         :return:

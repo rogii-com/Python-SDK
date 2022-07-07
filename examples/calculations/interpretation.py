@@ -1,5 +1,5 @@
 from math import fabs
-from typing import List
+from typing import Any, Dict, List
 
 from pandas import DataFrame
 
@@ -61,7 +61,7 @@ def calc_segments_dip(segments: List, assembled_horizons: DataFrame):
 
 
 def get_segments(
-        well: dict,
+        well: Dict[str, Any],
         assembled_segments: DataFrame,
         assembled_horizons: DataFrame,
         calculated_trajectory: List,

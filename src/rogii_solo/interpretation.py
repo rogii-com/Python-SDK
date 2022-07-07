@@ -1,14 +1,7 @@
-from typing import TypedDict
-
 from pandas import DataFrame
 
 from rogii_solo.base import ComplexObject
-
-
-class TypeInterpretation(TypedDict):
-    meta: DataFrame
-    horizons: DataFrame
-    segments: DataFrame
+from rogii_solo.types import Interpretation as InterpretationType
 
 
 class Interpretation(ComplexObject):
@@ -26,7 +19,7 @@ class Interpretation(ComplexObject):
     def to_dict(self):
         return self._get_data()
 
-    def to_df(self) -> TypeInterpretation:
+    def to_df(self) -> InterpretationType:
         data = self._get_data()
 
         return {
@@ -36,11 +29,11 @@ class Interpretation(ComplexObject):
         }
 
     def _get_data(self):
-        assembled_segments = self._papi_client.fetch_well_interpretation_assembled_segments(
+        assembled_segments = self._papi_client.fetch_interpretation_assembled_segments(
             interpretation_id=self.uuid
         )
-        horizons = self._papi_client._request_all_pages(
-            func=self._papi_client.fetch_well_interpretation_horizons,
+        horizons = self._papi_client._fetch_all_pages(
+            func=self._papi_client.fetch_interpretation_horizons,
             interpretation_id=self.uuid
         )
 
