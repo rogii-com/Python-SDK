@@ -1,9 +1,9 @@
-from typing import NamedTuple
+from typing import TypedDict
+
+from pandas import DataFrame
 
 
-class SettingsAuth(NamedTuple):
-    client_id: str
-    client_secret: str
-    solo_username: str
-    solo_password: str
-    papi_domain_name: str
+class Interpretation(TypedDict):
+    meta: DataFrame
+    horizons: DataFrame
+    segments: DataFrame

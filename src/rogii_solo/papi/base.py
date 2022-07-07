@@ -1,11 +1,12 @@
-from typing import Any
+from typing import Any, Dict, Optional
 
 from oauthlib.oauth2 import BackendApplicationClient, LegacyApplicationClient
 from requests import codes as status_codes
 from requests.auth import HTTPBasicAuth
 from requests_oauthlib import OAuth2Session
 
-from .exceptions import AccessTokenFailureException, BasePapiClientException
+from rogii_solo.papi.exceptions import AccessTokenFailureException, BasePapiClientException
+from rogii_solo.papi.types import PapiTrajectory, PapiVar
 
 
 class BasePapiClient:
@@ -21,8 +22,8 @@ class BasePapiClient:
                  papi_client_secret: str,
                  solo_username: str = None,
                  solo_password: str = None,
-                 headers: dict = None,
-                 proxies: dict = None
+                 headers: Optional[Dict[str, Any]] = None,
+                 proxies: Optional[Dict[str, Any]] = None
                  ):
         self.papi_url = papi_url
         self.token_url = f'{papi_auth_url}/token'
@@ -106,7 +107,11 @@ class BasePapiClient:
             'Authorization': f"Bearer {token_data['access_token']}"
         })
 
-    def _send_request(self, url: str, params: dict = None, headers: dict = None):
+    def _send_request(self,
+                      url: str,
+                      params: Optional[Dict[str, Any]] = None,
+                      headers: Optional[Dict[str, Any]] = None
+                      ):
         response = self.session.get(f"{self.papi_url}/{url}", params=params, headers=headers)
 
         if response.status_code != status_codes.ok:
@@ -116,7 +121,11 @@ class BasePapiClient:
         if response.text:
             return response.json()
 
-    def _send_post_request(self, url: str, request_data: Any, headers: dict = None):
+    def _send_post_request(self,
+                           url: str,
+                           request_data: Dict[str, Any],
+                           headers: Optional[Dict[str, Any]] = None
+                           ):
         response = self.session.post(f"{self.papi_url}/{url}", json=request_data, headers=headers)
 
         if response.status_code != status_codes.ok:
@@ -126,7 +135,11 @@ class BasePapiClient:
         if response.text:
             return response.json()
 
-    def _send_put_request(self, url: str, request_data: Any, headers: dict = None):
+    def _send_put_request(self,
+                          url: str,
+                          request_data: Dict[str, Any],
+                          headers: Optional[Dict[str, Any]] = None
+                          ):
         response = self.session.put(f"{self.papi_url}/{url}", json=request_data, headers=headers)
 
         if response.status_code != status_codes.ok:
@@ -145,8 +158,8 @@ class PapiClient(BasePapiClient):
                  papi_client_secret: str,
                  solo_username: str = None,
                  solo_password: str = None,
-                 headers: dict = None,
-                 proxies: dict = None
+                 headers: Optional[Dict[str, Any]] = None,
+                 proxies: Optional[Dict[str, Any]] = None
                  ):
         super().__init__(
             papi_url=papi_url,
@@ -159,17 +172,11 @@ class PapiClient(BasePapiClient):
             proxies=proxies
         )
 
-    def fetch_project(self, project_id: str, headers: dict = None):
-        return self._send_request(url=f'projects/{project_id}', headers=headers)
-
-    def fetch_raw_project(self, project_id: str, headers: dict = None):
-        return self._send_request(url=f'projects/{project_id}/raw', headers=headers)
-
     def fetch_projects(self,
                        offset: int = BasePapiClient.DEFAULT_OFFSET,
                        limit: int = BasePapiClient.DEFAULT_LIMIT,
                        project_filter: str = None,
-                       headers: dict = None
+                       headers: Optional[Dict[str, Any]] = None
                        ):
         """
         Fetches projects
@@ -195,7 +202,7 @@ class PapiClient(BasePapiClient):
                                offset: int = BasePapiClient.DEFAULT_OFFSET,
                                limit: int = BasePapiClient.DEFAULT_LIMIT,
                                project_filter: str = None,
-                               headers: dict = None
+                               headers: Optional[Dict[str, Any]] = None
                                ):
         """
         Fetches virtual projects
@@ -222,7 +229,7 @@ class PapiClient(BasePapiClient):
                             offset: int = BasePapiClient.DEFAULT_OFFSET,
                             limit: int = BasePapiClient.DEFAULT_LIMIT,
                             well_filter: str = None,
-                            headers: dict = None
+                            headers: Optional[Dict[str, Any]] = None
                             ):
         """
         Fetches project wells
@@ -245,13 +252,7 @@ class PapiClient(BasePapiClient):
 
         return data
 
-    def fetch_well(self, well_id: str, headers: dict = None):
-        return self._send_request(url=f'wells/{well_id}', headers=headers)
-
-    def fetch_raw_well(self, well_id: str, headers: dict = None):
-        return self._send_request(url=f'wells/{well_id}/raw', headers=headers)
-
-    def fetch_well_raw_trajectory(self, well_id: str, headers: dict = None):
+    def fetch_well_raw_trajectory(self, well_id: str, headers: Optional[Dict[str, Any]] = None):
         """
         Fetches well trajectory raw data
         :param well_id:
@@ -262,50 +263,12 @@ class PapiClient(BasePapiClient):
 
         return data['content']
 
-    def fetch_well_logs(self,
-                        well_id: str,
-                        offset: int = BasePapiClient.DEFAULT_OFFSET,
-                        limit: int = BasePapiClient.DEFAULT_LIMIT,
-                        filter: str = None,
-                        headers: dict = None
-                        ):
-        """
-        Fetches well logs
-        :param well_id:
-        :param offset:
-        :param limit:
-        :param filter:
-        :return:
-        """
-
-        data = self._send_request(
-            url=f'wells/{well_id}/logs',
-            params={
-                'offset': offset,
-                'limit': limit,
-                'filter': filter
-            },
-            headers=headers
-        )
-
-        return data['content']
-
-    def fetch_well_raw_log(self, log_id: str, headers: dict = None):
-        """
-        Fetches log raw data
-        :param log_id:
-        :return:
-        """
-        data = self._send_request(url=f'logs/{log_id}/data/raw', headers=headers)
-
-        return data['log_points']
-
     def fetch_well_raw_interpretations(self,
                                        well_id: str,
                                        offset: int = BasePapiClient.DEFAULT_OFFSET,
                                        limit: int = BasePapiClient.DEFAULT_LIMIT,
                                        filter: str = None,
-                                       headers: dict = None
+                                       headers: Optional[Dict[str, Any]] = None
                                        ):
         """
         Fetches well interpretations
@@ -316,7 +279,7 @@ class PapiClient(BasePapiClient):
         :return:
         """
 
-        data = self._send_request(
+        return self._send_request(
             url=f'wells/{well_id}/interpretations/raw',
             params={
                 'offset': offset,
@@ -326,15 +289,13 @@ class PapiClient(BasePapiClient):
             headers=headers
         )
 
-        return data['content']
-
-    def fetch_well_interpretation_horizons(self,
-                                           interpretation_id: str,
-                                           offset: int = BasePapiClient.DEFAULT_OFFSET,
-                                           limit: int = BasePapiClient.DEFAULT_LIMIT,
-                                           filter: str = None,
-                                           headers: dict = None
-                                           ):
+    def fetch_interpretation_horizons(self,
+                                      interpretation_id: str,
+                                      offset: int = BasePapiClient.DEFAULT_OFFSET,
+                                      limit: int = BasePapiClient.DEFAULT_LIMIT,
+                                      filter: str = None,
+                                      headers: Optional[Dict[str, Any]] = None
+                                      ):
         """
         Fetches interpretation horizons
         :param interpretation_id:
@@ -344,7 +305,7 @@ class PapiClient(BasePapiClient):
         :return:
         """
 
-        data = self._send_request(
+        return self._send_request(
             url=f'interpretations/{interpretation_id}/horizons',
             params={
                 'offset': offset,
@@ -354,9 +315,10 @@ class PapiClient(BasePapiClient):
             headers=headers
         )
 
-        return data['content']
-
-    def fetch_well_interpretation_assembled_segments(self, interpretation_id: str, headers: dict = None):
+    def fetch_interpretation_assembled_segments(self,
+                                                interpretation_id: str,
+                                                headers: Optional[Dict[str, Any]] = None
+                                                ):
         """
         Fetches interpretation assembled segments
         :param interpretation_id:
@@ -367,39 +329,11 @@ class PapiClient(BasePapiClient):
 
         return data['assembled_segments']
 
-    def fetch_userinfo(self, headers: dict = None):
-        data = self._send_request(url='userinfo', headers=headers)
-
-        return data
-
-    def fetch_well_tops(self,
-                        well_id: str,
-                        offset: int = BasePapiClient.DEFAULT_OFFSET,
-                        limit: int = BasePapiClient.DEFAULT_LIMIT,
-                        headers: dict = None
-                        ):
-        """
-        Fetches well tops
-        :param well_id:
-        :param offset:
-        :param limit:
-        :return:
-        """
-
-        return self._send_request(
-            url=f'wells/{well_id}/tops',
-            params={
-                'offset': offset,
-                'limit': limit
-            },
-            headers=headers
-        )
-
     def fetch_well_nested_wells(self,
                                 well_id: str,
                                 offset: int = BasePapiClient.DEFAULT_OFFSET,
                                 limit: int = BasePapiClient.DEFAULT_LIMIT,
-                                headers: dict = None
+                                headers: Optional[Dict[str, Any]] = None
                                 ):
         """
         Fetches well nested wells
@@ -418,34 +352,11 @@ class PapiClient(BasePapiClient):
             headers=headers
         )
 
-    def fetch_nested_well_tops(self,
-                               nested_well_id: str,
-                               offset: int = BasePapiClient.DEFAULT_OFFSET,
-                               limit: int = BasePapiClient.DEFAULT_LIMIT,
-                               headers: dict = None
-                               ):
-        """
-        Fetches nested well tops
-        :param nested_well_id:
-        :param offset:
-        :param limit:
-        :return:
-        """
-
-        return self._send_request(
-            url=f'nestedwells/{nested_well_id}/tops',
-            params={
-                'offset': offset,
-                'limit': limit
-            },
-            headers=headers
-        )
-
     def fetch_well_target_lines(self,
                                 well_id: str,
                                 offset: int = BasePapiClient.DEFAULT_OFFSET,
                                 limit: int = BasePapiClient.DEFAULT_LIMIT,
-                                headers: dict = None
+                                headers: Optional[Dict[str, Any]] = None
                                 ):
         """
         Fetches well target lines data
@@ -465,30 +376,19 @@ class PapiClient(BasePapiClient):
             headers=headers
         )
 
-    def fetch_nested_well_raw_trajectory(self, nested_well_id: str, headers: dict = None):
-        """
-        Fetches nested well raw trajectory
-        :param nested_well_id:
-        :return:
-        """
-
-        data = self._send_request(url=f'nestedwells/{nested_well_id}/trajectory/raw', headers=headers)
-
-        return data['content']
-
-    def create_nested_well(self,
-                           well_id: str,
-                           nested_well_name: str,
-                           operator: str,
-                           api: str,
-                           xsrf: dict,
-                           ysrf: dict,
-                           kb: dict,
-                           tie_in_tvd: dict,
-                           tie_in_ns: dict,
-                           tie_in_ew: dict,
-                           headers: dict = None
-                           ):
+    def create_well_nested_well(self,
+                                well_id: str,
+                                nested_well_name: str,
+                                operator: str,
+                                api: str,
+                                xsrf: PapiVar,
+                                ysrf: PapiVar,
+                                kb: PapiVar,
+                                tie_in_tvd: PapiVar,
+                                tie_in_ns: PapiVar,
+                                tie_in_ew: PapiVar,
+                                headers: Optional[Dict[str, Any]] = None
+                                ):
         url = f'wells/{well_id}/nestedwells'
         request_data = {
             'name': nested_well_name,
@@ -509,8 +409,8 @@ class PapiClient(BasePapiClient):
                                        md_uom: str,
                                        incl_uom: str,
                                        azi_uom: str,
-                                       trajectory_stations: list,
-                                       headers: dict = None
+                                       trajectory_stations: PapiTrajectory,
+                                       headers: Optional[Dict[str, Any]] = None
                                        ):
         url = f'nestedwells/{nested_well_id}/trajectory'
         request_data = {

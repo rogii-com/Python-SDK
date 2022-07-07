@@ -40,7 +40,7 @@ class Project(ComplexObject):
         if not self._wells_data:
             self._wells_data = [
                 self._papi_client._parse_papi_data(well)
-                for well in self._papi_client._request_all_pages_with_content(
+                for well in self._papi_client._fetch_all_pages(
                     func=self._papi_client.fetch_project_wells,
                     project_id=self.uuid
                 )
