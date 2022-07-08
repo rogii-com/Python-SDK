@@ -67,10 +67,7 @@ class Well(ComplexObject):
     @property
     def trajectory_data(self) -> List[Dict]:
         if not self._trajectory_data:
-            self._trajectory_data = [
-                self._papi_client._parse_papi_data(trajectory_point)
-                for trajectory_point in self._papi_client.fetch_well_raw_trajectory(well_id=self.uuid)
-            ]
+            self._trajectory_data = self._papi_client._get_well_trajectory_data(well_id=self.uuid)
 
         return self._trajectory_data
 
@@ -84,13 +81,7 @@ class Well(ComplexObject):
     @property
     def interpretations_data(self) -> List[Dict]:
         if not self._interpretations_data:
-            self._interpretations_data = [
-                self._papi_client._parse_papi_data(interpretation)
-                for interpretation in self._papi_client._fetch_all_pages(
-                    func=self._papi_client.fetch_well_raw_interpretations,
-                    well_id=self.uuid
-                )
-            ]
+            self._interpretations_data = self._papi_client._get_well_interpretations_data(well_id=self.uuid)
 
         return self._interpretations_data
 
@@ -117,13 +108,7 @@ class Well(ComplexObject):
     @property
     def target_lines_data(self) -> List[Dict]:
         if not self._target_lines_data:
-            self._target_lines_data = [
-                self._papi_client._parse_papi_data(target_line)
-                for target_line in self._papi_client._fetch_all_pages(
-                    func=self._papi_client.fetch_well_target_lines,
-                    well_id=self.uuid
-                )
-            ]
+            self._target_lines_data = self._papi_client._get_well_target_lines_data(well_id=self.uuid)
 
         return self._target_lines_data
 
@@ -148,13 +133,7 @@ class Well(ComplexObject):
     @property
     def nested_wells_data(self) -> List[Dict]:
         if not self._nested_wells_data:
-            self._nested_wells_data = [
-                self._papi_client._parse_papi_data(nested_well)
-                for nested_well in self._papi_client._fetch_all_pages(
-                    func=self._papi_client.fetch_well_nested_wells,
-                    well_id=self.uuid
-                )
-            ]
+            self._nested_wells_data = self._papi_client._get_well_nested_wells_data(well_id=self.uuid)
 
         return self._nested_wells_data
 

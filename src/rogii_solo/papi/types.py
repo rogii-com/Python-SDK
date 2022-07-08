@@ -1,4 +1,4 @@
-from typing import Any, Dict, List, Literal, NamedTuple, TypedDict
+from typing import Any, Dict, Iterator, List, Literal, NamedTuple, TypedDict
 
 
 class SettingsAuth(NamedTuple):
@@ -17,3 +17,7 @@ class PapiTrajectoryPoint(TypedDict):
 
 
 PapiTrajectory = List[PapiTrajectoryPoint]
+
+PapiData = Dict[str, Any]
+PapiDataList = List[Dict[str, Any]]
+PapiDataIterator = Iterator[Dict[str, Any]]

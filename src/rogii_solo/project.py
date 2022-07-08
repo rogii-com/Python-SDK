@@ -38,13 +38,7 @@ class Project(ComplexObject):
     @property
     def wells_data(self) -> List[Dict]:
         if not self._wells_data:
-            self._wells_data = [
-                self._papi_client._parse_papi_data(well)
-                for well in self._papi_client._fetch_all_pages(
-                    func=self._papi_client.fetch_project_wells,
-                    project_id=self.uuid
-                )
-            ]
+            self._wells_data = self._papi_client._get_project_wells_data(project_id=self.uuid)
 
         return self._wells_data
 
