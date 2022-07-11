@@ -25,17 +25,12 @@ class Interpretation(ComplexObject):
         return {
             'meta': DataFrame([data['meta']]),
             'horizons': DataFrame(data['horizons']).transpose(),
-            'segments': DataFrame(data['segments'])
+            'segments': DataFrame(data['segments']),
         }
 
     def _get_data(self):
-        assembled_segments = self._papi_client.fetch_interpretation_assembled_segments(
-            interpretation_id=self.uuid
-        )
-        horizons = self._papi_client._fetch_all_pages(
-            func=self._papi_client.fetch_interpretation_horizons,
-            interpretation_id=self.uuid
-        )
+        assembled_segments = self._papi_client._get_interpretation_assembled_segments_data(interpretation_id=self.uuid)
+        horizons = self._papi_client._get_interpretation_horizons_data(interpretation_id=self.uuid)
 
         for horizon in horizons:
             assembled_segments['horizons'][horizon['uuid']]['name'] = horizon['name']
@@ -50,6 +45,6 @@ class Interpretation(ComplexObject):
 
         return {
             'meta': meta,
-            'horizons': self._papi_client._parse_papi_data(assembled_segments['horizons']),
-            'segments': self._papi_client._parse_papi_data(assembled_segments['segments']),
+            'horizons': assembled_segments['horizons'],
+            'segments': assembled_segments['segments'],
         }

@@ -1,7 +1,7 @@
 from typing import Any, Dict, List, Optional
 
 from rogii_solo.base import ObjectRepository
-from rogii_solo.exceptions import ProjectNotFoundException
+from rogii_solo.exceptions import InvalidProjectException, ProjectNotFoundException
 from rogii_solo.papi.client import PapiClient
 from rogii_solo.papi.types import SettingsAuth
 from rogii_solo.project import Project
@@ -32,10 +32,7 @@ class SoloClient:
     @property
     def projects_data(self) -> List[Dict]:
         if not self._projects_data:
-            self._projects_data = [
-                self._papi_client._parse_papi_data(project)
-                for project in self._papi_client._fetch_all_pages(func=self._papi_client.fetch_projects)
-            ]
+            self._projects_data = self._papi_client._get_projects_data()
 
         return self._projects_data
 
@@ -50,16 +47,23 @@ class SoloClient:
         return self._projects
 
     def set_project_by_id(self, project_id: str):
-        self.project = self.projects.find_by_id(project_id)
+        project = self.projects.find_by_id(project_id)
 
-        if not self.project:
-            raise ProjectNotFoundException('Project not found.')
+        self.set_project(project)
 
     def set_project_by_name(self, project_name: str):
-        self.project = self.projects.find_by_name(project_name)
+        project = self.projects.find_by_name(project_name)
 
-        if not self.project:
+        self.set_project(project)
+
+    def set_project(self, project: Project):
+        if project is None:
             raise ProjectNotFoundException('Project not found.')
+
+        if not isinstance(project, Project):
+            raise InvalidProjectException('Must be the "Project" instance.')
+
+        self.project = project
 
     def replace_nested_well_trajectory(self,
                                        nested_well_id: str,
