@@ -1,7 +1,7 @@
 import base64
 import hashlib
 import uuid
-from typing import Any
+from typing import Any, Callable
 from urllib.parse import urljoin
 
 from rogii_solo import __version__
@@ -58,23 +58,23 @@ class PapiClient(SdkPapiClient):
             return data
 
     def _get_projects_data(self, **kwargs) -> PapiDataList:
-        return [
-            data_item for data_item in self._gen_data_page(func=self.fetch_projects, **kwargs)
-        ]
+        return list(self._gen_data_page(
+            func=self.fetch_projects,
+            **kwargs
+        ))
 
     def _get_virtual_projects_data(self, **kwargs) -> PapiDataList:
-        return [
-            data_item for data_item in self._gen_data_page(func=self.fetch_virtual_projects, **kwargs)
-        ]
+        return list(self._gen_data_page(
+            func=self.fetch_virtual_projects,
+            **kwargs
+        ))
 
     def _get_project_wells_data(self, project_id: str, **kwargs) -> PapiDataList:
-        return [
-            data_item for data_item in self._gen_data_page(
-                func=self.fetch_project_wells,
-                project_id=project_id,
-                **kwargs
-            )
-        ]
+        return list(self._gen_data_page(
+            func=self.fetch_project_wells,
+            project_id=project_id,
+            **kwargs
+        ))
 
     def _get_well_trajectory_data(self, well_id: str, **kwargs) -> PapiDataList:
         return [
@@ -85,22 +85,18 @@ class PapiClient(SdkPapiClient):
         ]
 
     def _get_well_interpretations_data(self, well_id: str, **kwargs) -> PapiDataList:
-        return [
-            data_item for data_item in self._gen_data_page(
-                func=self.fetch_well_raw_interpretations,
-                well_id=well_id,
-                **kwargs
-            )
-        ]
+        return list(self._gen_data_page(
+            func=self.fetch_well_raw_interpretations,
+            well_id=well_id,
+            **kwargs
+        ))
 
     def _get_interpretation_horizons_data(self, interpretation_id: str, **kwargs) -> PapiDataList:
-        return [
-            data_item for data_item in self._gen_data_page(
-                func=self.fetch_interpretation_horizons,
-                interpretation_id=interpretation_id,
-                **kwargs
-            )
-        ]
+        return list(self._gen_data_page(
+            func=self.fetch_interpretation_horizons,
+            interpretation_id=interpretation_id,
+            **kwargs
+        ))
 
     def _get_interpretation_assembled_segments_data(self, interpretation_id: str, **kwargs) -> PapiData:
         assembled_segments = self.fetch_interpretation_assembled_segments(
@@ -114,24 +110,20 @@ class PapiClient(SdkPapiClient):
         }
 
     def _get_well_target_lines_data(self, well_id: str, **kwargs) -> PapiDataList:
-        return [
-            data_item for data_item in self._gen_data_page(
-                func=self.fetch_well_target_lines,
-                well_id=well_id,
-                **kwargs
-            )
-        ]
+        return list(self._gen_data_page(
+            func=self.fetch_well_target_lines,
+            well_id=well_id,
+            **kwargs
+        ))
 
     def _get_well_nested_wells_data(self, well_id: str, **kwargs) -> PapiDataList:
-        return [
-            data_item for data_item in self._gen_data_page(
-                func=self.fetch_well_nested_wells,
-                well_id=well_id,
-                **kwargs
-            )
-        ]
+        return list(self._gen_data_page(
+            func=self.fetch_well_nested_wells,
+            well_id=well_id,
+            **kwargs
+        ))
 
-    def _gen_data_page(self, func, **kwargs) -> PapiDataIterator:
+    def _gen_data_page(self, func: Callable, **kwargs) -> PapiDataIterator:
         offset = kwargs.pop('offset', None) or self.DEFAULT_OFFSET
         limit = kwargs.pop('limit', None) or self.DEFAULT_LIMIT
 
