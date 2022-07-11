@@ -1,12 +1,23 @@
+PROJECT_NAME = 'Global project'
+WELL_NAME = 'Lateral'
+INTERPRETATION_NAME = 'Interpretation'
+
+STARRED_INTERPRETATION_NAME = 'Starred Interpretation'
 STARRED_INTERPRETATION_ID = 'ddb9700c-fdf9-46c9-a12a-1939cb6890a1'
+
+TARGET_LINE_NAME = 'Target Line'
 STARRED_TARGET_LINE_ID = '5623ac16-ca3f-4e77-8416-4365c274bf5d'
+STARRED_TARGET_LINE_NAME = 'Starred Target Line'
+
+NESTED_WELL_NAME = 'Nested Well'
+STARRED_NESTED_WELL_NAME = 'Starred Nested Well'
 STARRED_NESTED_WELL_ID = '3408e926-0ccf-4698-b453-509dd793db94'
 
 PROJECTS_DATA_RESPONSE = {
     'content': [
         {
             'uuid': '3e684dbc-37ed-4827-b677-dc0e3febc432',
-            'name': 'Global project',
+            'name': PROJECT_NAME,
             'measure_unit': 'FOOT',
             'role': 'MANAGER',
             'accessed_on': '2022-06-30T08:26:30Z',
@@ -58,7 +69,7 @@ WELLS_DATA_RESPONSE = {
     'content': [
         {
             'uuid': '85fa6e44-3507-40b6-a7e2-ee07be241ac7',
-            'name': 'Lateral',
+            'name': WELL_NAME,
             'api': 'Lateral API',
             'operator': 'Lateral Operator',
             'xsrf_real': {
@@ -163,7 +174,7 @@ INTERPRETATIONS_DATA_RESPONSE = {
     'content': [
         {
             'uuid': STARRED_INTERPRETATION_ID,
-            'name': 'Starred Interpretation',
+            'name': STARRED_INTERPRETATION_NAME,
             'properties': {
                 'cutoff': {
                     'val': 0
@@ -189,7 +200,7 @@ INTERPRETATIONS_DATA_RESPONSE = {
         },
         {
             'uuid': 'a4811211-cf40-4b2a-9536-aa7f41b56b08',
-            'name': 'Interpretation',
+            'name': INTERPRETATION_NAME,
             'properties': {
                 'cutoff': {
                     'val': 0
@@ -324,7 +335,7 @@ TARGET_LINES_DATA_RESPONSE = {
     'content': [
         {
             'uuid': STARRED_TARGET_LINE_ID,
-            'name': 'Starred Target Line',
+            'name': STARRED_TARGET_LINE_NAME,
             'azimuth': {
                 'val': 324.9999999999999
             },
@@ -394,7 +405,7 @@ TARGET_LINES_DATA_RESPONSE = {
         },
         {
             'uuid': 'ace335a9-bb9e-4f7a-b33d-a625b71e764e',
-            'name': 'Target Line',
+            'name': TARGET_LINE_NAME,
             'azimuth': {
                 'val': 324.9999999999999
             },
@@ -544,7 +555,7 @@ NESTED_WELLS_DATA_RESPONSE = {
     'content': [
         {
             'uuid': STARRED_NESTED_WELL_ID,
-            'name': 'Starred Nested Well',
+            'name': STARRED_NESTED_WELL_NAME,
             'api': 'Starred Nested Well API',
             'operator': 'Operator',
             'xsrf_real': {
@@ -574,7 +585,7 @@ NESTED_WELLS_DATA_RESPONSE = {
         },
         {
             'uuid': 'afbbe18b-511d-4ef2-b65c-b70eddc49731',
-            'name': 'Nested Well',
+            'name': NESTED_WELL_NAME,
             'api': 'Nested Well API',
             'operator': 'Nested Well Operator',
             'xsrf_real': {
