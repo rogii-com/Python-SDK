@@ -1,19 +1,49 @@
+default:
+  image: python:3.10
+  tags:
+    - docker
 stages:
+  - pre-commit
+  - tests
+  - build
   - publish
 
-variables:
-  CI_REF: &ref master
-  PYTHON_VERSION: "3.8"
-  IMAGE_NAME: python
+before_script:
+  - python -m pip install --upgrade pip
+  - pip install .[dev]
 
-include:
-  # templates
-  - { project: 'infra/ci-templates', ref: *ref, file: 'pypi_package.yml' }
-  -
+pre-commit:
+  stage: pre-commit
+  script:
+  - pre-commit run
+
+tests:
+  stage: tests
+  script:
+  - pytest tests/
+
+build:
+  stage: build
+  script:
+  - python -m build
+  artifacts:
+    paths:
+      - dist/
+    expire_in: 1d
+
 publish:
-  extends:
-    - .pypi_package
-  rules:
-    - if: '$CI_COMMIT_TAG =~ /^\d+\.\d+\.\d+(?:\.\d+)?$/'
-      when: always
-      allow_failure: false
+  stage: publish
+  when: manual
+  allow_failure: false
+  only: 
+  - tags
+  variables:
+    TWINE_USERNAME: __token__
+    TWINE_PASSWORD: $PYPI_TOKEN
+  script:
+  - twine upload dist/*
+
+
+
+
+
