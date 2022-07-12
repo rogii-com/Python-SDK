@@ -20,7 +20,7 @@ pre-commit:
 tests:
   stage: tests
   script:
-  - pytest tests/
+  - pytest tests/test_solo_client.py
 
 build:
   stage: build

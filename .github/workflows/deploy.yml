@@ -24,7 +24,7 @@ jobs:
         uses: pre-commit/action@v3.0.0
 
       - name: Test with pytest
-        run: pytest tests/
+        run: pytest tests/test_solo_client.py
 
       - name: Build package
         run: python -m build
