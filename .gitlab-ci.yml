@@ -42,8 +42,3 @@ publish:
     TWINE_PASSWORD: $PYPI_TOKEN
   script:
   - twine upload dist/*
-
-
-
-
-
