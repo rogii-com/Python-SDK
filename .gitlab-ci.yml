@@ -15,7 +15,7 @@ before_script:
 pre-commit:
   stage: pre-commit
   script:
-  - pre-commit run
+  - pre-commit run --all-files
 
 tests:
   stage: tests
