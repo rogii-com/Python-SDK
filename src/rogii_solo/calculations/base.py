@@ -77,6 +77,16 @@ def get_nearest_values(value: Any, input_list: List[Any]) -> Any:
     return values
 
 
+def interpolate_linear(x0: float, y0: float, x1: float, y1: float, x: float) -> Optional[float]:
+    if any(arg is None for arg in (x0, y0, x1, y1, x)):
+        return
+
+    if x0 == x1:
+        return y0
+
+    return y0 + (y1 - y0) * (x - x0) / (x1 - x0)
+
+
 def calc_segment_dip(delta_x: float, delta_y: float) -> Optional[float]:
     if (
             delta_x is None or
@@ -95,3 +105,20 @@ def get_most_common(input_list: List[Any]) -> Any:
         return
 
     return Counter(input_list).most_common()[0][0]
+
+
+def find_by_key(key, value, input_list):
+    return next((item for item in input_list if item[key] == value), {})
+
+
+def find_last_by_key(key, value, input_list):
+    filtered_list = [item for item in input_list if item[key] == value]
+    return filtered_list[-1] if len(filtered_list) > 0 else {}
+
+
+def find_by_md(value, input_list):
+    return find_by_key('md', value, input_list)
+
+
+def find_last_by_md(value, input_list):
+    return find_last_by_key('md', value, input_list)

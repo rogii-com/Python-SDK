@@ -7,6 +7,7 @@ from tests.papi_data import (
     WELL_NAME,
     INTERPRETATION_NAME,
     STARRED_INTERPRETATION_NAME,
+    HORIZON_NAME,
     TARGET_LINE_NAME,
     STARRED_TARGET_LINE_NAME,
     NESTED_WELL_NAME,
@@ -102,6 +103,21 @@ def test_get_well_starred_interpretation(solo_client_papi_project):
     assert starred_interpretation is not None
     assert starred_interpretation.to_dict()['meta']['name'] == STARRED_INTERPRETATION_NAME
     assert starred_interpretation.to_df()['meta'].at[0, 'name'] == STARRED_INTERPRETATION_NAME
+
+
+def test_get_horizon(solo_client_papi_project):
+    starred_interpretation = solo_client_papi_project.wells.find_by_name(WELL_NAME).starred_interpretation
+    horizon = starred_interpretation.horizons.find_by_name(HORIZON_NAME)
+
+    assert horizon is not None
+
+    horizon_data = horizon.to_dict()
+
+    assert 'meta' in horizon_data
+    assert 'points' in horizon_data
+
+    assert horizon_data['meta']['name'] == HORIZON_NAME
+    assert horizon.to_df()['meta'].at[0, 'name'] == HORIZON_NAME
 
 
 def test_get_well_target_lines(solo_client_papi_project):

@@ -2,16 +2,20 @@ from typing import Dict, List, Optional
 
 from pandas import DataFrame
 
+import rogii_solo.project
 from rogii_solo.base import ComplexObject, ObjectRepository
 from rogii_solo.interpretation import Interpretation
 from rogii_solo.nested_well import NestedWell
+from rogii_solo.papi.client import PapiClient
 from rogii_solo.target_line import TargetLine
 from rogii_solo.trajectory import TrajectoryPoint, TrajectoryPointRepository
 
 
 class Well(ComplexObject):
-    def __init__(self, papi_client, **kwargs):
+    def __init__(self, papi_client: PapiClient, project: 'rogii_solo.project.Project', **kwargs):
         super().__init__(papi_client)
+
+        self.project = project
 
         self.uuid = None
         self.name = None
@@ -91,7 +95,8 @@ class Well(ComplexObject):
             self._interpretations = ObjectRepository(
                 dicts=self.interpretations_data,
                 objects=[
-                    Interpretation(papi_client=self._papi_client, **item) for item in self.interpretations_data
+                    Interpretation(papi_client=self._papi_client, well=self, **item)
+                    for item in self.interpretations_data
                 ]
             )
 
