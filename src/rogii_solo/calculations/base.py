@@ -1,7 +1,7 @@
 import math
 from bisect import bisect_left
 from collections import Counter
-from typing import Any, List, Optional
+from typing import Any, Dict, List, Optional
 
 from .constants import DELTA
 
@@ -107,18 +107,18 @@ def get_most_common(input_list: List[Any]) -> Any:
     return Counter(input_list).most_common()[0][0]
 
 
-def find_by_key(key, value, input_list):
+def find_by_key(key: str, value: float, input_list: List[Dict[str, Any]]) -> Dict[str, Any]:
     return next((item for item in input_list if item[key] == value), {})
 
 
-def find_last_by_key(key, value, input_list):
+def find_last_by_key(key: str, value: float, input_list: List[Dict[str, Any]]) -> Dict[str, Any]:
     filtered_list = [item for item in input_list if item[key] == value]
     return filtered_list[-1] if len(filtered_list) > 0 else {}
 
 
-def find_by_md(value, input_list):
+def find_by_md(value: float, input_list: List[Dict[str, Any]]) -> Dict[str, Any]:
     return find_by_key('md', value, input_list)
 
 
-def find_last_by_md(value, input_list):
+def find_last_by_md(value: float, input_list: List[Dict[str, Any]]) -> Dict[str, Any]:
     return find_last_by_key('md', value, input_list)

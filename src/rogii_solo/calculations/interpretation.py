@@ -1,9 +1,7 @@
 from math import fabs
 from typing import Any, Dict, List
 
-from rogii_solo.papi.types import PapiAssembledSegments
-
-from .base import (
+from rogii_solo.calculations.base import (
     calc_segment_dip,
     find_by_md,
     find_last_by_md,
@@ -11,10 +9,18 @@ from .base import (
     get_nearest_values,
     interpolate_linear
 )
-from .constants import DELTA
-from .enums import EMeasureUnits
-from .trajectory import interpolate_trajectory_point
-from .types import AssembledHorizons, Segment, SegmentBoundaries, SegmentsBoundaries, SegmentWithDip, Trajectory
+from rogii_solo.calculations.constants import DELTA
+from rogii_solo.calculations.enums import EMeasureUnits
+from rogii_solo.calculations.trajectory import interpolate_trajectory_point
+from rogii_solo.calculations.types import (
+    AssembledHorizons,
+    Segment,
+    SegmentBoundaries,
+    SegmentsBoundaries,
+    SegmentWithDip,
+    Trajectory
+)
+from rogii_solo.papi.types import PapiAssembledSegments
 
 
 def get_segments(
@@ -23,13 +29,13 @@ def get_segments(
         assembled_segments: PapiAssembledSegments,
         measure_unit: EMeasureUnits
 ) -> List[Segment]:
+    segments = []
     mds, mds_map = [], {}
 
     for i, point in enumerate(calculated_trajectory):
         mds.append(point['md'])
         mds_map[point['md']] = i
 
-    segments = []
     for assembled_segment in assembled_segments:
         nearest_mds = get_nearest_values(
             value=assembled_segment['md'],
@@ -92,7 +98,7 @@ def get_segments_with_dip(
                 uuid: assembled_horizon
                 for uuid, assembled_horizon in sorted(
                     assembled_horizons.items(),
-                    key=lambda horizon: horizon[1]['tvd']
+                    key=lambda horizon_: horizon_[1]['tvd']
                 )
             }
 

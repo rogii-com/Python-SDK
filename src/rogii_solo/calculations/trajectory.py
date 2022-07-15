@@ -2,12 +2,12 @@ import copy
 from math import acos, cos, degrees, fabs, pi, sin
 from typing import Any, Dict, Optional
 
-from .base import calc_atan2, calc_hypotenuse_length, calc_shape_factor
-from .base import calc_vs as base_calc_vs
-from .base import normalize_angle
-from .constants import DELTA, FEET_TO_METERS
-from .enums import EMeasureUnits
-from .types import RawTrajectory, Trajectory, TrajectoryPoint
+from rogii_solo.calculations.base import calc_atan2, calc_hypotenuse_length, calc_shape_factor
+from rogii_solo.calculations.base import calc_vs as base_calc_vs
+from rogii_solo.calculations.base import normalize_angle
+from rogii_solo.calculations.constants import DELTA, FEET_TO_METERS
+from rogii_solo.calculations.enums import EMeasureUnits
+from rogii_solo.calculations.types import RawTrajectory, Trajectory, TrajectoryPoint
 
 
 def calculate_trajectory(
