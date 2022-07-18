@@ -70,7 +70,7 @@ def solo_client():
 
 
 @pytest.fixture(scope='function')
-def solo_client_project(solo_client):
+def project(solo_client):
     solo_client.set_project_by_name(PROJECT_NAME)
 
     return solo_client.project
@@ -88,7 +88,7 @@ def solo_client_papi():
 
 
 @pytest.fixture(scope='module')
-def solo_client_papi_project(solo_client_papi):
+def project_papi(solo_client_papi):
     solo_client_papi.set_project_by_name(PROJECT_NAME)
 
     return solo_client_papi.project

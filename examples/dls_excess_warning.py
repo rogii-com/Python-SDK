@@ -1,9 +1,9 @@
 from os import environ
 
-from calculations.enums import EMeasureUnits
-from calculations.trajectory import calculate_trajectory
 from pandas import DataFrame
 
+from rogii_solo.calculations.enums import EMeasureUnits
+from rogii_solo.calculations.trajectory import calculate_trajectory
 from rogii_solo.client import SoloClient
 
 PROJECT_NAME = 'Global project'

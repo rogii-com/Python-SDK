@@ -2,18 +2,19 @@ import copy
 from math import acos, cos, degrees, fabs, pi, sin
 from typing import Any, Dict, Optional
 
-from .base import calc_atan2, calc_hypotenuse_length, calc_shape_factor
-from .base import calc_vs as base_calc_vs
-from .base import normalize_angle
-from .constants import DELTA, FEET_TO_METERS
-from .enums import EMeasureUnits
+from rogii_solo.calculations.base import calc_atan2, calc_hypotenuse_length, calc_shape_factor
+from rogii_solo.calculations.base import calc_vs as base_calc_vs
+from rogii_solo.calculations.base import normalize_angle
+from rogii_solo.calculations.constants import DELTA, FEET_TO_METERS
+from rogii_solo.calculations.enums import EMeasureUnits
+from rogii_solo.calculations.types import RawTrajectory, Trajectory, TrajectoryPoint
 
 
 def calculate_trajectory(
-        raw_trajectory: list,
+        raw_trajectory: RawTrajectory,
         well: Dict[str, Any],
         measure_unit: EMeasureUnits,
-):
+) -> Trajectory:
     if not raw_trajectory or not well:
         return []
 
@@ -38,7 +39,7 @@ def calculate_trajectory_point(
         curr_point: Dict[str, Any],
         well: Dict[str, Any],
         measure_unit: EMeasureUnits,
-):
+) -> TrajectoryPoint:
     if not prev_point:
         return calculate_initial_trajectory_point(curr_point, well)
 
@@ -66,7 +67,7 @@ def calculate_trajectory_point(
     ns = (prev_point['ns'] or 0) + shape * (prev_incl_sin * cos(prev_point['azim']) + curr_incl_sin * cos(curr_azim))
     ew = (prev_point['ew'] or 0) + shape * (prev_incl_sin * sin(prev_point['azim']) + curr_incl_sin * sin(curr_azim))
 
-    calculated_point = dict(
+    return TrajectoryPoint(
         md=curr_point['md'],
         incl=curr_point['incl'],
         azim=curr_azim,
@@ -82,8 +83,6 @@ def calculate_trajectory_point(
         dog_leg=dog_leg
     )
 
-    return calculated_point
-
 
 def interpolate_trajectory_point(
         left_point: Dict[str, Any],
@@ -91,7 +90,7 @@ def interpolate_trajectory_point(
         md: float,
         well: Dict[str, Any],
         measure_unit: EMeasureUnits,
-):
+) -> TrajectoryPoint:
     if fabs(md - left_point['md']) < DELTA:
         return left_point
 
@@ -176,9 +175,9 @@ def interpolate_trajectory_point(
         incl += pi
 
     azim = normalize_angle(calc_atan2(ext_delta_ew, ext_delta_ns))
-
     dls = calc_dls(dog_leg, course_length, measure_unit=measure_unit)
-    point = dict(
+
+    return TrajectoryPoint(
         md=md,
         incl=incl,
         azim=azim,
@@ -194,16 +193,14 @@ def interpolate_trajectory_point(
         dog_leg=dog_leg
     )
 
-    return point
-
 
 def calculate_initial_trajectory_point(
         point: Dict[str, Any],
         well: Dict[str, Any],
-):
+) -> TrajectoryPoint:
     tvd = well['tie_in_tvd'] if well['tie_in_tvd'] is not None else point['md']
 
-    point = dict(
+    return TrajectoryPoint(
         md=point['md'],
         incl=point['incl'],
         azim=normalize_angle(point['azim']),
@@ -218,7 +215,6 @@ def calculate_initial_trajectory_point(
         dls=0,
         dog_leg=0
     )
-    return point
 
 
 def calc_x(ew: float, xsrf: Optional[float]) -> Optional[float]:

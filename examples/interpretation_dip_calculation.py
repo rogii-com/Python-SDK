@@ -1,11 +1,11 @@
 from os import environ
 
 import numpy as np
-from calculations.enums import EMeasureUnits
-from calculations.interpretation import get_segments
-from calculations.trajectory import calculate_trajectory
 from pandas import DataFrame
 
+from rogii_solo.calculations.enums import EMeasureUnits
+from rogii_solo.calculations.interpretation import get_segments, get_segments_with_dip
+from rogii_solo.calculations.trajectory import calculate_trajectory
 from rogii_solo.client import SoloClient
 
 
@@ -36,16 +36,18 @@ def calc_interpretation_dip():
         print(f'Interpretation "{INTERPRETATION_NAME}" in the well "{WELL_NAME}" not found.')
         return
 
-    interpretation_df = interpretation.to_df()
     segments = get_segments(
-        well_data,
-        assembled_segments=interpretation_df['segments'],
-        assembled_horizons=interpretation_df['horizons'],
+        well=well_data,
+        assembled_segments=interpretation.assembled_segments_data['segments'],
         calculated_trajectory=calculated_trajectory,
         measure_unit=MEASURE_UNIT
     )
+    segments_with_dip = get_segments_with_dip(
+        segments=segments,
+        assembled_horizons=interpretation.assembled_segments_data['horizons']
+    )
 
-    calculated_dips = DataFrame(segments, columns=['md', 'dip'])
+    calculated_dips = DataFrame(segments_with_dip, columns=['md', 'dip'])
     np_calculated_dips = calculated_dips.to_numpy()
     interpolated_md = sorted(
         np.unique(

@@ -3,11 +3,12 @@ from typing import Dict, List
 from pandas import DataFrame
 
 from rogii_solo.base import ComplexObject, ObjectRepository
+from rogii_solo.papi.client import PapiClient
 from rogii_solo.well import Well
 
 
 class Project(ComplexObject):
-    def __init__(self, papi_client, **kwargs):
+    def __init__(self, papi_client: PapiClient, **kwargs):
         super().__init__(papi_client)
 
         self.uuid = None
@@ -47,7 +48,7 @@ class Project(ComplexObject):
         if not self._wells:
             self._wells = ObjectRepository(
                 dicts=self.wells_data,
-                objects=[Well(papi_client=self._papi_client, **item) for item in self.wells_data]
+                objects=[Well(papi_client=self._papi_client, project=self, **item) for item in self.wells_data]
             )
 
         return self._wells
