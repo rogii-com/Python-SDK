@@ -4,6 +4,7 @@ from typing import Any, Dict, Iterable, List, Optional, Set, Tuple
 from pandas import DataFrame
 
 from rogii_solo.papi.client import PapiClient
+from rogii_solo.types import DataList
 
 
 class BaseObject(ABC):
@@ -118,7 +119,7 @@ class ObjectRepository(list):
     """
     List of objects with utility methods
     """
-    def __init__(self, dicts: List[Dict] = None, objects: List[BaseObject] = None):
+    def __init__(self, dicts: DataList = None, objects: List[BaseObject] = None):
         if dicts is None:
             dicts = []
 
@@ -137,7 +138,7 @@ class ObjectRepository(list):
         """
         return DataFrame(self._dicts)
 
-    def to_dict(self) -> List[Dict]:
+    def to_dict(self) -> DataList:
         """
         Return list of dicts
         :return:

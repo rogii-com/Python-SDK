@@ -1,8 +1,9 @@
-from typing import Dict, List, Optional
+from typing import Optional
 
 from pandas import DataFrame
 
 from rogii_solo.base import BaseObject
+from rogii_solo.types import DataList
 
 
 class TrajectoryPoint(BaseObject):
@@ -25,7 +26,7 @@ class TrajectoryPoint(BaseObject):
 
 
 class TrajectoryPointRepository(list):
-    def __init__(self, dicts: List[Dict] = None):
+    def __init__(self, dicts: DataList = None):
         if dicts is None:
             dicts = []
 
@@ -37,7 +38,7 @@ class TrajectoryPointRepository(list):
     def to_df(self) -> DataFrame:
         return DataFrame(self._dicts)
 
-    def to_dict(self) -> List[Dict]:
+    def to_dict(self) -> DataList:
         return self._dicts
 
     def find_by_md(self, value) -> Optional[TrajectoryPoint]:

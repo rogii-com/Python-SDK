@@ -1,4 +1,5 @@
 PROJECT_NAME = 'Global project'
+PROJECT_ID = '3e684dbc-37ed-4827-b677-dc0e3febc432'
 WELL_NAME = 'Lateral'
 INTERPRETATION_NAME = 'Interpretation'
 
@@ -19,7 +20,7 @@ STARRED_NESTED_WELL_ID = '3408e926-0ccf-4698-b453-509dd793db94'
 PROJECTS_DATA_RESPONSE = {
     'content': [
         {
-            'uuid': '3e684dbc-37ed-4827-b677-dc0e3febc432',
+            'uuid': PROJECT_ID,
             'name': PROJECT_NAME,
             'measure_unit': 'FOOT',
             'role': 'MANAGER',
@@ -49,7 +50,15 @@ VIRTUAL_PROJECTS_DATA_RESPONSE = {
             'name': 'Virtual project',
             'measure_unit': 'FOOT',
             'role': 'MANAGER',
-            'accessed_on': '2022-06-30T08:26:30Z',
+            'geo_crs': {
+                'code': 2194,
+                'authority': 'EPSG',
+                'name': 'American Samoa 1962 / American Samoa Lambert',
+                'measure_unit': 'FOOT_US'
+            },
+            'parent_uuid': PROJECT_ID,
+            'parent_name': PROJECT_NAME,
+            'virtual': True,
             'modified_on': '2022-06-24T13:30:32Z'
         },
         {
@@ -57,7 +66,15 @@ VIRTUAL_PROJECTS_DATA_RESPONSE = {
             'name': 'Virtual project 2',
             'measure_unit': 'METER',
             'role': 'MANAGER',
-            'accessed_on': '2022-05-20T19:56:52Z',
+            'geo_crs': {
+                'code': 2194,
+                'authority': 'EPSG',
+                'name': 'American Samoa 1962 / American Samoa Lambert',
+                'measure_unit': 'FOOT_US'
+            },
+            'parent_uuid': PROJECT_ID,
+            'parent_name': PROJECT_NAME,
+            'virtual': True,
             'modified_on': '2022-05-20T18:17:35Z'
         }
     ],

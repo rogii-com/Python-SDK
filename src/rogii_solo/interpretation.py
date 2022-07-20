@@ -1,5 +1,3 @@
-from typing import Dict, List
-
 from pandas import DataFrame
 
 import rogii_solo.well
@@ -7,6 +5,7 @@ from rogii_solo.base import ComplexObject, ObjectRepository
 from rogii_solo.horizon import Horizon
 from rogii_solo.papi.client import PapiClient
 from rogii_solo.papi.types import PapiAssembledSegments
+from rogii_solo.types import DataList
 from rogii_solo.types import Interpretation as InterpretationType
 
 
@@ -26,7 +25,7 @@ class Interpretation(ComplexObject):
 
         self._assembled_segments_data: PapiAssembledSegments = {}
 
-        self._horizons_data: List[Dict] = []
+        self._horizons_data: DataList = []
         self._horizons: ObjectRepository[Horizon] = ObjectRepository()
 
     def to_dict(self):
@@ -42,7 +41,7 @@ class Interpretation(ComplexObject):
         }
 
     @property
-    def horizons_data(self) -> List[Dict]:
+    def horizons_data(self) -> DataList:
         if not self._horizons_data:
             self._horizons_data = self._papi_client._get_interpretation_horizons_data(interpretation_id=self.uuid)
 

@@ -1,10 +1,11 @@
-from typing import Any, Dict, List, Optional
+from typing import Optional
 
 from rogii_solo.base import ObjectRepository
 from rogii_solo.exceptions import InvalidProjectException, ProjectNotFoundException
 from rogii_solo.papi.client import PapiClient
 from rogii_solo.papi.types import SettingsAuth
 from rogii_solo.project import Project
+from rogii_solo.types import DataList
 from rogii_solo.utils.constants import SOLO_PAPI_DEFAULT_DOMAIN_NAME
 
 
@@ -25,14 +26,17 @@ class SoloClient:
             )
         )
 
-        self._projects_data: List[Dict] = []
+        self._projects_data: DataList = []
         self._projects: ObjectRepository[Project] = ObjectRepository()
         self.project: Optional[Project] = None
 
     @property
-    def projects_data(self) -> List[Dict]:
+    def projects_data(self) -> DataList:
         if not self._projects_data:
-            self._projects_data = self._papi_client._get_projects_data()
+            global_projects_data = self._papi_client._get_global_projects_data()
+            virtual_projects_data = self._papi_client._get_virtual_projects_data()
+
+            self._projects_data = global_projects_data + virtual_projects_data
 
         return self._projects_data
 
@@ -49,17 +53,20 @@ class SoloClient:
     def set_project_by_id(self, project_id: str):
         project = self.projects.find_by_id(project_id)
 
+        if project is None:
+            raise ProjectNotFoundException('Project not found.')
+
         self.set_project(project)
 
     def set_project_by_name(self, project_name: str):
         project = self.projects.find_by_name(project_name)
 
-        self.set_project(project)
-
-    def set_project(self, project: Project):
         if project is None:
             raise ProjectNotFoundException('Project not found.')
 
+        self.set_project(project)
+
+    def set_project(self, project: Project):
         if not isinstance(project, Project):
             raise InvalidProjectException('Must be the "Project" instance.')
 
@@ -70,7 +77,7 @@ class SoloClient:
                                        md_uom: str,
                                        incl_uom: str,
                                        azi_uom: str,
-                                       trajectory_stations: List[Dict[str, Any]]
+                                       trajectory_stations: DataList
                                        ):
         prepared_trajectory_stations = [
             {key: self._papi_client._prepare_papi_var(value) for key, value in point.items()}
