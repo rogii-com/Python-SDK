@@ -57,7 +57,7 @@ class PapiClient(SdkPapiClient):
         else:
             return data
 
-    def _get_projects_data(self, **kwargs) -> PapiDataList:
+    def _get_global_projects_data(self, **kwargs) -> PapiDataList:
         return list(self._gen_data_page(
             func=self.fetch_projects,
             **kwargs

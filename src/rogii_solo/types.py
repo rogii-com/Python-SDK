@@ -1,6 +1,8 @@
-from typing import TypedDict
+from typing import Any, Dict, List, TypedDict
 
 from pandas import DataFrame
+
+DataList = List[Dict[str, Any]]
 
 
 class Interpretation(TypedDict):

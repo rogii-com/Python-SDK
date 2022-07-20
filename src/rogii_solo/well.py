@@ -1,4 +1,4 @@
-from typing import Dict, List, Optional
+from typing import Optional
 
 from pandas import DataFrame
 
@@ -9,6 +9,7 @@ from rogii_solo.nested_well import NestedWell
 from rogii_solo.papi.client import PapiClient
 from rogii_solo.target_line import TargetLine
 from rogii_solo.trajectory import TrajectoryPoint, TrajectoryPointRepository
+from rogii_solo.types import DataList
 
 
 class Well(ComplexObject):
@@ -33,18 +34,18 @@ class Well(ComplexObject):
 
         self.__dict__.update(kwargs)
 
-        self._trajectory_data: List[Dict] = []
+        self._trajectory_data: DataList = []
         self._trajectory: TrajectoryPointRepository[TrajectoryPoint] = TrajectoryPointRepository()
 
-        self._interpretations_data: List[Dict] = []
+        self._interpretations_data: DataList = []
         self._interpretations: ObjectRepository[Interpretation] = ObjectRepository()
         self._starred_interpretation: Optional[Interpretation] = None
 
-        self._target_lines_data: List[Dict] = []
+        self._target_lines_data: DataList = []
         self._target_lines: ObjectRepository[TargetLine] = ObjectRepository()
         self._starred_target_line: Optional[TargetLine] = None
 
-        self._nested_wells_data: List[Dict] = []
+        self._nested_wells_data: DataList = []
         self._nested_wells: ObjectRepository[NestedWell] = ObjectRepository()
         self._starred_nested_well: Optional[NestedWell] = None
 
@@ -69,7 +70,7 @@ class Well(ComplexObject):
         return DataFrame([self.to_dict()])
 
     @property
-    def trajectory_data(self) -> List[Dict]:
+    def trajectory_data(self) -> DataList:
         if not self._trajectory_data:
             self._trajectory_data = self._papi_client._get_well_trajectory_data(well_id=self.uuid)
 
@@ -83,7 +84,7 @@ class Well(ComplexObject):
         return self._trajectory
 
     @property
-    def interpretations_data(self) -> List[Dict]:
+    def interpretations_data(self) -> DataList:
         if not self._interpretations_data:
             self._interpretations_data = self._papi_client._get_well_interpretations_data(well_id=self.uuid)
 
@@ -111,7 +112,7 @@ class Well(ComplexObject):
         return self._starred_interpretation
 
     @property
-    def target_lines_data(self) -> List[Dict]:
+    def target_lines_data(self) -> DataList:
         if not self._target_lines_data:
             self._target_lines_data = self._papi_client._get_well_target_lines_data(well_id=self.uuid)
 
@@ -136,7 +137,7 @@ class Well(ComplexObject):
         return self._starred_target_line
 
     @property
-    def nested_wells_data(self) -> List[Dict]:
+    def nested_wells_data(self) -> DataList:
         if not self._nested_wells_data:
             self._nested_wells_data = self._papi_client._get_well_nested_wells_data(well_id=self.uuid)
 
