@@ -1,7 +1,7 @@
 from os import environ
 import pytest
 
-from rogii_solo.client import SoloClient
+from rogii_solo import SoloClient
 from tests.papi_data import (
     PROJECT_NAME,
     PROJECTS_DATA_RESPONSE,
@@ -79,9 +79,9 @@ def project(solo_client):
 @pytest.fixture(scope='module')
 def solo_client_papi():
     papi_solo_client = SoloClient(
-        client_id=environ.get('CLIENT_ID'),
-        client_secret=environ.get('CLIENT_SECRET'),
-        papi_domain_name=environ.get('PAPI_DOMAIN_NAME')
+        client_id=environ.get('ROGII_SOLO_CLIENT_ID'),
+        client_secret=environ.get('ROGII_SOLO_CLIENT_SECRET'),
+        papi_domain_name=environ.get('ROGII_SOLO_PAPI_DOMAIN_NAME')
     )
 
     return papi_solo_client

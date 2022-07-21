@@ -1,7 +1,7 @@
 import random
 from os import environ
 
-from rogii_solo.client import SoloClient
+from rogii_solo import SoloClient
 
 
 def prepare_well_plan():
@@ -9,9 +9,9 @@ def prepare_well_plan():
     WELL_NAME = 'Lateral'
 
     client = SoloClient(
-        client_id=environ.get('CLIENT_ID'),
-        client_secret=environ.get('CLIENT_SECRET'),
-        papi_domain_name=environ.get('PAPI_DOMAIN_NAME')
+        client_id=environ.get('ROGII_SOLO_CLIENT_ID'),
+        client_secret=environ.get('ROGII_SOLO_CLIENT_SECRET'),
+        papi_domain_name=environ.get('ROGII_SOLO_PAPI_DOMAIN_NAME')
     )
 
     client.set_project_by_name(PROJECT_NAME)

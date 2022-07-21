@@ -3,10 +3,10 @@ from os import environ
 import numpy as np
 from pandas import DataFrame
 
+from rogii_solo import SoloClient
 from rogii_solo.calculations.enums import EMeasureUnits
 from rogii_solo.calculations.interpretation import get_segments, get_segments_with_dip
 from rogii_solo.calculations.trajectory import calculate_trajectory
-from rogii_solo.client import SoloClient
 
 
 def calc_interpretation_dip():
@@ -16,9 +16,9 @@ def calc_interpretation_dip():
     MEASURE_UNIT = EMeasureUnits.METER_FOOT
 
     client = SoloClient(
-        client_id=environ.get('CLIENT_ID'),
-        client_secret=environ.get('CLIENT_SECRET'),
-        papi_domain_name=environ.get('PAPI_DOMAIN_NAME')
+        client_id=environ.get('ROGII_SOLO_CLIENT_ID'),
+        client_secret=environ.get('ROGII_SOLO_CLIENT_SECRET'),
+        papi_domain_name=environ.get('ROGII_SOLO_PAPI_DOMAIN_NAME')
     )
     client.set_project_by_name(project_name=PROJECT_NAME)
 

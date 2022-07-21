@@ -2,9 +2,9 @@ from os import environ
 
 from pandas import DataFrame
 
+from rogii_solo import SoloClient
 from rogii_solo.calculations.enums import EMeasureUnits
 from rogii_solo.calculations.trajectory import calculate_trajectory
-from rogii_solo.client import SoloClient
 
 PROJECT_NAME = 'Global project'
 WELL_NAME = 'Lateral'
@@ -14,9 +14,9 @@ DLS_THRESHOLD = 0.5
 
 def get_trajectory_dls():
     client = SoloClient(
-        client_id=environ.get('CLIENT_ID'),
-        client_secret=environ.get('CLIENT_SECRET'),
-        papi_domain_name=environ.get('PAPI_DOMAIN_NAME')
+        client_id=environ.get('ROGII_SOLO_CLIENT_ID'),
+        client_secret=environ.get('ROGII_SOLO_CLIENT_SECRET'),
+        papi_domain_name=environ.get('ROGII_SOLO_PAPI_DOMAIN_NAME')
     )
     client.set_project_by_name(project_name=PROJECT_NAME)
 
