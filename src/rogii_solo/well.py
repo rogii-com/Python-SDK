@@ -3,7 +3,7 @@ from typing import Optional
 from pandas import DataFrame
 
 import rogii_solo.project
-from rogii_solo.base import ComplexObject, ObjectRepository
+from rogii_solo.base import ComplexObject, Convertable, ObjectRepository
 from rogii_solo.interpretation import Interpretation
 from rogii_solo.nested_well import NestedWell
 from rogii_solo.papi.client import PapiClient
@@ -12,7 +12,7 @@ from rogii_solo.trajectory import TrajectoryPoint, TrajectoryPointRepository
 from rogii_solo.types import DataList
 
 
-class Well(ComplexObject):
+class Well(ComplexObject, Convertable):
     def __init__(self, papi_client: PapiClient, project: 'rogii_solo.project.Project', **kwargs):
         super().__init__(papi_client)
 
@@ -35,7 +35,7 @@ class Well(ComplexObject):
         self.__dict__.update(kwargs)
 
         self._trajectory_data: DataList = []
-        self._trajectory: TrajectoryPointRepository[TrajectoryPoint] = TrajectoryPointRepository()
+        self._trajectory: TrajectoryPointRepository[TrajectoryPoint] = TrajectoryPointRepository(well=self)
 
         self._interpretations_data: DataList = []
         self._interpretations: ObjectRepository[Interpretation] = ObjectRepository()
@@ -49,25 +49,27 @@ class Well(ComplexObject):
         self._nested_wells: ObjectRepository[NestedWell] = ObjectRepository()
         self._starred_nested_well: Optional[NestedWell] = None
 
-    def to_dict(self):
+    def to_dict(self, get_converted: bool = True):
+        measure_units = self.project.measure_unit
+
         return {
             'uuid': self.uuid,
             'name': self.name,
             'xsrf_real': self.xsrf_real,
             'ysrf_real': self.ysrf_real,
-            'kb': self.kb,
+            'kb': self.convert_z(self.kb, measure_units=measure_units) if get_converted else self.kb,
             'api': self.api,
             'operator': self.operator,
-            'azimuth': self.azimuth,
-            'convergence': self.convergence,
+            'azimuth': self.convert_angle(self.azimuth) if get_converted else self.azimuth,
+            'convergence': self.convert_angle(self.convergence) if get_converted else self.convergence,
             'tie_in_tvd': self.tie_in_tvd,
             'tie_in_ns': self.tie_in_ns,
             'tie_in_ew': self.tie_in_ew,
             'starred': self.starred,
         }
 
-    def to_df(self):
-        return DataFrame([self.to_dict()])
+    def to_df(self, get_converted: bool = True):
+        return DataFrame([self.to_dict(get_converted)])
 
     @property
     def trajectory_data(self) -> DataList:
@@ -79,7 +81,7 @@ class Well(ComplexObject):
     @property
     def trajectory(self) -> TrajectoryPointRepository[TrajectoryPoint]:
         if not self._trajectory:
-            self._trajectory = TrajectoryPointRepository(self.trajectory_data)
+            self._trajectory = TrajectoryPointRepository(well=self, dicts=self.trajectory_data)
 
         return self._trajectory
 
@@ -148,7 +150,7 @@ class Well(ComplexObject):
         if not self._nested_wells:
             self._nested_wells = ObjectRepository(
                 dicts=self.nested_wells_data,
-                objects=[NestedWell(**item) for item in self.nested_wells_data]
+                objects=[NestedWell(well=self, **item) for item in self.nested_wells_data]
             )
 
         return self._nested_wells

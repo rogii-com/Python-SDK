@@ -3,17 +3,37 @@ from typing import Any, Dict, Iterable, List, Optional, Set, Tuple
 
 from pandas import DataFrame
 
+from rogii_solo.calculations.converters import convert_value, radians_to_degrees
+from rogii_solo.calculations.enums import EMeasureUnits
 from rogii_solo.papi.client import PapiClient
 from rogii_solo.types import DataList
 
 
-class BaseObject(ABC):
+class Convertable:
+    def convert_xy(self,
+                   value: float,
+                   measure_units: EMeasureUnits,
+                   force_to_meters: bool = False
+                   ) -> Optional[float]:
+        if value is not None:
+            return convert_value(value, measure_units=measure_units, force_to_meters=force_to_meters)
+
+    def convert_z(self, value: float, measure_units: EMeasureUnits) -> Optional[float]:
+        if value is not None:
+            return convert_value(value=value, measure_units=measure_units)
+
+    def convert_angle(self, value: float) -> Optional[float]:
+        if value is not None:
+            return radians_to_degrees(value)
+
+
+class BaseObject(ABC, Convertable):
     """
     Base data object
     """
 
     @abstractmethod
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self, get_converted: bool = True) -> Dict[str, Any]:
         """
         Convert object to dict
         :return
@@ -21,7 +41,7 @@ class BaseObject(ABC):
         pass
 
     @abstractmethod
-    def to_df(self) -> DataFrame:
+    def to_df(self, get_converted: bool = True) -> DataFrame:
         """
         Convert object to DataFrame
         :return
@@ -108,11 +128,11 @@ class ComplexObject(BaseObject):
 
         self._papi_client = papi_client
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self, get_converted: bool = True) -> Dict[str, Any]:
         return {}
 
-    def to_df(self) -> DataFrame:
-        return DataFrame([self.to_dict()])
+    def to_df(self, get_converted: bool = True) -> DataFrame:
+        return DataFrame([self.to_dict(get_converted)])
 
 
 class ObjectRepository(list):
@@ -131,19 +151,22 @@ class ObjectRepository(list):
         self._dicts = dicts
         self._objects = objects
 
-    def to_df(self) -> DataFrame:
-        """
-        Convert list to Pandas DataFrame
-        :return:
-        """
-        return DataFrame(self._dicts)
-
-    def to_dict(self) -> DataList:
+    def to_dict(self, get_converted: bool = True) -> DataList:
         """
         Return list of dicts
         :return:
         """
+        if get_converted:
+            return [object_.to_dict(get_converted) for object_ in self._objects]
+
         return self._dicts
+
+    def to_df(self, get_converted: bool = True) -> DataFrame:
+        """
+        Convert list to Pandas DataFrame
+        :return:
+        """
+        return DataFrame(self.to_dict(get_converted))
 
     def find_by_id(self, value) -> Optional[BaseObject]:
         """

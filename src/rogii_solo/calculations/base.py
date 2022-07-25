@@ -3,7 +3,7 @@ from bisect import bisect_left
 from collections import Counter
 from typing import Any, Dict, List, Optional
 
-from .constants import DELTA
+from rogii_solo.calculations.constants import DELTA
 
 
 def calc_hypotenuse_length(cathetus1: float, cathetus2: float) -> Optional[float]:

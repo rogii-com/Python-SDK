@@ -22,7 +22,7 @@ PROJECTS_DATA_RESPONSE = {
         {
             'uuid': PROJECT_ID,
             'name': PROJECT_NAME,
-            'measure_unit': 'FOOT',
+            'measure_unit': 'METER',
             'role': 'MANAGER',
             'accessed_on': '2022-06-30T08:26:30Z',
             'modified_on': '2022-06-24T13:30:32Z'
