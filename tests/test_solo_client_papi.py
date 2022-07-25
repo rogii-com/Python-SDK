@@ -3,7 +3,7 @@ import pytest
 
 from rogii_solo.exceptions import ProjectNotFoundException, InvalidProjectException
 from tests.papi_data import (
-    PROJECT_NAME,
+    METER_PROJECT_NAME,
     WELL_NAME,
     INTERPRETATION_NAME,
     STARRED_INTERPRETATION_NAME,
@@ -48,8 +48,8 @@ def test_set_project(project_papi):
     project_data = project_papi.to_dict()
     project_df = project_papi.to_df()
 
-    assert project_data['name'] == PROJECT_NAME
-    assert project_df.at[0, 'name'] == PROJECT_NAME
+    assert project_data['name'] == METER_PROJECT_NAME
+    assert project_df.at[0, 'name'] == METER_PROJECT_NAME
 
 
 def test_get_project_wells(project_papi):
@@ -152,17 +152,6 @@ def test_get_horizon(project_papi):
 
     assert horizon_data['meta']['name'] == HORIZON_NAME
     assert horizon_df['meta'].at[0, 'name'] == HORIZON_NAME
-
-    # TODO: Remove when calculations package is removed
-    horizon_data_df = horizon_df['data']
-
-    assert not horizon_data_df.query('md == 0 & tvd.isnull()').empty
-    assert not horizon_data_df.query('md == 3858 & tvd.isnull()').empty
-    assert not horizon_data_df.query('md == 7452 & tvd.isnull()').empty
-    assert not horizon_data_df.query('md == 11257 & tvd.isnull()').empty
-    assert not horizon_data_df.query('md == 11288 & tvd == 11517.76902768946').empty
-    assert not horizon_data_df.query('md == 13770 & tvd == 11462.009984212762').empty
-    assert not horizon_data_df.query('md == 16854 & tvd == 11263.199107699302').empty
 
 
 def test_get_well_target_lines(project_papi):

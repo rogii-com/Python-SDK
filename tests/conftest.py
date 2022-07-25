@@ -3,7 +3,8 @@ import pytest
 
 from rogii_solo import SoloClient
 from tests.papi_data import (
-    PROJECT_NAME,
+    METER_PROJECT_NAME,
+    FOOT_PROJECT_NAME,
     PROJECTS_DATA_RESPONSE,
     VIRTUAL_PROJECTS_DATA_RESPONSE,
     WELLS_DATA_RESPONSE,
@@ -71,7 +72,14 @@ def solo_client():
 
 @pytest.fixture(scope='function')
 def project(solo_client):
-    solo_client.set_project_by_name(PROJECT_NAME)
+    solo_client.set_project_by_name(METER_PROJECT_NAME)
+
+    return solo_client.project
+
+
+@pytest.fixture(scope='function')
+def ft_project(solo_client):
+    solo_client.set_project_by_name(FOOT_PROJECT_NAME)
 
     return solo_client.project
 
@@ -89,6 +97,6 @@ def solo_client_papi():
 
 @pytest.fixture(scope='module')
 def project_papi(solo_client_papi):
-    solo_client_papi.set_project_by_name(PROJECT_NAME)
+    solo_client_papi.set_project_by_name(METER_PROJECT_NAME)
 
     return solo_client_papi.project

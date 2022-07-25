@@ -1,5 +1,9 @@
-PROJECT_NAME = 'Global project'
-PROJECT_ID = '3e684dbc-37ed-4827-b677-dc0e3febc432'
+METER_PROJECT_NAME = 'Global project'
+METER_PROJECT_ID = '3e684dbc-37ed-4827-b677-dc0e3febc432'
+
+FOOT_PROJECT_NAME = 'Global project (ft)'
+FOOT_PROJECT_ID = '4d684dbc-37ed-4827-b677-dc0e3febc432'
+
 WELL_NAME = 'Lateral'
 INTERPRETATION_NAME = 'Interpretation'
 
@@ -20,17 +24,17 @@ STARRED_NESTED_WELL_ID = '3408e926-0ccf-4698-b453-509dd793db94'
 PROJECTS_DATA_RESPONSE = {
     'content': [
         {
-            'uuid': PROJECT_ID,
-            'name': PROJECT_NAME,
+            'uuid': METER_PROJECT_ID,
+            'name': METER_PROJECT_NAME,
             'measure_unit': 'METER',
             'role': 'MANAGER',
             'accessed_on': '2022-06-30T08:26:30Z',
             'modified_on': '2022-06-24T13:30:32Z'
         },
         {
-            'uuid': 'a721009f-f71a-4c35-b6ad-084ca1cd624f',
-            'name': 'Global project 2',
-            'measure_unit': 'METER',
+            'uuid': FOOT_PROJECT_ID,
+            'name': FOOT_PROJECT_NAME,
+            'measure_unit': 'FOOT',
             'role': 'MANAGER',
             'accessed_on': '2022-05-20T19:56:52Z',
             'modified_on': '2022-05-20T18:17:35Z'
@@ -56,8 +60,8 @@ VIRTUAL_PROJECTS_DATA_RESPONSE = {
                 'name': 'American Samoa 1962 / American Samoa Lambert',
                 'measure_unit': 'FOOT_US'
             },
-            'parent_uuid': PROJECT_ID,
-            'parent_name': PROJECT_NAME,
+            'parent_uuid': METER_PROJECT_ID,
+            'parent_name': METER_PROJECT_NAME,
             'virtual': True,
             'modified_on': '2022-06-24T13:30:32Z'
         },
@@ -72,8 +76,8 @@ VIRTUAL_PROJECTS_DATA_RESPONSE = {
                 'name': 'American Samoa 1962 / American Samoa Lambert',
                 'measure_unit': 'FOOT_US'
             },
-            'parent_uuid': PROJECT_ID,
-            'parent_name': PROJECT_NAME,
+            'parent_uuid': METER_PROJECT_ID,
+            'parent_name': METER_PROJECT_NAME,
             'virtual': True,
             'modified_on': '2022-05-20T18:17:35Z'
         }
@@ -99,10 +103,10 @@ WELLS_DATA_RESPONSE = {
                 'val': 600000.0
             },
             'kb': {
-                'val': 0.0
+                'val': 100.0
             },
             'convergence': {
-                'val': 0.017453292519944444
+                'val': 0.17453292519944444
             },
             'tie_in_tvd': {
                 'val': 0.0
