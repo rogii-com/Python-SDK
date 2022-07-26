@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Any, Dict, Optional
 
 from pandas import DataFrame
 
@@ -49,7 +49,7 @@ class Well(ComplexObject, Convertable):
         self._nested_wells: ObjectRepository[NestedWell] = ObjectRepository()
         self._starred_nested_well: Optional[NestedWell] = None
 
-    def to_dict(self, get_converted: bool = True):
+    def to_dict(self, get_converted: bool = True) -> Dict[str, Any]:
         measure_units = self.project.measure_unit
 
         return {
@@ -68,7 +68,7 @@ class Well(ComplexObject, Convertable):
             'starred': self.starred,
         }
 
-    def to_df(self, get_converted: bool = True):
+    def to_df(self, get_converted: bool = True) -> DataFrame:
         return DataFrame([self.to_dict(get_converted)])
 
     @property

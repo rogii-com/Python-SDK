@@ -9,3 +9,8 @@ class Interpretation(TypedDict):
     meta: DataFrame
     horizons: DataFrame
     segments: DataFrame
+
+
+class Horizon(TypedDict):
+    meta: DataFrame
+    data: DataFrame

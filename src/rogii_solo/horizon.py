@@ -1,9 +1,12 @@
+from typing import Any, Dict
+
 from pandas import DataFrame
 
 import rogii_solo.interpretation
 from rogii_solo.base import BaseObject
 from rogii_solo.calculations.interpretation import get_segments, get_segments_boundaries, interpolate_horizon
 from rogii_solo.calculations.trajectory import calculate_trajectory
+from rogii_solo.types import Horizon as HorizonType
 
 
 class Horizon(BaseObject):
@@ -15,10 +18,10 @@ class Horizon(BaseObject):
 
         self.__dict__.update(kwargs)
 
-    def to_dict(self, get_converted: bool = True):
+    def to_dict(self, get_converted: bool = True) -> Dict[str, Any]:
         return self._get_data(get_converted)
 
-    def to_df(self, get_converted: bool = True):
+    def to_df(self, get_converted: bool = True) -> HorizonType:
         data = self._get_data(get_converted)
 
         return {

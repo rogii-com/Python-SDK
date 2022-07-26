@@ -1,3 +1,5 @@
+from typing import Any, Dict
+
 from pandas import DataFrame
 
 import rogii_solo.well
@@ -23,7 +25,7 @@ class NestedWell(BaseObject, Convertable):
 
         self.__dict__.update(kwargs)
 
-    def to_dict(self, get_converted: bool = True):
+    def to_dict(self, get_converted: bool = True) -> Dict[str, Any]:
         measure_units = self.well.project.measure_unit
 
         return {
@@ -41,5 +43,5 @@ class NestedWell(BaseObject, Convertable):
             'tie_in_ew': self.tie_in_ew,
         }
 
-    def to_df(self, get_converted: bool = True):
+    def to_df(self, get_converted: bool = True) -> DataFrame:
         return DataFrame([self.to_dict(get_converted)])

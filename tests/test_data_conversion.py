@@ -1,4 +1,4 @@
-from rogii_solo.calculations.base import np_is_close
+from tests.utils import np_is_close
 
 from tests.papi_data import (
     WELL_NAME,

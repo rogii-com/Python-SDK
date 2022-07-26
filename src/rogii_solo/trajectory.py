@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Any, Dict, Optional
 
 from pandas import DataFrame
 
@@ -17,7 +17,7 @@ class TrajectoryPoint(BaseObject):
 
         self.__dict__.update(kwargs)
 
-    def to_dict(self, get_converted: bool = True):
+    def to_dict(self, get_converted: bool = True) -> Dict[str, Any]:
         measure_units = self.well.project.measure_unit
 
         return {
@@ -26,7 +26,7 @@ class TrajectoryPoint(BaseObject):
             'azim': self.convert_angle(self.azim) if get_converted else self.azim,
         }
 
-    def to_df(self, get_converted: bool = True):
+    def to_df(self, get_converted: bool = True) -> DataFrame:
         return DataFrame([self.to_dict(get_converted)])
 
 

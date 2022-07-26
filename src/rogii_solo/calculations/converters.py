@@ -1,11 +1,14 @@
 import math
-from typing import Optional
 
 from rogii_solo.calculations.constants import FEET_TO_METERS
 from rogii_solo.calculations.enums import EMeasureUnits
+from rogii_solo.calculations.exceptions import InvalidMeasureUnitsException
 
 
-def convert_value(value: float, measure_units: EMeasureUnits, force_to_meters: bool = False) -> Optional[float]:
+def convert_value(value: float, measure_units: EMeasureUnits, force_to_meters: bool = False) -> float:
+    if not EMeasureUnits.includes(measure_units):
+        raise InvalidMeasureUnitsException('Invalid measure units value.')
+
     if measure_units == EMeasureUnits.METER:
         return value
     elif measure_units == EMeasureUnits.FOOT:

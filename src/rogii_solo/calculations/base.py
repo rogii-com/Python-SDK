@@ -3,8 +3,6 @@ from bisect import bisect_left
 from collections import Counter
 from typing import Any, Dict, List, Optional
 
-from numpy import isclose
-
 from rogii_solo.calculations.constants import DELTA
 
 
@@ -107,10 +105,6 @@ def get_most_common(input_list: List[Any]) -> Any:
         return
 
     return Counter(input_list).most_common()[0][0]
-
-
-def np_is_close(a, b):
-    return isclose(a=a, b=b, rtol=DELTA)
 
 
 def find_by_key(key: str, value: float, input_list: List[Dict[str, Any]]) -> Dict[str, Any]:
