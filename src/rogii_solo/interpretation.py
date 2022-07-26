@@ -1,3 +1,5 @@
+from typing import Any, Dict
+
 from pandas import DataFrame
 
 import rogii_solo.well
@@ -28,10 +30,10 @@ class Interpretation(ComplexObject):
         self._horizons_data: DataList = []
         self._horizons: ObjectRepository[Horizon] = ObjectRepository()
 
-    def to_dict(self):
+    def to_dict(self, get_converted: bool = True) -> Dict[str, Any]:
         return self._get_data()
 
-    def to_df(self) -> InterpretationType:
+    def to_df(self, get_converted: bool = True) -> InterpretationType:
         data = self._get_data()
 
         return {

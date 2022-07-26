@@ -1,3 +1,5 @@
+from typing import Any, Dict
+
 from pandas import DataFrame
 
 from rogii_solo.base import BaseObject
@@ -32,7 +34,7 @@ class TargetLine(BaseObject):
 
         self.__dict__.update(kwargs)
 
-    def to_dict(self):
+    def to_dict(self, get_converted: bool = True) -> Dict[str, Any]:
         return {
             'uuid': self.uuid,
             'name': self.name,
@@ -60,5 +62,5 @@ class TargetLine(BaseObject):
             'tvd_vs': self.tvd_vs,
         }
 
-    def to_df(self):
-        return DataFrame([self.to_dict()])
+    def to_df(self, get_converted: bool = True) -> DataFrame:
+        return DataFrame([self.to_dict(get_converted)])

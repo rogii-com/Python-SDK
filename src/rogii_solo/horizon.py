@@ -1,9 +1,12 @@
+from typing import Any, Dict
+
 from pandas import DataFrame
 
 import rogii_solo.interpretation
 from rogii_solo.base import BaseObject
 from rogii_solo.calculations.interpretation import get_segments, get_segments_boundaries, interpolate_horizon
 from rogii_solo.calculations.trajectory import calculate_trajectory
+from rogii_solo.types import Horizon as HorizonType
 
 
 class Horizon(BaseObject):
@@ -15,32 +18,32 @@ class Horizon(BaseObject):
 
         self.__dict__.update(kwargs)
 
-    def to_dict(self):
-        return self._get_data()
+    def to_dict(self, get_converted: bool = True) -> Dict[str, Any]:
+        return self._get_data(get_converted)
 
-    def to_df(self):
-        data = self._get_data()
+    def to_df(self, get_converted: bool = True) -> HorizonType:
+        data = self._get_data(get_converted)
 
         return {
             'meta': DataFrame([data['meta']]),
-            'data': DataFrame(data['data']),
+            'points': DataFrame(data['points']),
         }
 
-    def _get_data(self):
+    def _get_data(self, get_converted: bool):
         meta = {
             'uuid': self.uuid,
             'name': self.name,
         }
-        data = self._calculate_data()
+        points = self._calculate_points(get_converted)
 
         return {
             'meta': meta,
-            'data': data,
+            'points': points,
         }
 
-    def _calculate_data(self):
-        well_data = self.interpretation.well.to_dict()
-        trajectory_data = self.interpretation.well.trajectory.to_dict()
+    def _calculate_points(self, get_converted: bool):
+        well_data = self.interpretation.well.to_dict(get_converted=False)
+        trajectory_data = self.interpretation.well.trajectory_data
         assembled_segments_data = self.interpretation.assembled_segments_data
         measure_units = self.interpretation.well.project.measure_unit
 
@@ -62,8 +65,19 @@ class Horizon(BaseObject):
             calculated_trajectory=calculated_trajectory
         )
 
-        return interpolate_horizon(
+        interpolated_horizon = interpolate_horizon(
             segments_boundaries=segments_boundaries,
             horizon_uuid=self.uuid,
             horizon_tvd=assembled_segments_data['horizons'][self.uuid]['tvd']
         )
+
+        if get_converted:
+            return [
+                {
+                    'md': self.convert_z(point['md'], measure_units=measure_units),
+                    'tvd': self.convert_z(point['tvd'], measure_units=measure_units),
+                }
+                for point in interpolated_horizon
+            ]
+
+        return interpolated_horizon

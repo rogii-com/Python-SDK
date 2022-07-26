@@ -1,36 +1,54 @@
-PROJECT_NAME = 'Global project'
-PROJECT_ID = '3e684dbc-37ed-4827-b677-dc0e3febc432'
+from uuid import uuid4
+
+
+METER_PROJECT_NAME = 'Global project'
+METER_PROJECT_ID = uuid4()
+
+FOOT_PROJECT_NAME = 'Global project (ft)'
+FOOT_PROJECT_ID = uuid4()
+
+FOOT_METER_PROJECT_NAME = 'Global project (ft-m)'
+FOOT_METER_PROJECT_ID = uuid4()
+
 WELL_NAME = 'Lateral'
 INTERPRETATION_NAME = 'Interpretation'
 
 STARRED_INTERPRETATION_NAME = 'Starred Interpretation'
-STARRED_INTERPRETATION_ID = 'ddb9700c-fdf9-46c9-a12a-1939cb6890a1'
+STARRED_INTERPRETATION_ID = uuid4()
 
 HORIZON_NAME = 'Horizon'
-HORIZON_ID = '55e53b91-8dee-4e42-94c0-77f476fbd52f'
+HORIZON_ID = uuid4()
 
 TARGET_LINE_NAME = 'Target Line'
-STARRED_TARGET_LINE_ID = '5623ac16-ca3f-4e77-8416-4365c274bf5d'
+STARRED_TARGET_LINE_ID = uuid4()
 STARRED_TARGET_LINE_NAME = 'Starred Target Line'
 
 NESTED_WELL_NAME = 'Nested Well'
 STARRED_NESTED_WELL_NAME = 'Starred Nested Well'
-STARRED_NESTED_WELL_ID = '3408e926-0ccf-4698-b453-509dd793db94'
+STARRED_NESTED_WELL_ID = uuid4()
 
 PROJECTS_DATA_RESPONSE = {
     'content': [
         {
-            'uuid': PROJECT_ID,
-            'name': PROJECT_NAME,
-            'measure_unit': 'FOOT',
+            'uuid': METER_PROJECT_ID,
+            'name': METER_PROJECT_NAME,
+            'measure_unit': 'METER',
             'role': 'MANAGER',
             'accessed_on': '2022-06-30T08:26:30Z',
             'modified_on': '2022-06-24T13:30:32Z'
         },
         {
-            'uuid': 'a721009f-f71a-4c35-b6ad-084ca1cd624f',
-            'name': 'Global project 2',
-            'measure_unit': 'METER',
+            'uuid': FOOT_PROJECT_ID,
+            'name': FOOT_PROJECT_NAME,
+            'measure_unit': 'FOOT',
+            'role': 'MANAGER',
+            'accessed_on': '2022-05-20T19:56:52Z',
+            'modified_on': '2022-05-20T18:17:35Z'
+        },
+        {
+            'uuid': FOOT_METER_PROJECT_ID,
+            'name': FOOT_METER_PROJECT_NAME,
+            'measure_unit': 'METER_FOOT',
             'role': 'MANAGER',
             'accessed_on': '2022-05-20T19:56:52Z',
             'modified_on': '2022-05-20T18:17:35Z'
@@ -38,7 +56,7 @@ PROJECTS_DATA_RESPONSE = {
     ],
     'offset': 0,
     'limit': 100,
-    'total': 2,
+    'total': 3,
     'first': True,
     'last': True
 }
@@ -56,8 +74,8 @@ VIRTUAL_PROJECTS_DATA_RESPONSE = {
                 'name': 'American Samoa 1962 / American Samoa Lambert',
                 'measure_unit': 'FOOT_US'
             },
-            'parent_uuid': PROJECT_ID,
-            'parent_name': PROJECT_NAME,
+            'parent_uuid': METER_PROJECT_ID,
+            'parent_name': METER_PROJECT_NAME,
             'virtual': True,
             'modified_on': '2022-06-24T13:30:32Z'
         },
@@ -72,8 +90,8 @@ VIRTUAL_PROJECTS_DATA_RESPONSE = {
                 'name': 'American Samoa 1962 / American Samoa Lambert',
                 'measure_unit': 'FOOT_US'
             },
-            'parent_uuid': PROJECT_ID,
-            'parent_name': PROJECT_NAME,
+            'parent_uuid': METER_PROJECT_ID,
+            'parent_name': METER_PROJECT_NAME,
             'virtual': True,
             'modified_on': '2022-05-20T18:17:35Z'
         }
@@ -99,10 +117,10 @@ WELLS_DATA_RESPONSE = {
                 'val': 600000.0
             },
             'kb': {
-                'val': 0.0
+                'val': 100.0
             },
             'convergence': {
-                'val': 0.017453292519944444
+                'val': 0.17453292519944444
             },
             'tie_in_tvd': {
                 'val': 0.0

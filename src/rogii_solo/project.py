@@ -1,3 +1,5 @@
+from typing import Any, Dict
+
 from pandas import DataFrame
 
 from rogii_solo.base import ComplexObject, ObjectRepository
@@ -26,7 +28,7 @@ class Project(ComplexObject):
         self._wells_data: DataList = []
         self._wells: ObjectRepository[Well] = ObjectRepository()
 
-    def to_dict(self):
+    def to_dict(self, get_converted: bool = True) -> Dict[str, Any]:
         return {
             'uuid': self.uuid,
             'name': self.name,
@@ -40,8 +42,8 @@ class Project(ComplexObject):
             'virtual': self.virtual,
         }
 
-    def to_df(self):
-        return DataFrame([self.to_dict()])
+    def to_df(self, get_converted: bool = True) -> DataFrame:
+        return DataFrame([self.to_dict(get_converted)])
 
     @property
     def wells_data(self) -> DataList:
