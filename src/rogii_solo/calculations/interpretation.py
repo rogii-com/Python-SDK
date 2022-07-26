@@ -182,7 +182,7 @@ def get_segments_boundaries(assembled_segments: List[Segment], calculated_trajec
 
 
 def interpolate_horizon(segments_boundaries: SegmentsBoundaries, horizon_uuid: str, horizon_tvd: float):
-    interpolated_horizon_points = []
+    points = []
 
     for segment_boundaries in segments_boundaries:
         md = segment_boundaries['md']
@@ -191,7 +191,7 @@ def interpolate_horizon(segments_boundaries: SegmentsBoundaries, horizon_uuid: s
         interpolated_point = segment_boundaries['interpolated_point']
 
         if left_point is None:
-            interpolated_horizon_points.append({
+            points.append({
                 'md': md,
                 'tvd': None
             })
@@ -211,9 +211,9 @@ def interpolate_horizon(segments_boundaries: SegmentsBoundaries, horizon_uuid: s
             x=interpolated_point['vs']
         )
 
-        interpolated_horizon_points.append({
+        points.append({
             'md': md,
             'tvd': tvd
         })
 
-    return interpolated_horizon_points
+    return points

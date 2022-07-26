@@ -10,19 +10,18 @@ from rogii_solo.types import DataList
 
 
 class Convertable:
-    def convert_xy(self,
-                   value: float,
-                   measure_units: EMeasureUnits,
-                   force_to_meters: bool = False
-                   ) -> Optional[float]:
+    @staticmethod
+    def convert_xy(value: float, measure_units: EMeasureUnits, force_to_meters: bool = False) -> Optional[float]:
         if value is not None:
             return convert_value(value, measure_units=measure_units, force_to_meters=force_to_meters)
 
-    def convert_z(self, value: float, measure_units: EMeasureUnits) -> Optional[float]:
+    @staticmethod
+    def convert_z(value: float, measure_units: EMeasureUnits) -> Optional[float]:
         if value is not None:
             return convert_value(value=value, measure_units=measure_units)
 
-    def convert_angle(self, value: float) -> Optional[float]:
+    @staticmethod
+    def convert_angle(value: float) -> Optional[float]:
         if value is not None:
             return radians_to_degrees(value)
 

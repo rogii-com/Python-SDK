@@ -26,7 +26,7 @@ class Horizon(BaseObject):
 
         return {
             'meta': DataFrame([data['meta']]),
-            'data': DataFrame(data['data']),
+            'points': DataFrame(data['points']),
         }
 
     def _get_data(self, get_converted: bool):
@@ -34,14 +34,14 @@ class Horizon(BaseObject):
             'uuid': self.uuid,
             'name': self.name,
         }
-        data = self._calculate_data(get_converted)
+        points = self._calculate_points(get_converted)
 
         return {
             'meta': meta,
-            'data': data,
+            'points': points,
         }
 
-    def _calculate_data(self, get_converted: bool):
+    def _calculate_points(self, get_converted: bool):
         well_data = self.interpretation.well.to_dict(get_converted=False)
         trajectory_data = self.interpretation.well.trajectory_data
         assembled_segments_data = self.interpretation.assembled_segments_data

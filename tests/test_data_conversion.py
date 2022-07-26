@@ -4,6 +4,7 @@ from tests.papi_data import (
     WELL_NAME,
     HORIZON_NAME
 )
+from rogii_solo.base import Convertable
 
 
 def test_get_converted_meter_well(project):
@@ -15,11 +16,11 @@ def test_get_converted_meter_well(project):
 
     assert not well_df.empty
 
-    assert np_is_close(well_df['xsrf_real'], 500000)
-    assert np_is_close(well_df['ysrf_real'], 600000)
-    assert np_is_close(well_df['kb'], 100)
-    assert np_is_close(well_df['azimuth'], 325)
-    assert np_is_close(well_df['convergence'], 10)
+    assert np_is_close(well_df['xsrf_real'], well.xsrf_real)
+    assert np_is_close(well_df['ysrf_real'], well.ysrf_real)
+    assert np_is_close(well_df['kb'], Convertable.convert_z(value=well.kb, measure_units=project.measure_unit))
+    assert np_is_close(well_df['azimuth'], Convertable.convert_angle(value=well.azimuth))
+    assert np_is_close(well_df['convergence'], Convertable.convert_angle(value=well.convergence))
 
 
 def test_get_not_converted_meter_well(project):
@@ -31,11 +32,11 @@ def test_get_not_converted_meter_well(project):
 
     assert not well_df.empty
 
-    assert np_is_close(well_df['xsrf_real'], 500000)
-    assert np_is_close(well_df['ysrf_real'], 600000)
-    assert np_is_close(well_df['kb'], 100)
-    assert np_is_close(well_df['azimuth'], 5.672320068981945)
-    assert np_is_close(well_df['convergence'], 0.17453292519944444)
+    assert np_is_close(well_df['xsrf_real'], well.xsrf_real)
+    assert np_is_close(well_df['ysrf_real'], well.ysrf_real)
+    assert np_is_close(well_df['kb'], well.kb)
+    assert np_is_close(well_df['azimuth'], well.azimuth)
+    assert np_is_close(well_df['convergence'], well.convergence)
 
 
 def test_get_converted_foot_well(ft_project):
@@ -47,11 +48,11 @@ def test_get_converted_foot_well(ft_project):
 
     assert not well_df.empty
 
-    assert np_is_close(well_df['xsrf_real'], 500000)
-    assert np_is_close(well_df['ysrf_real'], 600000)
-    assert np_is_close(well_df['kb'], 328.08399)
-    assert np_is_close(well_df['azimuth'], 325)
-    assert np_is_close(well_df['convergence'], 10)
+    assert np_is_close(well_df['xsrf_real'], well.xsrf_real)
+    assert np_is_close(well_df['ysrf_real'], well.ysrf_real)
+    assert np_is_close(well_df['kb'], Convertable.convert_z(value=well.kb, measure_units=ft_project.measure_unit))
+    assert np_is_close(well_df['azimuth'], Convertable.convert_angle(value=well.azimuth))
+    assert np_is_close(well_df['convergence'], Convertable.convert_angle(value=well.convergence))
 
 
 def test_get_not_converted_foot_well(ft_project):
@@ -63,11 +64,11 @@ def test_get_not_converted_foot_well(ft_project):
 
     assert not well_df.empty
 
-    assert np_is_close(well_df['xsrf_real'], 500000)
-    assert np_is_close(well_df['ysrf_real'], 600000)
-    assert np_is_close(well_df['kb'], 100)
-    assert np_is_close(well_df['azimuth'], 5.672320068981945)
-    assert np_is_close(well_df['convergence'], 0.17453292519944444)
+    assert np_is_close(well_df['xsrf_real'], well.xsrf_real)
+    assert np_is_close(well_df['ysrf_real'], well.ysrf_real)
+    assert np_is_close(well_df['kb'], well.kb)
+    assert np_is_close(well_df['azimuth'], well.azimuth)
+    assert np_is_close(well_df['convergence'], well.convergence)
 
 
 def test_get_converted_ftm_well(ftm_project):
@@ -79,11 +80,11 @@ def test_get_converted_ftm_well(ftm_project):
 
     assert not well_df.empty
 
-    assert np_is_close(well_df['xsrf_real'], 500000)
-    assert np_is_close(well_df['ysrf_real'], 600000)
-    assert np_is_close(well_df['kb'], 328.08399)
-    assert np_is_close(well_df['azimuth'], 325)
-    assert np_is_close(well_df['convergence'], 10)
+    assert np_is_close(well_df['xsrf_real'], well.xsrf_real)
+    assert np_is_close(well_df['ysrf_real'], well.ysrf_real)
+    assert np_is_close(well_df['kb'], Convertable.convert_z(value=well.kb, measure_units=ftm_project.measure_unit))
+    assert np_is_close(well_df['azimuth'], Convertable.convert_angle(value=well.azimuth))
+    assert np_is_close(well_df['convergence'], Convertable.convert_angle(value=well.convergence))
 
 
 def test_get_not_converted_ftm_well(ftm_project):
@@ -95,11 +96,11 @@ def test_get_not_converted_ftm_well(ftm_project):
 
     assert not well_df.empty
 
-    assert np_is_close(well_df['xsrf_real'], 500000)
-    assert np_is_close(well_df['ysrf_real'], 600000)
-    assert np_is_close(well_df['kb'], 100)
-    assert np_is_close(well_df['azimuth'], 5.672320068981945)
-    assert np_is_close(well_df['convergence'], 0.17453292519944444)
+    assert np_is_close(well_df['xsrf_real'], well.xsrf_real)
+    assert np_is_close(well_df['ysrf_real'], well.ysrf_real)
+    assert np_is_close(well_df['kb'], well.kb)
+    assert np_is_close(well_df['azimuth'], well.azimuth)
+    assert np_is_close(well_df['convergence'], well.convergence)
 
 
 def test_get_converted_meter_trajectory(project):
@@ -107,35 +108,20 @@ def test_get_converted_meter_trajectory(project):
 
     assert well is not None
 
-    trajectory_df = well.trajectory.to_df()
+    trajectory = well.trajectory
+    trajectory_df = trajectory.to_df()
 
+    assert trajectory
     assert not trajectory_df.empty
+    assert len(trajectory) == len(trajectory_df.index)
 
-    assert not trajectory_df[
-        np_is_close(trajectory_df['md'], 0) &
-        np_is_close(trajectory_df['incl'], 0) &
-        np_is_close(trajectory_df['azim'], 0)
-        ].empty
-    assert not trajectory_df[
-        np_is_close(trajectory_df['md'], 447.99999999999994) &
-        np_is_close(trajectory_df['incl'], 0.40000000000002633) &
-        np_is_close(trajectory_df['azim'], 247.80000000001635)
-        ].empty
-    assert not trajectory_df[
-        np_is_close(trajectory_df['md'], 7735.0) &
-        np_is_close(trajectory_df['incl'], 1.5000000000000988) &
-        np_is_close(trajectory_df['azim'], 157.50000000001032)
-        ].empty
-    assert not trajectory_df[
-        np_is_close(trajectory_df['md'], 11383.0) &
-        np_is_close(trajectory_df['incl'], 48.30000000000318) &
-        np_is_close(trajectory_df['azim'], 326.00000000002143)
-        ].empty
-    assert not trajectory_df[
-        np_is_close(trajectory_df['md'], 16854.0) &
-        np_is_close(trajectory_df['incl'], 88.90000000000586) &
-        np_is_close(trajectory_df['azim'], 322.0000000000212)
-        ].empty
+    for idx, trajectory_point in enumerate(trajectory):
+        assert np_is_close(trajectory_df.at[idx, 'md'], Convertable.convert_z(
+            value=trajectory_point.md,
+            measure_units=well.project.measure_unit
+        ))
+        assert np_is_close(trajectory_df.at[idx, 'incl'], Convertable.convert_angle(trajectory_point.incl))
+        assert np_is_close(trajectory_df.at[idx, 'azim'], Convertable.convert_angle(trajectory_point.azim))
 
 
 def test_get_not_converted_meter_trajectory(project):
@@ -143,35 +129,17 @@ def test_get_not_converted_meter_trajectory(project):
 
     assert well is not None
 
-    trajectory_df = well.trajectory.to_df(get_converted=False)
+    trajectory = well.trajectory
+    trajectory_df = trajectory.to_df(get_converted=False)
 
+    assert trajectory
     assert not trajectory_df.empty
+    assert len(trajectory) == len(trajectory_df.index)
 
-    assert not trajectory_df[
-        np_is_close(trajectory_df['md'], 0) &
-        np_is_close(trajectory_df['incl'], 0) &
-        np_is_close(trajectory_df['azim'], 0)
-        ].empty
-    assert not trajectory_df[
-        np_is_close(trajectory_df['md'], 447.99999999999994) &
-        np_is_close(trajectory_df['incl'], 0.006981317007977778) &
-        np_is_close(trajectory_df['azim'], 4.324925886442234)
-        ].empty
-    assert not trajectory_df[
-        np_is_close(trajectory_df['md'], 7735.0) &
-        np_is_close(trajectory_df['incl'], 0.026179938779916666) &
-        np_is_close(trajectory_df['azim'], 2.7488935718912493)
-        ].empty
-    assert not trajectory_df[
-        np_is_close(trajectory_df['md'], 11383.0) &
-        np_is_close(trajectory_df['incl'], 0.8429940287133166) &
-        np_is_close(trajectory_df['azim'], 5.689773361501889)
-        ].empty
-    assert not trajectory_df[
-        np_is_close(trajectory_df['md'], 16854.0) &
-        np_is_close(trajectory_df['incl'], 1.5515977050230612) &
-        np_is_close(trajectory_df['azim'], 5.619960191422111)
-        ].empty
+    for idx, trajectory_point in enumerate(trajectory):
+        assert np_is_close(trajectory_df.at[idx, 'md'], trajectory_point.md)
+        assert np_is_close(trajectory_df.at[idx, 'incl'], trajectory_point.incl)
+        assert np_is_close(trajectory_df.at[idx, 'azim'], trajectory_point.azim)
 
 
 def test_get_converted_foot_trajectory(ft_project):
@@ -179,35 +147,20 @@ def test_get_converted_foot_trajectory(ft_project):
 
     assert well is not None
 
-    trajectory_df = well.trajectory.to_df()
+    trajectory = well.trajectory
+    trajectory_df = trajectory.to_df()
 
+    assert trajectory
     assert not trajectory_df.empty
+    assert len(trajectory) == len(trajectory_df.index)
 
-    assert not trajectory_df[
-        np_is_close(trajectory_df['md'], 0) &
-        np_is_close(trajectory_df['incl'], 0) &
-        np_is_close(trajectory_df['azim'], 0)
-        ].empty
-    assert not trajectory_df[
-        np_is_close(trajectory_df['md'], 1469.8162729658789) &
-        np_is_close(trajectory_df['incl'], 0.40000000000002633) &
-        np_is_close(trajectory_df['azim'], 247.80000000001635)
-        ].empty
-    assert not trajectory_df[
-        np_is_close(trajectory_df['md'], 25377.296587926507) &
-        np_is_close(trajectory_df['incl'], 1.5000000000000988) &
-        np_is_close(trajectory_df['azim'], 157.50000000001032)
-        ].empty
-    assert not trajectory_df[
-        np_is_close(trajectory_df['md'], 37345.80052493438) &
-        np_is_close(trajectory_df['incl'], 48.30000000000318) &
-        np_is_close(trajectory_df['azim'], 326.00000000002143)
-        ].empty
-    assert not trajectory_df[
-        np_is_close(trajectory_df['md'], 55295.27559055117) &
-        np_is_close(trajectory_df['incl'], 88.90000000000586) &
-        np_is_close(trajectory_df['azim'], 322.0000000000212)
-        ].empty
+    for idx, trajectory_point in enumerate(trajectory):
+        assert np_is_close(trajectory_df.at[idx, 'md'], Convertable.convert_z(
+            value=trajectory_point.md,
+            measure_units=well.project.measure_unit
+        ))
+        assert np_is_close(trajectory_df.at[idx, 'incl'], Convertable.convert_angle(trajectory_point.incl))
+        assert np_is_close(trajectory_df.at[idx, 'azim'], Convertable.convert_angle(trajectory_point.azim))
 
 
 def test_get_not_converted_foot_trajectory(ft_project):
@@ -215,35 +168,17 @@ def test_get_not_converted_foot_trajectory(ft_project):
 
     assert well is not None
 
-    trajectory_df = well.trajectory.to_df(get_converted=False)
+    trajectory = well.trajectory
+    trajectory_df = trajectory.to_df(get_converted=False)
 
+    assert trajectory
     assert not trajectory_df.empty
+    assert len(trajectory) == len(trajectory_df.index)
 
-    assert not trajectory_df[
-        np_is_close(trajectory_df['md'], 0) &
-        np_is_close(trajectory_df['incl'], 0) &
-        np_is_close(trajectory_df['azim'], 0)
-        ].empty
-    assert not trajectory_df[
-        np_is_close(trajectory_df['md'], 447.99999999999994) &
-        np_is_close(trajectory_df['incl'], 0.006981317007977778) &
-        np_is_close(trajectory_df['azim'], 4.324925886442234)
-        ].empty
-    assert not trajectory_df[
-        np_is_close(trajectory_df['md'], 7735.0) &
-        np_is_close(trajectory_df['incl'], 0.026179938779916666) &
-        np_is_close(trajectory_df['azim'], 2.7488935718912493)
-        ].empty
-    assert not trajectory_df[
-        np_is_close(trajectory_df['md'], 11383.0) &
-        np_is_close(trajectory_df['incl'], 0.8429940287133166) &
-        np_is_close(trajectory_df['azim'], 5.689773361501889)
-        ].empty
-    assert not trajectory_df[
-        np_is_close(trajectory_df['md'], 16854.0) &
-        np_is_close(trajectory_df['incl'], 1.5515977050230612) &
-        np_is_close(trajectory_df['azim'], 5.619960191422111)
-        ].empty
+    for idx, trajectory_point in enumerate(trajectory):
+        assert np_is_close(trajectory_df.at[idx, 'md'], trajectory_point.md)
+        assert np_is_close(trajectory_df.at[idx, 'incl'], trajectory_point.incl)
+        assert np_is_close(trajectory_df.at[idx, 'azim'], trajectory_point.azim)
 
 
 def test_get_converted_ftm_trajectory(ftm_project):
@@ -251,35 +186,20 @@ def test_get_converted_ftm_trajectory(ftm_project):
 
     assert well is not None
 
-    trajectory_df = well.trajectory.to_df()
+    trajectory = well.trajectory
+    trajectory_df = trajectory.to_df()
 
+    assert trajectory
     assert not trajectory_df.empty
+    assert len(trajectory) == len(trajectory_df.index)
 
-    assert not trajectory_df[
-        np_is_close(trajectory_df['md'], 0) &
-        np_is_close(trajectory_df['incl'], 0) &
-        np_is_close(trajectory_df['azim'], 0)
-        ].empty
-    assert not trajectory_df[
-        np_is_close(trajectory_df['md'], 1469.8162729658789) &
-        np_is_close(trajectory_df['incl'], 0.40000000000002633) &
-        np_is_close(trajectory_df['azim'], 247.80000000001635)
-        ].empty
-    assert not trajectory_df[
-        np_is_close(trajectory_df['md'], 25377.296587926507) &
-        np_is_close(trajectory_df['incl'], 1.5000000000000988) &
-        np_is_close(trajectory_df['azim'], 157.50000000001032)
-        ].empty
-    assert not trajectory_df[
-        np_is_close(trajectory_df['md'], 37345.80052493438) &
-        np_is_close(trajectory_df['incl'], 48.30000000000318) &
-        np_is_close(trajectory_df['azim'], 326.00000000002143)
-        ].empty
-    assert not trajectory_df[
-        np_is_close(trajectory_df['md'], 55295.27559055117) &
-        np_is_close(trajectory_df['incl'], 88.90000000000586) &
-        np_is_close(trajectory_df['azim'], 322.0000000000212)
-        ].empty
+    for idx, trajectory_point in enumerate(trajectory):
+        assert np_is_close(trajectory_df.at[idx, 'md'], Convertable.convert_z(
+            value=trajectory_point.md,
+            measure_units=well.project.measure_unit
+        ))
+        assert np_is_close(trajectory_df.at[idx, 'incl'], Convertable.convert_angle(trajectory_point.incl))
+        assert np_is_close(trajectory_df.at[idx, 'azim'], Convertable.convert_angle(trajectory_point.azim))
 
 
 def test_get_not_converted_ftm_trajectory(ftm_project):
@@ -287,35 +207,17 @@ def test_get_not_converted_ftm_trajectory(ftm_project):
 
     assert well is not None
 
-    trajectory_df = well.trajectory.to_df(get_converted=False)
+    trajectory = well.trajectory
+    trajectory_df = trajectory.to_df(get_converted=False)
 
+    assert trajectory
     assert not trajectory_df.empty
+    assert len(trajectory) == len(trajectory_df.index)
 
-    assert not trajectory_df[
-        np_is_close(trajectory_df['md'], 0) &
-        np_is_close(trajectory_df['incl'], 0) &
-        np_is_close(trajectory_df['azim'], 0)
-        ].empty
-    assert not trajectory_df[
-        np_is_close(trajectory_df['md'], 447.99999999999994) &
-        np_is_close(trajectory_df['incl'], 0.006981317007977778) &
-        np_is_close(trajectory_df['azim'], 4.324925886442234)
-        ].empty
-    assert not trajectory_df[
-        np_is_close(trajectory_df['md'], 7735.0) &
-        np_is_close(trajectory_df['incl'], 0.026179938779916666) &
-        np_is_close(trajectory_df['azim'], 2.7488935718912493)
-        ].empty
-    assert not trajectory_df[
-        np_is_close(trajectory_df['md'], 11383.0) &
-        np_is_close(trajectory_df['incl'], 0.8429940287133166) &
-        np_is_close(trajectory_df['azim'], 5.689773361501889)
-        ].empty
-    assert not trajectory_df[
-        np_is_close(trajectory_df['md'], 16854.0) &
-        np_is_close(trajectory_df['incl'], 1.5515977050230612) &
-        np_is_close(trajectory_df['azim'], 5.619960191422111)
-        ].empty
+    for idx, trajectory_point in enumerate(trajectory):
+        assert np_is_close(trajectory_df.at[idx, 'md'], trajectory_point.md)
+        assert np_is_close(trajectory_df.at[idx, 'incl'], trajectory_point.incl)
+        assert np_is_close(trajectory_df.at[idx, 'azim'], trajectory_point.azim)
 
 
 def test_get_converted_meter_nested_well(project):
@@ -327,11 +229,17 @@ def test_get_converted_meter_nested_well(project):
 
     assert not starred_nested_well_df.empty
 
-    assert np_is_close(starred_nested_well_df['xsrf_real'], 100000)
-    assert np_is_close(starred_nested_well_df['ysrf_real'], 100000)
+    assert np_is_close(starred_nested_well_df['xsrf_real'], starred_nested_well.xsrf_real)
+    assert np_is_close(starred_nested_well_df['ysrf_real'], starred_nested_well.ysrf_real)
     assert not starred_nested_well_df['kb'].isnull().empty
-    assert np_is_close(starred_nested_well_df['azimuth'], 325)
-    assert np_is_close(starred_nested_well_df['convergence'], 1)
+    assert np_is_close(
+        starred_nested_well_df['azimuth'],
+        Convertable.convert_angle(value=starred_nested_well.azimuth)
+    )
+    assert np_is_close(
+        starred_nested_well_df['convergence'],
+        Convertable.convert_angle(value=starred_nested_well.convergence)
+    )
 
 
 def test_get_not_converted_meter_nested_well(project):
@@ -343,11 +251,11 @@ def test_get_not_converted_meter_nested_well(project):
 
     assert not starred_nested_well_df.empty
 
-    assert np_is_close(starred_nested_well_df['xsrf_real'], 100000)
-    assert np_is_close(starred_nested_well_df['ysrf_real'], 100000)
+    assert np_is_close(starred_nested_well_df['xsrf_real'], starred_nested_well.xsrf_real)
+    assert np_is_close(starred_nested_well_df['ysrf_real'], starred_nested_well.ysrf_real)
     assert not starred_nested_well_df['kb'].isnull().empty
-    assert np_is_close(starred_nested_well_df['azimuth'], 5.672320068981945)
-    assert np_is_close(starred_nested_well_df['convergence'], 0.017453292519944444)
+    assert np_is_close(starred_nested_well_df['azimuth'], starred_nested_well.azimuth)
+    assert np_is_close(starred_nested_well_df['convergence'], starred_nested_well.convergence)
 
 
 def test_get_converted_foot_nested_well(ft_project):
@@ -359,11 +267,17 @@ def test_get_converted_foot_nested_well(ft_project):
 
     assert not starred_nested_well_df.empty
 
-    assert np_is_close(starred_nested_well_df['xsrf_real'], 100000)
-    assert np_is_close(starred_nested_well_df['ysrf_real'], 100000)
+    assert np_is_close(starred_nested_well_df['xsrf_real'], starred_nested_well.xsrf_real)
+    assert np_is_close(starred_nested_well_df['ysrf_real'], starred_nested_well.ysrf_real)
     assert not starred_nested_well_df['kb'].isnull().empty
-    assert np_is_close(starred_nested_well_df['azimuth'], 325)
-    assert np_is_close(starred_nested_well_df['convergence'], 1)
+    assert np_is_close(
+        starred_nested_well_df['azimuth'],
+        Convertable.convert_angle(value=starred_nested_well.azimuth)
+    )
+    assert np_is_close(
+        starred_nested_well_df['convergence'],
+        Convertable.convert_angle(value=starred_nested_well.convergence)
+    )
 
 
 def test_get_not_converted_foot_nested_well(ft_project):
@@ -375,11 +289,11 @@ def test_get_not_converted_foot_nested_well(ft_project):
 
     assert not starred_nested_well_df.empty
 
-    assert np_is_close(starred_nested_well_df['xsrf_real'], 100000)
-    assert np_is_close(starred_nested_well_df['ysrf_real'], 100000)
+    assert np_is_close(starred_nested_well_df['xsrf_real'], starred_nested_well.xsrf_real)
+    assert np_is_close(starred_nested_well_df['ysrf_real'], starred_nested_well.ysrf_real)
     assert not starred_nested_well_df['kb'].isnull().empty
-    assert np_is_close(starred_nested_well_df['azimuth'], 5.672320068981945)
-    assert np_is_close(starred_nested_well_df['convergence'], 0.017453292519944444)
+    assert np_is_close(starred_nested_well_df['azimuth'], starred_nested_well.azimuth)
+    assert np_is_close(starred_nested_well_df['convergence'], starred_nested_well.convergence)
 
 
 def test_get_converted_ftm_nested_well(ftm_project):
@@ -391,11 +305,17 @@ def test_get_converted_ftm_nested_well(ftm_project):
 
     assert not starred_nested_well_df.empty
 
-    assert np_is_close(starred_nested_well_df['xsrf_real'], 100000)
-    assert np_is_close(starred_nested_well_df['ysrf_real'], 100000)
+    assert np_is_close(starred_nested_well_df['xsrf_real'], starred_nested_well.xsrf_real)
+    assert np_is_close(starred_nested_well_df['ysrf_real'], starred_nested_well.ysrf_real)
     assert not starred_nested_well_df['kb'].isnull().empty
-    assert np_is_close(starred_nested_well_df['azimuth'], 325)
-    assert np_is_close(starred_nested_well_df['convergence'], 1)
+    assert np_is_close(
+        starred_nested_well_df['azimuth'],
+        Convertable.convert_angle(value=starred_nested_well.azimuth)
+    )
+    assert np_is_close(
+        starred_nested_well_df['convergence'],
+        Convertable.convert_angle(value=starred_nested_well.convergence)
+    )
 
 
 def test_get_not_converted_ftm_nested_well(ftm_project):
@@ -407,11 +327,11 @@ def test_get_not_converted_ftm_nested_well(ftm_project):
 
     assert not starred_nested_well_df.empty
 
-    assert np_is_close(starred_nested_well_df['xsrf_real'], 100000)
-    assert np_is_close(starred_nested_well_df['ysrf_real'], 100000)
+    assert np_is_close(starred_nested_well_df['xsrf_real'], starred_nested_well.xsrf_real)
+    assert np_is_close(starred_nested_well_df['ysrf_real'], starred_nested_well.ysrf_real)
     assert not starred_nested_well_df['kb'].isnull().empty
-    assert np_is_close(starred_nested_well_df['azimuth'], 5.672320068981945)
-    assert np_is_close(starred_nested_well_df['convergence'], 0.017453292519944444)
+    assert np_is_close(starred_nested_well_df['azimuth'], starred_nested_well.azimuth)
+    assert np_is_close(starred_nested_well_df['convergence'], starred_nested_well.convergence)
 
 
 def test_get_converted_meter_horizon(project):
@@ -420,42 +340,28 @@ def test_get_converted_meter_horizon(project):
 
     assert horizon is not None
 
+    horizon_data = horizon.to_dict(get_converted=False)
     horizon_df = horizon.to_df()
 
     assert 'meta' in horizon_df
-    assert 'data' in horizon_df
+    assert 'points' in horizon_df
 
-    horizon_data_df = horizon_df['data']
+    points = horizon_data['points']
+    points_df = horizon_df['points']
 
-    assert not horizon_data_df[
-        np_is_close(horizon_data_df['md'], 0) &
-        horizon_data_df['tvd'].isnull()
-        ].empty
-    assert not horizon_data_df[
-        np_is_close(horizon_data_df['md'], 3858) &
-        horizon_data_df['tvd'].isnull()
-        ].empty
-    assert not horizon_data_df[
-        np_is_close(horizon_data_df['md'], 7452) &
-        horizon_data_df['tvd'].isnull()
-        ].empty
-    assert not horizon_data_df[
-        np_is_close(horizon_data_df['md'], 11257) &
-        horizon_data_df['tvd'].isnull()
-        ].empty
+    assert len(points) == len(points_df.index)
 
-    assert not horizon_data_df[
-        np_is_close(horizon_data_df['md'], 11288) &
-        np_is_close(horizon_data_df['tvd'], 11517.76902768946)
-        ].empty
-    assert not horizon_data_df[
-        np_is_close(horizon_data_df['md'], 13770) &
-        np_is_close(horizon_data_df['tvd'], 11462.009984212762)
-        ].empty
-    assert not horizon_data_df[
-        np_is_close(horizon_data_df['md'], 16854) &
-        np_is_close(horizon_data_df['tvd'], 11263.199107699302)
-        ].empty
+    measure_units = horizon.interpretation.well.project.measure_unit
+
+    for idx, horizon_trajectory_point in enumerate(points):
+        assert np_is_close(
+            points_df.at[idx, 'md'],
+            Convertable.convert_z(value=horizon_trajectory_point['md'], measure_units=measure_units)
+        )
+        assert np_is_close(
+            points_df.at[idx, 'tvd'],
+            Convertable.convert_z(value=horizon_trajectory_point['tvd'], measure_units=measure_units)
+        )
 
 
 def test_get_not_converted_meter_horizon(project):
@@ -464,42 +370,20 @@ def test_get_not_converted_meter_horizon(project):
 
     assert horizon is not None
 
+    horizon_data = horizon.to_dict(get_converted=False)
     horizon_df = horizon.to_df(get_converted=False)
 
     assert 'meta' in horizon_df
-    assert 'data' in horizon_df
+    assert 'points' in horizon_df
 
-    horizon_data_df = horizon_df['data']
+    points = horizon_data['points']
+    points_df = horizon_df['points']
 
-    assert not horizon_data_df[
-        np_is_close(horizon_data_df['md'], 0) &
-        horizon_data_df['tvd'].isnull()
-        ].empty
-    assert not horizon_data_df[
-        np_is_close(horizon_data_df['md'], 3858) &
-        horizon_data_df['tvd'].isnull()
-        ].empty
-    assert not horizon_data_df[
-        np_is_close(horizon_data_df['md'], 7452) &
-        horizon_data_df['tvd'].isnull()
-        ].empty
-    assert not horizon_data_df[
-        np_is_close(horizon_data_df['md'], 11257) &
-        horizon_data_df['tvd'].isnull()
-        ].empty
+    assert len(points) == len(points_df.index)
 
-    assert not horizon_data_df[
-        np_is_close(horizon_data_df['md'], 11288) &
-        np_is_close(horizon_data_df['tvd'], 11517.76902768946)
-        ].empty
-    assert not horizon_data_df[
-        np_is_close(horizon_data_df['md'], 13770) &
-        np_is_close(horizon_data_df['tvd'], 11462.009984212762)
-        ].empty
-    assert not horizon_data_df[
-        np_is_close(horizon_data_df['md'], 16854) &
-        np_is_close(horizon_data_df['tvd'], 11263.199107699302)
-        ].empty
+    for idx, horizon_trajectory_point in enumerate(points):
+        assert np_is_close(points_df.at[idx, 'md'], horizon_trajectory_point['md'])
+        assert np_is_close(points_df.at[idx, 'tvd'], horizon_trajectory_point['tvd'])
 
 
 def test_get_converted_foot_horizon(ft_project):
@@ -508,42 +392,28 @@ def test_get_converted_foot_horizon(ft_project):
 
     assert horizon is not None
 
+    horizon_data = horizon.to_dict(get_converted=False)
     horizon_df = horizon.to_df()
 
     assert 'meta' in horizon_df
-    assert 'data' in horizon_df
+    assert 'points' in horizon_df
 
-    horizon_data_df = horizon_df['data']
+    points = horizon_data['points']
+    points_df = horizon_df['points']
 
-    assert not horizon_data_df[
-        np_is_close(horizon_data_df['md'], 0) &
-        horizon_data_df['tvd'].isnull()
-        ].empty
-    assert not horizon_data_df[
-        np_is_close(horizon_data_df['md'], 10196.85039) &
-        horizon_data_df['tvd'].isnull()
-        ].empty
-    assert not horizon_data_df[
-        np_is_close(horizon_data_df['md'], 20134.51444) &
-        horizon_data_df['tvd'].isnull()
-        ].empty
-    assert not horizon_data_df[
-        np_is_close(horizon_data_df['md'], 30026.24672) &
-        horizon_data_df['tvd'].isnull()
-        ].empty
+    assert len(points) == len(points_df.index)
 
-    assert not horizon_data_df[
-        np_is_close(horizon_data_df['md'], 37034.12073) &
-        np_is_close(horizon_data_df['tvd'], 37787.95935)
-        ].empty
-    assert not horizon_data_df[
-        np_is_close(horizon_data_df['md'], 39714.56693) &
-        np_is_close(horizon_data_df['tvd'], 37685.00777)
-        ].empty
-    assert not horizon_data_df[
-        np_is_close(horizon_data_df['md'], 55295.27559) &
-        np_is_close(horizon_data_df['tvd'], 36952.75298)
-        ].empty
+    measure_units = horizon.interpretation.well.project.measure_unit
+
+    for idx, horizon_trajectory_point in enumerate(points):
+        assert np_is_close(
+            points_df.at[idx, 'md'],
+            Convertable.convert_z(value=horizon_trajectory_point['md'], measure_units=measure_units)
+        )
+        assert np_is_close(
+            points_df.at[idx, 'tvd'],
+            Convertable.convert_z(value=horizon_trajectory_point['tvd'], measure_units=measure_units)
+        )
 
 
 def test_get_not_converted_foot_horizon(ft_project):
@@ -552,42 +422,20 @@ def test_get_not_converted_foot_horizon(ft_project):
 
     assert horizon is not None
 
+    horizon_data = horizon.to_dict(get_converted=False)
     horizon_df = horizon.to_df(get_converted=False)
 
     assert 'meta' in horizon_df
-    assert 'data' in horizon_df
+    assert 'points' in horizon_df
 
-    horizon_data_df = horizon_df['data']
+    points = horizon_data['points']
+    points_df = horizon_df['points']
 
-    assert not horizon_data_df[
-        np_is_close(horizon_data_df['md'], 0) &
-        horizon_data_df['tvd'].isnull()
-        ].empty
-    assert not horizon_data_df[
-        np_is_close(horizon_data_df['md'], 3858) &
-        horizon_data_df['tvd'].isnull()
-        ].empty
-    assert not horizon_data_df[
-        np_is_close(horizon_data_df['md'], 7452) &
-        horizon_data_df['tvd'].isnull()
-        ].empty
-    assert not horizon_data_df[
-        np_is_close(horizon_data_df['md'], 11257) &
-        horizon_data_df['tvd'].isnull()
-        ].empty
+    assert len(points) == len(points_df.index)
 
-    assert not horizon_data_df[
-        np_is_close(horizon_data_df['md'], 11288) &
-        np_is_close(horizon_data_df['tvd'], 11517.76902768946)
-        ].empty
-    assert not horizon_data_df[
-        np_is_close(horizon_data_df['md'], 13770) &
-        np_is_close(horizon_data_df['tvd'], 11462.009984212762)
-        ].empty
-    assert not horizon_data_df[
-        np_is_close(horizon_data_df['md'], 16854) &
-        np_is_close(horizon_data_df['tvd'], 11263.199107699302)
-        ].empty
+    for idx, horizon_trajectory_point in enumerate(points):
+        assert np_is_close(points_df.at[idx, 'md'], horizon_trajectory_point['md'])
+        assert np_is_close(points_df.at[idx, 'tvd'], horizon_trajectory_point['tvd'])
 
 
 def test_get_converted_ftm_horizon(ftm_project):
@@ -596,42 +444,28 @@ def test_get_converted_ftm_horizon(ftm_project):
 
     assert horizon is not None
 
+    horizon_data = horizon.to_dict(get_converted=False)
     horizon_df = horizon.to_df()
 
     assert 'meta' in horizon_df
-    assert 'data' in horizon_df
+    assert 'points' in horizon_df
 
-    horizon_data_df = horizon_df['data']
+    points = horizon_data['points']
+    points_df = horizon_df['points']
 
-    assert not horizon_data_df[
-        np_is_close(horizon_data_df['md'], 0) &
-        horizon_data_df['tvd'].isnull()
-        ].empty
-    assert not horizon_data_df[
-        np_is_close(horizon_data_df['md'], 10196.85039) &
-        horizon_data_df['tvd'].isnull()
-        ].empty
-    assert not horizon_data_df[
-        np_is_close(horizon_data_df['md'], 20134.51444) &
-        horizon_data_df['tvd'].isnull()
-        ].empty
-    assert not horizon_data_df[
-        np_is_close(horizon_data_df['md'], 30026.24672) &
-        horizon_data_df['tvd'].isnull()
-        ].empty
+    assert len(points) == len(points_df.index)
 
-    assert not horizon_data_df[
-        np_is_close(horizon_data_df['md'], 37034.12073) &
-        np_is_close(horizon_data_df['tvd'], 37787.95935)
-        ].empty
-    assert not horizon_data_df[
-        np_is_close(horizon_data_df['md'], 39714.56693) &
-        np_is_close(horizon_data_df['tvd'], 37685.00777)
-        ].empty
-    assert not horizon_data_df[
-        np_is_close(horizon_data_df['md'], 55295.27559) &
-        np_is_close(horizon_data_df['tvd'], 36952.75298)
-        ].empty
+    measure_units = horizon.interpretation.well.project.measure_unit
+
+    for idx, horizon_trajectory_point in enumerate(points):
+        assert np_is_close(
+            points_df.at[idx, 'md'],
+            Convertable.convert_z(value=horizon_trajectory_point['md'], measure_units=measure_units)
+        )
+        assert np_is_close(
+            points_df.at[idx, 'tvd'],
+            Convertable.convert_z(value=horizon_trajectory_point['tvd'], measure_units=measure_units)
+        )
 
 
 def test_get_not_converted_ftm_horizon(ftm_project):
@@ -640,39 +474,17 @@ def test_get_not_converted_ftm_horizon(ftm_project):
 
     assert horizon is not None
 
+    horizon_data = horizon.to_dict(get_converted=False)
     horizon_df = horizon.to_df(get_converted=False)
 
     assert 'meta' in horizon_df
-    assert 'data' in horizon_df
+    assert 'points' in horizon_df
 
-    horizon_data_df = horizon_df['data']
+    points = horizon_data['points']
+    points_df = horizon_df['points']
 
-    assert not horizon_data_df[
-        np_is_close(horizon_data_df['md'], 0) &
-        horizon_data_df['tvd'].isnull()
-        ].empty
-    assert not horizon_data_df[
-        np_is_close(horizon_data_df['md'], 3858) &
-        horizon_data_df['tvd'].isnull()
-        ].empty
-    assert not horizon_data_df[
-        np_is_close(horizon_data_df['md'], 7452) &
-        horizon_data_df['tvd'].isnull()
-        ].empty
-    assert not horizon_data_df[
-        np_is_close(horizon_data_df['md'], 11257) &
-        horizon_data_df['tvd'].isnull()
-        ].empty
+    assert len(points) == len(points_df.index)
 
-    assert not horizon_data_df[
-        np_is_close(horizon_data_df['md'], 11288.0) &
-        np_is_close(horizon_data_df['tvd'], 11517.76902768946)
-        ].empty
-    assert not horizon_data_df[
-        np_is_close(horizon_data_df['md'], 13770.0) &
-        np_is_close(horizon_data_df['tvd'], 11462.009984212762)
-        ].empty
-    assert not horizon_data_df[
-        np_is_close(horizon_data_df['md'], 16854.0) &
-        np_is_close(horizon_data_df['tvd'], 11263.199107699302)
-        ].empty
+    for idx, horizon_trajectory_point in enumerate(points):
+        assert np_is_close(points_df.at[idx, 'md'], horizon_trajectory_point['md'])
+        assert np_is_close(points_df.at[idx, 'tvd'], horizon_trajectory_point['tvd'])

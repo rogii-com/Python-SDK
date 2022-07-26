@@ -142,7 +142,7 @@ def test_get_horizon(project):
     horizon_df = horizon.to_df()
 
     assert 'meta' in horizon_data
-    assert 'data' in horizon_data
+    assert 'points' in horizon_data
 
     assert horizon_data['meta']['name'] == HORIZON_NAME
     assert horizon_df['meta'].at[0, 'name'] == HORIZON_NAME
