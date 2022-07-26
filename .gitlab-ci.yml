@@ -20,7 +20,7 @@ pre-commit:
 tests:
   stage: tests
   script:
-  - pytest tests/test_solo_client.py tests/test_conversion.py --verbosity=1
+  - pytest tests/test_solo_client.py tests/test_data_conversion.py --verbosity=1
 
 build:
   stage: build

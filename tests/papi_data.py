@@ -4,6 +4,9 @@ METER_PROJECT_ID = '3e684dbc-37ed-4827-b677-dc0e3febc432'
 FOOT_PROJECT_NAME = 'Global project (ft)'
 FOOT_PROJECT_ID = '4d684dbc-37ed-4827-b677-dc0e3febc432'
 
+FOOT_METER_PROJECT_NAME = 'Global project (ft-m)'
+FOOT_METER_PROJECT_ID = '5e684dbc-37ed-4827-b677-dc0e3febc432'
+
 WELL_NAME = 'Lateral'
 INTERPRETATION_NAME = 'Interpretation'
 
@@ -38,11 +41,19 @@ PROJECTS_DATA_RESPONSE = {
             'role': 'MANAGER',
             'accessed_on': '2022-05-20T19:56:52Z',
             'modified_on': '2022-05-20T18:17:35Z'
+        },
+        {
+            'uuid': FOOT_METER_PROJECT_ID,
+            'name': FOOT_METER_PROJECT_NAME,
+            'measure_unit': 'METER_FOOT',
+            'role': 'MANAGER',
+            'accessed_on': '2022-05-20T19:56:52Z',
+            'modified_on': '2022-05-20T18:17:35Z'
         }
     ],
     'offset': 0,
     'limit': 100,
-    'total': 2,
+    'total': 3,
     'first': True,
     'last': True
 }
