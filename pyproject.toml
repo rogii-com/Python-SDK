@@ -7,7 +7,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "rogii-solo"
-description = "ROGII Solo is a Python SDK designed for making data scientists' work easier."
+description = "ROGII Solo is a Python SDK designed to make data scientists' work with Solo easier."
 readme = "README.md"
 license = {file = "LICENSE.txt"}
 keywords = [
@@ -62,7 +62,6 @@ dev = [
     "pytest==7.1.2"
 ]
 
-# TODO: Add "Homepage" and "Source Code" links
 [project.urls]
 "Homepage" = "https://www.rogii.com/"
 "Documentation" = "https://kb.solo.cloud/Python+SDK"
