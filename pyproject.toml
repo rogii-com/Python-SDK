@@ -64,8 +64,10 @@ dev = [
 
 # TODO: Add "Homepage" and "Source Code" links
 [project.urls]
-"Documentation" = "https://kb.solo.cloud"
-"Report" = "https://rogii.net/support"
+"Homepage" = "https://www.rogii.com/"
+"Documentation" = "https://kb.solo.cloud/Python+SDK"
+"Issue Tracker" = "https://github.com/rogii-com/Python-SDK/issues"
+"Source Code" = "https://github.com/rogii-com/Python-SDK"
 
 [tool.setuptools.dynamic]
 version = {attr = "rogii_solo.__version__"}
