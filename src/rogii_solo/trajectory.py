@@ -2,13 +2,14 @@ from typing import Any, Dict, Optional
 
 from pandas import DataFrame
 
-import rogii_solo.well
 from rogii_solo.base import BaseObject
 from rogii_solo.types import DataList
 
+well_type = ('rogii_solo.well.Well', 'rogii_solo.typewell.Typewell')
+
 
 class TrajectoryPoint(BaseObject):
-    def __init__(self, well: 'rogii_solo.well.Well', **kwargs):
+    def __init__(self, well: well_type, **kwargs):
         self.well = well
 
         self.md = None
@@ -31,7 +32,7 @@ class TrajectoryPoint(BaseObject):
 
 
 class TrajectoryPointRepository(list):
-    def __init__(self, well: 'rogii_solo.well.Well', dicts: DataList = None):
+    def __init__(self, well: well_type, dicts: DataList = None):
         if dicts is None:
             dicts = []
 
