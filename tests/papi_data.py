@@ -3129,11 +3129,16 @@ TYPEWELLS_DATA_RESPONSE = {
             'uuid': 'fc1e3e0c-12ed-4cc6-adcf-6a14dc3db7ae',
             'name': TYPEWELL_NAME,
             'api': 'Typewell API'
+        },
+        {
+            'name': 'Typewell 2',
+            'uuid': '66a1dd35-6bc2-4d01-a550-c5054d956146',
+            'api': 'Typewell 2 API'
         }
     ],
     'offset': 0,
     'limit': 100,
-    'total': 1,
+    'total': 2,
     'first': True,
     'last': True
 }
