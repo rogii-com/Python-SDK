@@ -137,3 +137,18 @@ class PapiClient(SdkPapiClient):
                 break
 
             offset += limit
+
+    def _get_project_typewells_data(self, project_id: str, **kwargs) -> PapiDataList:
+        return list(self._gen_data_page(
+            func=self.fetch_project_typewells,
+            project_id=project_id,
+            **kwargs
+        ))
+
+    def _get_typewell_trajectory_data(self, typewell_id: str, **kwargs) -> PapiDataList:
+        return [
+            self._parse_papi_data(data_item) for data_item in self.fetch_typewell_raw_trajectory(
+                typewell_id=typewell_id,
+                **kwargs
+            )
+        ]

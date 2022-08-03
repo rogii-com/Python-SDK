@@ -429,3 +429,42 @@ class PapiClient(BasePapiClient):
         }
 
         return self._send_put_request(url=url, request_data=request_data, headers=headers)
+
+    def fetch_project_typewells(self,
+                            project_id: str,
+                            offset: int = BasePapiClient.DEFAULT_OFFSET,
+                            limit: int = BasePapiClient.DEFAULT_LIMIT,
+                            typewell_filter: str = None,
+                            headers: Optional[Dict[str, Any]] = None
+                            ):
+        """
+        Fetches project wells
+        :param project_id:
+        :param offset:
+        :param limit:
+        :param typewell_filter
+        :return:
+        """
+
+        data = self._send_request(
+            url=f'projects/{project_id}/typewells',
+            params={
+                'offset': offset,
+                'limit': limit,
+                'filter': typewell_filter
+            },
+            headers=headers
+        )
+
+        return data
+
+    def fetch_typewell_raw_trajectory(self, typewell_id: str, headers: Optional[Dict[str, Any]] = None):
+        """
+        Fetches typewell trajectory raw data
+        :param typewell_id:
+        :return:
+        """
+
+        data = self._send_request(url=f'typewells/{typewell_id}/trajectory/raw', headers=headers)
+
+        return data['content']

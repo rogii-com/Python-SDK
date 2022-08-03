@@ -14,7 +14,9 @@ from tests.papi_data import (
     HORIZONS_DATA_RESPONSE,
     ASSEMBLED_SEGMENTS_DATA_RESPONSE,
     TARGET_LINES_DATA_RESPONSE,
-    NESTED_WELLS_DATA_RESPONSE
+    NESTED_WELLS_DATA_RESPONSE,
+    TYPEWELLS_DATA_RESPONSE,
+    TYPEWELL_TRAJECTORY_DATA_RESPONSE
 )
 
 
@@ -54,6 +56,14 @@ def fetch_well_nested_wells(**kwargs):
     return NESTED_WELLS_DATA_RESPONSE
 
 
+def fetch_project_typewells(**kwargs):
+    return TYPEWELLS_DATA_RESPONSE
+
+
+def fetch_typewell_raw_trajectory(**kwargs):
+    return TYPEWELL_TRAJECTORY_DATA_RESPONSE['content']
+
+
 @pytest.fixture(scope='function')
 def solo_client():
     solo_client = SoloClient(client_id='client_id', client_secret='client_secret')
@@ -61,12 +71,14 @@ def solo_client():
     solo_client._papi_client.fetch_projects = fetch_projects
     solo_client._papi_client.fetch_virtual_projects = fetch_virtual_projects
     solo_client._papi_client.fetch_project_wells = fetch_project_wells
+    solo_client._papi_client.fetch_project_typewells = fetch_project_typewells
     solo_client._papi_client.fetch_well_raw_trajectory = fetch_well_raw_trajectory
     solo_client._papi_client.fetch_well_raw_interpretations = fetch_well_raw_interpretations
     solo_client._papi_client.fetch_interpretation_horizons = fetch_interpretation_horizons
     solo_client._papi_client.fetch_interpretation_assembled_segments = fetch_interpretation_assembled_segments
     solo_client._papi_client.fetch_well_target_lines = fetch_well_target_lines
     solo_client._papi_client.fetch_well_nested_wells = fetch_well_nested_wells
+    solo_client._papi_client.fetch_typewell_raw_trajectory = fetch_typewell_raw_trajectory
 
     return solo_client
 
