@@ -1,9 +1,9 @@
-from typing import Any, Dict, Optional
+from typing import Any, Dict
 
 from pandas import DataFrame
 
 import rogii_solo.project
-from rogii_solo.base import ComplexObject, Convertable, ObjectRepository
+from rogii_solo.base import ComplexObject, Convertable
 from rogii_solo.papi.client import PapiClient
 from rogii_solo.trajectory import TrajectoryPoint, TrajectoryPointRepository
 from rogii_solo.types import DataList
@@ -50,7 +50,7 @@ class Typewell(ComplexObject, Convertable):
             'tie_in_tvd': self.tie_in_tvd,
             'tie_in_ns': self.tie_in_ns,
             'tie_in_ew': self.tie_in_ew,
-            'starred': self.starred,
+            'starred': self.starred
         }
 
     def to_df(self, get_converted: bool = True) -> DataFrame:
