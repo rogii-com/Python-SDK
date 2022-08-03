@@ -5,8 +5,8 @@ from pandas import DataFrame
 from rogii_solo.base import ComplexObject, ObjectRepository
 from rogii_solo.papi.client import PapiClient
 from rogii_solo.types import DataList
-from rogii_solo.well import Well
 from rogii_solo.typewell import Typewell
+from rogii_solo.well import Well
 
 
 class Project(ComplexObject):
