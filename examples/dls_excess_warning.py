@@ -29,16 +29,14 @@ def get_trajectory_dls():
     well_data = well.to_dict()
     calculated_trajectory = calculate_trajectory(well.trajectory_data, well_data, measure_unit=MEASURE_UNIT)
 
-    dls_list = [
+    return [
         {
-            'md': row['md'],
-            'dls': row['dls'],
-            'exceeds': row['dls'] > DLS_THRESHOLD
+            'md': trajectory_point['md'],
+            'dls': trajectory_point['dls'],
+            'exceeds': trajectory_point['dls'] > DLS_THRESHOLD
         }
-        for row in calculated_trajectory
+        for trajectory_point in calculated_trajectory
     ]
-
-    return dls_list
 
 
 if __name__ == '__main__':

@@ -183,6 +183,7 @@ class PapiClient(BasePapiClient):
         :param offset:
         :param limit:
         :param project_filter
+        :param headers
         :return:
         """
 
@@ -209,6 +210,7 @@ class PapiClient(BasePapiClient):
         :param offset:
         :param limit:
         :param project_filter:
+        :param headers
         :return:
         """
 
@@ -237,6 +239,7 @@ class PapiClient(BasePapiClient):
         :param offset:
         :param limit:
         :param well_filter
+        :param headers
         :return:
         """
 
@@ -256,6 +259,7 @@ class PapiClient(BasePapiClient):
         """
         Fetches well trajectory raw data
         :param well_id:
+        :param headers
         :return:
         """
 
@@ -267,7 +271,7 @@ class PapiClient(BasePapiClient):
                                        well_id: str,
                                        offset: int = BasePapiClient.DEFAULT_OFFSET,
                                        limit: int = BasePapiClient.DEFAULT_LIMIT,
-                                       filter: str = None,
+                                       interpretation_filter: str = None,
                                        headers: Optional[Dict[str, Any]] = None
                                        ):
         """
@@ -275,7 +279,8 @@ class PapiClient(BasePapiClient):
         :param well_id:
         :param offset:
         :param limit:
-        :param filter:
+        :param interpretation_filter:
+        :param headers
         :return:
         """
 
@@ -284,7 +289,7 @@ class PapiClient(BasePapiClient):
             params={
                 'offset': offset,
                 'limit': limit,
-                'filter': filter
+                'filter': interpretation_filter
             },
             headers=headers
         )
@@ -293,7 +298,7 @@ class PapiClient(BasePapiClient):
                                       interpretation_id: str,
                                       offset: int = BasePapiClient.DEFAULT_OFFSET,
                                       limit: int = BasePapiClient.DEFAULT_LIMIT,
-                                      filter: str = None,
+                                      horizon_filter: str = None,
                                       headers: Optional[Dict[str, Any]] = None
                                       ):
         """
@@ -301,7 +306,8 @@ class PapiClient(BasePapiClient):
         :param interpretation_id:
         :param offset:
         :param limit:
-        :param filter:
+        :param horizon_filter:
+        :param headers
         :return:
         """
 
@@ -310,7 +316,7 @@ class PapiClient(BasePapiClient):
             params={
                 'offset': offset,
                 'limit': limit,
-                'filter': filter
+                'filter': horizon_filter
             },
             headers=headers
         )
@@ -322,6 +328,7 @@ class PapiClient(BasePapiClient):
         """
         Fetches interpretation assembled segments
         :param interpretation_id:
+        :param headers
         :return:
         """
 
@@ -340,6 +347,7 @@ class PapiClient(BasePapiClient):
         :param well_id:
         :param offset:
         :param limit:
+        :param headers
         :return:
         """
 
@@ -363,7 +371,7 @@ class PapiClient(BasePapiClient):
         :param well_id:
         :param offset:
         :param limit:
-        :param filter:
+        :param headers
         :return:
         """
 

@@ -48,7 +48,7 @@ class Project(ComplexObject):
     @property
     def wells_data(self) -> DataList:
         if not self._wells_data:
-            self._wells_data = self._papi_client._get_project_wells_data(project_id=self.uuid)
+            self._wells_data = self._papi_client.get_project_wells_data(project_id=self.uuid)
 
         return self._wells_data
 

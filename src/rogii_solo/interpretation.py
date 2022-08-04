@@ -45,7 +45,7 @@ class Interpretation(ComplexObject):
     @property
     def horizons_data(self) -> DataList:
         if not self._horizons_data:
-            self._horizons_data = self._papi_client._get_interpretation_horizons_data(interpretation_id=self.uuid)
+            self._horizons_data = self._papi_client.get_interpretation_horizons_data(interpretation_id=self.uuid)
 
         return self._horizons_data
 
@@ -62,7 +62,7 @@ class Interpretation(ComplexObject):
     @property
     def assembled_segments_data(self) -> PapiAssembledSegments:
         if not self._assembled_segments_data:
-            self._assembled_segments_data = self._papi_client._get_interpretation_assembled_segments_data(
+            self._assembled_segments_data = self._papi_client.get_interpretation_assembled_segments_data(
                 interpretation_id=self.uuid
             )
 

@@ -3,11 +3,11 @@ from os import environ
 
 from rogii_solo import SoloClient
 
+PROJECT_NAME = 'Global project'
+WELL_NAME = 'Lateral'
+
 
 def prepare_well_plan():
-    PROJECT_NAME = 'Global project'
-    WELL_NAME = 'Lateral'
-
     client = SoloClient(
         client_id=environ.get('ROGII_SOLO_CLIENT_ID'),
         client_secret=environ.get('ROGII_SOLO_CLIENT_SECRET'),

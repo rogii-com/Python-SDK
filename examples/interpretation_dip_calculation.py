@@ -8,13 +8,13 @@ from rogii_solo.calculations.enums import EMeasureUnits
 from rogii_solo.calculations.interpretation import get_segments, get_segments_with_dip
 from rogii_solo.calculations.trajectory import calculate_trajectory
 
+PROJECT_NAME = 'Global project'
+WELL_NAME = 'Lateral'
+INTERPRETATION_NAME = 'Interpretation'
+MEASURE_UNIT = EMeasureUnits.METER_FOOT
+
 
 def calc_interpretation_dip():
-    PROJECT_NAME = 'Global project'
-    WELL_NAME = 'Lateral'
-    INTERPRETATION_NAME = 'Interpretation'
-    MEASURE_UNIT = EMeasureUnits.METER_FOOT
-
     client = SoloClient(
         client_id=environ.get('ROGII_SOLO_CLIENT_ID'),
         client_secret=environ.get('ROGII_SOLO_CLIENT_SECRET'),
@@ -64,6 +64,6 @@ def calc_interpretation_dip():
 
 
 if __name__ == '__main__':
-    dips, interpolated_dips = calc_interpretation_dip()
-    print(dips)
-    print(interpolated_dips)
+    calculated, interpolated = calc_interpretation_dip()
+    print(calculated)
+    print(interpolated)

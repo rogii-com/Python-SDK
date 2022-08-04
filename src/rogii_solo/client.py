@@ -33,8 +33,8 @@ class SoloClient:
     @property
     def projects_data(self) -> DataList:
         if not self._projects_data:
-            global_projects_data = self._papi_client._get_global_projects_data()
-            virtual_projects_data = self._papi_client._get_virtual_projects_data()
+            global_projects_data = self._papi_client.get_global_projects_data()
+            virtual_projects_data = self._papi_client.get_virtual_projects_data()
 
             self._projects_data = global_projects_data + virtual_projects_data
 
@@ -80,7 +80,7 @@ class SoloClient:
                                        trajectory_stations: DataList
                                        ):
         prepared_trajectory_stations = [
-            {key: self._papi_client._prepare_papi_var(value) for key, value in point.items()}
+            {key: self._papi_client.prepare_papi_var(value) for key, value in point.items()}
             for point in trajectory_stations
         ]
 

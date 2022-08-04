@@ -14,10 +14,10 @@ class PapiClient(SdkPapiClient):
     def __init__(self, settings_auth: SettingsAuth):
         app_id = base64.standard_b64encode(PYTHON_SDK_APP_ID.encode()).decode()
 
-        FINGERPRINT = hashlib.sha256(str(uuid.uuid4()).encode()).hexdigest()
+        fingerprint = hashlib.sha256(str(uuid.uuid4()).encode()).hexdigest()
         headers = {
             'User-Agent': f'PythonSDK/{__version__}',
-            'X-Solo-Hid': f'{FINGERPRINT}:{app_id}',
+            'X-Solo-Hid': f'{fingerprint}:{app_id}',
         }
 
         papi_url = urljoin(settings_auth.papi_domain_name, SOLO_PAPI_URL)
@@ -31,7 +31,7 @@ class PapiClient(SdkPapiClient):
             headers=headers
         )
 
-    def _prepare_papi_var(self, value: float) -> PapiVar:
+    def prepare_papi_var(self, value: float) -> PapiVar:
         """
         Create value dict for PAPI
         :param value:
@@ -42,7 +42,7 @@ class PapiClient(SdkPapiClient):
 
         return {'val': value}
 
-    def _parse_papi_data(self, data: Any, default: Any = None) -> Any:
+    def parse_papi_data(self, data: Any, default: Any = None) -> Any:
         """
         Recursive PAPI data parsing.
         Elements can be either of the regular type values, list/dict, or dicts with "val" or "undefined" key.
@@ -51,72 +51,72 @@ class PapiClient(SdkPapiClient):
             if 'val' in data or 'undefined' in data:
                 return data.get('val', default)
             else:
-                return {item: self._parse_papi_data(value) for item, value in data.items()}
+                return {item: self.parse_papi_data(value) for item, value in data.items()}
         elif isinstance(data, list):
-            return [self._parse_papi_data(item) for item in data]
+            return [self.parse_papi_data(item) for item in data]
         else:
             return data
 
-    def _get_global_projects_data(self, **kwargs) -> PapiDataList:
+    def get_global_projects_data(self, **kwargs) -> PapiDataList:
         return list(self._gen_data_page(
             func=self.fetch_projects,
             **kwargs
         ))
 
-    def _get_virtual_projects_data(self, **kwargs) -> PapiDataList:
+    def get_virtual_projects_data(self, **kwargs) -> PapiDataList:
         return list(self._gen_data_page(
             func=self.fetch_virtual_projects,
             **kwargs
         ))
 
-    def _get_project_wells_data(self, project_id: str, **kwargs) -> PapiDataList:
+    def get_project_wells_data(self, project_id: str, **kwargs) -> PapiDataList:
         return list(self._gen_data_page(
             func=self.fetch_project_wells,
             project_id=project_id,
             **kwargs
         ))
 
-    def _get_well_trajectory_data(self, well_id: str, **kwargs) -> PapiDataList:
+    def get_well_trajectory_data(self, well_id: str, **kwargs) -> PapiDataList:
         return [
-            self._parse_papi_data(data_item) for data_item in self.fetch_well_raw_trajectory(
+            self.parse_papi_data(data_item) for data_item in self.fetch_well_raw_trajectory(
                 well_id=well_id,
                 **kwargs
             )
         ]
 
-    def _get_well_interpretations_data(self, well_id: str, **kwargs) -> PapiDataList:
+    def get_well_interpretations_data(self, well_id: str, **kwargs) -> PapiDataList:
         return list(self._gen_data_page(
             func=self.fetch_well_raw_interpretations,
             well_id=well_id,
             **kwargs
         ))
 
-    def _get_interpretation_horizons_data(self, interpretation_id: str, **kwargs) -> PapiDataList:
+    def get_interpretation_horizons_data(self, interpretation_id: str, **kwargs) -> PapiDataList:
         return list(self._gen_data_page(
             func=self.fetch_interpretation_horizons,
             interpretation_id=interpretation_id,
             **kwargs
         ))
 
-    def _get_interpretation_assembled_segments_data(self, interpretation_id: str, **kwargs) -> PapiData:
+    def get_interpretation_assembled_segments_data(self, interpretation_id: str, **kwargs) -> PapiData:
         assembled_segments = self.fetch_interpretation_assembled_segments(
             interpretation_id=interpretation_id,
             **kwargs
         )
 
         return {
-            'horizons': self._parse_papi_data(assembled_segments['horizons']),
-            'segments': self._parse_papi_data(assembled_segments['segments']),
+            'horizons': self.parse_papi_data(assembled_segments['horizons']),
+            'segments': self.parse_papi_data(assembled_segments['segments']),
         }
 
-    def _get_well_target_lines_data(self, well_id: str, **kwargs) -> PapiDataList:
+    def get_well_target_lines_data(self, well_id: str, **kwargs) -> PapiDataList:
         return list(self._gen_data_page(
             func=self.fetch_well_target_lines,
             well_id=well_id,
             **kwargs
         ))
 
-    def _get_well_nested_wells_data(self, well_id: str, **kwargs) -> PapiDataList:
+    def get_well_nested_wells_data(self, well_id: str, **kwargs) -> PapiDataList:
         return list(self._gen_data_page(
             func=self.fetch_well_nested_wells,
             well_id=well_id,
@@ -131,7 +131,7 @@ class PapiClient(SdkPapiClient):
             response = func(offset=offset, limit=limit, **kwargs)
 
             for data_page in response.get('content', []):
-                yield self._parse_papi_data(data_page)
+                yield self.parse_papi_data(data_page)
 
             if response.get('last', True):
                 break
