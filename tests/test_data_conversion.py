@@ -2,7 +2,6 @@ from tests.utils import np_is_close
 
 from tests.papi_data import (
     WELL_NAME,
-    TYPEWELL_NAME,
     HORIZON_NAME
 )
 from rogii_solo.base import Convertable
@@ -102,66 +101,6 @@ def test_get_not_converted_ftm_well(ftm_project):
     assert np_is_close(well_df['kb'], well.kb)
     assert np_is_close(well_df['azimuth'], well.azimuth)
     assert np_is_close(well_df['convergence'], well.convergence)
-
-
-def test_get_converted_meter_typewell(project):
-    typewell = project.typewells.find_by_name(TYPEWELL_NAME)
-
-    assert typewell is not None
-
-    typewell_df = typewell.to_df()
-
-    assert not typewell_df.empty
-
-
-def test_get_not_converted_meter_typewell(project):
-    typewell = project.typewells.find_by_name(TYPEWELL_NAME)
-
-    assert typewell is not None
-
-    typewell_df = typewell.to_df(get_converted=False)
-
-    assert not typewell_df.empty
-
-
-def test_get_converted_foot_typewell(ft_project):
-    typewell = ft_project.typewells.find_by_name(TYPEWELL_NAME)
-
-    assert typewell is not None
-
-    typewell_df = typewell.to_df()
-
-    assert not typewell_df.empty
-
-
-def test_get_not_converted_foot_typewell(ft_project):
-    typewell = ft_project.typewells.find_by_name(TYPEWELL_NAME)
-
-    assert typewell is not None
-
-    typewell_df = typewell.to_df(get_converted=False)
-
-    assert not typewell_df.empty
-
-
-def test_get_converted_ftm_typewell(ftm_project):
-    typewell = ftm_project.typewells.find_by_name(TYPEWELL_NAME)
-
-    assert typewell is not None
-
-    typewell_df = typewell.to_df()
-
-    assert not typewell_df.empty
-
-
-def test_get_not_converted_ftm_typewell(ftm_project):
-    typewell = ftm_project.typewells.find_by_name(TYPEWELL_NAME)
-
-    assert typewell is not None
-
-    typewell_df = typewell.to_df(get_converted=False)
-
-    assert not typewell_df.empty
 
 
 def test_get_converted_meter_trajectory(project):
