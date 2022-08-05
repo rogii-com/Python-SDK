@@ -14,9 +14,6 @@ media
 static/*
 !static/solo_connect/
 
-# Jupiters files
-jupiters/*
-
 ### Django.Python Stack ###
 # Byte-compiled / optimized / DLL files
 *.py[cod]

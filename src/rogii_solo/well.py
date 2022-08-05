@@ -259,7 +259,7 @@ class Typewell(ComplexObject, Convertable):
     @property
     def trajectory_data(self) -> DataList:
         if not self._trajectory_data:
-            self._trajectory_data = self._papi_client._get_typewell_trajectory_data(typewell_id=self.uuid)
+            self._trajectory_data = self._papi_client.get_typewell_trajectory_data(typewell_id=self.uuid)
 
         return self._trajectory_data
 
