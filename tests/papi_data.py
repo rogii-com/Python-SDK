@@ -27,6 +27,8 @@ NESTED_WELL_NAME = 'Nested Well'
 STARRED_NESTED_WELL_NAME = 'Starred Nested Well'
 STARRED_NESTED_WELL_ID = uuid4()
 
+TYPEWELL_NAME = 'Typewell'
+
 PROJECTS_DATA_RESPONSE = {
     'content': [
         {
@@ -3119,4 +3121,128 @@ NESTED_WELLS_DATA_RESPONSE = {
     'total': 3,
     'first': True,
     'last': True
+}
+
+TYPEWELLS_DATA_RESPONSE = {
+    'content': [
+        {
+            'uuid': 'fc1e3e0c-12ed-4cc6-adcf-6a14dc3db7ae',
+            'name': TYPEWELL_NAME,
+            'api': 'Typewell API'
+        },
+        {
+            'name': 'Typewell 2',
+            'uuid': '66a1dd35-6bc2-4d01-a550-c5054d956146',
+            'api': 'Typewell 2 API'
+        }
+    ],
+    'offset': 0,
+    'limit': 100,
+    'total': 2,
+    'first': True,
+    'last': True
+}
+
+TYPEWELL_TRAJECTORY_DATA_RESPONSE = {
+    'content': [
+        {
+            'azim': {
+                'val': 0
+            },
+            'incl': {
+                'val': 0
+            },
+            'md': {
+                'val': 0
+            }
+        },
+        {
+            'azim': {
+                'val': 4.324925886442234
+            },
+            'incl': {
+                'val': 0.006981317007977778
+            },
+            'md': {
+                'val': 448
+            }
+        },
+        {
+            'azim': {
+                'val': 5.180137219919511
+            },
+            'incl': {
+                'val': 0.010471975511966667
+            },
+            'md': {
+                'val': 847
+            }
+        },
+        {
+            'azim': {
+                'val': 5.791002458117567
+            },
+            'incl': {
+                'val': 0.003490658503988889
+            },
+            'md': {
+                'val': 1035
+            }
+        },
+        {
+            'azim': {
+                'val': 0.6597344572538999
+            },
+            'incl': {
+                'val': 0.005235987755983333
+            },
+            'md': {
+                'val': 1224
+            }
+        },
+        {
+            'azim': {
+                'val': 0.8866272600131777
+            },
+            'incl': {
+                'val': 0.003490658503988889
+            },
+            'md': {
+                'val': 1413
+            }
+        },
+        {
+            'azim': {
+                'val': 5.703735995517844
+            },
+            'incl': {
+                'val': 0.3508111796508833
+            },
+            'md': {
+                'val': 11101
+            }
+        },
+        {
+            'azim': {
+                'val': 5.628686837682083
+            },
+            'incl': {
+                'val': 0.4782202150464777
+            },
+            'md': {
+                'val': 11195
+            }
+        },
+        {
+            'azim': {
+                'val': 5.640904142446044
+            },
+            'incl': {
+                'val': 0.7365289443416556
+            },
+            'md': {
+                'val': 11319
+            }
+        }
+    ]
 }

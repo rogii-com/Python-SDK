@@ -3,6 +3,7 @@ from rogii_solo.exceptions import ProjectNotFoundException, InvalidProjectExcept
 from tests.papi_data import (
     METER_PROJECT_NAME,
     WELL_NAME,
+    TYPEWELL_NAME,
     INTERPRETATION_NAME,
     STARRED_INTERPRETATION_NAME,
     HORIZON_NAME,
@@ -214,3 +215,45 @@ def test_get_well_starred_nested_well(project):
 
     assert starred_nested_well_data['name'] == STARRED_NESTED_WELL_NAME
     assert starred_nested_well_df.at[0, 'name'] == STARRED_NESTED_WELL_NAME
+
+
+def test_get_project_typewells(project):
+    typewells_data = project.typewells.to_dict()
+    typewells_df = project.typewells.to_df()
+
+    assert typewells_data
+    assert not typewells_df.empty
+
+
+def test_get_typewell(project):
+    typewell = project.typewells.find_by_name(TYPEWELL_NAME)
+
+    assert typewell is not None
+
+    typewell_data = typewell.to_dict()
+    typewell_df = typewell.to_df()
+
+    assert typewell_data['name'] == TYPEWELL_NAME
+    assert typewell_df.at[0, 'name'] == TYPEWELL_NAME
+
+
+def test_get_typewell_trajectory(project):
+    trajectory = project.typewells.find_by_name(TYPEWELL_NAME).trajectory
+
+    trajectory_data = trajectory.to_dict()
+    trajectory_df = trajectory.to_df()
+
+    assert trajectory_data
+    assert not trajectory_df.empty
+
+
+def test_get_typewell_trajectory_point(project):
+    trajectory_point = project.typewells.find_by_name(TYPEWELL_NAME).trajectory.find_by_md(0)
+
+    assert trajectory_point is not None
+
+    trajectory_point_data = trajectory_point.to_dict()
+    trajectory_point_df = trajectory_point.to_df()
+
+    assert trajectory_point_data
+    assert not trajectory_point_df.empty
