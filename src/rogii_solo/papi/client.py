@@ -147,7 +147,7 @@ class PapiClient(SdkPapiClient):
 
     def _get_typewell_trajectory_data(self, typewell_id: str, **kwargs) -> PapiDataList:
         return [
-            self._parse_papi_data(data_item) for data_item in self.fetch_typewell_raw_trajectory(
+            self.parse_papi_data(data_item) for data_item in self.fetch_typewell_raw_trajectory(
                 typewell_id=typewell_id,
                 **kwargs
             )
