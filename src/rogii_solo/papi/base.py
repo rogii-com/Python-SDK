@@ -234,7 +234,8 @@ class PapiClient(BasePapiClient):
         :param project_id:
         :param offset:
         :param limit:
-        :param well_filter
+        :param well_filter:
+        :param headers:
         :return:
         """
 
@@ -252,6 +253,7 @@ class PapiClient(BasePapiClient):
         """
         Fetches well trajectory raw data
         :param well_id:
+        :param headers:
         :return:
         """
 
@@ -272,6 +274,7 @@ class PapiClient(BasePapiClient):
         :param offset:
         :param limit:
         :param interpretation_filter:
+        :param headers:
         :return:
         """
 
@@ -298,6 +301,7 @@ class PapiClient(BasePapiClient):
         :param offset:
         :param limit:
         :param horizon_filter:
+        :param headers:
         :return:
         """
 
@@ -318,6 +322,7 @@ class PapiClient(BasePapiClient):
         """
         Fetches interpretation assembled segments
         :param interpretation_id:
+        :param headers:
         :return:
         """
 
@@ -336,6 +341,7 @@ class PapiClient(BasePapiClient):
         :param well_id:
         :param offset:
         :param limit:
+        :param headers:
         :return:
         """
 
@@ -359,6 +365,7 @@ class PapiClient(BasePapiClient):
         :param well_id:
         :param offset:
         :param limit:
+        :param headers:
         :return:
         """
 
@@ -429,7 +436,8 @@ class PapiClient(BasePapiClient):
         :param project_id:
         :param offset:
         :param limit:
-        :param typewell_filter
+        :param typewell_filter:
+        :param headers:
         :return:
         """
 
@@ -447,6 +455,7 @@ class PapiClient(BasePapiClient):
         """
         Fetches typewell trajectory raw data
         :param typewell_id:
+        :param headers:
         :return:
         """
 
