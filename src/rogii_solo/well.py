@@ -3,7 +3,7 @@ from typing import Any, Dict, Optional
 from pandas import DataFrame
 
 import rogii_solo.project
-from rogii_solo.base import BaseObject, ComplexObject, Convertable, ObjectRepository
+from rogii_solo.base import BaseObject, ComplexObject, ObjectRepository
 from rogii_solo.interpretation import Interpretation
 from rogii_solo.papi.client import PapiClient
 from rogii_solo.target_line import TargetLine
@@ -11,7 +11,7 @@ from rogii_solo.trajectory import TrajectoryPoint, TrajectoryPointRepository
 from rogii_solo.types import DataList
 
 
-class Well(ComplexObject, Convertable):
+class Well(ComplexObject):
     def __init__(self, papi_client: PapiClient, project: 'rogii_solo.project.Project', **kwargs):
         super().__init__(papi_client)
 
@@ -190,7 +190,7 @@ class Well(ComplexObject, Convertable):
         self._nested_wells = ObjectRepository()
 
 
-class NestedWell(BaseObject, Convertable):
+class NestedWell(BaseObject):
     def __init__(self, well: Well, **kwargs):
         self.well = well
 
