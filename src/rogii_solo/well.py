@@ -231,7 +231,7 @@ class NestedWell(BaseObject, Convertable):
         return DataFrame([self.to_dict(get_converted)])
 
 
-class Typewell(ComplexObject, Convertable):
+class Typewell(ComplexObject):
     def __init__(self, papi_client: PapiClient, project: 'rogii_solo.project.Project', **kwargs):
         super().__init__(papi_client)
 
