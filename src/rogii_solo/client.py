@@ -26,13 +26,13 @@ class SoloClient:
             )
         )
 
-        self._projects_data: DataList = []
-        self._projects: ObjectRepository[Project] = ObjectRepository()
+        self._projects_data: Optional[DataList] = None
+        self._projects: Optional[ObjectRepository[Project]] = None
         self.project: Optional[Project] = None
 
     @property
     def projects_data(self) -> DataList:
-        if not self._projects_data:
+        if self._projects_data is None:
             global_projects_data = self._papi_client.get_global_projects_data()
             virtual_projects_data = self._papi_client.get_virtual_projects_data()
 
@@ -42,9 +42,8 @@ class SoloClient:
 
     @property
     def projects(self) -> ObjectRepository[Project]:
-        if not self._projects:
+        if self._projects is None:
             self._projects = ObjectRepository(
-                dicts=self.projects_data,
                 objects=[Project(papi_client=self._papi_client, **item) for item in self.projects_data]
             )
 

@@ -138,27 +138,18 @@ class ObjectRepository(list):
     """
     List of objects with utility methods
     """
-    def __init__(self, dicts: DataList = None, objects: List[BaseObject] = None):
-        if dicts is None:
-            dicts = []
-
+    def __init__(self, objects: List[BaseObject] = None):
         if objects is None:
             objects = []
 
         super().__init__(objects)
-
-        self._dicts = dicts
-        self._objects = objects
 
     def to_dict(self, get_converted: bool = True) -> DataList:
         """
         Return list of dicts
         :return:
         """
-        if get_converted:
-            return [object_.to_dict(get_converted) for object_ in self._objects]
-
-        return self._dicts
+        return [object_.to_dict(get_converted) for object_ in self]
 
     def to_df(self, get_converted: bool = True) -> DataFrame:
         """

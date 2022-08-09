@@ -429,3 +429,14 @@ class PapiClient(BasePapiClient):
         }
 
         return self._send_put_request(url=url, request_data=request_data, headers=headers)
+
+    def fetch_nested_well_raw_trajectory(self, nested_well_id: str, headers: dict = None):
+        """
+        Fetches nested well raw trajectory
+        :param nested_well_id:
+        :param headers:
+        :return:
+        """
+        data = self._send_request(url=f'nestedwells/{nested_well_id}/trajectory/raw', headers=headers)
+
+        return data['content']

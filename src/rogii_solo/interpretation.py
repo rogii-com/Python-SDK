@@ -1,4 +1,4 @@
-from typing import Any, Dict
+from typing import Any, Dict, Optional
 
 from pandas import DataFrame
 
@@ -25,10 +25,10 @@ class Interpretation(ComplexObject):
 
         self.__dict__.update(kwargs)
 
-        self._assembled_segments_data: PapiAssembledSegments = {}
+        self._assembled_segments_data: Optional[PapiAssembledSegments] = None
 
-        self._horizons_data: DataList = []
-        self._horizons: ObjectRepository[Horizon] = ObjectRepository()
+        self._horizons_data: Optional[DataList] = None
+        self._horizons: Optional[ObjectRepository[Horizon]] = None
 
     def to_dict(self, get_converted: bool = True) -> Dict[str, Any]:
         return self._get_data()
@@ -44,16 +44,15 @@ class Interpretation(ComplexObject):
 
     @property
     def horizons_data(self) -> DataList:
-        if not self._horizons_data:
+        if self._horizons_data is None:
             self._horizons_data = self._papi_client.get_interpretation_horizons_data(interpretation_id=self.uuid)
 
         return self._horizons_data
 
     @property
     def horizons(self) -> ObjectRepository[Horizon]:
-        if not self._horizons:
+        if self._horizons is None:
             self._horizons = ObjectRepository(
-                dicts=self.horizons_data,
                 objects=[Horizon(interpretation=self, **item) for item in self.horizons_data]
             )
 
@@ -61,7 +60,7 @@ class Interpretation(ComplexObject):
 
     @property
     def assembled_segments_data(self) -> PapiAssembledSegments:
-        if not self._assembled_segments_data:
+        if self._assembled_segments_data is None:
             self._assembled_segments_data = self._papi_client.get_interpretation_assembled_segments_data(
                 interpretation_id=self.uuid
             )
