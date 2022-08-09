@@ -124,12 +124,11 @@ class PapiClient(SdkPapiClient):
         ))
 
     def get_nested_well_trajectory_data(self, nested_well_id: str, **kwargs) -> PapiDataList:
-        data = self.fetch_nested_well_raw_trajectory(
+        return [
+            self.parse_papi_data(data_item) for data_item in self.fetch_nested_well_raw_trajectory(
                 nested_well_id=nested_well_id,
                 **kwargs
             )
-        return [
-            self.parse_papi_data(data_item) for data_item in data
         ]
 
     def _gen_data_page(self, func: Callable, **kwargs) -> PapiDataIterator:

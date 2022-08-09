@@ -1,4 +1,4 @@
-from typing import Any, Dict, Optional
+from typing import Any, Dict, List, Optional
 
 from pandas import DataFrame
 
@@ -29,20 +29,14 @@ class TrajectoryPoint(BaseObject):
 
 
 class TrajectoryPointRepository(list):
-    def __init__(self, measure_units: EMeasureUnits, dicts: DataList = None):
-        if dicts is None:
-            dicts = []
+    def __init__(self, objects: List[BaseObject] = None):
+        if objects is None:
+            objects = []
 
-        self._dicts = dicts
-        self._objects = [TrajectoryPoint(measure_units=measure_units, **item) for item in self._dicts]
-
-        super().__init__(self._objects)
+        super().__init__(objects)
 
     def to_dict(self, get_converted: bool = True) -> DataList:
-        if get_converted:
-            return [object_.to_dict(get_converted) for object_ in self._objects]
-
-        return self._dicts
+        return [object_.to_dict(get_converted) for object_ in self]
 
     def to_df(self, get_converted: bool = True) -> DataFrame:
         return DataFrame(self.to_dict(get_converted))
