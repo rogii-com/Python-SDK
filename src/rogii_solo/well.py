@@ -3,7 +3,7 @@ from typing import Any, Dict, Optional
 from pandas import DataFrame
 
 import rogii_solo.project
-from rogii_solo.base import BaseObject, ComplexObject, ObjectRepository
+from rogii_solo.base import ComplexObject, ObjectRepository
 from rogii_solo.interpretation import Interpretation
 from rogii_solo.papi.client import PapiClient
 from rogii_solo.target_line import TargetLine
@@ -34,7 +34,9 @@ class Well(ComplexObject):
         self.__dict__.update(kwargs)
 
         self._trajectory_data: DataList = []
-        self._trajectory: TrajectoryPointRepository[TrajectoryPoint] = TrajectoryPointRepository(well=self)
+        self._trajectory: TrajectoryPointRepository[TrajectoryPoint] = TrajectoryPointRepository(
+            measure_units=self.project.measure_unit
+        )
 
         self._interpretations_data: DataList = []
         self._interpretations: ObjectRepository[Interpretation] = ObjectRepository()
@@ -80,7 +82,10 @@ class Well(ComplexObject):
     @property
     def trajectory(self) -> TrajectoryPointRepository[TrajectoryPoint]:
         if not self._trajectory:
-            self._trajectory = TrajectoryPointRepository(well=self, dicts=self.trajectory_data)
+            self._trajectory = TrajectoryPointRepository(
+                measure_units=self.project.measure_unit,
+                dicts=self.trajectory_data
+            )
 
         return self._trajectory
 
@@ -149,7 +154,9 @@ class Well(ComplexObject):
         if not self._nested_wells:
             self._nested_wells = ObjectRepository(
                 dicts=self.nested_wells_data,
-                objects=[NestedWell(well=self, **item) for item in self.nested_wells_data]
+                objects=[
+                    NestedWell(papi_client=self._papi_client, well=self, **item) for item in self.nested_wells_data
+                ]
             )
 
         return self._nested_wells
@@ -190,8 +197,10 @@ class Well(ComplexObject):
         self._nested_wells = ObjectRepository()
 
 
-class NestedWell(BaseObject):
-    def __init__(self, well: Well, **kwargs):
+class NestedWell(ComplexObject):
+    def __init__(self, papi_client: PapiClient, well: Well, **kwargs):
+        super().__init__(papi_client)
+
         self.well = well
 
         self.uuid = None
@@ -208,6 +217,11 @@ class NestedWell(BaseObject):
         self.tie_in_ew = None
 
         self.__dict__.update(kwargs)
+
+        self._trajectory_data: DataList = []
+        self._trajectory: TrajectoryPointRepository[TrajectoryPoint] = TrajectoryPointRepository(
+            measure_units=self.well.project.measure_unit
+        )
 
     def to_dict(self, get_converted: bool = True) -> Dict[str, Any]:
         measure_units = self.well.project.measure_unit
@@ -229,3 +243,20 @@ class NestedWell(BaseObject):
 
     def to_df(self, get_converted: bool = True) -> DataFrame:
         return DataFrame([self.to_dict(get_converted)])
+
+    @property
+    def trajectory_data(self) -> DataList:
+        if not self._trajectory_data:
+            self._trajectory_data = self._papi_client.get_nested_well_trajectory_data(nested_well_id=self.uuid)
+
+        return self._trajectory_data
+
+    @property
+    def trajectory(self) -> TrajectoryPointRepository[TrajectoryPoint]:
+        if not self._trajectory:
+            self._trajectory = TrajectoryPointRepository(
+                measure_units=self.well.project.measure_unit,
+                dicts=self.trajectory_data
+            )
+
+        return self._trajectory

@@ -2,14 +2,14 @@ from typing import Any, Dict, Optional
 
 from pandas import DataFrame
 
-import rogii_solo.well
 from rogii_solo.base import BaseObject
+from rogii_solo.calculations.enums import EMeasureUnits
 from rogii_solo.types import DataList
 
 
 class TrajectoryPoint(BaseObject):
-    def __init__(self, well: 'rogii_solo.well.Well', **kwargs):
-        self.well = well
+    def __init__(self, measure_units: EMeasureUnits, **kwargs):
+        self.measure_units = measure_units
 
         self.md = None
         self.incl = None
@@ -18,10 +18,8 @@ class TrajectoryPoint(BaseObject):
         self.__dict__.update(kwargs)
 
     def to_dict(self, get_converted: bool = True) -> Dict[str, Any]:
-        measure_units = self.well.project.measure_unit
-
         return {
-            'md': self.convert_z(self.md, measure_units=measure_units) if get_converted else self.md,
+            'md': self.convert_z(self.md, measure_units=self.measure_units) if get_converted else self.md,
             'incl': self.convert_angle(self.incl) if get_converted else self.incl,
             'azim': self.convert_angle(self.azim) if get_converted else self.azim,
         }
@@ -31,12 +29,12 @@ class TrajectoryPoint(BaseObject):
 
 
 class TrajectoryPointRepository(list):
-    def __init__(self, well: 'rogii_solo.well.Well', dicts: DataList = None):
+    def __init__(self, measure_units: EMeasureUnits, dicts: DataList = None):
         if dicts is None:
             dicts = []
 
         self._dicts = dicts
-        self._objects = [TrajectoryPoint(well=well, **item) for item in self._dicts]
+        self._objects = [TrajectoryPoint(measure_units=measure_units, **item) for item in self._dicts]
 
         super().__init__(self._objects)
 

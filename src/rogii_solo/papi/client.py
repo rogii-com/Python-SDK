@@ -123,6 +123,15 @@ class PapiClient(SdkPapiClient):
             **kwargs
         ))
 
+    def get_nested_well_trajectory_data(self, nested_well_id: str, **kwargs) -> PapiDataList:
+        data = self.fetch_nested_well_raw_trajectory(
+                nested_well_id=nested_well_id,
+                **kwargs
+            )
+        return [
+            self.parse_papi_data(data_item) for data_item in data
+        ]
+
     def _gen_data_page(self, func: Callable, **kwargs) -> PapiDataIterator:
         offset = kwargs.pop('offset', None) or self.DEFAULT_OFFSET
         limit = kwargs.pop('limit', None) or self.DEFAULT_LIMIT

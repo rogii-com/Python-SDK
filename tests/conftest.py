@@ -54,6 +54,10 @@ def fetch_well_nested_wells(**kwargs):
     return NESTED_WELLS_DATA_RESPONSE
 
 
+def fetch_nested_well_raw_trajectory(**kwargs):
+    return TRAJECTORY_DATA_RESPONSE['content']
+
+
 @pytest.fixture(scope='function')
 def solo_client():
     solo_client = SoloClient(client_id='client_id', client_secret='client_secret')
@@ -67,6 +71,7 @@ def solo_client():
     solo_client._papi_client.fetch_interpretation_assembled_segments = fetch_interpretation_assembled_segments
     solo_client._papi_client.fetch_well_target_lines = fetch_well_target_lines
     solo_client._papi_client.fetch_well_nested_wells = fetch_well_nested_wells
+    solo_client._papi_client.fetch_nested_well_raw_trajectory = fetch_nested_well_raw_trajectory
 
     return solo_client
 
