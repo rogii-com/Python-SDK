@@ -7,7 +7,7 @@ Python 3.10
 
 ## Installation
 1. Install the package using `pip install rogii-solo` command.
-2. Generate access credentials on the [landing page](https://solo.cloud/credentials/python-ask) and copy the initialization string.
+2. Generate access credentials on the [landing page](https://solo.cloud/credentials/python-sdk) and copy the initialization string.
 3. Initialize the client by pasting the initialization string in the constructor.
 4. Set the project you wish to work with by name or UUID.
 
