@@ -13,14 +13,14 @@ DLS_THRESHOLD = 0.5
 
 
 def get_trajectory_dls():
-    client = SoloClient(
+    solo_client = SoloClient(
         client_id=environ.get('ROGII_SOLO_CLIENT_ID'),
         client_secret=environ.get('ROGII_SOLO_CLIENT_SECRET'),
         papi_domain_name=environ.get('ROGII_SOLO_PAPI_DOMAIN_NAME')
     )
-    client.set_project_by_name(project_name=PROJECT_NAME)
+    solo_client.set_project_by_name(PROJECT_NAME)
 
-    well = client.project.wells.find_by_name(WELL_NAME)
+    well = solo_client.project.wells.find_by_name(WELL_NAME)
 
     if well is None:
         print(f'Well "{WELL_NAME}" not found.')
