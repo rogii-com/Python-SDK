@@ -29,7 +29,7 @@ class TrajectoryPoint(BaseObject):
 
 
 class TrajectoryPointRepository(list):
-    def __init__(self, objects: List[BaseObject] = None):
+    def __init__(self, objects: List[TrajectoryPoint] = None):
         if objects is None:
             objects = []
 
