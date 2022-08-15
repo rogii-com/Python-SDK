@@ -7,6 +7,7 @@ from rogii_solo.base import ComplexObject, ObjectRepository
 from rogii_solo.interpretation import Interpretation
 from rogii_solo.papi.client import PapiClient
 from rogii_solo.target_line import TargetLine
+from rogii_solo.topset import Topset
 from rogii_solo.trajectory import TrajectoryPoint, TrajectoryPointRepository
 from rogii_solo.types import DataList
 
@@ -47,6 +48,10 @@ class Well(ComplexObject):
         self._nested_wells_data: Optional[DataList] = None
         self._nested_wells: Optional[ObjectRepository[NestedWell]] = None
         self._starred_nested_well: Optional[NestedWell] = None
+
+        self._topsets_data: DataList = []
+        self._topsets: ObjectRepository[Topset] = ObjectRepository()
+        self._starred_topset:  Optional[Topset] = None
 
     def to_dict(self, get_converted: bool = True) -> Dict[str, Any]:
         measure_units = self.project.measure_unit
@@ -100,6 +105,7 @@ class Well(ComplexObject):
     def interpretations(self) -> ObjectRepository[Interpretation]:
         if self._interpretations is None:
             self._interpretations = ObjectRepository(
+                dicts=self.interpretations_data,
                 objects=[
                     Interpretation(papi_client=self._papi_client, well=self, **item)
                     for item in self.interpretations_data
@@ -166,6 +172,16 @@ class Well(ComplexObject):
 
         return self._starred_nested_well
 
+    # @property
+    # def topsets_data(self) -> DataList:
+    # if not self._topsets_data:
+    #     self._topsets =
+    #
+    # @property
+    # def topsets(self): -> ObjectRepository['Typeset']:
+    # if not self._topsets:
+    #     self._topsets =
+
     def create_nested_well(self,
                            nested_well_name: str,
                            operator: str,
@@ -192,6 +208,12 @@ class Well(ComplexObject):
 
         self._nested_wells_data = None
         self._nested_wells = None
+
+    def create_topset(self, topset_name: str):
+        self._papi_client.create_well_topset(
+            well_id=self.uuid,
+            topset_name=topset_name
+        )
 
 
 class NestedWell(ComplexObject):
@@ -258,6 +280,12 @@ class NestedWell(ComplexObject):
 
         return self._trajectory
 
+    # def create_topset(self, topset_name: str):
+    #     self._papi_client.create_well_topset(
+    #         well_id=self.uuid,
+    #         topset_name=topset_name
+    #     )
+
 
 class Typewell(ComplexObject):
     def __init__(self, papi_client: PapiClient, project: 'rogii_solo.project.Project', **kwargs):
@@ -302,3 +330,9 @@ class Typewell(ComplexObject):
             )
 
         return self._trajectory
+
+    def create_topset(self, topset_name: str):
+        self._papi_client.create_well_topset(
+            well_id=self.uuid,
+            topset_name=topset_name
+        )

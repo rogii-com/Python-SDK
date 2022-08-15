@@ -473,3 +473,57 @@ class PapiClient(BasePapiClient):
         data = self._send_request(url=f'typewells/{typewell_id}/trajectory/raw', headers=headers)
 
         return data['content']
+
+    def create_well_topset(self,
+                           well_id: str,
+                           topset_name: str,
+                           headers: Optional[Dict[str, Any]] = None
+                           ):
+        """
+        Create topset in the well
+        :param well_id:
+        :param topset_name:
+        :param headers:
+        :return:
+        """
+
+        url = f'wells/{well_id}/topsets'
+        request_data = {'name': topset_name}
+
+        return self._send_post_request(url=url, request_data=request_data, headers=headers)
+
+    def create_typewell_topset(self,
+                               typewell_id: str,
+                               topset_name: str,
+                               headers: Optional[Dict[str, Any]] = None
+                               ):
+        """
+        Create topset in the typewell
+        :param typewell_id:
+        :param topset_name:
+        :param headers:
+        :return:
+        """
+
+        url = f'typewells/{typewell_id}/topsets'
+        request_data = {'name': topset_name}
+
+        return self._send_post_request(url=url, request_data=request_data, headers=headers)
+
+    def create_nestedwell_topset(self,
+                                 nestedwell_id: str,
+                                 topset_name: str,
+                                 headers: Optional[Dict[str, Any]] = None
+                                 ):
+        """
+        Create topset in the nestedwells
+        :param nestedwell_id:
+        :param topset_name:
+        :param headers:
+        :return:
+        """
+
+        url = f'nestedwellss/{nestedwell_id}/topsets'
+        request_data = {'name': topset_name}
+
+        return self._send_post_request(url=url, request_data=request_data, headers=headers)
