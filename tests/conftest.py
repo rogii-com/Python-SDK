@@ -16,7 +16,6 @@ from tests.papi_data import (
     TARGET_LINES_DATA_RESPONSE,
     NESTED_WELLS_DATA_RESPONSE,
     TYPEWELLS_DATA_RESPONSE,
-    TYPEWELL_TRAJECTORY_DATA_RESPONSE
 )
 
 
@@ -61,7 +60,7 @@ def fetch_project_typewells(**kwargs):
 
 
 def fetch_typewell_raw_trajectory(**kwargs):
-    return TYPEWELL_TRAJECTORY_DATA_RESPONSE['content']
+    return TYPEWELLS_DATA_RESPONSE['content']
 
 
 @pytest.fixture(scope='function')
