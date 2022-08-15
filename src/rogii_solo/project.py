@@ -1,4 +1,4 @@
-from typing import Any, Dict
+from typing import Any, Dict, Optional
 
 from pandas import DataFrame
 
@@ -25,8 +25,8 @@ class Project(ComplexObject):
 
         self.__dict__.update(kwargs)
 
-        self._wells_data: DataList = []
-        self._wells: ObjectRepository[Well] = ObjectRepository()
+        self._wells_data: Optional[DataList] = None
+        self._wells: Optional[ObjectRepository[Well]] = None
 
         self._typewells_data: DataList = []
         self._typewells: ObjectRepository[Typewell] = ObjectRepository()
@@ -50,16 +50,15 @@ class Project(ComplexObject):
 
     @property
     def wells_data(self) -> DataList:
-        if not self._wells_data:
+        if self._wells_data is None:
             self._wells_data = self._papi_client.get_project_wells_data(project_id=self.uuid)
 
         return self._wells_data
 
     @property
     def wells(self) -> ObjectRepository[Well]:
-        if not self._wells:
+        if self._wells is None:
             self._wells = ObjectRepository(
-                dicts=self.wells_data,
                 objects=[Well(papi_client=self._papi_client, project=self, **item) for item in self.wells_data]
             )
 

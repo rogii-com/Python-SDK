@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Any, Dict, Iterable, List, Optional, Set, Tuple
+from typing import Any, Dict, Iterable, List, Optional, Set, Tuple, TypeVar
 
 from pandas import DataFrame
 
@@ -134,31 +134,25 @@ class ComplexObject(BaseObject):
         return DataFrame([self.to_dict(get_converted)])
 
 
-class ObjectRepository(list):
+T = TypeVar('T', bound=BaseObject)
+
+
+class ObjectRepository(list[T]):
     """
     List of objects with utility methods
     """
-    def __init__(self, dicts: DataList = None, objects: List[BaseObject] = None):
-        if dicts is None:
-            dicts = []
-
+    def __init__(self, objects: List[T] = None):
         if objects is None:
             objects = []
 
         super().__init__(objects)
-
-        self._dicts = dicts
-        self._objects = objects
 
     def to_dict(self, get_converted: bool = True) -> DataList:
         """
         Return list of dicts
         :return:
         """
-        if get_converted:
-            return [object_.to_dict(get_converted) for object_ in self._objects]
-
-        return self._dicts
+        return [object_.to_dict(get_converted) for object_ in self]
 
     def to_df(self, get_converted: bool = True) -> DataFrame:
         """
@@ -167,7 +161,7 @@ class ObjectRepository(list):
         """
         return DataFrame(self.to_dict(get_converted))
 
-    def find_by_id(self, value) -> Optional[BaseObject]:
+    def find_by_id(self, value) -> Optional[T]:
         """
         Find object by ID
         :param value:
@@ -175,7 +169,7 @@ class ObjectRepository(list):
         """
         return self._find_by_attr(attr='uuid', value=value)
 
-    def find_by_name(self, value) -> Optional[BaseObject]:
+    def find_by_name(self, value) -> Optional[T]:
         """
         Find object by name
         :param value:
@@ -183,5 +177,5 @@ class ObjectRepository(list):
         """
         return self._find_by_attr(attr='name', value=value)
 
-    def _find_by_attr(self, attr: str, value) -> Optional[BaseObject]:
+    def _find_by_attr(self, attr: str, value) -> Optional[T]:
         return next((item for item in self if getattr(item, attr, None) == value), None)

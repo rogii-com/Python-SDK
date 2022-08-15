@@ -103,7 +103,7 @@ def test_get_not_converted_ftm_well(ftm_project):
     assert np_is_close(well_df['convergence'], well.convergence)
 
 
-def test_get_converted_meter_trajectory(project):
+def test_get_converted_meter_well_trajectory(project):
     well = project.wells.find_by_name(WELL_NAME)
 
     assert well is not None
@@ -124,7 +124,7 @@ def test_get_converted_meter_trajectory(project):
         assert np_is_close(trajectory_df.at[idx, 'azim'], Convertable.convert_angle(trajectory_point.azim))
 
 
-def test_get_not_converted_meter_trajectory(project):
+def test_get_not_converted_meter_well_trajectory(project):
     well = project.wells.find_by_name(WELL_NAME)
 
     assert well is not None
@@ -142,7 +142,7 @@ def test_get_not_converted_meter_trajectory(project):
         assert np_is_close(trajectory_df.at[idx, 'azim'], trajectory_point.azim)
 
 
-def test_get_converted_foot_trajectory(ft_project):
+def test_get_converted_foot_well_trajectory(ft_project):
     well = ft_project.wells.find_by_name(WELL_NAME)
 
     assert well is not None
@@ -163,7 +163,7 @@ def test_get_converted_foot_trajectory(ft_project):
         assert np_is_close(trajectory_df.at[idx, 'azim'], Convertable.convert_angle(trajectory_point.azim))
 
 
-def test_get_not_converted_foot_trajectory(ft_project):
+def test_get_not_converted_foot_well_trajectory(ft_project):
     well = ft_project.wells.find_by_name(WELL_NAME)
 
     assert well is not None
@@ -181,7 +181,7 @@ def test_get_not_converted_foot_trajectory(ft_project):
         assert np_is_close(trajectory_df.at[idx, 'azim'], trajectory_point.azim)
 
 
-def test_get_converted_ftm_trajectory(ftm_project):
+def test_get_converted_ftm_well_trajectory(ftm_project):
     well = ftm_project.wells.find_by_name(WELL_NAME)
 
     assert well is not None
@@ -202,7 +202,7 @@ def test_get_converted_ftm_trajectory(ftm_project):
         assert np_is_close(trajectory_df.at[idx, 'azim'], Convertable.convert_angle(trajectory_point.azim))
 
 
-def test_get_not_converted_ftm_trajectory(ftm_project):
+def test_get_not_converted_ftm_well_trajectory(ftm_project):
     well = ftm_project.wells.find_by_name(WELL_NAME)
 
     assert well is not None
@@ -488,3 +488,120 @@ def test_get_not_converted_ftm_horizon(ftm_project):
     for idx, horizon_trajectory_point in enumerate(points):
         assert np_is_close(points_df.at[idx, 'md'], horizon_trajectory_point['md'])
         assert np_is_close(points_df.at[idx, 'tvd'], horizon_trajectory_point['tvd'])
+
+
+def test_get_converted_meter_nested_well_trajectory(project):
+    starred_nested_well = project.wells.find_by_name(WELL_NAME).starred_nested_well
+
+    assert starred_nested_well is not None
+
+    trajectory = starred_nested_well.trajectory
+    trajectory_df = trajectory.to_df()
+
+    assert trajectory
+    assert not trajectory_df.empty
+    assert len(trajectory) == len(trajectory_df.index)
+
+    for idx, trajectory_point in enumerate(trajectory):
+        assert np_is_close(trajectory_df.at[idx, 'md'], Convertable.convert_z(
+            value=trajectory_point.md,
+            measure_units=starred_nested_well.well.project.measure_unit
+        ))
+        assert np_is_close(trajectory_df.at[idx, 'incl'], Convertable.convert_angle(trajectory_point.incl))
+        assert np_is_close(trajectory_df.at[idx, 'azim'], Convertable.convert_angle(trajectory_point.azim))
+
+
+def test_get_not_converted_meter_nested_well_trajectory(project):
+    starred_nested_well = project.wells.find_by_name(WELL_NAME).starred_nested_well
+
+    assert starred_nested_well is not None
+
+    trajectory = starred_nested_well.trajectory
+    trajectory_df = trajectory.to_df(get_converted=False)
+
+    assert trajectory
+    assert not trajectory_df.empty
+    assert len(trajectory) == len(trajectory_df.index)
+
+    for idx, trajectory_point in enumerate(trajectory):
+        assert np_is_close(trajectory_df.at[idx, 'md'], trajectory_point.md)
+        assert np_is_close(trajectory_df.at[idx, 'incl'], trajectory_point.incl)
+        assert np_is_close(trajectory_df.at[idx, 'azim'], trajectory_point.azim)
+
+
+def test_get_converted_foot_nested_well_trajectory(ft_project):
+    starred_nested_well = ft_project.wells.find_by_name(WELL_NAME).starred_nested_well
+
+    assert starred_nested_well is not None
+
+    trajectory = starred_nested_well.trajectory
+    trajectory_df = trajectory.to_df()
+
+    assert trajectory
+    assert not trajectory_df.empty
+    assert len(trajectory) == len(trajectory_df.index)
+
+    for idx, trajectory_point in enumerate(trajectory):
+        assert np_is_close(trajectory_df.at[idx, 'md'], Convertable.convert_z(
+            value=trajectory_point.md,
+            measure_units=starred_nested_well.well.project.measure_unit
+        ))
+        assert np_is_close(trajectory_df.at[idx, 'incl'], Convertable.convert_angle(trajectory_point.incl))
+        assert np_is_close(trajectory_df.at[idx, 'azim'], Convertable.convert_angle(trajectory_point.azim))
+
+
+def test_get_not_converted_foot_nested_well_trajectory(ft_project):
+    starred_nested_well = ft_project.wells.find_by_name(WELL_NAME).starred_nested_well
+
+    assert starred_nested_well is not None
+
+    trajectory = starred_nested_well.trajectory
+    trajectory_df = trajectory.to_df(get_converted=False)
+
+    assert trajectory
+    assert not trajectory_df.empty
+    assert len(trajectory) == len(trajectory_df.index)
+
+    for idx, trajectory_point in enumerate(trajectory):
+        assert np_is_close(trajectory_df.at[idx, 'md'], trajectory_point.md)
+        assert np_is_close(trajectory_df.at[idx, 'incl'], trajectory_point.incl)
+        assert np_is_close(trajectory_df.at[idx, 'azim'], trajectory_point.azim)
+
+
+def test_get_converted_ftm_nested_well_trajectory(ftm_project):
+    starred_nested_well = ftm_project.wells.find_by_name(WELL_NAME).starred_nested_well
+
+    assert starred_nested_well is not None
+
+    trajectory = starred_nested_well.trajectory
+    trajectory_df = trajectory.to_df()
+
+    assert trajectory
+    assert not trajectory_df.empty
+    assert len(trajectory) == len(trajectory_df.index)
+
+    for idx, trajectory_point in enumerate(trajectory):
+        assert np_is_close(trajectory_df.at[idx, 'md'], Convertable.convert_z(
+            value=trajectory_point.md,
+            measure_units=starred_nested_well.well.project.measure_unit
+        ))
+        assert np_is_close(trajectory_df.at[idx, 'incl'], Convertable.convert_angle(trajectory_point.incl))
+        assert np_is_close(trajectory_df.at[idx, 'azim'], Convertable.convert_angle(trajectory_point.azim))
+
+
+def test_get_not_converted_ftm_nested_well_trajectory(ftm_project):
+    starred_nested_well = ftm_project.wells.find_by_name(WELL_NAME).starred_nested_well
+
+    assert starred_nested_well is not None
+
+    trajectory = starred_nested_well.trajectory
+    trajectory_df = trajectory.to_df(get_converted=False)
+
+    assert trajectory
+    assert not trajectory_df.empty
+    assert len(trajectory) == len(trajectory_df.index)
+
+    for idx, trajectory_point in enumerate(trajectory):
+        assert np_is_close(trajectory_df.at[idx, 'md'], trajectory_point.md)
+        assert np_is_close(trajectory_df.at[idx, 'incl'], trajectory_point.incl)
+        assert np_is_close(trajectory_df.at[idx, 'azim'], trajectory_point.azim)

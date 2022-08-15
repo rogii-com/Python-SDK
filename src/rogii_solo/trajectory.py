@@ -1,17 +1,15 @@
-from typing import Any, Dict, Optional, Union
+from typing import Any, Dict, List, Optional
 
 from pandas import DataFrame
 
-import rogii_solo.well
 from rogii_solo.base import BaseObject
+from rogii_solo.calculations.enums import EMeasureUnits
 from rogii_solo.types import DataList
-
-WellType = Union['rogii_solo.well.Well', 'rogii_solo.well.Typewell']
 
 
 class TrajectoryPoint(BaseObject):
-    def __init__(self, well: WellType, **kwargs):
-        self.well = well
+    def __init__(self, measure_units: EMeasureUnits, **kwargs):
+        self.measure_units = measure_units
 
         self.md = None
         self.incl = None
@@ -20,10 +18,8 @@ class TrajectoryPoint(BaseObject):
         self.__dict__.update(kwargs)
 
     def to_dict(self, get_converted: bool = True) -> Dict[str, Any]:
-        measure_units = self.well.project.measure_unit
-
         return {
-            'md': self.convert_z(self.md, measure_units=measure_units) if get_converted else self.md,
+            'md': self.convert_z(self.md, measure_units=self.measure_units) if get_converted else self.md,
             'incl': self.convert_angle(self.incl) if get_converted else self.incl,
             'azim': self.convert_angle(self.azim) if get_converted else self.azim,
         }
@@ -33,20 +29,14 @@ class TrajectoryPoint(BaseObject):
 
 
 class TrajectoryPointRepository(list):
-    def __init__(self, well: WellType, dicts: DataList = None):
-        if dicts is None:
-            dicts = []
+    def __init__(self, objects: List[TrajectoryPoint] = None):
+        if objects is None:
+            objects = []
 
-        self._dicts = dicts
-        self._objects = [TrajectoryPoint(well=well, **item) for item in self._dicts]
-
-        super().__init__(self._objects)
+        super().__init__(objects)
 
     def to_dict(self, get_converted: bool = True) -> DataList:
-        if get_converted:
-            return [object_.to_dict(get_converted) for object_ in self._objects]
-
-        return self._dicts
+        return [object_.to_dict(get_converted) for object_ in self]
 
     def to_df(self, get_converted: bool = True) -> DataFrame:
         return DataFrame(self.to_dict(get_converted))

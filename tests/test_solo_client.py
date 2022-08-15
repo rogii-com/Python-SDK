@@ -217,6 +217,36 @@ def test_get_well_starred_nested_well(project):
     assert starred_nested_well_df.at[0, 'name'] == STARRED_NESTED_WELL_NAME
 
 
+def test_get_nested_well_trajectory(project):
+    starred_nested_well = project.wells.find_by_name(WELL_NAME).starred_nested_well
+
+    assert starred_nested_well is not None
+
+    trajectory = starred_nested_well.trajectory
+
+    trajectory_data = trajectory.to_dict()
+    trajectory_df = trajectory.to_df()
+
+    assert trajectory_data
+    assert not trajectory_df.empty
+
+
+def test_get_nested_well_trajectory_point(project):
+    starred_nested_well = project.wells.find_by_name(WELL_NAME).starred_nested_well
+
+    assert starred_nested_well is not None
+
+    trajectory_point = starred_nested_well.trajectory.find_by_md(0)
+
+    assert trajectory_point is not None
+
+    trajectory_point_data = trajectory_point.to_dict()
+    trajectory_point_df = trajectory_point.to_df()
+
+    assert trajectory_point_data
+    assert not trajectory_point_df.empty
+
+
 def test_get_project_typewells(project):
     typewells_data = project.typewells.to_dict()
     typewells_df = project.typewells.to_df()
