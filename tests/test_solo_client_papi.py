@@ -320,6 +320,7 @@ def test_create_well_topset(project_papi):
     well.create_topset(topset_name)
     assert well.topsets.find_by_name(topset_name) is not None
 
+
 def test_create_typewell_topset(project_papi):
     typewell = project_papi.typewells.find_by_name(TYPEWELL_NAME)
     topset_name = 'Topset ' + str(random.randint(0, 10000))
@@ -327,6 +328,7 @@ def test_create_typewell_topset(project_papi):
     typewell.create_topset(topset_name)
     assert typewell.topsets.find_by_name(topset_name) is not None
     
+
 def test_create_nested_well_topset(project_papi):
     nested_well = project_papi.nested_wells.find_by_name(NESTED_WELL_NAME)
     topset_name = 'Topset ' + str(random.randint(0, 10000))

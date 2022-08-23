@@ -510,20 +510,92 @@ class PapiClient(BasePapiClient):
 
         return self._send_post_request(url=url, request_data=request_data, headers=headers)
 
-    def create_nestedwell_topset(self,
-                                 nestedwell_id: str,
-                                 topset_name: str,
-                                 headers: Optional[Dict[str, Any]] = None
-                                 ):
+    def create_nested_well_topset(self,
+                                  nested_well_id: str,
+                                  topset_name: str,
+                                  headers: Optional[Dict[str, Any]] = None
+                                  ):
         """
         Create topset in the nestedwells
-        :param nestedwell_id:
+        :param nested_well_id:
         :param topset_name:
         :param headers:
         :return:
         """
 
-        url = f'nestedwellss/{nestedwell_id}/topsets'
+        url = f'nestedwellss/{nested_well_id}/topsets'
         request_data = {'name': topset_name}
 
         return self._send_post_request(url=url, request_data=request_data, headers=headers)
+
+    def fetch_well_topsets(self,
+                           well_id: str,
+                           offset: int = BasePapiClient.DEFAULT_OFFSET,
+                           limit: int = BasePapiClient.DEFAULT_LIMIT,
+                           headers: Optional[Dict[str, Any]] = None
+                           ):
+        """
+        Fetches well topsets
+        :param well_id:
+        :param offset:
+        :param limit:
+        :param headers:
+        :return:
+        """
+
+        return self._send_request(
+            url=f'wells/{well_id}/topsets',
+            params={
+                'offset': offset,
+                'limit': limit,
+            },
+            headers=headers
+        )
+
+    def fetch_typewell_topsets(self,
+                               typewell_id: str,
+                               offset: int = BasePapiClient.DEFAULT_OFFSET,
+                               limit: int = BasePapiClient.DEFAULT_LIMIT,
+                               headers: Optional[Dict[str, Any]] = None
+                               ):
+        """
+        Fetches typewell topsets
+        :param typewell_id:
+        :param offset:
+        :param limit:
+        :param headers:
+        :return:
+        """
+
+        return self._send_request(
+            url=f'typewells/{typewell_id}/topsets',
+            params={
+                'offset': offset,
+                'limit': limit,
+            },
+            headers=headers
+        )
+
+    def fetch_nested_well_topsets(self,
+                                  nested_well_id: str,
+                                  offset: int = BasePapiClient.DEFAULT_OFFSET,
+                                  limit: int = BasePapiClient.DEFAULT_LIMIT,
+                                  headers: Optional[Dict[str, Any]] = None
+                                  ):
+        """
+        Fetches nested well topsets
+        :param nested_well_id:
+        :param offset:
+        :param limit:
+        :param headers:
+        :return:
+        """
+
+        return self._send_request(
+            url=f'nestedwells/{nested_well_id}/topsets',
+            params={
+                'offset': offset,
+                'limit': limit,
+            },
+            headers=headers
+        )

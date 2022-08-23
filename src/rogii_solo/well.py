@@ -49,7 +49,7 @@ class Well(ComplexObject):
         self._nested_wells: Optional[ObjectRepository[NestedWell]] = None
         self._starred_nested_well: Optional[NestedWell] = None
 
-        self._topsets_data: DataList = []
+        self._topsets_data: Optional[DataList] = None
         self._topsets: ObjectRepository[Topset] = ObjectRepository()
         self._starred_topset:  Optional[Topset] = None
 
@@ -105,7 +105,6 @@ class Well(ComplexObject):
     def interpretations(self) -> ObjectRepository[Interpretation]:
         if self._interpretations is None:
             self._interpretations = ObjectRepository(
-                dicts=self.interpretations_data,
                 objects=[
                     Interpretation(papi_client=self._papi_client, well=self, **item)
                     for item in self.interpretations_data
@@ -117,7 +116,7 @@ class Well(ComplexObject):
     @property
     def starred_interpretation(self) -> Optional[Interpretation]:
         if self._starred_interpretation is None:
-            starred_interpretation_id = self._find_by_path(self.starred, 'interpretation')
+            starred_interpretation_id = self._find_by_path(obj=self.starred, path='interpretation')
             self._starred_interpretation = self.interpretations.find_by_id(starred_interpretation_id)
 
         return self._starred_interpretation
@@ -141,7 +140,7 @@ class Well(ComplexObject):
     @property
     def starred_target_line(self) -> Optional[TargetLine]:
         if self._starred_target_line is None:
-            starred_target_line_id = self._find_by_path(self.starred, 'target_line')
+            starred_target_line_id = self._find_by_path(obj=self.starred, path='target_line')
             self._starred_target_line = self.target_lines.find_by_id(starred_target_line_id)
 
         return self._starred_target_line
@@ -167,20 +166,36 @@ class Well(ComplexObject):
     @property
     def starred_nested_well(self) -> Optional['NestedWell']:
         if self._starred_nested_well is None:
-            starred_nested_well_id = self._find_by_path(self.starred, 'nested_well')
+            starred_nested_well_id = self._find_by_path(obj=self.starred, path='nested_well')
             self._starred_nested_well = self.nested_wells.find_by_id(starred_nested_well_id)
 
         return self._starred_nested_well
 
-    # @property
-    # def topsets_data(self) -> DataList:
-    # if not self._topsets_data:
-    #     self._topsets =
-    #
-    # @property
-    # def topsets(self): -> ObjectRepository['Typeset']:
-    # if not self._topsets:
-    #     self._topsets =
+    @property
+    def topsets_data(self) -> Optional[DataList]:
+        if self._topsets_data is None:
+            self._topsets_data = self._papi_client.get_well_topsets_data(well_id=self.uuid)
+
+        return self._topsets_data
+
+    @property
+    def topsets(self) -> ObjectRepository[Topset]:
+        if self._topsets is None:
+            self._topsets = ObjectRepository(
+                objects=[
+                    Topset(papi_client=self._papi_client, well=self, **item) for item in self.topsets_data
+                ]
+            )
+
+        return self._topsets
+
+    @property
+    def starred_topset(self) -> Optional[Topset]:
+        if self._starred_topset is None:
+            starred_topset_id = self._find_by_path(obj=self.starred, path='topset')
+            self._starred_topset = self.topsets.find_by_id(starred_topset_id)
+
+        return self._starred_topset
 
     def create_nested_well(self,
                            nested_well_name: str,
@@ -234,11 +249,16 @@ class NestedWell(ComplexObject):
         self.tie_in_tvd = None
         self.tie_in_ns = None
         self.tie_in_ew = None
+        self.starred = None
 
         self.__dict__.update(kwargs)
 
         self._trajectory_data: Optional[DataList] = None
         self._trajectory: Optional[TrajectoryPointRepository[TrajectoryPoint]] = None
+
+        self._topsets_data: Optional[DataList] = None
+        self._topsets: ObjectRepository[Topset] = ObjectRepository()
+        self._starred_topset:  Optional[Topset] = None
 
     def to_dict(self, get_converted: bool = True) -> Dict[str, Any]:
         measure_units = self.well.project.measure_unit
@@ -280,11 +300,37 @@ class NestedWell(ComplexObject):
 
         return self._trajectory
 
-    # def create_topset(self, topset_name: str):
-    #     self._papi_client.create_well_topset(
-    #         well_id=self.uuid,
-    #         topset_name=topset_name
-    #     )
+    @property
+    def topsets_data(self) -> Optional[DataList]:
+        if self._topsets_data is None:
+            self._topsets_data = self._papi_client.get_nested_well_topsets_data(nested_well_id=self.uuid)
+
+        return self._topsets_data
+
+    @property
+    def topsets(self) -> ObjectRepository[Topset]:
+        if self._topsets is None:
+            self._topsets = ObjectRepository(
+                objects=[
+                    Topset(papi_client=self._papi_client, well=self, **item) for item in self.topsets_data
+                ]
+            )
+
+        return self._topsets
+
+    @property
+    def starred_topset(self) -> Optional[Topset]:
+        if self._starred_topset is None:
+            starred_topset_id = self._find_by_path(obj=self.starred, path='topset')
+            self._starred_topset = self.topsets.find_by_id(starred_topset_id)
+
+        return self._starred_topset
+
+    def create_topset(self, topset_name: str):
+        self._papi_client.create_nested_well_topset(
+            nested_well_id=self.uuid,
+            topset_name=topset_name
+        )
 
 
 class Typewell(ComplexObject):
@@ -296,11 +342,16 @@ class Typewell(ComplexObject):
         self.uuid = None
         self.name = None
         self.api = None
+        self.starred = None
 
         self.__dict__.update(kwargs)
 
         self._trajectory_data: Optional[DataList] = None
         self._trajectory: Optional[TrajectoryPointRepository[TrajectoryPoint]] = None
+
+        self._topsets_data: Optional[DataList] = None
+        self._topsets: ObjectRepository[Topset] = ObjectRepository()
+        self._starred_topset:  Optional[Topset] = None
 
     def to_dict(self, get_converted: bool = True) -> Dict[str, Any]:
         return {
@@ -331,8 +382,34 @@ class Typewell(ComplexObject):
 
         return self._trajectory
 
+    @property
+    def topsets_data(self) -> Optional[DataList]:
+        if self._topsets_data is None:
+            self._topsets_data = self._papi_client.get_typewell_topsets_data(typewell_id=self.uuid)
+
+        return self._topsets_data
+
+    @property
+    def topsets(self) -> ObjectRepository[Topset]:
+        if self._topsets is None:
+            self._topsets = ObjectRepository(
+                objects=[
+                    Topset(papi_client=self._papi_client, well=self, **item) for item in self.topsets_data
+                ]
+            )
+
+        return self._topsets
+
+    @property
+    def starred_topset(self) -> Optional[Topset]:
+        if self._starred_topset is None:
+            starred_topset_id = self._find_by_path(obj=self.starred, path='topset')
+            self._starred_topset = self.topsets.find_by_id(starred_topset_id)
+
+        return self._starred_topset
+
     def create_topset(self, topset_name: str):
-        self._papi_client.create_well_topset(
-            well_id=self.uuid,
+        self._papi_client.create_typewell_topset(
+            typewell_id=self.uuid,
             topset_name=topset_name
         )

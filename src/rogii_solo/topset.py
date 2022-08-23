@@ -2,24 +2,16 @@ from typing import Any, Dict, Union
 
 from pandas import DataFrame
 
-import rogii_solo.project
+import rogii_solo.well
 from rogii_solo.base import ComplexObject
 from rogii_solo.papi.client import PapiClient
 
-WellType = Union['rogii_solo.well.Well', 'rogii_solo.well.Typewell', 'rogii_solo.well.NestedWell']
+WellType = Union[
+    'rogii_solo.well.Well',
+    'rogii_solo.well.Typewell',
+    'rogii_solo.well.NestedWell'
+]
 
-
-# class Top(BaseObject):
-#     def __init__(self, topset: Topset, **kwargs):
-#         self.topset = topset
-#         self._name = None
-#
-#     @property
-#     def name(self) -> DataList:
-#         if not self._name:
-#             self._horizons_data = self._papi_client.get_interpretation_horizons_data(interpretation_id=self.uuid)
-#
-#         return self._horizons_data
 
 class Topset(ComplexObject):
     def __init__(self, papi_client: PapiClient, well: WellType, **kwargs):
