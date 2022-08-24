@@ -50,7 +50,7 @@ class Well(ComplexObject):
         self._starred_nested_well: Optional[NestedWell] = None
 
         self._topsets_data: Optional[DataList] = None
-        self._topsets: ObjectRepository[Topset] = ObjectRepository()
+        self._topsets: Optional[ObjectRepository[Topset]] = None
         self._starred_topset:  Optional[Topset] = None
 
     def to_dict(self, get_converted: bool = True) -> Dict[str, Any]:
@@ -257,7 +257,7 @@ class NestedWell(ComplexObject):
         self._trajectory: Optional[TrajectoryPointRepository[TrajectoryPoint]] = None
 
         self._topsets_data: Optional[DataList] = None
-        self._topsets: ObjectRepository[Topset] = ObjectRepository()
+        self._topsets: Optional[ObjectRepository[Topset]] = None
         self._starred_topset:  Optional[Topset] = None
 
     def to_dict(self, get_converted: bool = True) -> Dict[str, Any]:
@@ -350,7 +350,7 @@ class Typewell(ComplexObject):
         self._trajectory: Optional[TrajectoryPointRepository[TrajectoryPoint]] = None
 
         self._topsets_data: Optional[DataList] = None
-        self._topsets: ObjectRepository[Topset] = ObjectRepository()
+        self._topsets: Optional[ObjectRepository[Topset]] = None
         self._starred_topset:  Optional[Topset] = None
 
     def to_dict(self, get_converted: bool = True) -> Dict[str, Any]:
