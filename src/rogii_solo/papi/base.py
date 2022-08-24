@@ -523,7 +523,7 @@ class PapiClient(BasePapiClient):
         :return:
         """
 
-        url = f'nestedwellss/{nested_well_id}/topsets'
+        url = f'nestedwells/{nested_well_id}/topsets'
         request_data = {'name': topset_name}
 
         return self._send_post_request(url=url, request_data=request_data, headers=headers)
@@ -599,3 +599,27 @@ class PapiClient(BasePapiClient):
             },
             headers=headers
         )
+
+    def create_well_target_line(self,
+                                well_id: str,
+                                target_line_name: str,
+                                origin_x: PapiVar,
+                                origin_y: PapiVar,
+                                origin_z: PapiVar,
+                                target_x: PapiVar,
+                                target_y: PapiVar,
+                                target_z: PapiVar,
+                                headers: Optional[Dict[str, Any]] = None
+                                ):
+        url = f'wells/{well_id}/targetlines'
+        request_data = {
+            'name': target_line_name,
+            'origin_x': origin_x,
+            'origin_y': origin_y,
+            'origin_z': origin_z,
+            'target_x': target_x,
+            'target_y': target_y,
+            'target_z': target_z,
+        }
+
+        return self._send_post_request(url=url, request_data=request_data, headers=headers)
