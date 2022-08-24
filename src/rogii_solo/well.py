@@ -271,8 +271,8 @@ class Typewell(ComplexObject):
 
         self.__dict__.update(kwargs)
 
-        self._trajectory_data: DataList = None
-        self._trajectory: TrajectoryPointRepository[TrajectoryPoint] = None
+        self._trajectory_data: Optional[DataList] = None
+        self._trajectory: Optional[TrajectoryPointRepository[TrajectoryPoint]] = None
 
     def to_dict(self, get_converted: bool = True) -> Dict[str, Any]:
         return {

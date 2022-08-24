@@ -64,7 +64,7 @@ def fetch_project_typewells(**kwargs):
 
 
 def fetch_typewell_raw_trajectory(**kwargs):
-    return TYPEWELLS_DATA_RESPONSE['content']
+    return TRAJECTORY_DATA_RESPONSE['content']
 
 
 @pytest.fixture(scope='function')
@@ -80,6 +80,9 @@ def solo_client():
     solo_client._papi_client.fetch_interpretation_assembled_segments = fetch_interpretation_assembled_segments
     solo_client._papi_client.fetch_well_target_lines = fetch_well_target_lines
     solo_client._papi_client.fetch_well_nested_wells = fetch_well_nested_wells
+    solo_client._papi_client.fetch_nested_well_raw_trajectory = fetch_nested_well_raw_trajectory
+    solo_client._papi_client.fetch_project_typewells = fetch_project_typewells
+    solo_client._papi_client.fetch_typewell_raw_trajectory = fetch_typewell_raw_trajectory
 
     return solo_client
 
