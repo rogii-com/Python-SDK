@@ -146,6 +146,27 @@ class PapiClient(SdkPapiClient):
             )
         ]
 
+    def get_well_topsets_data(self, well_id: str, **kwargs) -> PapiDataList:
+        return list(self._gen_data_page(
+            func=self.fetch_well_topsets,
+            well_id=well_id,
+            **kwargs
+        ))
+
+    def get_typewell_topsets_data(self, typewell_id: str, **kwargs) -> PapiDataList:
+        return list(self._gen_data_page(
+            func=self.fetch_typewell_topsets,
+            typewell_id=typewell_id,
+            **kwargs
+        ))
+
+    def get_nested_well_topsets_data(self, nested_well_id: str, **kwargs) -> PapiDataList:
+        return list(self._gen_data_page(
+            func=self.fetch_nested_well_topsets,
+            nested_well_id=nested_well_id,
+            **kwargs
+        ))
+
     def _gen_data_page(self, func: Callable, **kwargs) -> PapiDataIterator:
         offset = kwargs.pop('offset', None) or self.DEFAULT_OFFSET
         limit = kwargs.pop('limit', None) or self.DEFAULT_LIMIT
