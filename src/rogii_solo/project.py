@@ -28,8 +28,8 @@ class Project(ComplexObject):
         self._wells_data: Optional[DataList] = None
         self._wells: Optional[ObjectRepository[Well]] = None
 
-        self._typewells_data: DataList = []
-        self._typewells: ObjectRepository[Typewell] = ObjectRepository()
+        self._typewells_data: Optional[DataList] = None
+        self._typewells: Optional[ObjectRepository[Well]] = None
 
     def to_dict(self, get_converted: bool = True) -> Dict[str, Any]:
         return {
@@ -66,16 +66,15 @@ class Project(ComplexObject):
 
     @property
     def typewells_data(self) -> DataList:
-        if not self._typewells_data:
+        if self._typewells_data is None:
             self._typewells_data = self._papi_client.get_project_typewells_data(project_id=self.uuid)
 
         return self._typewells_data
 
     @property
     def typewells(self) -> ObjectRepository[Typewell]:
-        if not self._typewells:
+        if self._typewells is None:
             self._typewells = ObjectRepository(
-                dicts=self.typewells_data,
                 objects=[Typewell(papi_client=self._papi_client, project=self, **item) for item in self.typewells_data]
             )
 
