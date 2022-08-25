@@ -237,7 +237,7 @@ class Well(ComplexObject):
                            origin_z: float,
                            target_x: float,
                            target_y: float,
-                           target_z: float,
+                           target_z: float
                            ):
         self._papi_client.create_well_target_line(
             well_id=self.uuid,
@@ -247,7 +247,7 @@ class Well(ComplexObject):
             origin_z=self._papi_client.prepare_papi_var(origin_z),
             target_x=self._papi_client.prepare_papi_var(target_x),
             target_y=self._papi_client.prepare_papi_var(target_y),
-            target_z=self._papi_client.prepare_papi_var(target_z),
+            target_z=self._papi_client.prepare_papi_var(target_z)
         )
 
         self._target_lines_data = None
@@ -298,7 +298,7 @@ class NestedWell(ComplexObject):
             'convergence': self.convert_angle(self.convergence) if get_converted else self.convergence,
             'tie_in_tvd': self.tie_in_tvd,
             'tie_in_ns': self.tie_in_ns,
-            'tie_in_ew': self.tie_in_ew,
+            'tie_in_ew': self.tie_in_ew
         }
 
     def to_df(self, get_converted: bool = True) -> DataFrame:
@@ -380,7 +380,7 @@ class Typewell(ComplexObject):
         return {
             'uuid': self.uuid,
             'name': self.name,
-            'api': self.api,
+            'api': self.api
         }
 
     def to_df(self, get_converted: bool = True) -> DataFrame:

@@ -619,7 +619,7 @@ class PapiClient(BasePapiClient):
             'origin_z': origin_z,
             'target_x': target_x,
             'target_y': target_y,
-            'target_z': target_z,
+            'target_z': target_z
         }
 
         return self._send_post_request(url=url, request_data=request_data, headers=headers)
