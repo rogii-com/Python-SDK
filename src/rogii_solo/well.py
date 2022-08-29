@@ -61,9 +61,12 @@ class Well(ComplexObject):
             'operator': self.operator,
             'azimuth': self.convert_angle(self.azimuth) if get_converted else self.azimuth,
             'convergence': self.convert_angle(self.convergence) if get_converted else self.convergence,
-            'tie_in_tvd': self.tie_in_tvd,
-            'tie_in_ns': self.tie_in_ns,
-            'tie_in_ew': self.tie_in_ew,
+            'tie_in_tvd':
+                self.convert_z(self.tie_in_tvd, measure_units=measure_units) if get_converted else self.tie_in_tvd,
+            'tie_in_ns':
+                self.convert_xy(self.tie_in_ns, measure_units=measure_units) if get_converted else self.tie_in_ns,
+            'tie_in_ew':
+                self.convert_xy(self.tie_in_ew, measure_units=measure_units) if get_converted else self.tie_in_ew,
             'starred': self.starred,
         }
 
@@ -231,9 +234,12 @@ class NestedWell(ComplexObject):
             'operator': self.operator,
             'azimuth': self.convert_angle(self.azimuth) if get_converted else self.azimuth,
             'convergence': self.convert_angle(self.convergence) if get_converted else self.convergence,
-            'tie_in_tvd': self.tie_in_tvd,
-            'tie_in_ns': self.tie_in_ns,
-            'tie_in_ew': self.tie_in_ew,
+            'tie_in_tvd':
+                self.convert_z(self.tie_in_tvd, measure_units=measure_units) if get_converted else self.tie_in_tvd,
+            'tie_in_ns':
+                self.convert_xy(self.tie_in_ns, measure_units=measure_units) if get_converted else self.tie_in_ns,
+            'tie_in_ew':
+                self.convert_xy(self.tie_in_ew, measure_units=measure_units) if get_converted else self.tie_in_ew,
         }
 
     def to_df(self, get_converted: bool = True) -> DataFrame:

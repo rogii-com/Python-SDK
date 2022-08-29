@@ -123,13 +123,13 @@ WELLS_DATA_RESPONSE = {
                 'val': 0.17453292519944444
             },
             'tie_in_tvd': {
-                'val': 0.0
+                'val': 125.0
             },
             'tie_in_ns': {
-                'val': 0.0
+                'val': 150.5
             },
             'tie_in_ew': {
-                'val': 0.0
+                'val': 250.5
             },
             'azimuth': {
                 'val': 5.672320068981945
@@ -158,13 +158,13 @@ WELLS_DATA_RESPONSE = {
                 'val': 0.027453292519944444
             },
             'tie_in_tvd': {
-                'val': 0.0
+                'val': 125.0
             },
             'tie_in_ns': {
-                'val': 0.0
+                'val': 150.5
             },
             'tie_in_ew': {
-                'val': 0.0
+                'val': 250.5
             },
             'azimuth': {
                 'val': 5.372320068981945
@@ -3041,13 +3041,13 @@ NESTED_WELLS_DATA_RESPONSE = {
                 'val': 0.017453292519944444
             },
             'tie_in_tvd': {
-                'undefined': True
+                'val': 125.0
             },
             'tie_in_ns': {
-                'undefined': True
+                'val': 150.5
             },
             'tie_in_ew': {
-                'undefined': True
+                'val': 250.5
             },
             'azimuth': {
                 'val': 5.672320068981945
@@ -3071,13 +3071,13 @@ NESTED_WELLS_DATA_RESPONSE = {
                 'val': 0.017453292519944444
             },
             'tie_in_tvd': {
-                'undefined': True
+                'val': 125.0
             },
             'tie_in_ns': {
-                'undefined': True
+                'val': 150.5
             },
             'tie_in_ew': {
-                'undefined': True
+                'val': 250.5
             },
             'azimuth': {
                 'val': 5.672320068981945

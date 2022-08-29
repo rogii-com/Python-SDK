@@ -21,6 +21,18 @@ def test_get_converted_meter_well(project):
     assert np_is_close(well_df['kb'], Convertable.convert_z(value=well.kb, measure_units=project.measure_unit))
     assert np_is_close(well_df['azimuth'], Convertable.convert_angle(value=well.azimuth))
     assert np_is_close(well_df['convergence'], Convertable.convert_angle(value=well.convergence))
+    assert np_is_close(
+        well_df['tie_in_tvd'],
+        Convertable.convert_z(value=well.tie_in_tvd, measure_units=project.measure_unit)
+    )
+    assert np_is_close(
+        well_df['tie_in_ns'],
+        Convertable.convert_xy(value=well.tie_in_ns, measure_units=project.measure_unit)
+    )
+    assert np_is_close(
+        well_df['tie_in_ew'],
+        Convertable.convert_xy(value=well.tie_in_ew, measure_units=project.measure_unit)
+    )
 
 
 def test_get_not_converted_meter_well(project):
@@ -37,6 +49,9 @@ def test_get_not_converted_meter_well(project):
     assert np_is_close(well_df['kb'], well.kb)
     assert np_is_close(well_df['azimuth'], well.azimuth)
     assert np_is_close(well_df['convergence'], well.convergence)
+    assert np_is_close(well_df['tie_in_tvd'], well.tie_in_tvd)
+    assert np_is_close(well_df['tie_in_ns'], well.tie_in_ns)
+    assert np_is_close(well_df['tie_in_ew'], well.tie_in_ew)
 
 
 def test_get_converted_foot_well(ft_project):
@@ -53,6 +68,18 @@ def test_get_converted_foot_well(ft_project):
     assert np_is_close(well_df['kb'], Convertable.convert_z(value=well.kb, measure_units=ft_project.measure_unit))
     assert np_is_close(well_df['azimuth'], Convertable.convert_angle(value=well.azimuth))
     assert np_is_close(well_df['convergence'], Convertable.convert_angle(value=well.convergence))
+    assert np_is_close(
+        well_df['tie_in_tvd'],
+        Convertable.convert_z(value=well.tie_in_tvd, measure_units=ft_project.measure_unit)
+    )
+    assert np_is_close(
+        well_df['tie_in_ns'],
+        Convertable.convert_xy(value=well.tie_in_ns, measure_units=ft_project.measure_unit)
+    )
+    assert np_is_close(
+        well_df['tie_in_ew'],
+        Convertable.convert_xy(value=well.tie_in_ew, measure_units=ft_project.measure_unit)
+    )
 
 
 def test_get_not_converted_foot_well(ft_project):
@@ -69,6 +96,9 @@ def test_get_not_converted_foot_well(ft_project):
     assert np_is_close(well_df['kb'], well.kb)
     assert np_is_close(well_df['azimuth'], well.azimuth)
     assert np_is_close(well_df['convergence'], well.convergence)
+    assert np_is_close(well_df['tie_in_tvd'], well.tie_in_tvd)
+    assert np_is_close(well_df['tie_in_ns'], well.tie_in_ns)
+    assert np_is_close(well_df['tie_in_ew'], well.tie_in_ew)
 
 
 def test_get_converted_ftm_well(ftm_project):
@@ -85,6 +115,18 @@ def test_get_converted_ftm_well(ftm_project):
     assert np_is_close(well_df['kb'], Convertable.convert_z(value=well.kb, measure_units=ftm_project.measure_unit))
     assert np_is_close(well_df['azimuth'], Convertable.convert_angle(value=well.azimuth))
     assert np_is_close(well_df['convergence'], Convertable.convert_angle(value=well.convergence))
+    assert np_is_close(
+        well_df['tie_in_tvd'],
+        Convertable.convert_z(value=well.tie_in_tvd, measure_units=ftm_project.measure_unit)
+    )
+    assert np_is_close(
+        well_df['tie_in_ns'],
+        Convertable.convert_xy(value=well.tie_in_ns, measure_units=ftm_project.measure_unit)
+    )
+    assert np_is_close(
+        well_df['tie_in_ew'],
+        Convertable.convert_xy(value=well.tie_in_ew, measure_units=ftm_project.measure_unit)
+    )
 
 
 def test_get_not_converted_ftm_well(ftm_project):
@@ -101,6 +143,9 @@ def test_get_not_converted_ftm_well(ftm_project):
     assert np_is_close(well_df['kb'], well.kb)
     assert np_is_close(well_df['azimuth'], well.azimuth)
     assert np_is_close(well_df['convergence'], well.convergence)
+    assert np_is_close(well_df['tie_in_tvd'], well.tie_in_tvd)
+    assert np_is_close(well_df['tie_in_ns'], well.tie_in_ns)
+    assert np_is_close(well_df['tie_in_ew'], well.tie_in_ew)
 
 
 def test_get_converted_meter_well_trajectory(project):
@@ -240,6 +285,18 @@ def test_get_converted_meter_nested_well(project):
         starred_nested_well_df['convergence'],
         Convertable.convert_angle(value=starred_nested_well.convergence)
     )
+    assert np_is_close(
+        starred_nested_well_df['tie_in_tvd'],
+        Convertable.convert_z(value=starred_nested_well.tie_in_tvd, measure_units=project.measure_unit)
+    )
+    assert np_is_close(
+        starred_nested_well_df['tie_in_ns'],
+        Convertable.convert_xy(value=starred_nested_well.tie_in_ns, measure_units=project.measure_unit)
+    )
+    assert np_is_close(
+        starred_nested_well_df['tie_in_ew'],
+        Convertable.convert_xy(value=starred_nested_well.tie_in_ew, measure_units=project.measure_unit)
+    )
 
 
 def test_get_not_converted_meter_nested_well(project):
@@ -256,6 +313,9 @@ def test_get_not_converted_meter_nested_well(project):
     assert not starred_nested_well_df['kb'].isnull().empty
     assert np_is_close(starred_nested_well_df['azimuth'], starred_nested_well.azimuth)
     assert np_is_close(starred_nested_well_df['convergence'], starred_nested_well.convergence)
+    assert np_is_close(starred_nested_well_df['tie_in_tvd'], starred_nested_well.tie_in_tvd)
+    assert np_is_close(starred_nested_well_df['tie_in_ns'], starred_nested_well.tie_in_ns)
+    assert np_is_close(starred_nested_well_df['tie_in_ew'], starred_nested_well.tie_in_ew)
 
 
 def test_get_converted_foot_nested_well(ft_project):
@@ -278,6 +338,18 @@ def test_get_converted_foot_nested_well(ft_project):
         starred_nested_well_df['convergence'],
         Convertable.convert_angle(value=starred_nested_well.convergence)
     )
+    assert np_is_close(
+        starred_nested_well_df['tie_in_tvd'],
+        Convertable.convert_z(value=starred_nested_well.tie_in_tvd, measure_units=ft_project.measure_unit)
+    )
+    assert np_is_close(
+        starred_nested_well_df['tie_in_ns'],
+        Convertable.convert_xy(value=starred_nested_well.tie_in_ns, measure_units=ft_project.measure_unit)
+    )
+    assert np_is_close(
+        starred_nested_well_df['tie_in_ew'],
+        Convertable.convert_xy(value=starred_nested_well.tie_in_ew, measure_units=ft_project.measure_unit)
+    )
 
 
 def test_get_not_converted_foot_nested_well(ft_project):
@@ -294,6 +366,9 @@ def test_get_not_converted_foot_nested_well(ft_project):
     assert not starred_nested_well_df['kb'].isnull().empty
     assert np_is_close(starred_nested_well_df['azimuth'], starred_nested_well.azimuth)
     assert np_is_close(starred_nested_well_df['convergence'], starred_nested_well.convergence)
+    assert np_is_close(starred_nested_well_df['tie_in_tvd'], starred_nested_well.tie_in_tvd)
+    assert np_is_close(starred_nested_well_df['tie_in_ns'], starred_nested_well.tie_in_ns)
+    assert np_is_close(starred_nested_well_df['tie_in_ew'], starred_nested_well.tie_in_ew)
 
 
 def test_get_converted_ftm_nested_well(ftm_project):
@@ -316,6 +391,18 @@ def test_get_converted_ftm_nested_well(ftm_project):
         starred_nested_well_df['convergence'],
         Convertable.convert_angle(value=starred_nested_well.convergence)
     )
+    assert np_is_close(
+        starred_nested_well_df['tie_in_tvd'],
+        Convertable.convert_z(value=starred_nested_well.tie_in_tvd, measure_units=ftm_project.measure_unit)
+    )
+    assert np_is_close(
+        starred_nested_well_df['tie_in_ns'],
+        Convertable.convert_xy(value=starred_nested_well.tie_in_ns, measure_units=ftm_project.measure_unit)
+    )
+    assert np_is_close(
+        starred_nested_well_df['tie_in_ew'],
+        Convertable.convert_xy(value=starred_nested_well.tie_in_ew, measure_units=ftm_project.measure_unit)
+    )
 
 
 def test_get_not_converted_ftm_nested_well(ftm_project):
@@ -332,6 +419,9 @@ def test_get_not_converted_ftm_nested_well(ftm_project):
     assert not starred_nested_well_df['kb'].isnull().empty
     assert np_is_close(starred_nested_well_df['azimuth'], starred_nested_well.azimuth)
     assert np_is_close(starred_nested_well_df['convergence'], starred_nested_well.convergence)
+    assert np_is_close(starred_nested_well_df['tie_in_tvd'], starred_nested_well.tie_in_tvd)
+    assert np_is_close(starred_nested_well_df['tie_in_ns'], starred_nested_well.tie_in_ns)
+    assert np_is_close(starred_nested_well_df['tie_in_ew'], starred_nested_well.tie_in_ew)
 
 
 def test_get_converted_meter_horizon(project):
