@@ -1,4 +1,4 @@
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List
 
 from pandas import DataFrame
 
@@ -40,9 +40,3 @@ class TrajectoryPointRepository(list):
 
     def to_df(self, get_converted: bool = True) -> DataFrame:
         return DataFrame(self.to_dict(get_converted))
-
-    def find_by_md(self, value) -> Optional[TrajectoryPoint]:
-        return self._find_by_attr(attr='md', value=value)
-
-    def _find_by_attr(self, attr: str, value) -> Optional[TrajectoryPoint]:
-        return next((item for item in self if getattr(item, attr, None) == value), None)
