@@ -76,18 +76,6 @@ def test_get_well_trajectory(project):
     assert not trajectory_df.empty
 
 
-def test_get_well_trajectory_point(project):
-    trajectory_point = project.wells.find_by_name(WELL_NAME).trajectory.find_by_md(0)
-
-    assert trajectory_point is not None
-
-    trajectory_point_data = trajectory_point.to_dict()
-    trajectory_point_df = trajectory_point.to_df()
-
-    assert trajectory_point_data
-    assert not trajectory_point_df.empty
-
-
 def test_get_well_interpretations(project):
     interpretations = project.wells.find_by_name(WELL_NAME).interpretations
 
@@ -228,19 +216,3 @@ def test_get_nested_well_trajectory(project):
 
     assert trajectory_data
     assert not trajectory_df.empty
-
-
-def test_get_nested_well_trajectory_point(project):
-    starred_nested_well = project.wells.find_by_name(WELL_NAME).starred_nested_well
-
-    assert starred_nested_well is not None
-
-    trajectory_point = starred_nested_well.trajectory.find_by_md(0)
-
-    assert trajectory_point is not None
-
-    trajectory_point_data = trajectory_point.to_dict()
-    trajectory_point_df = trajectory_point.to_df()
-
-    assert trajectory_point_data
-    assert not trajectory_point_df.empty
