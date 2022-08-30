@@ -330,8 +330,30 @@ def test_create_typewell_topset(project_papi):
     
 
 def test_create_nested_well_topset(project_papi):
-    nested_well = project_papi.nested_wells.find_by_name(NESTED_WELL_NAME)
-    topset_name = 'Topset ' + str(random.randint(0, 10000))
+    starred_nested_well = project_papi.wells.find_by_name(WELL_NAME).starred_nested_well
 
-    nested_well.create_topset(topset_name)
-    assert nested_well.topsets.find_by_name(topset_name) is not None
+    assert starred_nested_well is not None
+
+    topset_name = 'Topset ' + str(random.randint(0, 10000))
+    starred_nested_well.create_topset(topset_name)
+
+    assert starred_nested_well.topsets.find_by_name(topset_name) is not None
+
+
+def test_create_target_line(project_papi):
+    well = project_papi.wells.find_by_name(WELL_NAME)
+
+    assert well is not None
+
+    target_line_name = 'Target Line ' + str(random.randint(0, 10000))
+    well.create_target_line(
+        target_line_name=target_line_name,
+        origin_x=100.5,
+        origin_y=200.5,
+        origin_z=300.5,
+        target_x=400.5,
+        target_y=500.5,
+        target_z=600.5
+    )
+
+    assert well.target_lines.find_by_name(target_line_name) is not None

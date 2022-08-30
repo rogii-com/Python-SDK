@@ -230,6 +230,29 @@ class Well(ComplexObject):
             topset_name=topset_name
         )
 
+    def create_target_line(self,
+                           target_line_name: str,
+                           origin_x: float,
+                           origin_y: float,
+                           origin_z: float,
+                           target_x: float,
+                           target_y: float,
+                           target_z: float
+                           ):
+        self._papi_client.create_well_target_line(
+            well_id=self.uuid,
+            target_line_name=target_line_name,
+            origin_x=self._papi_client.prepare_papi_var(origin_x),
+            origin_y=self._papi_client.prepare_papi_var(origin_y),
+            origin_z=self._papi_client.prepare_papi_var(origin_z),
+            target_x=self._papi_client.prepare_papi_var(target_x),
+            target_y=self._papi_client.prepare_papi_var(target_y),
+            target_z=self._papi_client.prepare_papi_var(target_z)
+        )
+
+        self._target_lines_data = None
+        self._target_lines = None
+
 
 class NestedWell(ComplexObject):
     def __init__(self, papi_client: PapiClient, well: Well, **kwargs):
