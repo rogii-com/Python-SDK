@@ -27,7 +27,11 @@ def get_trajectory_dls():
         return
 
     well_data = well.to_dict()
-    calculated_trajectory = calculate_trajectory(well.trajectory_data, well_data, measure_unit=MEASURE_UNIT)
+    calculated_trajectory = calculate_trajectory(
+        raw_trajectory=well.trajectory.to_dict(get_converted=False),
+        well=well_data,
+        measure_unit=MEASURE_UNIT
+    )
 
     return [
         {

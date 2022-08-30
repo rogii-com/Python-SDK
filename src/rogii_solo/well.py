@@ -74,30 +74,22 @@ class Well(ComplexObject):
         return DataFrame([self.to_dict(get_converted)])
 
     @property
-    def trajectory_data(self) -> DataList:
-        if self._trajectory_data is None:
-            self._trajectory_data = self._papi_client.get_well_trajectory_data(well_id=self.uuid)
-
-        return self._trajectory_data
-
-    @property
     def trajectory(self) -> TrajectoryPointRepository[TrajectoryPoint]:
         if self._trajectory is None:
             self._trajectory = TrajectoryPointRepository(
                 objects=[
                     TrajectoryPoint(measure_units=self.project.measure_unit, **item)
-                    for item in self.trajectory_data
+                    for item in self._get_trajectory_data()
                 ]
             )
 
         return self._trajectory
 
-    @property
-    def interpretations_data(self) -> DataList:
-        if self._interpretations_data is None:
-            self._interpretations_data = self._papi_client.get_well_interpretations_data(well_id=self.uuid)
+    def _get_trajectory_data(self) -> DataList:
+        if self._trajectory_data is None:
+            self._trajectory_data = self._papi_client.get_well_trajectory_data(well_id=self.uuid)
 
-        return self._interpretations_data
+        return self._trajectory_data
 
     @property
     def interpretations(self) -> ObjectRepository[Interpretation]:
@@ -105,11 +97,17 @@ class Well(ComplexObject):
             self._interpretations = ObjectRepository(
                 objects=[
                     Interpretation(papi_client=self._papi_client, well=self, **item)
-                    for item in self.interpretations_data
+                    for item in self._get_interpretations_data()
                 ]
             )
 
         return self._interpretations
+
+    def _get_interpretations_data(self) -> DataList:
+        if self._interpretations_data is None:
+            self._interpretations_data = self._papi_client.get_well_interpretations_data(well_id=self.uuid)
+
+        return self._interpretations_data
 
     @property
     def starred_interpretation(self) -> Optional[Interpretation]:
@@ -120,20 +118,19 @@ class Well(ComplexObject):
         return self._starred_interpretation
 
     @property
-    def target_lines_data(self) -> DataList:
+    def target_lines(self) -> ObjectRepository[TargetLine]:
+        if self._target_lines is None:
+            self._target_lines = ObjectRepository(
+                objects=[TargetLine(**item) for item in self._get_target_lines_data()]
+            )
+
+        return self._target_lines
+
+    def _get_target_lines_data(self) -> DataList:
         if self._target_lines_data is None:
             self._target_lines_data = self._papi_client.get_well_target_lines_data(well_id=self.uuid)
 
         return self._target_lines_data
-
-    @property
-    def target_lines(self) -> ObjectRepository[TargetLine]:
-        if self._target_lines is None:
-            self._target_lines = ObjectRepository(
-                objects=[TargetLine(**item) for item in self.target_lines_data]
-            )
-
-        return self._target_lines
 
     @property
     def starred_target_line(self) -> Optional[TargetLine]:
@@ -142,13 +139,6 @@ class Well(ComplexObject):
             self._starred_target_line = self.target_lines.find_by_id(starred_target_line_id)
 
         return self._starred_target_line
-
-    @property
-    def nested_wells_data(self) -> DataList:
-        if self._nested_wells_data is None:
-            self._nested_wells_data = self._papi_client.get_well_nested_wells_data(well_id=self.uuid)
-
-        return self._nested_wells_data
 
     @property
     def nested_wells(self) -> ObjectRepository['NestedWell']:
@@ -163,11 +153,17 @@ class Well(ComplexObject):
                             'azimuth': self.azimuth,
                             'convergence': self.convergence
                         }
-                    ) for item in self.nested_wells_data
+                    ) for item in self._get_nested_wells_data()
                 ]
             )
 
         return self._nested_wells
+
+    def _get_nested_wells_data(self) -> DataList:
+        if self._nested_wells_data is None:
+            self._nested_wells_data = self._papi_client.get_well_nested_wells_data(well_id=self.uuid)
+
+        return self._nested_wells_data
 
     @property
     def starred_nested_well(self) -> Optional['NestedWell']:
@@ -254,20 +250,19 @@ class NestedWell(ComplexObject):
         return DataFrame([self.to_dict(get_converted)])
 
     @property
-    def trajectory_data(self) -> DataList:
-        if self._trajectory_data is None:
-            self._trajectory_data = self._papi_client.get_nested_well_trajectory_data(nested_well_id=self.uuid)
-
-        return self._trajectory_data
-
-    @property
     def trajectory(self) -> TrajectoryPointRepository[TrajectoryPoint]:
         if self._trajectory is None:
             self._trajectory = TrajectoryPointRepository(
                 objects=[
                     TrajectoryPoint(measure_units=self.well.project.measure_unit, **item)
-                    for item in self.trajectory_data
+                    for item in self._get_trajectory_data()
                 ]
             )
 
         return self._trajectory
+
+    def _get_trajectory_data(self) -> DataList:
+        if self._trajectory_data is None:
+            self._trajectory_data = self._papi_client.get_nested_well_trajectory_data(nested_well_id=self.uuid)
+
+        return self._trajectory_data
