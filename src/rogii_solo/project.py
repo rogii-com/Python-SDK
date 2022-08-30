@@ -46,17 +46,16 @@ class Project(ComplexObject):
         return DataFrame([self.to_dict(get_converted)])
 
     @property
-    def wells_data(self) -> DataList:
+    def wells(self) -> ObjectRepository[Well]:
+        if self._wells is None:
+            self._wells = ObjectRepository(
+                objects=[Well(papi_client=self._papi_client, project=self, **item) for item in self._get_wells_data()]
+            )
+
+        return self._wells
+
+    def _get_wells_data(self) -> DataList:
         if self._wells_data is None:
             self._wells_data = self._papi_client.get_project_wells_data(project_id=self.uuid)
 
         return self._wells_data
-
-    @property
-    def wells(self) -> ObjectRepository[Well]:
-        if self._wells is None:
-            self._wells = ObjectRepository(
-                objects=[Well(papi_client=self._papi_client, project=self, **item) for item in self.wells_data]
-            )
-
-        return self._wells

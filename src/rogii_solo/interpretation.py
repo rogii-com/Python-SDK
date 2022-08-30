@@ -42,24 +42,7 @@ class Interpretation(ComplexObject):
             'segments': DataFrame(data['segments']),
         }
 
-    @property
-    def horizons_data(self) -> DataList:
-        if self._horizons_data is None:
-            self._horizons_data = self._papi_client.get_interpretation_horizons_data(interpretation_id=self.uuid)
-
-        return self._horizons_data
-
-    @property
-    def horizons(self) -> ObjectRepository[Horizon]:
-        if self._horizons is None:
-            self._horizons = ObjectRepository(
-                objects=[Horizon(interpretation=self, **item) for item in self.horizons_data]
-            )
-
-        return self._horizons
-
-    @property
-    def assembled_segments_data(self) -> PapiAssembledSegments:
+    def get_assembled_segments_data(self) -> PapiAssembledSegments:
         if self._assembled_segments_data is None:
             self._assembled_segments_data = self._papi_client.get_interpretation_assembled_segments_data(
                 interpretation_id=self.uuid
@@ -67,10 +50,25 @@ class Interpretation(ComplexObject):
 
         return self._assembled_segments_data
 
-    def _get_data(self):
-        assembled_segments = self.assembled_segments_data
+    @property
+    def horizons(self) -> ObjectRepository[Horizon]:
+        if self._horizons is None:
+            self._horizons = ObjectRepository(
+                objects=[Horizon(interpretation=self, **item) for item in self._get_horizons_data()]
+            )
 
-        for horizon in self.horizons_data:
+        return self._horizons
+
+    def _get_horizons_data(self) -> DataList:
+        if self._horizons_data is None:
+            self._horizons_data = self._papi_client.get_interpretation_horizons_data(interpretation_id=self.uuid)
+
+        return self._horizons_data
+
+    def _get_data(self):
+        assembled_segments = self.get_assembled_segments_data()
+
+        for horizon in self._get_horizons_data():
             assembled_segments['horizons'][horizon['uuid']]['name'] = horizon['name']
 
         meta = {

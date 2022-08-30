@@ -29,7 +29,11 @@ def calc_interpretation_dip():
         return
 
     well_data = well.to_dict()
-    calculated_trajectory = calculate_trajectory(well.trajectory_data, well_data, measure_unit=MEASURE_UNIT)
+    calculated_trajectory = calculate_trajectory(
+        raw_trajectory=well.trajectory.to_dict(get_converted=False),
+        well=well_data,
+        measure_unit=MEASURE_UNIT
+    )
     interpretation = well.starred_interpretation or well.interpretations.find_by_name(INTERPRETATION_NAME)
 
     if not interpretation:
@@ -38,13 +42,13 @@ def calc_interpretation_dip():
 
     segments = get_segments(
         well=well_data,
-        assembled_segments=interpretation.assembled_segments_data['segments'],
+        assembled_segments=interpretation.get_assembled_segments_data()['segments'],
         calculated_trajectory=calculated_trajectory,
         measure_unit=MEASURE_UNIT
     )
     segments_with_dip = get_segments_with_dip(
         segments=segments,
-        assembled_horizons=interpretation.assembled_segments_data['horizons']
+        assembled_horizons=interpretation.get_assembled_segments_data()['horizons']
     )
 
     calculated_dips = DataFrame(segments_with_dip, columns=['md', 'dip'])

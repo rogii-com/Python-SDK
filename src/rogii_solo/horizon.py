@@ -43,8 +43,8 @@ class Horizon(BaseObject):
 
     def _calculate_points(self, get_converted: bool):
         well_data = self.interpretation.well.to_dict(get_converted=False)
-        trajectory_data = self.interpretation.well.trajectory_data
-        assembled_segments_data = self.interpretation.assembled_segments_data
+        trajectory_data = self.interpretation.well.trajectory.to_dict(get_converted=False)
+        assembled_segments_data = self.interpretation.get_assembled_segments_data()
         measure_units = self.interpretation.well.project.measure_unit
 
         calculated_trajectory = calculate_trajectory(
