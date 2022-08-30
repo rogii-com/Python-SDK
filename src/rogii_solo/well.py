@@ -298,7 +298,7 @@ class NestedWell(ComplexObject):
             'convergence': self.convert_angle(self.convergence) if get_converted else self.convergence,
             'tie_in_tvd': self.tie_in_tvd,
             'tie_in_ns': self.tie_in_ns,
-            'tie_in_ew': self.tie_in_ew
+            'tie_in_ew': self.tie_in_ew,
         }
 
     def to_df(self, get_converted: bool = True) -> DataFrame:
@@ -380,7 +380,7 @@ class Typewell(ComplexObject):
         return {
             'uuid': self.uuid,
             'name': self.name,
-            'api': self.api
+            'api': self.api,
         }
 
     def to_df(self, get_converted: bool = True) -> DataFrame:

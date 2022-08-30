@@ -401,7 +401,7 @@ class PapiClient(BasePapiClient):
             'kb': kb,
             'tie_in_tvd': tie_in_tvd,
             'tie_in_ns': tie_in_ns,
-            'tie_in_ew': tie_in_ew
+            'tie_in_ew': tie_in_ew,
         }
 
         return self._send_post_request(url=url, request_data=request_data, headers=headers)
@@ -419,7 +419,7 @@ class PapiClient(BasePapiClient):
             'md_uom': md_uom,
             'incl_uom': incl_uom,
             'azi_uom': azi_uom,
-            'trajectory_stations': trajectory_stations
+            'trajectory_stations': trajectory_stations,
         }
 
         return self._send_put_request(url=url, request_data=request_data, headers=headers)
@@ -457,7 +457,7 @@ class PapiClient(BasePapiClient):
             params={
                 'offset': offset,
                 'limit': limit,
-                'filter': typewell_filter
+                'filter': typewell_filter,
             },
             headers=headers
         )
@@ -619,7 +619,7 @@ class PapiClient(BasePapiClient):
             'origin_z': origin_z,
             'target_x': target_x,
             'target_y': target_y,
-            'target_z': target_z
+            'target_z': target_z,
         }
 
         return self._send_post_request(url=url, request_data=request_data, headers=headers)
