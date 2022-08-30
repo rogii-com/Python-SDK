@@ -226,12 +226,17 @@ def test_get_nested_well_trajectory(project_papi):
 
 def test_create_nested_well(project_papi):
     well = project_papi.wells.find_by_name(WELL_NAME)
+
+    assert well is not None
+
     nested_well_name = 'Nested Well ' + str(random.randint(0, 10000))
+    nested_well_api = f'{nested_well_name} API'
+    nested_well_operator = f'{nested_well_name} Operator'
 
     well.create_nested_well(
         nested_well_name=nested_well_name,
-        operator='Operator',
-        api=nested_well_name,
+        api=nested_well_api,
+        operator=nested_well_operator,
         xsrf=100000.0,
         ysrf=100000.0,
         kb=0.0,
@@ -240,3 +245,30 @@ def test_create_nested_well(project_papi):
         tie_in_ew=0.0
     )
     assert well.nested_wells.find_by_name(nested_well_name) is not None
+
+
+def test_new_nested_well_header_same_as_parent_well(project_papi):
+    well = project_papi.wells.find_by_name(WELL_NAME)
+
+    assert well is not None
+
+    nested_well_name = 'Nested Well ' + str(random.randint(0, 10000))
+    nested_well_api = f'{nested_well_name} API'
+    nested_well_operator = f'{nested_well_name} Operator'
+
+    well.create_nested_well(
+        nested_well_name=nested_well_name,
+        api=nested_well_api,
+        operator=nested_well_operator,
+        xsrf=100000.0,
+        ysrf=100000.0,
+        kb=0.0,
+        tie_in_tvd=0.0,
+        tie_in_ns=0.0,
+        tie_in_ew=0.0
+    )
+    new_nested_well = well.nested_wells.find_by_name(nested_well_name)
+
+    assert new_nested_well is not None
+    assert new_nested_well.azimuth == well.azimuth
+    assert new_nested_well.convergence == well.convergence
