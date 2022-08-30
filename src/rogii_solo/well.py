@@ -155,7 +155,15 @@ class Well(ComplexObject):
         if self._nested_wells is None:
             self._nested_wells = ObjectRepository(
                 objects=[
-                    NestedWell(papi_client=self._papi_client, well=self, **item) for item in self.nested_wells_data
+                    NestedWell(
+                        papi_client=self._papi_client,
+                        well=self,
+                        **{
+                            **item,
+                            'azimuth': self.azimuth,
+                            'convergence': self.convergence
+                        }
+                    ) for item in self.nested_wells_data
                 ]
             )
 

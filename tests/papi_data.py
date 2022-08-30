@@ -11,6 +11,12 @@ FOOT_METER_PROJECT_NAME = 'Global project (ft-m)'
 FOOT_METER_PROJECT_ID = uuid4()
 
 WELL_NAME = 'Lateral'
+WELL_XSRF_REAL = 500000.0
+WELL_YSRF_REAL = 600000.0
+WELL_KB = 100.0
+WELL_AZIMUTH = 5.672320068981945
+WELL_CONVERGENCE = 0.17453292519944444
+
 INTERPRETATION_NAME = 'Interpretation'
 
 STARRED_INTERPRETATION_NAME = 'Starred Interpretation'
@@ -111,16 +117,16 @@ WELLS_DATA_RESPONSE = {
             'api': 'Lateral API',
             'operator': 'Lateral Operator',
             'xsrf_real': {
-                'val': 500000.0
+                'val': WELL_XSRF_REAL
             },
             'ysrf_real': {
-                'val': 600000.0
+                'val': WELL_YSRF_REAL
             },
             'kb': {
-                'val': 100.0
+                'val': WELL_KB
             },
             'convergence': {
-                'val': 0.17453292519944444
+                'val': WELL_CONVERGENCE
             },
             'tie_in_tvd': {
                 'val': 125.0
@@ -132,7 +138,7 @@ WELLS_DATA_RESPONSE = {
                 'val': 250.5
             },
             'azimuth': {
-                'val': 5.672320068981945
+                'val': WELL_AZIMUTH
             },
             'starred': {
                 'target_line': STARRED_TARGET_LINE_ID,
@@ -3029,16 +3035,16 @@ NESTED_WELLS_DATA_RESPONSE = {
             'api': 'Starred Nested Well API',
             'operator': 'Operator',
             'xsrf_real': {
-                'val': 100000.0
+                'val': WELL_XSRF_REAL
             },
             'ysrf_real': {
-                'val': 100000.0
+                'val': WELL_YSRF_REAL
             },
             'kb': {
-                'undefined': True
+                'val': WELL_KB
             },
             'convergence': {
-                'val': 0.017453292519944444
+                'val': WELL_CONVERGENCE
             },
             'tie_in_tvd': {
                 'val': 125.0
@@ -3050,7 +3056,7 @@ NESTED_WELLS_DATA_RESPONSE = {
                 'val': 250.5
             },
             'azimuth': {
-                'val': 5.672320068981945
+                'val': WELL_AZIMUTH
             }
         },
         {
