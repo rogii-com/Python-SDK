@@ -50,14 +50,14 @@ class Horizon(BaseObject):
         calculated_trajectory = calculate_trajectory(
             well=well_data,
             raw_trajectory=trajectory_data,
-            measure_unit=measure_units
+            measure_units=measure_units
         )
 
         segments = get_segments(
             well=well_data,
             assembled_segments=assembled_segments_data['segments'],
             calculated_trajectory=calculated_trajectory,
-            measure_unit=measure_units
+            measure_units=measure_units
         )
 
         segments_boundaries = get_segments_boundaries(

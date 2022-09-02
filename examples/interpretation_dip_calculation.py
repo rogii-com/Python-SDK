@@ -11,7 +11,7 @@ from rogii_solo.calculations.trajectory import calculate_trajectory
 PROJECT_NAME = 'Global project'
 WELL_NAME = 'Lateral'
 INTERPRETATION_NAME = 'Interpretation'
-MEASURE_UNIT = EMeasureUnits.METER_FOOT
+MEASURE_UNITS = EMeasureUnits.METER_FOOT
 
 
 def calc_interpretation_dip():
@@ -28,11 +28,11 @@ def calc_interpretation_dip():
         print(f'Well "{WELL_NAME}" not found.')
         return
 
-    well_data = well.to_dict()
+    well_data = well.to_dict(get_converted=False)
     calculated_trajectory = calculate_trajectory(
         raw_trajectory=well.trajectory.to_dict(get_converted=False),
         well=well_data,
-        measure_unit=MEASURE_UNIT
+        measure_units=MEASURE_UNITS
     )
     interpretation = well.starred_interpretation or well.interpretations.find_by_name(INTERPRETATION_NAME)
 
@@ -44,7 +44,7 @@ def calc_interpretation_dip():
         well=well_data,
         assembled_segments=interpretation.get_assembled_segments_data()['segments'],
         calculated_trajectory=calculated_trajectory,
-        measure_unit=MEASURE_UNIT
+        measure_units=MEASURE_UNITS
     )
     segments_with_dip = get_segments_with_dip(
         segments=segments,

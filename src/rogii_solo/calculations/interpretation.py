@@ -27,7 +27,7 @@ def get_segments(
         well: Dict[str, Any],
         calculated_trajectory: Trajectory,
         assembled_segments: PapiAssembledSegments,
-        measure_unit: EMeasureUnits
+        measure_units: EMeasureUnits
 ) -> List[Segment]:
     segments = []
     mds, mds_map = [], {}
@@ -57,7 +57,7 @@ def get_segments(
                 right_point=right_point,
                 md=assembled_segment['md'],
                 well=well,
-                measure_unit=measure_unit,
+                measure_units=measure_units,
             )
 
         segments.append(Segment(

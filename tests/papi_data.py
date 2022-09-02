@@ -11,8 +11,8 @@ FOOT_METER_PROJECT_NAME = 'Global project (ft-m)'
 FOOT_METER_PROJECT_ID = uuid4()
 
 WELL_NAME = 'Lateral'
-WELL_XSRF_REAL = 500000.0
-WELL_YSRF_REAL = 600000.0
+WELL_XSRF = 1000000.0
+WELL_YSRF = 2000000.0
 WELL_KB = 100.0
 WELL_AZIMUTH = 5.672320068981945
 WELL_CONVERGENCE = 0.17453292519944444
@@ -116,11 +116,17 @@ WELLS_DATA_RESPONSE = {
             'name': WELL_NAME,
             'api': 'Lateral API',
             'operator': 'Lateral Operator',
+            'xsrf': {
+                'val': WELL_XSRF
+            },
+            'ysrf': {
+                'val': WELL_YSRF
+            },
             'xsrf_real': {
-                'val': WELL_XSRF_REAL
+                'val': 3000000.0
             },
             'ysrf_real': {
-                'val': WELL_YSRF_REAL
+                'val': 4000000.0
             },
             'kb': {
                 'val': WELL_KB
@@ -151,11 +157,17 @@ WELLS_DATA_RESPONSE = {
             'name': 'Lateral 2',
             'api': 'Lateral 2 API',
             'operator': 'Lateral 2 Operator',
+            'xsrf': {
+                'val': WELL_XSRF
+            },
+            'ysrf': {
+                'val': WELL_YSRF
+            },
             'xsrf_real': {
-                'val': 600000.0
+                'val': 3000000.0
             },
             'ysrf_real': {
-                'val': 700000.0
+                'val': 4000000.0
             },
             'kb': {
                 'val': 494.0
@@ -3034,11 +3046,17 @@ NESTED_WELLS_DATA_RESPONSE = {
             'name': STARRED_NESTED_WELL_NAME,
             'api': 'Starred Nested Well API',
             'operator': 'Operator',
+            'xsrf': {
+                'val': WELL_XSRF
+            },
+            'ysrf': {
+                'val': WELL_YSRF
+            },
             'xsrf_real': {
-                'val': WELL_XSRF_REAL
+                'val': 3000000.0
             },
             'ysrf_real': {
-                'val': WELL_YSRF_REAL
+                'val': 4000000.0
             },
             'kb': {
                 'val': WELL_KB
@@ -3064,11 +3082,17 @@ NESTED_WELLS_DATA_RESPONSE = {
             'name': NESTED_WELL_NAME,
             'api': 'Nested Well API',
             'operator': 'Nested Well Operator',
+            'xsrf': {
+                'val': WELL_XSRF
+            },
+            'ysrf': {
+                'val': WELL_YSRF
+            },
             'xsrf_real': {
-                'val': 100000.0
+                'val': 3000000.0
             },
             'ysrf_real': {
-                'val': 100000.0
+                'val': 4000000.0
             },
             'kb': {
                 'undefined': True
@@ -3094,11 +3118,17 @@ NESTED_WELLS_DATA_RESPONSE = {
             'name': 'Nested Well 2',
             'api': 'Nested Well 2 API',
             'operator': 'Nested Well 2 Operator',
+            'xsrf': {
+                'val': WELL_XSRF
+            },
+            'ysrf': {
+                'val': WELL_YSRF
+            },
             'xsrf_real': {
-                'val': 200000.0
+                'val': 3000000.0
             },
             'ysrf_real': {
-                'val': 200000.0
+                'val': 4000000.0
             },
             'kb': {
                 'undefined': True
