@@ -32,7 +32,7 @@ def calc_interpretation_dip():
     calculated_trajectory = calculate_trajectory(
         raw_trajectory=well.trajectory.to_dict(get_converted=False),
         well=well_data,
-        measure_unit=MEASURE_UNITS
+        measure_units=MEASURE_UNITS
     )
     interpretation = well.starred_interpretation or well.interpretations.find_by_name(INTERPRETATION_NAME)
 
@@ -44,7 +44,7 @@ def calc_interpretation_dip():
         well=well_data,
         assembled_segments=interpretation.get_assembled_segments_data()['segments'],
         calculated_trajectory=calculated_trajectory,
-        measure_unit=MEASURE_UNITS
+        measure_units=MEASURE_UNITS
     )
     segments_with_dip = get_segments_with_dip(
         segments=segments,

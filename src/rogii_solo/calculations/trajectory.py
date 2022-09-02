@@ -13,7 +13,7 @@ from rogii_solo.calculations.types import RawTrajectory, Trajectory, TrajectoryP
 def calculate_trajectory(
         raw_trajectory: RawTrajectory,
         well: Dict[str, Any],
-        measure_unit: EMeasureUnits,
+        measure_units: EMeasureUnits,
 ) -> Trajectory:
     if not raw_trajectory or not well:
         return []
@@ -26,7 +26,7 @@ def calculate_trajectory(
             prev_point=prev_point,
             curr_point=prepare_trajectory_point(point, well['convergence']),
             well=well,
-            measure_unit=measure_unit,
+            measure_units=measure_units,
         )
         calculated_trajectory.append(calculated_point)
         prev_point = calculated_point
@@ -38,7 +38,7 @@ def calculate_trajectory_point(
         prev_point: Dict[str, Any],
         curr_point: Dict[str, Any],
         well: Dict[str, Any],
-        measure_unit: EMeasureUnits,
+        measure_units: EMeasureUnits,
 ) -> TrajectoryPoint:
     if not prev_point:
         return calculate_initial_trajectory_point(curr_point, well)
@@ -59,7 +59,7 @@ def calculate_trajectory_point(
         * (1.0 - cos(curr_azim - prev_point['azim']))
     )
 
-    dls = calc_dls(dog_leg, course_length, measure_unit=measure_unit)
+    dls = calc_dls(dog_leg, course_length, measure_units=measure_units)
     shape = calc_shape(dog_leg, course_length)
 
     tvd = prev_point['tvd'] + shape * (curr_incl_cos + prev_incl_cos)
@@ -89,7 +89,7 @@ def interpolate_trajectory_point(
         right_point: Dict[str, Any],
         md: float,
         well: Dict[str, Any],
-        measure_unit: EMeasureUnits,
+        measure_units: EMeasureUnits,
 ) -> TrajectoryPoint:
     if fabs(md - left_point['md']) < DELTA:
         return left_point
@@ -175,7 +175,7 @@ def interpolate_trajectory_point(
         incl += pi
 
     azim = normalize_angle(calc_atan2(ext_delta_ew, ext_delta_ns))
-    dls = calc_dls(dog_leg, course_length, measure_unit=measure_unit)
+    dls = calc_dls(dog_leg, course_length, measure_units=measure_units)
 
     return TrajectoryPoint(
         md=md,
@@ -248,12 +248,12 @@ DLS_RADIANS_MAP = {
 }
 
 
-def get_dls_unit_coefficient(measure_unit: EMeasureUnits) -> float:
-    return DLS_RADIANS_MAP[measure_unit]
+def get_dls_unit_coefficient(measure_units: EMeasureUnits) -> float:
+    return DLS_RADIANS_MAP[measure_units]
 
 
-def calc_dls(dog_leg: float, md_delta: float, measure_unit: EMeasureUnits) -> float:
-    return degrees(dog_leg) * (get_dls_unit_coefficient(measure_unit) / md_delta)
+def calc_dls(dog_leg: float, md_delta: float, measure_units: EMeasureUnits) -> float:
+    return degrees(dog_leg) * (get_dls_unit_coefficient(measure_units) / md_delta)
 
 
 def calc_shape(dog_leg: float, course_length: float) -> float:
