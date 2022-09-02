@@ -16,8 +16,8 @@ def test_get_converted_meter_well(project):
 
     assert not well_df.empty
 
-    assert np_is_close(well_df['xsrf_real'], well.xsrf_real)
-    assert np_is_close(well_df['ysrf_real'], well.ysrf_real)
+    assert np_is_close(well_df['xsrf'], Convertable.convert_xy(value=well.xsrf, measure_units=project.measure_unit))
+    assert np_is_close(well_df['ysrf'], Convertable.convert_xy(value=well.ysrf, measure_units=project.measure_unit))
     assert np_is_close(well_df['kb'], Convertable.convert_z(value=well.kb, measure_units=project.measure_unit))
     assert np_is_close(well_df['azimuth'], Convertable.convert_angle(value=well.azimuth))
     assert np_is_close(well_df['convergence'], Convertable.convert_angle(value=well.convergence))
@@ -44,8 +44,8 @@ def test_get_not_converted_meter_well(project):
 
     assert not well_df.empty
 
-    assert np_is_close(well_df['xsrf_real'], well.xsrf_real)
-    assert np_is_close(well_df['ysrf_real'], well.ysrf_real)
+    assert np_is_close(well_df['xsrf'], well.xsrf)
+    assert np_is_close(well_df['ysrf'], well.ysrf)
     assert np_is_close(well_df['kb'], well.kb)
     assert np_is_close(well_df['azimuth'], well.azimuth)
     assert np_is_close(well_df['convergence'], well.convergence)
@@ -63,8 +63,8 @@ def test_get_converted_foot_well(ft_project):
 
     assert not well_df.empty
 
-    assert np_is_close(well_df['xsrf_real'], well.xsrf_real)
-    assert np_is_close(well_df['ysrf_real'], well.ysrf_real)
+    assert np_is_close(well_df['xsrf'], Convertable.convert_xy(value=well.xsrf, measure_units=ft_project.measure_unit))
+    assert np_is_close(well_df['ysrf'], Convertable.convert_xy(value=well.ysrf, measure_units=ft_project.measure_unit))
     assert np_is_close(well_df['kb'], Convertable.convert_z(value=well.kb, measure_units=ft_project.measure_unit))
     assert np_is_close(well_df['azimuth'], Convertable.convert_angle(value=well.azimuth))
     assert np_is_close(well_df['convergence'], Convertable.convert_angle(value=well.convergence))
@@ -91,8 +91,8 @@ def test_get_not_converted_foot_well(ft_project):
 
     assert not well_df.empty
 
-    assert np_is_close(well_df['xsrf_real'], well.xsrf_real)
-    assert np_is_close(well_df['ysrf_real'], well.ysrf_real)
+    assert np_is_close(well_df['xsrf'], well.xsrf)
+    assert np_is_close(well_df['ysrf'], well.ysrf)
     assert np_is_close(well_df['kb'], well.kb)
     assert np_is_close(well_df['azimuth'], well.azimuth)
     assert np_is_close(well_df['convergence'], well.convergence)
@@ -110,8 +110,14 @@ def test_get_converted_ftm_well(ftm_project):
 
     assert not well_df.empty
 
-    assert np_is_close(well_df['xsrf_real'], well.xsrf_real)
-    assert np_is_close(well_df['ysrf_real'], well.ysrf_real)
+    assert np_is_close(
+        well_df['xsrf'],
+        Convertable.convert_xy(value=well.xsrf, measure_units=ftm_project.measure_unit)
+    )
+    assert np_is_close(
+        well_df['ysrf'],
+        Convertable.convert_xy(value=well.ysrf, measure_units=ftm_project.measure_unit)
+    )
     assert np_is_close(well_df['kb'], Convertable.convert_z(value=well.kb, measure_units=ftm_project.measure_unit))
     assert np_is_close(well_df['azimuth'], Convertable.convert_angle(value=well.azimuth))
     assert np_is_close(well_df['convergence'], Convertable.convert_angle(value=well.convergence))
@@ -138,8 +144,8 @@ def test_get_not_converted_ftm_well(ftm_project):
 
     assert not well_df.empty
 
-    assert np_is_close(well_df['xsrf_real'], well.xsrf_real)
-    assert np_is_close(well_df['ysrf_real'], well.ysrf_real)
+    assert np_is_close(well_df['xsrf'], well.xsrf)
+    assert np_is_close(well_df['ysrf'], well.ysrf)
     assert np_is_close(well_df['kb'], well.kb)
     assert np_is_close(well_df['azimuth'], well.azimuth)
     assert np_is_close(well_df['convergence'], well.convergence)
@@ -274,8 +280,14 @@ def test_get_converted_meter_nested_well(project):
 
     assert not starred_nested_well_df.empty
 
-    assert np_is_close(starred_nested_well_df['xsrf_real'], starred_nested_well.xsrf_real)
-    assert np_is_close(starred_nested_well_df['ysrf_real'], starred_nested_well.ysrf_real)
+    assert np_is_close(
+        starred_nested_well_df['xsrf'],
+        Convertable.convert_xy(value=starred_nested_well.xsrf, measure_units=project.measure_unit)
+    )
+    assert np_is_close(
+        starred_nested_well_df['ysrf'],
+        Convertable.convert_xy(value=starred_nested_well.ysrf, measure_units=project.measure_unit)
+    )
     assert np_is_close(
         starred_nested_well_df['kb'],
         Convertable.convert_z(starred_nested_well.kb, measure_units=project.measure_unit)
@@ -311,8 +323,8 @@ def test_get_not_converted_meter_nested_well(project):
 
     assert not starred_nested_well_df.empty
 
-    assert np_is_close(starred_nested_well_df['xsrf_real'], starred_nested_well.xsrf_real)
-    assert np_is_close(starred_nested_well_df['ysrf_real'], starred_nested_well.ysrf_real)
+    assert np_is_close(starred_nested_well_df['xsrf'], starred_nested_well.xsrf)
+    assert np_is_close(starred_nested_well_df['ysrf'], starred_nested_well.ysrf)
     assert np_is_close(starred_nested_well_df['kb'], starred_nested_well.kb)
     assert np_is_close(starred_nested_well_df['azimuth'], starred_nested_well.azimuth)
     assert np_is_close(starred_nested_well_df['convergence'], starred_nested_well.convergence)
@@ -330,8 +342,14 @@ def test_get_converted_foot_nested_well(ft_project):
 
     assert not starred_nested_well_df.empty
 
-    assert np_is_close(starred_nested_well_df['xsrf_real'], starred_nested_well.xsrf_real)
-    assert np_is_close(starred_nested_well_df['ysrf_real'], starred_nested_well.ysrf_real)
+    assert np_is_close(
+        starred_nested_well_df['xsrf'],
+        Convertable.convert_xy(value=starred_nested_well.xsrf, measure_units=ft_project.measure_unit)
+    )
+    assert np_is_close(
+        starred_nested_well_df['ysrf'],
+        Convertable.convert_xy(value=starred_nested_well.ysrf, measure_units=ft_project.measure_unit)
+    )
     assert np_is_close(
         starred_nested_well_df['kb'],
         Convertable.convert_z(starred_nested_well.kb, measure_units=ft_project.measure_unit)
@@ -367,8 +385,8 @@ def test_get_not_converted_foot_nested_well(ft_project):
 
     assert not starred_nested_well_df.empty
 
-    assert np_is_close(starred_nested_well_df['xsrf_real'], starred_nested_well.xsrf_real)
-    assert np_is_close(starred_nested_well_df['ysrf_real'], starred_nested_well.ysrf_real)
+    assert np_is_close(starred_nested_well_df['xsrf'], starred_nested_well.xsrf)
+    assert np_is_close(starred_nested_well_df['ysrf'], starred_nested_well.ysrf)
     assert np_is_close(starred_nested_well_df['kb'], starred_nested_well.kb)
     assert np_is_close(starred_nested_well_df['azimuth'], starred_nested_well.azimuth)
     assert np_is_close(starred_nested_well_df['convergence'], starred_nested_well.convergence)
@@ -386,8 +404,14 @@ def test_get_converted_ftm_nested_well(ftm_project):
 
     assert not starred_nested_well_df.empty
 
-    assert np_is_close(starred_nested_well_df['xsrf_real'], starred_nested_well.xsrf_real)
-    assert np_is_close(starred_nested_well_df['ysrf_real'], starred_nested_well.ysrf_real)
+    assert np_is_close(
+        starred_nested_well_df['xsrf'],
+        Convertable.convert_xy(value=starred_nested_well.xsrf, measure_units=ftm_project.measure_unit)
+    )
+    assert np_is_close(
+        starred_nested_well_df['ysrf'],
+        Convertable.convert_xy(value=starred_nested_well.ysrf, measure_units=ftm_project.measure_unit)
+    )
     assert np_is_close(
         starred_nested_well_df['kb'],
         Convertable.convert_z(starred_nested_well.kb, measure_units=ftm_project.measure_unit)
@@ -423,8 +447,8 @@ def test_get_not_converted_ftm_nested_well(ftm_project):
 
     assert not starred_nested_well_df.empty
 
-    assert np_is_close(starred_nested_well_df['xsrf_real'], starred_nested_well.xsrf_real)
-    assert np_is_close(starred_nested_well_df['ysrf_real'], starred_nested_well.ysrf_real)
+    assert np_is_close(starred_nested_well_df['xsrf'], starred_nested_well.xsrf)
+    assert np_is_close(starred_nested_well_df['ysrf'], starred_nested_well.ysrf)
     assert np_is_close(starred_nested_well_df['kb'], starred_nested_well.kb)
     assert np_is_close(starred_nested_well_df['azimuth'], starred_nested_well.azimuth)
     assert np_is_close(starred_nested_well_df['convergence'], starred_nested_well.convergence)

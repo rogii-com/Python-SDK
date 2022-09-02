@@ -8,7 +8,7 @@ from rogii_solo.calculations.trajectory import calculate_trajectory
 
 PROJECT_NAME = 'Global project'
 WELL_NAME = 'Lateral'
-MEASURE_UNIT = EMeasureUnits.METER_FOOT
+MEASURE_UNITS = EMeasureUnits.METER_FOOT
 DLS_THRESHOLD = 0.5
 
 
@@ -26,11 +26,10 @@ def get_trajectory_dls():
         print(f'Well "{WELL_NAME}" not found.')
         return
 
-    well_data = well.to_dict()
     calculated_trajectory = calculate_trajectory(
         raw_trajectory=well.trajectory.to_dict(get_converted=False),
-        well=well_data,
-        measure_unit=MEASURE_UNIT
+        well=well.to_dict(get_converted=False),
+        measure_unit=MEASURE_UNITS
     )
 
     return [

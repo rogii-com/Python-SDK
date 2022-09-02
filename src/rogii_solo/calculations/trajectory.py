@@ -76,8 +76,8 @@ def calculate_trajectory_point(
         tvdss=calc_tvdss(well['kb'], tvd),
         ns=ns,
         ew=ew,
-        x=calc_x(ew, well['xsrf_real']),
-        y=calc_y(ns, well['ysrf_real']),
+        x=calc_x(ew, well['xsrf']),
+        y=calc_y(ns, well['ysrf']),
         vs=calc_vs(ns, ew, well['azimuth']),
         dls=dls,
         dog_leg=dog_leg
@@ -165,8 +165,8 @@ def interpolate_trajectory_point(
     ns = left_point['ns'] + shape * (ext_delta_ns + left_incl_sin * left_azim_cos)
     ew = left_point['ew'] + shape * (ext_delta_ew + left_incl_sin * left_azim_sin)
 
-    x = calc_x(ew, well['xsrf_real'])
-    y = calc_y(ns, well['ysrf_real'])
+    x = calc_x(ew, well['xsrf'])
+    y = calc_y(ns, well['ysrf'])
     vs = calc_vs(ns, ew, well['azimuth'])
 
     incl = calc_atan2(calc_hypotenuse_length(ext_delta_ns, ext_delta_ew), ext_delta_tvd)
@@ -209,8 +209,8 @@ def calculate_initial_trajectory_point(
         tvdss=calc_tvdss(well['kb'], tvd),
         ns=well['tie_in_ns'],
         ew=well['tie_in_ew'],
-        x=calc_x(well['tie_in_ew'], well['xsrf_real']),
-        y=calc_y(well['tie_in_ns'], well['ysrf_real']),
+        x=calc_x(well['tie_in_ew'], well['xsrf']),
+        y=calc_y(well['tie_in_ns'], well['ysrf']),
         vs=calc_vs(well['tie_in_ns'], well['tie_in_ew'], well['azimuth']),
         dls=0,
         dog_leg=0
