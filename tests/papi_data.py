@@ -29,6 +29,8 @@ STARRED_NESTED_WELL_ID = uuid4()
 
 TYPEWELL_NAME = 'Typewell'
 
+STARRED_WELL_TOPSET = 'Starred Topset'
+
 PROJECTS_DATA_RESPONSE = {
     'content': [
         {

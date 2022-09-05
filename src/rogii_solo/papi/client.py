@@ -167,6 +167,13 @@ class PapiClient(SdkPapiClient):
             **kwargs
         ))
 
+    def get_topset_tops_data(self, topset_id: str, **kwargs) -> PapiDataList:
+        return list(self._gen_data_page(
+            func=self.fetch_topset_tops,
+            topset_id=topset_id,
+            **kwargs
+        ))
+
     def _gen_data_page(self, func: Callable, **kwargs) -> PapiDataIterator:
         offset = kwargs.pop('offset', None) or self.DEFAULT_OFFSET
         limit = kwargs.pop('limit', None) or self.DEFAULT_LIMIT

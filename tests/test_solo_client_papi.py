@@ -12,6 +12,7 @@ from tests.papi_data import (
     TARGET_LINE_NAME,
     STARRED_TARGET_LINE_NAME,
     NESTED_WELL_NAME,
+    STARRED_WELL_TOPSET,
     STARRED_NESTED_WELL_NAME
 )
 
@@ -357,3 +358,34 @@ def test_create_target_line(project_papi):
     )
 
     assert well.target_lines.find_by_name(target_line_name) is not None
+
+
+def test_create_topset_top(project_papi):
+    well = project_papi.wells.find_by_name(WELL_NAME)
+
+    topset = well.topsets.find_by_name(STARRED_WELL_TOPSET)
+
+    assert topset is not None
+
+    random_md = random.randint(11400, 11500)
+    top_name = 'Top ' + str(random_md)
+    topset.create_top(top_name=top_name, md=float(random_md))
+
+    assert topset.tops.find_by_name(top_name) is not None
+
+
+def test_get_topset_tops_data(project_papi):
+    well = project_papi.wells.find_by_name(WELL_NAME)
+    topset = well.topsets.find_by_name(STARRED_WELL_TOPSET)
+
+    assert topset is not None
+
+    tops = topset.tops
+
+    assert tops is not None
+
+    tops_data = tops.to_dict()
+    tops_df = tops.to_df()
+
+    assert tops_data
+    assert not tops_df.empty
