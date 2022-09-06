@@ -11,7 +11,7 @@ from tests.papi_data import (
     TARGET_LINE_NAME,
     STARRED_TARGET_LINE_NAME,
     NESTED_WELL_NAME,
-    STARRED_WELL_TOPSET,
+    STARRED_TOPSET_NAME,
     STARRED_NESTED_WELL_NAME
 )
 
@@ -296,7 +296,7 @@ def test_get_topset_tops(project):
 
     assert well is not None
 
-    topset = well.topsets.find_by_name(STARRED_WELL_TOPSET)
+    topset = well.topsets.find_by_name(STARRED_TOPSET_NAME)
 
     assert topset is not None
 

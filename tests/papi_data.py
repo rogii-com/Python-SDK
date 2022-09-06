@@ -142,7 +142,7 @@ WELLS_DATA_RESPONSE = {
                 'target_line': STARRED_TARGET_LINE_ID,
                 'nested_well': STARRED_NESTED_WELL_ID,
                 'interpretation': STARRED_INTERPRETATION_ID,
-                'topset': STARRED_WELL_TOPSET
+                'topset': STARRED_TOPSET_NAME
             }
         },
         {
@@ -3149,7 +3149,7 @@ TYPEWELLS_DATA_RESPONSE = {
 TOPSETS_DATA_RESPONSE = {
     'content': [
         {
-            'name': STARRED_WELL_TOPSET,
+            'name': STARRED_TOPSET_NAME,
             'uuid': '97d02d10-e2ef-462b-8e90-3df063eaf83d'
         },
         {
