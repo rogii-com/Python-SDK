@@ -291,8 +291,8 @@ def test_get_typewell_trajectory_point(project):
     assert not trajectory_point_df.empty
 
 
-def test_get_topset_tops_data(project_papi):
-    well = project_papi.wells.find_by_name(WELL_NAME)
+def test_get_topset_tops_data(project):
+    well = project.wells.find_by_name(WELL_NAME)
 
     topset_name = STARRED_WELL_TOPSET
     topset = well.topsets.find_by_name(topset_name)
