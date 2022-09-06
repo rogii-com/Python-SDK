@@ -3150,19 +3150,19 @@ TOPSETS_DATA_RESPONSE = {
     'content': [
         {
             'name': STARRED_WELL_TOPSET,
-            'uuid': 'bw4e711-dt28-hyc6-hw82-f6wk87a2d5bf'
+            'uuid': '97d02d10-e2ef-462b-8e90-3df063eaf83d'
         },
         {
             'name': 'Topset 2',
-            'uuid': '777fvt49-6dd6-44fd-j8s7-34gfgr5hfjc0'
+            'uuid': 'fb20162a-0c47-4eea-8bc5-a56b1bd856dc'
         },
         {
             'name': 'Topset 3',
-            'uuid': '8hvdf693-g65a-hy81-3gr3-4ghyuj7fs4a2'
+            'uuid': '7e86bd40-124d-466a-9592-24811963fa12'
         },
         {
             'name': 'Topset 4',
-            'uuid': '2s456hjb-4fy7-23fg-4564-bju785fds3fc'
+            'uuid': '95c15955-af34-4b41-ba6a-c1abb979ea68'
         }
     ],
     'offset': 0,
@@ -3180,7 +3180,7 @@ TOPS_DATA_RESPONSE = {
             },
             'name': 'Top',
             'topset_name': 'Topset',
-            'uuid': 'esfrfvf4-vfbg-5g7f-4324-236vbjuygd42'
+            'uuid': 'c0332dab-9468-4b27-b1f6-3d4d7c875ecf'
         },
         {
             'md': {
@@ -3188,7 +3188,7 @@ TOPS_DATA_RESPONSE = {
             },
             'name': 'Top 2',
             'topset_name': 'Topset',
-            'uuid': '2sf67fb0-4f67-rf6d-4rty-wertbgh670f3'
+            'uuid': '3e5f09a8-0a0a-4722-ab1a-c52c769fc72b'
           }
     ],
     'offset': 0,

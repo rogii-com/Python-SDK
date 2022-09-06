@@ -373,10 +373,6 @@ def test_create_topset_top(project_papi):
     top_name = 'Top ' + str(random_md)
     topset.create_top(top_name=top_name, md=float(random_md))
 
-    random_md = random.randint(11400, 11500)
-    top_name = 'Top ' + str(random_md)
-    topset.create_top(top_name=top_name, md=float(random_md))
-
     assert topset.tops.find_by_name(top_name) is not None
 
 
