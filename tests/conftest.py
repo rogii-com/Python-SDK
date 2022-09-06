@@ -70,11 +70,11 @@ def fetch_typewell_raw_trajectory(**kwargs):
 
 
 def fetch_well_topsets(**kwargs):
-    return TOPSETS_DATA_RESPONSE['content']
+    return TOPSETS_DATA_RESPONSE
 
 
 def fetch_topset_tops(**kwargs):
-    return TOPS_DATA_RESPONSE['content']
+    return TOPS_DATA_RESPONSE
 
 
 @pytest.fixture(scope='function')
