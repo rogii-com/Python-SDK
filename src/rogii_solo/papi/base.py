@@ -623,3 +623,50 @@ class PapiClient(BasePapiClient):
         }
 
         return self._send_post_request(url=url, request_data=request_data, headers=headers)
+
+    def create_topset_top(self,
+                          topset_id: str,
+                          top_name: str,
+                          md: PapiVar,
+                          headers: Optional[Dict[str, Any]] = None
+                          ):
+        """
+        Create top in the topset
+        :param topset_id:
+        :param top_name:
+        :param md:
+        :param headers:
+        :return:
+        """
+
+        url = f'topsets/{topset_id}/tops'
+        request_data = {
+            'name': top_name,
+            'md': md,
+        }
+
+        return self._send_post_request(url=url, request_data=request_data, headers=headers)
+
+    def fetch_topset_tops(self,
+                          topset_id: str,
+                          offset: int = BasePapiClient.DEFAULT_OFFSET,
+                          limit: int = BasePapiClient.DEFAULT_LIMIT,
+                          headers: Optional[Dict[str, Any]] = None
+                          ):
+        """
+        Fetches topset tops
+        :param topset_id:
+        :param offset:
+        :param limit:
+        :param headers:
+        :return:
+        """
+
+        return self._send_request(
+            url=f'topsets/{topset_id}/tops',
+            params={
+                'offset': offset,
+                'limit': limit,
+            },
+            headers=headers
+        )

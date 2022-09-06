@@ -29,6 +29,9 @@ STARRED_NESTED_WELL_ID = uuid4()
 
 TYPEWELL_NAME = 'Typewell'
 
+STARRED_TOPSET_NAME = 'Starred Topset'
+STARRED_TOPSET_ID = uuid4()
+
 PROJECTS_DATA_RESPONSE = {
     'content': [
         {
@@ -139,7 +142,8 @@ WELLS_DATA_RESPONSE = {
             'starred': {
                 'target_line': STARRED_TARGET_LINE_ID,
                 'nested_well': STARRED_NESTED_WELL_ID,
-                'interpretation': STARRED_INTERPRETATION_ID
+                'interpretation': STARRED_INTERPRETATION_ID,
+                'topset': STARRED_TOPSET_ID
             }
         },
         {
@@ -3138,6 +3142,58 @@ TYPEWELLS_DATA_RESPONSE = {
     ],
     'offset': 0,
     'limit': 100,
+    'total': 2,
+    'first': True,
+    'last': True
+}
+
+TOPSETS_DATA_RESPONSE = {
+    'content': [
+        {
+            'name': STARRED_TOPSET_NAME,
+            'uuid': '97d02d10-e2ef-462b-8e90-3df063eaf83d'
+        },
+        {
+            'name': 'Topset 2',
+            'uuid': 'fb20162a-0c47-4eea-8bc5-a56b1bd856dc'
+        },
+        {
+            'name': 'Topset 3',
+            'uuid': '7e86bd40-124d-466a-9592-24811963fa12'
+        },
+        {
+            'name': 'Topset 4',
+            'uuid': '95c15955-af34-4b41-ba6a-c1abb979ea68'
+        }
+    ],
+    'offset': 0,
+    'limit': 10,
+    'total': 4,
+    'first': True,
+    'last': True
+}
+
+TOPS_DATA_RESPONSE = {
+    'content': [
+        {
+            'md': {
+                'val': 9.842519685039372
+            },
+            'name': 'Top',
+            'topset_name': 'Topset',
+            'uuid': 'c0332dab-9468-4b27-b1f6-3d4d7c875ecf'
+        },
+        {
+            'md': {
+                'val': 13.123359580052496
+            },
+            'name': 'Top 2',
+            'topset_name': 'Topset',
+            'uuid': '3e5f09a8-0a0a-4722-ab1a-c52c769fc72b'
+          }
+    ],
+    'offset': 0,
+    'limit': 20,
     'total': 2,
     'first': True,
     'last': True

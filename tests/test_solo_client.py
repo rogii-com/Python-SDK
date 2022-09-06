@@ -1,4 +1,5 @@
 import pytest
+
 from rogii_solo.exceptions import ProjectNotFoundException, InvalidProjectException
 from tests.papi_data import (
     METER_PROJECT_NAME,
@@ -10,6 +11,7 @@ from tests.papi_data import (
     TARGET_LINE_NAME,
     STARRED_TARGET_LINE_NAME,
     NESTED_WELL_NAME,
+    STARRED_TOPSET_NAME,
     STARRED_NESTED_WELL_NAME
 )
 
@@ -287,3 +289,23 @@ def test_get_typewell_trajectory_point(project):
 
     assert trajectory_point_data
     assert not trajectory_point_df.empty
+
+
+def test_get_topset_tops(project):
+    well = project.wells.find_by_name(WELL_NAME)
+
+    assert well is not None
+
+    topset = well.topsets.find_by_name(STARRED_TOPSET_NAME)
+
+    assert topset is not None
+
+    tops = topset.tops
+
+    assert tops is not None
+
+    tops_data = tops.to_dict()
+    tops_df = tops.to_df()
+
+    assert tops_data
+    assert not tops_df.empty
