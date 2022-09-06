@@ -4,7 +4,6 @@ from pandas import DataFrame
 
 import rogii_solo.well
 from rogii_solo.base import BaseObject, ComplexObject, ObjectRepository
-from rogii_solo.calculations.enums import EMeasureUnits
 from rogii_solo.papi.client import PapiClient
 from rogii_solo.types import DataList
 
@@ -43,7 +42,7 @@ class Topset(ComplexObject):
         if self._tops is None:
             self._tops = ObjectRepository(
                 objects=[
-                    Top(measure_units=self.well.project.measure_unit, topset=self, **item)
+                    Top(topset=self, **item)
                     for item in self._get_tops_data()
                 ]
             )
@@ -56,22 +55,21 @@ class Topset(ComplexObject):
 
         return self._tops_data
 
-    def create_top(self,
-                   top_name: str,
-                   md: float
-                   ):
+    def create_top(self, top_name: str, md: float):
         self._papi_client.create_topset_top(
             topset_id=self.uuid,
             top_name=top_name,
             md=self._papi_client.prepare_papi_var(md)
         )
 
+        self._tops_data = None
+        self._tops = None
+
 
 class Top(BaseObject):
-    def __init__(self, measure_units: EMeasureUnits, topset: Topset, **kwargs):
-        self.measure_units = measure_units
-
+    def __init__(self, topset: Topset, **kwargs):
         self.topset = topset
+        self.measure_units = topset.well.project.measure_unit
 
         self.uuid = None
         self.name = None

@@ -363,6 +363,8 @@ def test_create_target_line(project_papi):
 def test_create_topset_top(project_papi):
     well = project_papi.wells.find_by_name(WELL_NAME)
 
+    assert well is not None
+
     topset = well.topsets.find_by_name(STARRED_WELL_TOPSET)
 
     assert topset is not None
@@ -371,11 +373,18 @@ def test_create_topset_top(project_papi):
     top_name = 'Top ' + str(random_md)
     topset.create_top(top_name=top_name, md=float(random_md))
 
+    random_md = random.randint(11400, 11500)
+    top_name = 'Top ' + str(random_md)
+    topset.create_top(top_name=top_name, md=float(random_md))
+
     assert topset.tops.find_by_name(top_name) is not None
 
 
-def test_get_topset_tops_data(project_papi):
+def test_get_topset_tops(project_papi):
     well = project_papi.wells.find_by_name(WELL_NAME)
+
+    assert well is not None
+
     topset = well.topsets.find_by_name(STARRED_WELL_TOPSET)
 
     assert topset is not None
