@@ -141,7 +141,8 @@ WELLS_DATA_RESPONSE = {
             'starred': {
                 'target_line': STARRED_TARGET_LINE_ID,
                 'nested_well': STARRED_NESTED_WELL_ID,
-                'interpretation': STARRED_INTERPRETATION_ID
+                'interpretation': STARRED_INTERPRETATION_ID,
+                'topset': STARRED_WELL_TOPSET
             }
         },
         {
@@ -3143,4 +3144,56 @@ TYPEWELLS_DATA_RESPONSE = {
     'total': 2,
     'first': True,
     'last': True
+}
+
+TOPSETS_DATA_RESPONSE = {
+    "content": [
+        {
+            "name": STARRED_WELL_TOPSET,
+            "uuid": "bc7e61c5-4758-4e5f-9992-0bcc87a2d5bf"
+        },
+        {
+            "name": "D Well MhsCHMbjjp",
+            "uuid": "77741779-6cd9-4f6d-ad37-81c32e9298c0"
+        },
+        {
+            "name": "TopSet Log tXHyYuvxfS",
+            "uuid": "5cca5693-7f5a-4ab1-9973-7b651ee3c4a2"
+        },
+        {
+            "name": "TopSetOMPPsDAqvl",
+            "uuid": "eebed07b-cf5e-498f-9df4-464ee60a360c"
+        }
+    ],
+    "offset": 0,
+    "limit": 10,
+    "total": 4,
+    "first": True,
+    "last": True
+}
+
+TOPS_DATA_RESPONSE = {
+    'content': [
+        {
+            'md': {
+                'val': 9.842519685039372
+            },
+            'name': 'Top',
+            'topset_name': 'Top Set',
+            'uuid': 'e68d9fc1-21e3-4f3f-9e34-14c983480842'
+        },
+        {
+            'md': {
+                'val': 13.123359580052496
+            },
+            'name': 'Update Top',
+            'topset_name': 'Top Set',
+            'uuid': '70710fb0-05bb-4fad-baee-546196bba0f3'
+          }
+    ],
+    "offset": 0,
+    "limit": 20,
+    "total": 2,
+    "first": True,
+    "last": True
 }
