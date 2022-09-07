@@ -8,6 +8,9 @@ from tests.papi_data import (
     TYPEWELL_NAME,
     INTERPRETATION_NAME,
     STARRED_INTERPRETATION_NAME,
+    STARRED_HORIZON_TOP_ID,
+    STARRED_HORIZON_CENTER_ID,
+    STARRED_HORIZON_BOTTOM_ID,
     HORIZON_NAME,
     TARGET_LINE_NAME,
     STARRED_TARGET_LINE_NAME,
@@ -394,3 +397,13 @@ def test_get_topset_tops(project_papi):
 
     assert tops_data
     assert not tops_df.empty
+
+
+def test_get_interpretation_starred_horizons(project_papi):
+    starred_interpretation = project_papi.wells.find_by_name(WELL_NAME).starred_interpretation
+
+    assert starred_interpretation is not None
+
+    assert starred_interpretation.starred_horizon_top == STARRED_HORIZON_TOP_ID
+    assert starred_interpretation.starred_horizon_center == STARRED_HORIZON_CENTER_ID
+    assert starred_interpretation.starred_horizon_bottom == STARRED_HORIZON_BOTTOM_ID

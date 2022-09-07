@@ -18,6 +18,7 @@ from tests.papi_data import (
     TYPEWELLS_DATA_RESPONSE,
     TOPSETS_DATA_RESPONSE,
     TOPS_DATA_RESPONSE,
+    STARRED_HORIZONS_DATA_RESPONSE,
 )
 
 
@@ -77,6 +78,10 @@ def fetch_topset_tops(**kwargs):
     return TOPS_DATA_RESPONSE
 
 
+def fetch_interpretation_starred_horizons(**kwargs):
+    return STARRED_HORIZONS_DATA_RESPONSE
+
+
 @pytest.fixture(scope='function')
 def solo_client():
     solo_client = SoloClient(client_id='client_id', client_secret='client_secret')
@@ -95,6 +100,7 @@ def solo_client():
     solo_client._papi_client.fetch_typewell_raw_trajectory = fetch_typewell_raw_trajectory
     solo_client._papi_client.fetch_well_topsets = fetch_well_topsets
     solo_client._papi_client.fetch_topset_tops = fetch_topset_tops
+    solo_client._papi_client.fetch_interpretation_starred_horizons = fetch_interpretation_starred_horizons
 
     return solo_client
 

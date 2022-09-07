@@ -109,6 +109,11 @@ class PapiClient(SdkPapiClient):
             'segments': self.parse_papi_data(assembled_segments['segments']),
         }
 
+    def get_interpretation_starred_horizons(self, interpretation_id: str, **kwargs) -> PapiData:
+        starred_horizons = self.fetch_interpretation_starred_horizons(interpretation_id=interpretation_id, **kwargs)
+
+        return {key: self.parse_papi_data(starred_horizons[key]) for key in starred_horizons.keys()}
+
     def get_well_target_lines_data(self, well_id: str, **kwargs) -> PapiDataList:
         return list(self._gen_data_page(
             func=self.fetch_well_target_lines,

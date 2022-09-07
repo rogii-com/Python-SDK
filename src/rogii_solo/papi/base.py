@@ -1,4 +1,4 @@
-from typing import Any, Dict, Optional
+from typing import Any, Dict, Optional, TypedDict
 
 from oauthlib.oauth2 import BackendApplicationClient, LegacyApplicationClient
 from requests import codes as status_codes
@@ -148,6 +148,12 @@ class BasePapiClient:
 
         if response.text:
             return response.json()
+
+
+class StarredHorizons(TypedDict):
+    top: str
+    center: str
+    bottom: str
 
 
 class PapiClient(BasePapiClient):
@@ -329,6 +335,26 @@ class PapiClient(BasePapiClient):
         data = self._send_request(url=f'interpretations/{interpretation_id}/horizons/raw', headers=headers)
 
         return data['assembled_segments']
+
+    def fetch_interpretation_starred_horizons(self,
+                                              interpretation_id: str,
+                                              headers: Optional[Dict[str, Any]] = None
+                                              ) -> StarredHorizons:
+        """
+        Fetches IDs of starred horizons
+        :param interpretation_id:
+        :param headers:
+        :return:
+        """
+        starred_horizons: StarredHorizons = self._send_request(
+            url=f'interpretations/{interpretation_id}/starred', headers=headers
+        )
+
+        return StarredHorizons(
+            top=starred_horizons['top'],
+            center=starred_horizons['center'],
+            bottom=starred_horizons['bottom']
+        )
 
     def fetch_well_nested_wells(self,
                                 well_id: str,

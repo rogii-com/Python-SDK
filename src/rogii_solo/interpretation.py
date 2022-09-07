@@ -30,6 +30,8 @@ class Interpretation(ComplexObject):
         self._horizons_data: Optional[DataList] = None
         self._horizons: Optional[ObjectRepository[Horizon]] = None
 
+        self._starred_horizons: Optional[Dict[str, str]] = None
+
     def to_dict(self, get_converted: bool = True) -> Dict[str, Any]:
         return self._get_data()
 
@@ -86,3 +88,24 @@ class Interpretation(ComplexObject):
             'horizons': assembled_segments['horizons'],
             'segments': assembled_segments['segments'],
         }
+
+    @property
+    def starred_horizon_top(self):
+        if self._starred_horizons is None:
+            self._starred_horizons = self._papi_client.get_interpretation_starred_horizons(self.uuid)
+
+        return self._starred_horizons['top']
+
+    @property
+    def starred_horizon_center(self):
+        if self._starred_horizons is None:
+            self._starred_horizons = self._papi_client.get_interpretation_starred_horizons(self.uuid)
+
+        return self._starred_horizons['center']
+
+    @property
+    def starred_horizon_bottom(self):
+        if self._starred_horizons is None:
+            self._starred_horizons = self._papi_client.get_interpretation_starred_horizons(self.uuid)
+
+        return self._starred_horizons['bottom']

@@ -23,6 +23,10 @@ TARGET_LINE_NAME = 'Target Line'
 STARRED_TARGET_LINE_ID = uuid4()
 STARRED_TARGET_LINE_NAME = 'Starred Target Line'
 
+STARRED_HORIZON_TOP_ID = '79fdee2f-10c0-42bd-9fbf-c6c6d25993da'
+STARRED_HORIZON_CENTER_ID = '836e7a2c-4c11-4e04-8e52-ea70bb1f880f'
+STARRED_HORIZON_BOTTOM_ID = 'd89effe0-ed5a-4273-b6cf-b23bc6a446da'
+
 NESTED_WELL_NAME = 'Nested Well'
 STARRED_NESTED_WELL_NAME = 'Starred Nested Well'
 STARRED_NESTED_WELL_ID = uuid4()
@@ -3197,4 +3201,10 @@ TOPS_DATA_RESPONSE = {
     'total': 2,
     'first': True,
     'last': True
+}
+
+STARRED_HORIZONS_DATA_RESPONSE = {
+    'top': STARRED_HORIZON_TOP_ID,
+    'center': STARRED_HORIZON_CENTER_ID,
+    'bottom': STARRED_HORIZON_BOTTOM_ID
 }
