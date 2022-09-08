@@ -54,8 +54,12 @@ class Well(ComplexObject):
         return {
             'uuid': self.uuid,
             'name': self.name,
-            'xsrf': self.convert_xy(self.xsrf, measure_units=measure_units) if get_converted else self.xsrf,
-            'ysrf': self.convert_xy(self.ysrf, measure_units=measure_units) if get_converted else self.ysrf,
+            'xsrf': self.convert_xy(
+                self.xsrf, measure_units=measure_units, force_to_meters=True
+            ) if get_converted else self.xsrf,
+            'ysrf': self.convert_xy(
+                self.ysrf, measure_units=measure_units, force_to_meters=True
+            ) if get_converted else self.ysrf,
             'kb': self.convert_z(self.kb, measure_units=measure_units) if get_converted else self.kb,
             'api': self.api,
             'operator': self.operator,
@@ -231,8 +235,12 @@ class NestedWell(ComplexObject):
         return {
             'uuid': self.uuid,
             'name': self.name,
-            'xsrf': self.convert_xy(self.xsrf, measure_units=measure_units) if get_converted else self.xsrf,
-            'ysrf': self.convert_xy(self.ysrf, measure_units=measure_units) if get_converted else self.ysrf,
+            'xsrf': self.convert_xy(
+                self.xsrf, measure_units=measure_units, force_to_meters=True
+            ) if get_converted else self.xsrf,
+            'ysrf': self.convert_xy(
+                self.ysrf, measure_units=measure_units, force_to_meters=True
+            ) if get_converted else self.ysrf,
             'kb': self.convert_z(self.kb, measure_units=measure_units) if get_converted else self.kb,
             'api': self.api,
             'operator': self.operator,
