@@ -15,7 +15,6 @@ class TrajectoryPoint(TypedDict):
     incl: float
     azim: float
     tvd: float
-    tvt: float
     ns: float
     ew: float
     x: float
