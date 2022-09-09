@@ -6,7 +6,7 @@ from urllib.parse import urljoin
 
 from rogii_solo import __version__
 from rogii_solo.papi.base import PapiClient as SdkPapiClient
-from rogii_solo.papi.types import PapiData, PapiDataIterator, PapiDataList, PapiVar, SettingsAuth
+from rogii_solo.papi.types import PapiData, PapiDataIterator, PapiDataList, PapiStarredHorizons, PapiVar, SettingsAuth
 from rogii_solo.utils.constants import PYTHON_SDK_APP_ID, SOLO_OPEN_AUTH_SERVICE_URL, SOLO_PAPI_URL
 
 
@@ -108,6 +108,15 @@ class PapiClient(SdkPapiClient):
             'horizons': self.parse_papi_data(assembled_segments['horizons']),
             'segments': self.parse_papi_data(assembled_segments['segments']),
         }
+
+    def get_interpretation_starred_horizons(self, interpretation_id: str, **kwargs) -> PapiStarredHorizons:
+        starred_horizons = self.fetch_interpretation_starred_horizons(interpretation_id=interpretation_id, **kwargs)
+
+        return PapiStarredHorizons(
+            top=starred_horizons['top'],
+            center=starred_horizons['center'],
+            bottom=starred_horizons['bottom']
+        )
 
     def get_well_target_lines_data(self, well_id: str, **kwargs) -> PapiDataList:
         return list(self._gen_data_page(

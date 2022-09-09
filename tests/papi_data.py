@@ -23,6 +23,10 @@ TARGET_LINE_NAME = 'Target Line'
 STARRED_TARGET_LINE_ID = uuid4()
 STARRED_TARGET_LINE_NAME = 'Starred Target Line'
 
+STARRED_HORIZON_TOP_NAME = 'Horizon 2'
+STARRED_HORIZON_CENTER_NAME = 'Horizon'
+STARRED_HORIZON_BOTTOM_NAME = 'Horizon 3'
+
 NESTED_WELL_NAME = 'Nested Well'
 STARRED_NESTED_WELL_NAME = 'Starred Nested Well'
 STARRED_NESTED_WELL_ID = uuid4()
@@ -2150,11 +2154,15 @@ HORIZONS_DATA_RESPONSE = {
         {
             'uuid': '586a5e44-2a1c-402d-88bf-e82304e8fa2e',
             'name': 'Horizon 2'
-        }
+        },
+        {
+            'uuid': '86831e2a-3a0b-4085-9e63-90500a8b47ac',
+            'name': 'Horizon 3'
+        },
     ],
     'offset': 0,
     'limit': 100,
-    'total': 2,
+    'total': 3,
     'first': True,
     'last': True
 }
@@ -2173,6 +2181,12 @@ ASSEMBLED_SEGMENTS_DATA_RESPONSE = {
                     'val': 11517.84276413585
                 },
                 'uuid': HORIZON_ID
+            },
+            '86831e2a-3a0b-4085-9e63-90500a8b47ac': {
+                'tvd': {
+                    'val': 11519.84276413585
+                },
+                'uuid': '86831e2a-3a0b-4085-9e63-90500a8b47ac'
             }
         },
         'segments': [
@@ -2199,6 +2213,15 @@ ASSEMBLED_SEGMENTS_DATA_RESPONSE = {
                             'val': 0
                         },
                         'uuid': HORIZON_ID
+                    },
+                    '86831e2a-3a0b-4085-9e63-90500a8b47ac': {
+                        'end': {
+                            'val': -6.5656962603957885
+                        },
+                        'start': {
+                            'val': 0
+                        },
+                        'uuid': '86831e2a-3a0b-4085-9e63-90500a8b47ac'
                     }
                 },
                 'md': {
@@ -2232,6 +2255,15 @@ ASSEMBLED_SEGMENTS_DATA_RESPONSE = {
                             'val': -6.565715689306932
                         },
                         'uuid': HORIZON_ID
+                    },
+                    '86831e2a-3a0b-4085-9e63-90500a8b47ac': {
+                        'end': {
+                            'val': -18.912379033568882
+                        },
+                        'start': {
+                            'val': -6.565715689306932
+                        },
+                        'uuid': '86831e2a-3a0b-4085-9e63-90500a8b47ac'
                     }
                 },
                 'md': {
@@ -2265,6 +2297,15 @@ ASSEMBLED_SEGMENTS_DATA_RESPONSE = {
                             'val': -18.91237067033499
                         },
                         'uuid': HORIZON_ID
+                    },
+                    '86831e2a-3a0b-4085-9e63-90500a8b47ac': {
+                        'end': {
+                            'val': -33.516118275710916
+                        },
+                        'start': {
+                            'val': -18.91237067033499
+                        },
+                        'uuid': '86831e2a-3a0b-4085-9e63-90500a8b47ac'
                     }
                 },
                 'md': {
@@ -2298,6 +2339,15 @@ ASSEMBLED_SEGMENTS_DATA_RESPONSE = {
                             'val': -33.516119686481034
                         },
                         'uuid': HORIZON_ID
+                    },
+                    '86831e2a-3a0b-4085-9e63-90500a8b47ac': {
+                        'end': {
+                            'val': -58.95023687660797
+                        },
+                        'start': {
+                            'val': -33.516119686481034
+                        },
+                        'uuid': '86831e2a-3a0b-4085-9e63-90500a8b47ac'
                     }
                 },
                 'md': {
@@ -2331,6 +2381,15 @@ ASSEMBLED_SEGMENTS_DATA_RESPONSE = {
                             'val': -58.95023687660797
                         },
                         'uuid': HORIZON_ID
+                    },
+                    '86831e2a-3a0b-4085-9e63-90500a8b47ac': {
+                        'end': {
+                            'val': -59.10163924450717
+                        },
+                        'start': {
+                            'val': -58.95023687660797
+                        },
+                        'uuid': '86831e2a-3a0b-4085-9e63-90500a8b47ac'
                     }
                 },
                 'md': {
@@ -2364,6 +2423,15 @@ ASSEMBLED_SEGMENTS_DATA_RESPONSE = {
                             'val': -51.812185591572415
                         },
                         'uuid': HORIZON_ID
+                    },
+                    '86831e2a-3a0b-4085-9e63-90500a8b47ac': {
+                        'end': {
+                            'val': -56.70307051967029
+                        },
+                        'start': {
+                            'val': -51.812185591572415
+                        },
+                        'uuid': '86831e2a-3a0b-4085-9e63-90500a8b47ac'
                     }
                 },
                 'md': {
@@ -2397,6 +2465,15 @@ ASSEMBLED_SEGMENTS_DATA_RESPONSE = {
                             'val': -56.70307051967029
                         },
                         'uuid': HORIZON_ID
+                    },
+                    '86831e2a-3a0b-4085-9e63-90500a8b47ac': {
+                        'end': {
+                            'val': -60.56338690861413
+                        },
+                        'start': {
+                            'val': -56.70307051967029
+                        },
+                        'uuid': '86831e2a-3a0b-4085-9e63-90500a8b47ac'
                     }
                 },
                 'md': {
@@ -2430,6 +2507,15 @@ ASSEMBLED_SEGMENTS_DATA_RESPONSE = {
                             'val': -99.99209841093398
                         },
                         'uuid': HORIZON_ID
+                    },
+                    '86831e2a-3a0b-4085-9e63-90500a8b47ac': {
+                        'end': {
+                            'val': -103.06310344580925
+                        },
+                        'start': {
+                            'val': -99.99209841093398
+                        },
+                        'uuid': '86831e2a-3a0b-4085-9e63-90500a8b47ac'
                     }
                 },
                 'md': {
@@ -2463,6 +2549,15 @@ ASSEMBLED_SEGMENTS_DATA_RESPONSE = {
                             'val': -103.06310344580925
                         },
                         'uuid': HORIZON_ID
+                    },
+                    '86831e2a-3a0b-4085-9e63-90500a8b47ac': {
+                        'end': {
+                            'val': -110.61396071446325
+                        },
+                        'start': {
+                            'val': -103.06310344580925
+                        },
+                        'uuid': '86831e2a-3a0b-4085-9e63-90500a8b47ac'
                     }
                 },
                 'md': {
@@ -2496,6 +2591,15 @@ ASSEMBLED_SEGMENTS_DATA_RESPONSE = {
                             'val': -110.61403385396254
                         },
                         'uuid': HORIZON_ID
+                    },
+                    '86831e2a-3a0b-4085-9e63-90500a8b47ac': {
+                        'end': {
+                            'val': -118.64063807436037
+                        },
+                        'start': {
+                            'val': -110.61403385396254
+                        },
+                        'uuid': '86831e2a-3a0b-4085-9e63-90500a8b47ac'
                     }
                 },
                 'md': {
@@ -2529,6 +2633,15 @@ ASSEMBLED_SEGMENTS_DATA_RESPONSE = {
                             'val': -118.6403753720424
                         },
                         'uuid': HORIZON_ID
+                    },
+                    '86831e2a-3a0b-4085-9e63-90500a8b47ac': {
+                        'end': {
+                            'val': -135.60868693330121
+                        },
+                        'start': {
+                            'val': -118.6403753720424
+                        },
+                        'uuid': '86831e2a-3a0b-4085-9e63-90500a8b47ac'
                     }
                 },
                 'md': {
@@ -2562,6 +2675,15 @@ ASSEMBLED_SEGMENTS_DATA_RESPONSE = {
                             'val': -135.60868693330121
                         },
                         'uuid': HORIZON_ID
+                    },
+                    '86831e2a-3a0b-4085-9e63-90500a8b47ac': {
+                        'end': {
+                            'val': -154.195111448762
+                        },
+                        'start': {
+                            'val': -135.60868693330121
+                        },
+                        'uuid': '86831e2a-3a0b-4085-9e63-90500a8b47ac'
                     }
                 },
                 'md': {
@@ -2595,6 +2717,15 @@ ASSEMBLED_SEGMENTS_DATA_RESPONSE = {
                             'val': -213.8141818373515
                         },
                         'uuid': HORIZON_ID
+                    },
+                    '86831e2a-3a0b-4085-9e63-90500a8b47ac': {
+                        'end': {
+                            'val': -211.69246022414336
+                        },
+                        'start': {
+                            'val': -213.8141818373515
+                        },
+                        'uuid': '86831e2a-3a0b-4085-9e63-90500a8b47ac'
                     }
                 },
                 'md': {
@@ -2628,6 +2759,15 @@ ASSEMBLED_SEGMENTS_DATA_RESPONSE = {
                             'val': -211.69246022414336
                         },
                         'uuid': HORIZON_ID
+                    },
+                    '86831e2a-3a0b-4085-9e63-90500a8b47ac': {
+                        'end': {
+                            'val': -215.79805967196262
+                        },
+                        'start': {
+                            'val': -211.69246022414336
+                        },
+                        'uuid': '86831e2a-3a0b-4085-9e63-90500a8b47ac'
                     }
                 },
                 'md': {
@@ -2661,6 +2801,15 @@ ASSEMBLED_SEGMENTS_DATA_RESPONSE = {
                             'val': -215.79805967196262
                         },
                         'uuid': HORIZON_ID
+                    },
+                    '86831e2a-3a0b-4085-9e63-90500a8b47ac': {
+                        'end': {
+                            'val': -221.2564026611872
+                        },
+                        'start': {
+                            'val': -215.79805967196262
+                        },
+                        'uuid': '86831e2a-3a0b-4085-9e63-90500a8b47ac'
                     }
                 },
                 'md': {
@@ -2694,6 +2843,15 @@ ASSEMBLED_SEGMENTS_DATA_RESPONSE = {
                             'val': -221.2564026611872
                         },
                         'uuid': HORIZON_ID
+                    },
+                    '86831e2a-3a0b-4085-9e63-90500a8b47ac': {
+                        'end': {
+                            'val': -229.80925200626916
+                        },
+                        'start': {
+                            'val': -221.2564026611872
+                        },
+                        'uuid': '86831e2a-3a0b-4085-9e63-90500a8b47ac'
                     }
                 },
                 'md': {
@@ -2727,6 +2885,15 @@ ASSEMBLED_SEGMENTS_DATA_RESPONSE = {
                             'val': -229.80925200626916
                         },
                         'uuid': HORIZON_ID
+                    },
+                    '86831e2a-3a0b-4085-9e63-90500a8b47ac': {
+                        'end': {
+                            'val': -230.16893424342015
+                        },
+                        'start': {
+                            'val': -229.80925200626916
+                        },
+                        'uuid': '86831e2a-3a0b-4085-9e63-90500a8b47ac'
                     }
                 },
                 'md': {
@@ -2760,6 +2927,15 @@ ASSEMBLED_SEGMENTS_DATA_RESPONSE = {
                             'val': -230.16893424342015
                         },
                         'uuid': HORIZON_ID
+                    },
+                    '86831e2a-3a0b-4085-9e63-90500a8b47ac': {
+                        'end': {
+                            'val': -235.85437670843567
+                        },
+                        'start': {
+                            'val': -230.16893424342015
+                        },
+                        'uuid': '86831e2a-3a0b-4085-9e63-90500a8b47ac'
                     }
                 },
                 'md': {
@@ -2793,6 +2969,15 @@ ASSEMBLED_SEGMENTS_DATA_RESPONSE = {
                             'val': -235.8287914731423
                         },
                         'uuid': HORIZON_ID
+                    },
+                    '86831e2a-3a0b-4085-9e63-90500a8b47ac': {
+                        'end': {
+                            'val': -254.64365643654796
+                        },
+                        'start': {
+                            'val': -235.8287914731423
+                        },
+                        'uuid': '86831e2a-3a0b-4085-9e63-90500a8b47ac'
                     }
                 },
                 'md': {
@@ -3197,4 +3382,10 @@ TOPS_DATA_RESPONSE = {
     'total': 2,
     'first': True,
     'last': True
+}
+
+STARRED_HORIZONS_DATA_RESPONSE = {
+    'top': '586a5e44-2a1c-402d-88bf-e82304e8fa2e',
+    'center': HORIZON_ID,
+    'bottom': '86831e2a-3a0b-4085-9e63-90500a8b47ac',
 }

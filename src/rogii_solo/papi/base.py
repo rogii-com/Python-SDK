@@ -6,7 +6,7 @@ from requests.auth import HTTPBasicAuth
 from requests_oauthlib import OAuth2Session
 
 from rogii_solo.papi.exceptions import AccessTokenFailureException, BasePapiClientException
-from rogii_solo.papi.types import PapiTrajectory, PapiVar
+from rogii_solo.papi.types import PapiStarredHorizons, PapiTrajectory, PapiVar
 
 
 class BasePapiClient:
@@ -329,6 +329,26 @@ class PapiClient(BasePapiClient):
         data = self._send_request(url=f'interpretations/{interpretation_id}/horizons/raw', headers=headers)
 
         return data['assembled_segments']
+
+    def fetch_interpretation_starred_horizons(self,
+                                              interpretation_id: str,
+                                              headers: Optional[Dict[str, Any]] = None
+                                              ) -> PapiStarredHorizons:
+        """
+        Fetches IDs of starred horizons
+        :param interpretation_id:
+        :param headers:
+        :return:
+        """
+        starred_horizons: PapiStarredHorizons = self._send_request(
+            url=f'interpretations/{interpretation_id}/starred', headers=headers
+        )
+
+        return PapiStarredHorizons(
+            top=starred_horizons['top'],
+            center=starred_horizons['center'],
+            bottom=starred_horizons['bottom']
+        )
 
     def fetch_well_nested_wells(self,
                                 well_id: str,
