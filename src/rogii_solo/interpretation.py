@@ -75,21 +75,24 @@ class Interpretation(ComplexObject):
     @property
     def starred_horizon_top(self):
         if self._starred_horizon_top is None:
-            self._starred_horizon_top = self.horizons.find_by_id(self._get_starred_horizons_data()['top'])
+            starred_horizons_data = self._get_starred_horizons_data()
+            self._starred_horizon_top = self.horizons.find_by_id(starred_horizons_data['top'])
 
         return self._starred_horizon_top
 
     @property
     def starred_horizon_center(self):
         if self._starred_horizon_center is None:
-            self._starred_horizon_center = self.horizons.find_by_id(self._get_starred_horizons_data()['center'])
+            starred_horizons_data = self._get_starred_horizons_data()
+            self._starred_horizon_center = self.horizons.find_by_id(starred_horizons_data['center'])
 
         return self._starred_horizon_center
 
     @property
     def starred_horizon_bottom(self):
         if self._starred_horizon_bottom is None:
-            self._starred_horizon_bottom = self.horizons.find_by_id(self._get_starred_horizons_data()['bottom'])
+            starred_horizons_data = self._get_starred_horizons_data()
+            self._starred_horizon_bottom = self.horizons.find_by_id(starred_horizons_data['bottom'])
 
         return self._starred_horizon_bottom
 
