@@ -75,33 +75,21 @@ class Interpretation(ComplexObject):
     @property
     def starred_horizon_top(self):
         if self._starred_horizon_top is None:
-
-            if self._starred_horizons_data is None:
-                self._starred_horizons_data = self._papi_client.get_interpretation_starred_horizons(self.uuid)
-
-            self._starred_horizon_top = self.horizons.find_by_id(self._starred_horizons_data['top'])
+            self._starred_horizon_top = self.horizons.find_by_id(self._get_starred_horizons_data()['top'])
 
         return self._starred_horizon_top
 
     @property
     def starred_horizon_center(self):
         if self._starred_horizon_center is None:
-
-            if self._starred_horizons_data is None:
-                self._starred_horizons_data = self._papi_client.get_interpretation_starred_horizons(self.uuid)
-
-            self._starred_horizon_center = self.horizons.find_by_id(self._starred_horizons_data['center'])
+            self._starred_horizon_center = self.horizons.find_by_id(self._get_starred_horizons_data()['center'])
 
         return self._starred_horizon_center
 
     @property
     def starred_horizon_bottom(self):
         if self._starred_horizon_bottom is None:
-
-            if self._starred_horizons_data is None:
-                self._starred_horizons_data = self._papi_client.get_interpretation_starred_horizons(self.uuid)
-
-            self._starred_horizon_bottom = self.horizons.find_by_id(self._starred_horizons_data['bottom'])
+            self._starred_horizon_bottom = self.horizons.find_by_id(self._get_starred_horizons_data()['bottom'])
 
         return self._starred_horizon_bottom
 
@@ -124,3 +112,9 @@ class Interpretation(ComplexObject):
             'horizons': assembled_segments['horizons'],
             'segments': assembled_segments['segments'],
         }
+
+    def _get_starred_horizons_data(self):
+        if self._starred_horizons_data is None:
+            self._starred_horizons_data = self._papi_client.get_interpretation_starred_horizons(self.uuid)
+
+        return self._starred_horizons_data
