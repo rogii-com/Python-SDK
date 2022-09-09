@@ -1,0 +1,2 @@
+class InvalidMeasureUnitsException(Exception):
+    pass

@@ -1,0 +1,44 @@
+default:
+  image: python:3.10
+  tags:
+    - docker
+stages:
+  - pre-commit
+  - tests
+  - build
+  - publish
+
+before_script:
+  - python -m pip install --upgrade pip
+  - pip install .[dev]
+
+pre-commit:
+  stage: pre-commit
+  script:
+  - pre-commit run --all-files
+
+tests:
+  stage: tests
+  script:
+  - pytest tests/test_solo_client.py tests/test_data_conversion.py --verbosity=1
+
+build:
+  stage: build
+  script:
+  - python -m build
+  artifacts:
+    paths:
+      - dist/
+    expire_in: 1d
+
+publish:
+  stage: publish
+  when: manual
+  allow_failure: false
+  only: 
+  - tags
+  variables:
+    TWINE_USERNAME: __token__
+    TWINE_PASSWORD: $PYPI_TOKEN
+  script:
+  - twine upload dist/*
