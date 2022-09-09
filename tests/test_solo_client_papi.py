@@ -8,9 +8,9 @@ from tests.papi_data import (
     TYPEWELL_NAME,
     INTERPRETATION_NAME,
     STARRED_INTERPRETATION_NAME,
-    STARRED_HORIZON_TOP_ID,
-    STARRED_HORIZON_CENTER_ID,
-    STARRED_HORIZON_BOTTOM_ID,
+    STARRED_HORIZON_TOP_NAME,
+    STARRED_HORIZON_CENTER_NAME,
+    STARRED_HORIZON_BOTTOM_NAME,
     HORIZON_NAME,
     TARGET_LINE_NAME,
     STARRED_TARGET_LINE_NAME,
@@ -403,7 +403,22 @@ def test_get_interpretation_starred_horizons(project_papi):
     starred_interpretation = project_papi.wells.find_by_name(WELL_NAME).starred_interpretation
 
     assert starred_interpretation is not None
+    assert starred_interpretation.starred_horizon_top is not None
 
-    assert starred_interpretation.starred_horizon_top == STARRED_HORIZON_TOP_ID
-    assert starred_interpretation.starred_horizon_center == STARRED_HORIZON_CENTER_ID
-    assert starred_interpretation.starred_horizon_bottom == STARRED_HORIZON_BOTTOM_ID
+    starred_horizon_top_data = starred_interpretation.starred_horizon_top.to_dict()
+    starred_horizon_top_df = starred_interpretation.starred_horizon_top.to_df()
+
+    starred_horizon_center_data = starred_interpretation.starred_horizon_center.to_dict()
+    starred_horizon_center_df = starred_interpretation.starred_horizon_center.to_df()
+
+    starred_horizon_bottom_data = starred_interpretation.starred_horizon_bottom.to_dict()
+    starred_horizon_bottom_df = starred_interpretation.starred_horizon_bottom.to_df()
+
+    assert starred_horizon_top_data['meta']['name'] == STARRED_HORIZON_TOP_NAME
+    assert starred_horizon_top_df['meta'].at[0, 'name'] == STARRED_HORIZON_TOP_NAME
+
+    assert starred_horizon_center_data['meta']['name'] == STARRED_HORIZON_CENTER_NAME
+    assert starred_horizon_center_df['meta'].at[0, 'name'] == STARRED_HORIZON_CENTER_NAME
+
+    assert starred_horizon_bottom_data['meta']['name'] == STARRED_HORIZON_BOTTOM_NAME
+    assert starred_horizon_bottom_df['meta'].at[0, 'name'] == STARRED_HORIZON_BOTTOM_NAME

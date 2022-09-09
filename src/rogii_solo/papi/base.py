@@ -1,4 +1,4 @@
-from typing import Any, Dict, Optional, TypedDict
+from typing import Any, Dict, Optional
 
 from oauthlib.oauth2 import BackendApplicationClient, LegacyApplicationClient
 from requests import codes as status_codes
@@ -6,7 +6,7 @@ from requests.auth import HTTPBasicAuth
 from requests_oauthlib import OAuth2Session
 
 from rogii_solo.papi.exceptions import AccessTokenFailureException, BasePapiClientException
-from rogii_solo.papi.types import PapiTrajectory, PapiVar
+from rogii_solo.papi.types import PapiStarredHorizons, PapiTrajectory, PapiVar
 
 
 class BasePapiClient:
@@ -148,12 +148,6 @@ class BasePapiClient:
 
         if response.text:
             return response.json()
-
-
-class StarredHorizons(TypedDict):
-    top: str
-    center: str
-    bottom: str
 
 
 class PapiClient(BasePapiClient):
@@ -339,18 +333,18 @@ class PapiClient(BasePapiClient):
     def fetch_interpretation_starred_horizons(self,
                                               interpretation_id: str,
                                               headers: Optional[Dict[str, Any]] = None
-                                              ) -> StarredHorizons:
+                                              ) -> PapiStarredHorizons:
         """
         Fetches IDs of starred horizons
         :param interpretation_id:
         :param headers:
         :return:
         """
-        starred_horizons: StarredHorizons = self._send_request(
+        starred_horizons: PapiStarredHorizons = self._send_request(
             url=f'interpretations/{interpretation_id}/starred', headers=headers
         )
 
-        return StarredHorizons(
+        return PapiStarredHorizons(
             top=starred_horizons['top'],
             center=starred_horizons['center'],
             bottom=starred_horizons['bottom']
