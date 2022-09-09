@@ -6,7 +6,7 @@ from requests.auth import HTTPBasicAuth
 from requests_oauthlib import OAuth2Session
 
 from rogii_solo.papi.exceptions import AccessTokenFailureException, BasePapiClientException
-from rogii_solo.papi.types import PapiStarredHorizons, PapiTrajectory, PapiVar
+from rogii_solo.papi.types import PapiStarredHorizons, PapiStarredTops, PapiTrajectory, PapiVar
 
 
 class BasePapiClient:
@@ -340,7 +340,7 @@ class PapiClient(BasePapiClient):
         :param headers:
         :return:
         """
-        starred_horizons: PapiStarredHorizons = self._send_request(
+        starred_horizons = self._send_request(
             url=f'interpretations/{interpretation_id}/starred', headers=headers
         )
 
@@ -689,4 +689,19 @@ class PapiClient(BasePapiClient):
                 'limit': limit,
             },
             headers=headers
+        )
+
+    def fetch_topset_starred_tops(self, topset_id: str, headers: Dict = None) -> PapiStarredTops:
+        """
+        Fetches IDs of starred tops
+        :param topset_id:
+        :param headers:
+        :return:
+        """
+        starred_tops = self._send_request(url=f'topsets/{topset_id}/starred', headers=headers)
+
+        return PapiStarredTops(
+            top=starred_tops['top'],
+            center=starred_tops['center'],
+            bottom=starred_tops['bottom']
         )

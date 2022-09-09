@@ -5,6 +5,7 @@ from pandas import DataFrame
 import rogii_solo.well
 from rogii_solo.base import BaseObject, ComplexObject, ObjectRepository
 from rogii_solo.papi.client import PapiClient
+from rogii_solo.papi.types import PapiStarredTops
 from rogii_solo.types import DataList
 
 WellType = Union[
@@ -28,6 +29,11 @@ class Topset(ComplexObject):
         self._tops_data: Optional[DataList] = None
         self._tops: Optional[ObjectRepository[Top]] = None
 
+        self._starred_tops_data: Optional[PapiStarredTops] = None
+        self._starred_top_top: Optional[Top] = None
+        self._starred_top_center: Optional[Top] = None
+        self._starred_top_bottom: Optional[Top] = None
+
     def to_dict(self, get_converted: bool = True) -> Dict[str, Any]:
         return {
             'uuid': self.uuid,
@@ -49,11 +55,29 @@ class Topset(ComplexObject):
 
         return self._tops
 
-    def _get_tops_data(self) -> Optional[DataList]:
-        if self._tops_data is None:
-            self._tops_data = self._papi_client.get_topset_tops_data(topset_id=self.uuid)
+    @property
+    def starred_top_top(self):
+        if self._starred_top_top is None:
+            starred_tops_data = self._get_starred_tops_data()
+            self._starred_top_top = self.tops.find_by_id(starred_tops_data['top'])
 
-        return self._tops_data
+        return self._starred_top_top
+
+    @property
+    def starred_top_center(self):
+        if self._starred_top_center is None:
+            starred_tops_data = self._get_starred_tops_data()
+            self._starred_top_center = self.tops.find_by_id(starred_tops_data['center'])
+
+        return self._starred_top_center
+
+    @property
+    def starred_top_bottom(self):
+        if self._starred_top_bottom is None:
+            starred_tops_data = self._get_starred_tops_data()
+            self._starred_top_bottom = self.tops.find_by_id(starred_tops_data['bottom'])
+
+        return self._starred_top_bottom
 
     def create_top(self, top_name: str, md: float):
         self._papi_client.create_topset_top(
@@ -64,6 +88,18 @@ class Topset(ComplexObject):
 
         self._tops_data = None
         self._tops = None
+
+    def _get_tops_data(self) -> Optional[DataList]:
+        if self._tops_data is None:
+            self._tops_data = self._papi_client.get_topset_tops_data(topset_id=self.uuid)
+
+        return self._tops_data
+
+    def _get_starred_tops_data(self):
+        if self._starred_tops_data is None:
+            self._starred_tops_data = self._papi_client.get_topset_starred_tops(self.uuid)
+
+        return self._starred_tops_data
 
 
 class Top(BaseObject):

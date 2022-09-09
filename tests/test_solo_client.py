@@ -15,7 +15,10 @@ from tests.papi_data import (
     STARRED_TARGET_LINE_NAME,
     NESTED_WELL_NAME,
     STARRED_TOPSET_NAME,
-    STARRED_NESTED_WELL_NAME
+    STARRED_NESTED_WELL_NAME,
+    STARRED_TOP_TOP_NAME,
+    STARRED_TOP_CENTER_NAME,
+    STARRED_TOP_BOTTOM_NAME,
 )
 
 
@@ -337,3 +340,27 @@ def test_get_interpretation_starred_horizons(project):
 
     assert starred_horizon_bottom_data['meta']['name'] == STARRED_HORIZON_BOTTOM_NAME
     assert starred_horizon_bottom_df['meta'].at[0, 'name'] == STARRED_HORIZON_BOTTOM_NAME
+
+
+def test_get_topset_starred_tops(project):
+    starred_topset = project.wells.find_by_name(WELL_NAME).starred_topset
+
+    assert starred_topset is not None
+
+    starred_top_top_data = starred_topset.starred_top_top.to_dict()
+    starred_top_top_df = starred_topset.starred_top_top.to_df()
+
+    assert starred_top_top_data['name'] == STARRED_TOP_TOP_NAME
+    assert starred_top_top_df.at[0, 'name'] == STARRED_TOP_TOP_NAME
+
+    starred_top_center_data = starred_topset.starred_top_center.to_dict()
+    starred_top_center_df = starred_topset.starred_top_center.to_df()
+
+    assert starred_top_center_data['name'] == STARRED_TOP_CENTER_NAME
+    assert starred_top_center_df.at[0, 'name'] == STARRED_TOP_CENTER_NAME
+
+    starred_top_bottom_data = starred_topset.starred_top_bottom.to_dict()
+    starred_top_bottom_df = starred_topset.starred_top_bottom.to_df()
+
+    assert starred_top_bottom_data['name'] == STARRED_TOP_BOTTOM_NAME
+    assert starred_top_bottom_df.at[0, 'name'] == STARRED_TOP_BOTTOM_NAME
