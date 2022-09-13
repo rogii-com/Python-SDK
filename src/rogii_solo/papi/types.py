@@ -22,6 +22,12 @@ class PapiStarredHorizons(TypedDict):
     bottom: str
 
 
+class PapiStarredTops(TypedDict):
+    top: str
+    center: str
+    bottom: str
+
+
 PapiTrajectory = List[PapiTrajectoryPoint]
 
 PapiData = Dict[str, Any]

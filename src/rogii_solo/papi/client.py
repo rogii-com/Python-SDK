@@ -6,7 +6,15 @@ from urllib.parse import urljoin
 
 from rogii_solo import __version__
 from rogii_solo.papi.base import PapiClient as SdkPapiClient
-from rogii_solo.papi.types import PapiData, PapiDataIterator, PapiDataList, PapiStarredHorizons, PapiVar, SettingsAuth
+from rogii_solo.papi.types import (
+    PapiData,
+    PapiDataIterator,
+    PapiDataList,
+    PapiStarredHorizons,
+    PapiStarredTops,
+    PapiVar,
+    SettingsAuth
+)
 from rogii_solo.utils.constants import PYTHON_SDK_APP_ID, SOLO_OPEN_AUTH_SERVICE_URL, SOLO_PAPI_URL
 
 
@@ -182,6 +190,15 @@ class PapiClient(SdkPapiClient):
             topset_id=topset_id,
             **kwargs
         ))
+
+    def get_topset_starred_tops(self, topset_id: str, **kwargs) -> PapiStarredTops:
+        starred_tops = self.fetch_topset_starred_tops(topset_id=topset_id, **kwargs)
+
+        return PapiStarredTops(
+            top=starred_tops['top'],
+            center=starred_tops['center'],
+            bottom=starred_tops['bottom']
+        )
 
     def _gen_data_page(self, func: Callable, **kwargs) -> PapiDataIterator:
         offset = kwargs.pop('offset', None) or self.DEFAULT_OFFSET

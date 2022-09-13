@@ -36,6 +36,10 @@ TYPEWELL_NAME = 'Typewell'
 STARRED_TOPSET_NAME = 'Starred Topset'
 STARRED_TOPSET_ID = uuid4()
 
+STARRED_TOP_TOP_NAME = 'Top'
+STARRED_TOP_CENTER_NAME = 'Top 2'
+STARRED_TOP_BOTTOM_NAME = 'Top 3'
+
 PROJECTS_DATA_RESPONSE = {
     'content': [
         {
@@ -3336,7 +3340,7 @@ TOPSETS_DATA_RESPONSE = {
     'content': [
         {
             'name': STARRED_TOPSET_NAME,
-            'uuid': '97d02d10-e2ef-462b-8e90-3df063eaf83d'
+            'uuid': STARRED_TOPSET_ID
         },
         {
             'name': 'Topset 2',
@@ -3364,7 +3368,7 @@ TOPS_DATA_RESPONSE = {
             'md': {
                 'val': 9.842519685039372
             },
-            'name': 'Top',
+            'name': STARRED_TOP_TOP_NAME,
             'topset_name': 'Topset',
             'uuid': 'c0332dab-9468-4b27-b1f6-3d4d7c875ecf'
         },
@@ -3372,14 +3376,22 @@ TOPS_DATA_RESPONSE = {
             'md': {
                 'val': 13.123359580052496
             },
-            'name': 'Top 2',
+            'name': STARRED_TOP_CENTER_NAME,
             'topset_name': 'Topset',
             'uuid': '3e5f09a8-0a0a-4722-ab1a-c52c769fc72b'
-          }
+        },
+        {
+            'md': {
+                'val': 15.443359580052496
+            },
+            'name': STARRED_TOP_BOTTOM_NAME,
+            'topset_name': 'Topset',
+            'uuid': '77b3db2b-83f0-4122-8068-647ce432d221'
+        }
     ],
     'offset': 0,
     'limit': 20,
-    'total': 2,
+    'total': 3,
     'first': True,
     'last': True
 }
@@ -3388,4 +3400,10 @@ STARRED_HORIZONS_DATA_RESPONSE = {
     'top': '586a5e44-2a1c-402d-88bf-e82304e8fa2e',
     'center': HORIZON_ID,
     'bottom': '86831e2a-3a0b-4085-9e63-90500a8b47ac',
+}
+
+STARRED_TOPS_DATA_RESPONSE = {
+    'top': 'c0332dab-9468-4b27-b1f6-3d4d7c875ecf',
+    'center': '3e5f09a8-0a0a-4722-ab1a-c52c769fc72b',
+    'bottom': '77b3db2b-83f0-4122-8068-647ce432d221',
 }
