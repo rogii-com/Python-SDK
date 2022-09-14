@@ -403,22 +403,21 @@ class Typewell(ComplexObject):
         return self._trajectory
 
     @property
-    def topsets_data(self) -> Optional[DataList]:
-        if self._topsets_data is None:
-            self._topsets_data = self._papi_client.get_typewell_topsets_data(typewell_id=self.uuid)
-
-        return self._topsets_data
-
-    @property
     def topsets(self) -> ObjectRepository[Topset]:
         if self._topsets is None:
             self._topsets = ObjectRepository(
                 objects=[
-                    Topset(papi_client=self._papi_client, well=self, **item) for item in self.topsets_data
+                    Topset(papi_client=self._papi_client, well=self, **item) for item in self._get_topsets_data()
                 ]
             )
 
         return self._topsets
+
+    def _get_topsets_data(self) -> Optional[DataList]:
+        if self._topsets_data is None:
+            self._topsets_data = self._papi_client.get_typewell_topsets_data(typewell_id=self.uuid)
+
+        return self._topsets_data
 
     @property
     def starred_topset(self) -> Optional[Topset]:
