@@ -5,7 +5,7 @@ from pandas import DataFrame
 from rogii_solo.base import ComplexObject, ObjectRepository
 from rogii_solo.papi.client import PapiClient
 from rogii_solo.types import DataList
-from rogii_solo.well import Well
+from rogii_solo.well import Typewell, Well
 
 
 class Project(ComplexObject):
@@ -27,6 +27,9 @@ class Project(ComplexObject):
 
         self._wells_data: Optional[DataList] = None
         self._wells: Optional[ObjectRepository[Well]] = None
+
+        self._typewells_data: Optional[DataList] = None
+        self._typewells: Optional[ObjectRepository[Well]] = None
 
     def to_dict(self, get_converted: bool = True) -> Dict[str, Any]:
         return {
@@ -54,8 +57,26 @@ class Project(ComplexObject):
 
         return self._wells
 
+    @property
+    def typewells(self) -> ObjectRepository[Typewell]:
+        if self._typewells is None:
+            self._typewells = ObjectRepository(
+                objects=[
+                    Typewell(papi_client=self._papi_client, project=self, **item)
+                    for item in self._get_typewells_data()
+                ]
+            )
+
+        return self._typewells
+
     def _get_wells_data(self) -> DataList:
         if self._wells_data is None:
             self._wells_data = self._papi_client.get_project_wells_data(project_id=self.uuid)
 
         return self._wells_data
+
+    def _get_typewells_data(self) -> DataList:
+        if self._typewells_data is None:
+            self._typewells_data = self._papi_client.get_project_typewells_data(project_id=self.uuid)
+
+        return self._typewells_data

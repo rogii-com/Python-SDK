@@ -5,13 +5,21 @@ from rogii_solo.exceptions import ProjectNotFoundException, InvalidProjectExcept
 from tests.papi_data import (
     METER_PROJECT_NAME,
     WELL_NAME,
+    TYPEWELL_NAME,
     INTERPRETATION_NAME,
     STARRED_INTERPRETATION_NAME,
+    STARRED_HORIZON_TOP_NAME,
+    STARRED_HORIZON_CENTER_NAME,
+    STARRED_HORIZON_BOTTOM_NAME,
     HORIZON_NAME,
     TARGET_LINE_NAME,
     STARRED_TARGET_LINE_NAME,
     NESTED_WELL_NAME,
-    STARRED_NESTED_WELL_NAME
+    STARRED_TOPSET_NAME,
+    STARRED_NESTED_WELL_NAME,
+    STARRED_TOP_TOP_NAME,
+    STARRED_TOP_CENTER_NAME,
+    STARRED_TOP_BOTTOM_NAME,
 )
 
 
@@ -272,3 +280,164 @@ def test_new_nested_well_header_same_as_parent_well(project_papi):
     assert new_nested_well is not None
     assert new_nested_well.azimuth == well.azimuth
     assert new_nested_well.convergence == well.convergence
+
+
+def test_get_project_typewells(project_papi):
+    typewells_data = project_papi.typewells.to_dict()
+    typewells_df = project_papi.typewells.to_df()
+
+    assert typewells_data
+    assert not typewells_df.empty
+
+
+def test_get_typewell(project_papi):
+    typewell = project_papi.typewells.find_by_name(TYPEWELL_NAME)
+
+    assert typewell is not None
+
+    typewell_data = typewell.to_dict()
+    typewell_df = typewell.to_df()
+
+    assert typewell_data['name'] == TYPEWELL_NAME
+    assert typewell_df.at[0, 'name'] == TYPEWELL_NAME
+
+
+def test_get_typewell_trajectory(project_papi):
+    trajectory = project_papi.typewells.find_by_name(TYPEWELL_NAME).trajectory
+
+    trajectory_data = trajectory.to_dict()
+    trajectory_df = trajectory.to_df()
+
+    assert trajectory_data
+    assert not trajectory_df.empty
+
+
+def test_create_well_topset(project_papi):
+    well = project_papi.wells.find_by_name(WELL_NAME)
+    topset_name = 'Topset ' + str(random.randint(0, 10000))
+
+    well.create_topset(topset_name)
+    assert well.topsets.find_by_name(topset_name) is not None
+
+
+def test_create_typewell_topset(project_papi):
+    typewell = project_papi.typewells.find_by_name(TYPEWELL_NAME)
+    topset_name = 'Topset ' + str(random.randint(0, 10000))
+
+    typewell.create_topset(topset_name)
+    assert typewell.topsets.find_by_name(topset_name) is not None
+
+
+def test_create_nested_well_topset(project_papi):
+    starred_nested_well = project_papi.wells.find_by_name(WELL_NAME).starred_nested_well
+
+    assert starred_nested_well is not None
+
+    topset_name = 'Topset ' + str(random.randint(0, 10000))
+    starred_nested_well.create_topset(topset_name)
+
+    assert starred_nested_well.topsets.find_by_name(topset_name) is not None
+
+
+def test_create_target_line(project_papi):
+    well = project_papi.wells.find_by_name(WELL_NAME)
+
+    assert well is not None
+
+    target_line_name = 'Target Line ' + str(random.randint(0, 10000))
+    well.create_target_line(
+        target_line_name=target_line_name,
+        origin_x=100.5,
+        origin_y=200.5,
+        origin_z=300.5,
+        target_x=400.5,
+        target_y=500.5,
+        target_z=600.5
+    )
+
+    assert well.target_lines.find_by_name(target_line_name) is not None
+
+
+def test_create_topset_top(project_papi):
+    well = project_papi.wells.find_by_name(WELL_NAME)
+
+    assert well is not None
+
+    topset = well.topsets.find_by_name(STARRED_TOPSET_NAME)
+
+    assert topset is not None
+
+    random_md = random.randint(11400, 11500)
+    top_name = 'Top ' + str(random_md)
+    topset.create_top(top_name=top_name, md=float(random_md))
+
+    assert topset.tops.find_by_name(top_name) is not None
+
+
+def test_get_topset_tops(project_papi):
+    well = project_papi.wells.find_by_name(WELL_NAME)
+
+    assert well is not None
+
+    topset = well.topsets.find_by_name(STARRED_TOPSET_NAME)
+
+    assert topset is not None
+
+    tops = topset.tops
+
+    assert tops is not None
+
+    tops_data = tops.to_dict()
+    tops_df = tops.to_df()
+
+    assert tops_data
+    assert not tops_df.empty
+
+
+def test_get_interpretation_starred_horizons(project_papi):
+    starred_interpretation = project_papi.wells.find_by_name(WELL_NAME).starred_interpretation
+
+    assert starred_interpretation is not None
+    assert starred_interpretation.starred_horizon_top is not None
+
+    starred_horizon_top_data = starred_interpretation.starred_horizon_top.to_dict()
+    starred_horizon_top_df = starred_interpretation.starred_horizon_top.to_df()
+
+    starred_horizon_center_data = starred_interpretation.starred_horizon_center.to_dict()
+    starred_horizon_center_df = starred_interpretation.starred_horizon_center.to_df()
+
+    starred_horizon_bottom_data = starred_interpretation.starred_horizon_bottom.to_dict()
+    starred_horizon_bottom_df = starred_interpretation.starred_horizon_bottom.to_df()
+
+    assert starred_horizon_top_data['meta']['name'] == STARRED_HORIZON_TOP_NAME
+    assert starred_horizon_top_df['meta'].at[0, 'name'] == STARRED_HORIZON_TOP_NAME
+
+    assert starred_horizon_center_data['meta']['name'] == STARRED_HORIZON_CENTER_NAME
+    assert starred_horizon_center_df['meta'].at[0, 'name'] == STARRED_HORIZON_CENTER_NAME
+
+    assert starred_horizon_bottom_data['meta']['name'] == STARRED_HORIZON_BOTTOM_NAME
+    assert starred_horizon_bottom_df['meta'].at[0, 'name'] == STARRED_HORIZON_BOTTOM_NAME
+
+
+def test_get_topset_starred_tops(project_papi):
+    starred_topset = project_papi.wells.find_by_name(WELL_NAME).starred_topset
+
+    assert starred_topset is not None
+
+    starred_top_top_data = starred_topset.starred_top_top.to_dict()
+    starred_top_top_df = starred_topset.starred_top_top.to_df()
+
+    assert starred_top_top_data['name'] == STARRED_TOP_TOP_NAME
+    assert starred_top_top_df.at[0, 'name'] == STARRED_TOP_TOP_NAME
+
+    starred_top_center_data = starred_topset.starred_top_center.to_dict()
+    starred_top_center_df = starred_topset.starred_top_center.to_df()
+
+    assert starred_top_center_data['name'] == STARRED_TOP_CENTER_NAME
+    assert starred_top_center_df.at[0, 'name'] == STARRED_TOP_CENTER_NAME
+
+    starred_top_bottom_data = starred_topset.starred_top_bottom.to_dict()
+    starred_top_bottom_df = starred_topset.starred_top_bottom.to_df()
+
+    assert starred_top_bottom_data['name'] == STARRED_TOP_BOTTOM_NAME
+    assert starred_top_bottom_df.at[0, 'name'] == STARRED_TOP_BOTTOM_NAME

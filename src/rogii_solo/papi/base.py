@@ -6,7 +6,7 @@ from requests.auth import HTTPBasicAuth
 from requests_oauthlib import OAuth2Session
 
 from rogii_solo.papi.exceptions import AccessTokenFailureException, BasePapiClientException
-from rogii_solo.papi.types import PapiTrajectory, PapiVar
+from rogii_solo.papi.types import PapiStarredHorizons, PapiStarredTops, PapiTrajectory, PapiVar
 
 
 class BasePapiClient:
@@ -182,12 +182,12 @@ class PapiClient(BasePapiClient):
         Fetches projects
         :param offset:
         :param limit:
-        :param project_filter
-        :param headers
+        :param project_filter:
+        :param headers:
         :return:
         """
 
-        data = self._send_request(
+        return self._send_request(
             url='projects',
             params={
                 'offset': offset,
@@ -196,8 +196,6 @@ class PapiClient(BasePapiClient):
             },
             headers=headers
         )
-
-        return data
 
     def fetch_virtual_projects(self,
                                offset: int = BasePapiClient.DEFAULT_OFFSET,
@@ -210,11 +208,11 @@ class PapiClient(BasePapiClient):
         :param offset:
         :param limit:
         :param project_filter:
-        :param headers
+        :param headers:
         :return:
         """
 
-        data = self._send_request(
+        return self._send_request(
             url='projects/virtual',
             params={
                 'offset': offset,
@@ -223,8 +221,6 @@ class PapiClient(BasePapiClient):
             },
             headers=headers
         )
-
-        return data
 
     def fetch_project_wells(self,
                             project_id: str,
@@ -238,12 +234,12 @@ class PapiClient(BasePapiClient):
         :param project_id:
         :param offset:
         :param limit:
-        :param well_filter
-        :param headers
+        :param well_filter:
+        :param headers:
         :return:
         """
 
-        data = self._send_request(
+        return self._send_request(
             url=f'projects/{project_id}/wells/raw',
             params={
                 'offset': offset,
@@ -253,13 +249,11 @@ class PapiClient(BasePapiClient):
             headers=headers
         )
 
-        return data
-
     def fetch_well_raw_trajectory(self, well_id: str, headers: Optional[Dict[str, Any]] = None):
         """
         Fetches well trajectory raw data
         :param well_id:
-        :param headers
+        :param headers:
         :return:
         """
 
@@ -280,7 +274,7 @@ class PapiClient(BasePapiClient):
         :param offset:
         :param limit:
         :param interpretation_filter:
-        :param headers
+        :param headers:
         :return:
         """
 
@@ -307,7 +301,7 @@ class PapiClient(BasePapiClient):
         :param offset:
         :param limit:
         :param horizon_filter:
-        :param headers
+        :param headers:
         :return:
         """
 
@@ -328,13 +322,33 @@ class PapiClient(BasePapiClient):
         """
         Fetches interpretation assembled segments
         :param interpretation_id:
-        :param headers
+        :param headers:
         :return:
         """
 
         data = self._send_request(url=f'interpretations/{interpretation_id}/horizons/raw', headers=headers)
 
         return data['assembled_segments']
+
+    def fetch_interpretation_starred_horizons(self,
+                                              interpretation_id: str,
+                                              headers: Optional[Dict[str, Any]] = None
+                                              ) -> PapiStarredHorizons:
+        """
+        Fetches IDs of starred horizons
+        :param interpretation_id:
+        :param headers:
+        :return:
+        """
+        starred_horizons = self._send_request(
+            url=f'interpretations/{interpretation_id}/starred', headers=headers
+        )
+
+        return PapiStarredHorizons(
+            top=starred_horizons['top'],
+            center=starred_horizons['center'],
+            bottom=starred_horizons['bottom']
+        )
 
     def fetch_well_nested_wells(self,
                                 well_id: str,
@@ -347,7 +361,7 @@ class PapiClient(BasePapiClient):
         :param well_id:
         :param offset:
         :param limit:
-        :param headers
+        :param headers:
         :return:
         """
 
@@ -371,7 +385,7 @@ class PapiClient(BasePapiClient):
         :param well_id:
         :param offset:
         :param limit:
-        :param headers
+        :param headers:
         :return:
         """
 
@@ -407,7 +421,7 @@ class PapiClient(BasePapiClient):
             'kb': kb,
             'tie_in_tvd': tie_in_tvd,
             'tie_in_ns': tie_in_ns,
-            'tie_in_ew': tie_in_ew
+            'tie_in_ew': tie_in_ew,
         }
 
         return self._send_post_request(url=url, request_data=request_data, headers=headers)
@@ -425,7 +439,7 @@ class PapiClient(BasePapiClient):
             'md_uom': md_uom,
             'incl_uom': incl_uom,
             'azi_uom': azi_uom,
-            'trajectory_stations': trajectory_stations
+            'trajectory_stations': trajectory_stations,
         }
 
         return self._send_put_request(url=url, request_data=request_data, headers=headers)
@@ -440,3 +454,254 @@ class PapiClient(BasePapiClient):
         data = self._send_request(url=f'nestedwells/{nested_well_id}/trajectory/raw', headers=headers)
 
         return data['content']
+
+    def fetch_project_typewells(self,
+                                project_id: str,
+                                offset: int = BasePapiClient.DEFAULT_OFFSET,
+                                limit: int = BasePapiClient.DEFAULT_LIMIT,
+                                typewell_filter: str = None,
+                                headers: Optional[Dict[str, Any]] = None
+                                ):
+        """
+        Fetches project typewells
+        :param project_id:
+        :param offset:
+        :param limit:
+        :param typewell_filter:
+        :param headers:
+        :return:
+        """
+
+        return self._send_request(
+            url=f'projects/{project_id}/typewells',
+            params={
+                'offset': offset,
+                'limit': limit,
+                'filter': typewell_filter,
+            },
+            headers=headers
+        )
+
+    def fetch_typewell_raw_trajectory(self, typewell_id: str, headers: Optional[Dict[str, Any]] = None):
+        """
+        Fetches typewell trajectory raw data
+        :param typewell_id:
+        :param headers:
+        :return:
+        """
+
+        data = self._send_request(url=f'typewells/{typewell_id}/trajectory/raw', headers=headers)
+
+        return data['content']
+
+    def create_well_topset(self,
+                           well_id: str,
+                           topset_name: str,
+                           headers: Optional[Dict[str, Any]] = None
+                           ):
+        """
+        Create topset in the well
+        :param well_id:
+        :param topset_name:
+        :param headers:
+        :return:
+        """
+
+        url = f'wells/{well_id}/topsets'
+        request_data = {'name': topset_name}
+
+        return self._send_post_request(url=url, request_data=request_data, headers=headers)
+
+    def create_typewell_topset(self,
+                               typewell_id: str,
+                               topset_name: str,
+                               headers: Optional[Dict[str, Any]] = None
+                               ):
+        """
+        Create topset in the typewell
+        :param typewell_id:
+        :param topset_name:
+        :param headers:
+        :return:
+        """
+
+        url = f'typewells/{typewell_id}/topsets'
+        request_data = {'name': topset_name}
+
+        return self._send_post_request(url=url, request_data=request_data, headers=headers)
+
+    def create_nested_well_topset(self,
+                                  nested_well_id: str,
+                                  topset_name: str,
+                                  headers: Optional[Dict[str, Any]] = None
+                                  ):
+        """
+        Create topset in the nestedwells
+        :param nested_well_id:
+        :param topset_name:
+        :param headers:
+        :return:
+        """
+
+        url = f'nestedwells/{nested_well_id}/topsets'
+        request_data = {'name': topset_name}
+
+        return self._send_post_request(url=url, request_data=request_data, headers=headers)
+
+    def fetch_well_topsets(self,
+                           well_id: str,
+                           offset: int = BasePapiClient.DEFAULT_OFFSET,
+                           limit: int = BasePapiClient.DEFAULT_LIMIT,
+                           headers: Optional[Dict[str, Any]] = None
+                           ):
+        """
+        Fetches well topsets
+        :param well_id:
+        :param offset:
+        :param limit:
+        :param headers:
+        :return:
+        """
+
+        return self._send_request(
+            url=f'wells/{well_id}/topsets',
+            params={
+                'offset': offset,
+                'limit': limit,
+            },
+            headers=headers
+        )
+
+    def fetch_typewell_topsets(self,
+                               typewell_id: str,
+                               offset: int = BasePapiClient.DEFAULT_OFFSET,
+                               limit: int = BasePapiClient.DEFAULT_LIMIT,
+                               headers: Optional[Dict[str, Any]] = None
+                               ):
+        """
+        Fetches typewell topsets
+        :param typewell_id:
+        :param offset:
+        :param limit:
+        :param headers:
+        :return:
+        """
+
+        return self._send_request(
+            url=f'typewells/{typewell_id}/topsets',
+            params={
+                'offset': offset,
+                'limit': limit,
+            },
+            headers=headers
+        )
+
+    def fetch_nested_well_topsets(self,
+                                  nested_well_id: str,
+                                  offset: int = BasePapiClient.DEFAULT_OFFSET,
+                                  limit: int = BasePapiClient.DEFAULT_LIMIT,
+                                  headers: Optional[Dict[str, Any]] = None
+                                  ):
+        """
+        Fetches nested well topsets
+        :param nested_well_id:
+        :param offset:
+        :param limit:
+        :param headers:
+        :return:
+        """
+
+        return self._send_request(
+            url=f'nestedwells/{nested_well_id}/topsets',
+            params={
+                'offset': offset,
+                'limit': limit,
+            },
+            headers=headers
+        )
+
+    def create_well_target_line(self,
+                                well_id: str,
+                                target_line_name: str,
+                                origin_x: PapiVar,
+                                origin_y: PapiVar,
+                                origin_z: PapiVar,
+                                target_x: PapiVar,
+                                target_y: PapiVar,
+                                target_z: PapiVar,
+                                headers: Optional[Dict[str, Any]] = None
+                                ):
+        url = f'wells/{well_id}/targetlines'
+        request_data = {
+            'name': target_line_name,
+            'origin_x': origin_x,
+            'origin_y': origin_y,
+            'origin_z': origin_z,
+            'target_x': target_x,
+            'target_y': target_y,
+            'target_z': target_z,
+        }
+
+        return self._send_post_request(url=url, request_data=request_data, headers=headers)
+
+    def create_topset_top(self,
+                          topset_id: str,
+                          top_name: str,
+                          md: PapiVar,
+                          headers: Optional[Dict[str, Any]] = None
+                          ):
+        """
+        Create top in the topset
+        :param topset_id:
+        :param top_name:
+        :param md:
+        :param headers:
+        :return:
+        """
+
+        url = f'topsets/{topset_id}/tops'
+        request_data = {
+            'name': top_name,
+            'md': md,
+        }
+
+        return self._send_post_request(url=url, request_data=request_data, headers=headers)
+
+    def fetch_topset_tops(self,
+                          topset_id: str,
+                          offset: int = BasePapiClient.DEFAULT_OFFSET,
+                          limit: int = BasePapiClient.DEFAULT_LIMIT,
+                          headers: Optional[Dict[str, Any]] = None
+                          ):
+        """
+        Fetches topset tops
+        :param topset_id:
+        :param offset:
+        :param limit:
+        :param headers:
+        :return:
+        """
+
+        return self._send_request(
+            url=f'topsets/{topset_id}/tops',
+            params={
+                'offset': offset,
+                'limit': limit,
+            },
+            headers=headers
+        )
+
+    def fetch_topset_starred_tops(self, topset_id: str, headers: Dict = None) -> PapiStarredTops:
+        """
+        Fetches IDs of starred tops
+        :param topset_id:
+        :param headers:
+        :return:
+        """
+        starred_tops = self._send_request(url=f'topsets/{topset_id}/starred', headers=headers)
+
+        return PapiStarredTops(
+            top=starred_tops['top'],
+            center=starred_tops['center'],
+            bottom=starred_tops['bottom']
+        )

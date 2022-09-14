@@ -6,7 +6,7 @@ import rogii_solo.well
 from rogii_solo.base import ComplexObject, ObjectRepository
 from rogii_solo.horizon import Horizon
 from rogii_solo.papi.client import PapiClient
-from rogii_solo.papi.types import PapiAssembledSegments
+from rogii_solo.papi.types import PapiAssembledSegments, PapiStarredHorizons
 from rogii_solo.types import DataList
 from rogii_solo.types import Interpretation as InterpretationType
 
@@ -29,6 +29,11 @@ class Interpretation(ComplexObject):
 
         self._horizons_data: Optional[DataList] = None
         self._horizons: Optional[ObjectRepository[Horizon]] = None
+
+        self._starred_horizons_data: Optional[PapiStarredHorizons] = None
+        self._starred_horizon_top: Optional[Horizon] = None
+        self._starred_horizon_center: Optional[Horizon] = None
+        self._starred_horizon_bottom: Optional[Horizon] = None
 
     def to_dict(self, get_converted: bool = True) -> Dict[str, Any]:
         return self._get_data()
@@ -65,6 +70,30 @@ class Interpretation(ComplexObject):
 
         return self._horizons_data
 
+    @property
+    def starred_horizon_top(self):
+        if self._starred_horizon_top is None:
+            starred_horizons_data = self._get_starred_horizons_data()
+            self._starred_horizon_top = self.horizons.find_by_id(starred_horizons_data['top'])
+
+        return self._starred_horizon_top
+
+    @property
+    def starred_horizon_center(self):
+        if self._starred_horizon_center is None:
+            starred_horizons_data = self._get_starred_horizons_data()
+            self._starred_horizon_center = self.horizons.find_by_id(starred_horizons_data['center'])
+
+        return self._starred_horizon_center
+
+    @property
+    def starred_horizon_bottom(self):
+        if self._starred_horizon_bottom is None:
+            starred_horizons_data = self._get_starred_horizons_data()
+            self._starred_horizon_bottom = self.horizons.find_by_id(starred_horizons_data['bottom'])
+
+        return self._starred_horizon_bottom
+
     def _get_data(self):
         assembled_segments = self.get_assembled_segments_data()
 
@@ -84,3 +113,9 @@ class Interpretation(ComplexObject):
             'horizons': assembled_segments['horizons'],
             'segments': assembled_segments['segments'],
         }
+
+    def _get_starred_horizons_data(self):
+        if self._starred_horizons_data is None:
+            self._starred_horizons_data = self._papi_client.get_interpretation_starred_horizons(self.uuid)
+
+        return self._starred_horizons_data
