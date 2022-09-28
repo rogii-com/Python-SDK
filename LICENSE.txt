@@ -1,20 +1,81 @@
-Copyright (c) 2022 ROGII Inc.
+Copyright 2022 Rogii Inc.
 
-MIT License
+These API Terms form a binding "Agreement" between You and Rogii Inc. (“Rogii”)
+"You," and "your," refers to the individual, company or legal entity that you represent.
+The Agreement does not grant You any right to access or use: (a) Solo Cloud platform
+and associated tools and applications (the "Services"); (b) any of Rogii’s non-public
+application programming interfaces; or (c) the confidential geoscience and drilling data
+owned by third parties stored in Solo Cloud.  If You wish to access the Services, You
+will be required to enter into separate license agreements with Rogii for the Services.
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+DEFINITIONS
+“Software Application” means software authored by You that accesses or otherwise
+interoperates with Solo Cloud via the Solo Cloud Public API.
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+“Solo Cloud” means Rogii’s proprietary multi-tenant cloud system and database which
+contains confidential geoscience and drilling data owned by third parties.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+“Solo Cloud Public API” means a collection of routines, classes, function parameters,
+protocols, related libraries, tools and other instructions provided in source code or
+object code form that allow access to or interoperability with Solo Cloud by a Software
+Application.
+
+“Python SDK” means the software development kit of tools developed by Rogii that
+enables access to the capabilities and features of Solo Cloud through the utilization of
+Solo Cloud Public API.
+
+1.  Rogii grants You a world-wide, non-exclusive, revocable limited license, under
+    applicable copyrights, to Use the Solo Cloud Public API or Python SDK, as
+    applicable, only as necessary to develop, test, enable and support interoperability
+    between the Software Application and Solo Cloud.
+
+2.  You will not: (A) access Solo Cloud Public API or Python SDK or their
+    documentation in violation of any law or regulation; (B) access Solo Cloud Public
+    API or Python SDK in any manner that (i) compromises, breaks or circumvents any
+    of Rogii’s technical processes or security measures associated with Solo Cloud, (ii)
+    poses a security vulnerability to customers or users of Solo Cloud, or (iii) tests the
+    vulnerability of Rogii’s systems or networks; (C) access Solo Cloud Public API or
+    Python SDK or their documentation in order to replicate or compete with Solo
+    Cloud; (D) attempt to reverse engineer or otherwise derive source code, trade
+    secrets, or know-how of Solos Cloud API, Python SDK or Solo Cloud; or (E) attempt
+    to use Solo Cloud Public API or Python SDK in a manner that exceeds rate limits, or
+    constitutes excessive or abusive usage.
+
+3.  The above copyright notice and this permission notice shall be included in all copies
+    or substantial portions of the Software.
+
+4.  THE SOLO CLOUD PUBLIC API, PYTHON SDK AND THEIR DOCUMENTATION AND ALL
+    RELATED COMPONENTS AND INFORMATION ARE PROVIDED BY US ON AN "AS IS"
+    AND "AS AVAILABLE" BASIS WITHOUT ANY WARRANTIES OF ANY KIND, AND WE
+    EXPRESSLY DISCLAIM ANY AND ALL WARRANTIES, WHETHER EXPRESS OR
+    IMPLIED, INCLUDING THE IMPLIED WARRANTIES OF MERCHANTABILITY, TITLE,
+    FITNESS FOR A PARTICULAR PURPOSE, AND NON-INFRINGEMENT. YOU
+    ACKNOWLEDGE THAT ROGII DOES NOT WARRANT THAT THE SOLO CLOUD PUBLIC
+    API OR PYTHON SDK WILL BE UNINTERRUPTED, TIMELY, SECURE, ERROR-FREE,
+    OR BACKWARDS COMPATIBLE.
+
+5.  You shall defend, indemnify and hold harmless Rogii, its affiliates and their
+    respective officers, directors, employees, agents and representatives from any and
+    all claims, damages, liabilities, costs and fees (including reasonable attorneys’
+    fees) arising from the Software Application. The Parties agree to comply with the
+    following process when Rogii seeks indemnification under this section and
+    specifically that Rogii is to: (i) promptly give You written notice of the claim; (ii) give
+    You sole control of the defense and settlement of the claim (provided that You may
+    not settle any claim unless it unconditionally releases Rogii of all liability); and (iii)
+    provide You, at Your cost, all reasonable assistance.
+
+6.  TO THE EXTENT PERMITTED BY APPLICABLE LAW, IN NO EVENT SHALL ROGII BE
+    RESPONSIBLE OR LIABLE WITH RESPECT TO ANY SUBJECT MATTER OF THIS
+    AGREEMENT UNDER ANY CONTRACT, NEGLIGENCE, STRICT LIABILITY OR OTHER
+    THEORY FOR: (I) LOSS OR INACCURACY OF DATA OR COST OF PROCUREMENT OF
+    SUBSTITUTE GOODS, SERVICES, OR TECHNOLOGY; OR (II) ANY INDIRECT,
+    INCIDENTAL, OR CONSEQUENTIAL DAMAGES INCLUDING, BUT NOT LIMITED TO
+    LOSS OF REVENUES OR PROFITS; (III) ANY MATTER BEYOND ITS REASONABLE
+    CONTROL; OR (IV) ANY AMOUNT IN THE AGGREGATE OVER $100
+
+7.  Rogii may terminate this Agreement immediately upon written notice if You breach
+    this Agreement. Rogii may, at its sole discretion, reinstate Your ability to use the
+    Solo Cloud Public API if You demonstrate that You have remedied any such breach.
+
+8.  Notwithstanding the foregoing, Sections 4-6 of this Agreement will survive any
+    termination of this Agreement.

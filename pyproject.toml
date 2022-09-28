@@ -7,7 +7,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "rogii-solo"
-description = "ROGII Solo is a Python SDK designed to make data scientists' work with Solo easier."
+description = "Rogii Solo is a Python SDK designed to make data scientists' work with Solo easier."
 readme = "README.md"
 license = {file = "LICENSE.txt"}
 keywords = [
@@ -29,7 +29,7 @@ requires-python = "==3.10.*"
 classifiers = [
     "Programming Language :: Python :: 3 :: Only",
     "Programming Language :: Python :: 3.10",
-    "License :: OSI Approved :: MIT License",
+    "License :: Other/Proprietary License",
     "Operating System :: OS Independent",
     "Development Status :: 4 - Beta",
     "Intended Audience :: Science/Research",
@@ -39,7 +39,7 @@ classifiers = [
     "Topic :: Scientific/Engineering"
 ]
 authors = [
-    { name = "ROGII Inc." },
+    { name = "Rogii Inc." },
     { email = "support@rogii.com" }
 ]
 dependencies = [
@@ -67,6 +67,7 @@ dev = [
 "Documentation" = "https://kb.solo.cloud/Python+SDK"
 "Issue Tracker" = "https://github.com/rogii-com/Python-SDK/issues"
 "Source Code" = "https://github.com/rogii-com/Python-SDK"
+"License Agreement" = "https://github.com/rogii-com/Python-SDK/blob/develop/LICENSE.txt"
 
 [tool.setuptools.dynamic]
 version = {attr = "rogii_solo.__version__"}

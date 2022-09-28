@@ -1,6 +1,6 @@
-# ROGII Solo
+# Rogii Solo
 
-ROGII Solo is a Python SDK designed to make data scientists' work with Solo easier.
+Rogii Solo is a Python SDK designed to make data scientists' work with Solo easier.
 
 ## Requirements
 Python 3.10
