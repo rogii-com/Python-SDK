@@ -5,6 +5,7 @@ from pandas import DataFrame
 import rogii_solo.project
 from rogii_solo.base import ComplexObject, ObjectRepository
 from rogii_solo.interpretation import Interpretation
+from rogii_solo.log import Log
 from rogii_solo.papi.client import PapiClient
 from rogii_solo.target_line import TargetLine
 from rogii_solo.trajectory import TrajectoryPoint, TrajectoryPointRepository
@@ -47,6 +48,9 @@ class Well(ComplexObject):
         self._nested_wells_data: Optional[DataList] = None
         self._nested_wells: Optional[ObjectRepository[NestedWell]] = None
         self._starred_nested_well: Optional[NestedWell] = None
+
+        self._logs_data: Optional[DataList] = None
+        self._logs: Optional[ObjectRepository[Log]] = None
 
     def to_dict(self, get_converted: bool = True) -> Dict[str, Any]:
         measure_units = self.project.measure_unit
@@ -176,6 +180,21 @@ class Well(ComplexObject):
             self._starred_nested_well = self.nested_wells.find_by_id(starred_nested_well_id)
 
         return self._starred_nested_well
+
+    @property
+    def logs(self) -> ObjectRepository[Log]:
+        if self._logs is None:
+            self._logs = ObjectRepository(
+                objects=[Log(papi_client=self._papi_client, well=self, **item) for item in self._get_logs_data()]
+            )
+
+        return self._logs
+
+    def _get_logs_data(self) -> DataList:
+        if self._logs_data is None:
+            self._logs_data = self._papi_client.get_well_logs_data(well_id=self.uuid)
+
+        return self._logs_data
 
     def create_nested_well(self,
                            nested_well_name: str,

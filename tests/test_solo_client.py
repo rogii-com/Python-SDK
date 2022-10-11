@@ -9,7 +9,8 @@ from tests.papi_data import (
     TARGET_LINE_NAME,
     STARRED_TARGET_LINE_NAME,
     NESTED_WELL_NAME,
-    STARRED_NESTED_WELL_NAME
+    STARRED_NESTED_WELL_NAME,
+    LOG_NAME
 )
 
 
@@ -216,3 +217,25 @@ def test_get_nested_well_trajectory(project):
 
     assert trajectory_data
     assert not trajectory_df.empty
+
+
+def test_get_well_logs(project):
+    logs = project.wells.find_by_name(WELL_NAME).logs
+
+    logs_data = logs.to_dict()
+    logs_df = logs.to_df()
+
+    assert logs_data
+    assert not logs_df.empty
+
+
+def test_get_well_log_points(project):
+    log = project.wells.find_by_name(WELL_NAME).logs.find_by_name(LOG_NAME)
+
+    assert log is not None
+
+    log_data = log.to_dict()
+    log_df = log.to_df()
+
+    assert log_data['meta']['name'] == LOG_NAME
+    assert log_df['meta'].at[0, 'name'] == LOG_NAME

@@ -14,7 +14,9 @@ from tests.papi_data import (
     HORIZONS_DATA_RESPONSE,
     ASSEMBLED_SEGMENTS_DATA_RESPONSE,
     TARGET_LINES_DATA_RESPONSE,
-    NESTED_WELLS_DATA_RESPONSE
+    NESTED_WELLS_DATA_RESPONSE,
+    LOGS_DATA_RESPONSE,
+    LOG_POINTS_DATA_RESPONSE
 )
 
 
@@ -58,6 +60,14 @@ def fetch_nested_well_raw_trajectory(**kwargs):
     return TRAJECTORY_DATA_RESPONSE['content']
 
 
+def fetch_well_logs(**kwargs):
+    return LOGS_DATA_RESPONSE
+
+
+def fetch_well_log_points(**kwargs):
+    return LOG_POINTS_DATA_RESPONSE['log_points']
+
+
 @pytest.fixture(scope='function')
 def solo_client():
     solo_client = SoloClient(client_id='client_id', client_secret='client_secret')
@@ -72,6 +82,8 @@ def solo_client():
     solo_client._papi_client.fetch_well_target_lines = fetch_well_target_lines
     solo_client._papi_client.fetch_well_nested_wells = fetch_well_nested_wells
     solo_client._papi_client.fetch_nested_well_raw_trajectory = fetch_nested_well_raw_trajectory
+    solo_client._papi_client.fetch_well_logs = fetch_well_logs
+    solo_client._papi_client.fetch_well_log_points = fetch_well_log_points
 
     return solo_client
 
