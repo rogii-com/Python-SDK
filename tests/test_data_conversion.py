@@ -809,10 +809,6 @@ def test_get_converted_meter_log(project):
             points_df.at[idx, 'md'],
             Convertable.convert_z(value=log_point['md'], measure_units=measure_units)
         )
-        assert np_is_close(
-            points_df.at[idx, 'data'],
-            Convertable.convert_z(value=log_point['data'], measure_units=measure_units)
-        )
 
 
 def test_get_not_converted_meter_log(project):
@@ -834,7 +830,6 @@ def test_get_not_converted_meter_log(project):
 
     for idx, log_point in enumerate(points):
         assert np_is_close(points_df.at[idx, 'md'], log_point['md'])
-        assert np_is_close(points_df.at[idx, 'data'], log_point['data'])
 
 
 def test_get_converted_foot_log(ft_project):
@@ -861,10 +856,6 @@ def test_get_converted_foot_log(ft_project):
             points_df.at[idx, 'md'],
             Convertable.convert_z(value=log_point['md'], measure_units=measure_units)
         )
-        assert np_is_close(
-            points_df.at[idx, 'data'],
-            Convertable.convert_z(value=log_point['data'], measure_units=measure_units)
-        )
 
 
 def test_get_not_converted_foot_log(ft_project):
@@ -886,7 +877,6 @@ def test_get_not_converted_foot_log(ft_project):
 
     for idx, log_point in enumerate(points):
         assert np_is_close(points_df.at[idx, 'md'], log_point['md'])
-        assert np_is_close(points_df.at[idx, 'data'], log_point['data'])
 
 
 def test_get_converted_ftm_log(ftm_project):
@@ -913,10 +903,6 @@ def test_get_converted_ftm_log(ftm_project):
             points_df.at[idx, 'md'],
             Convertable.convert_z(value=log_point['md'], measure_units=measure_units)
         )
-        assert np_is_close(
-            points_df.at[idx, 'data'],
-            Convertable.convert_z(value=log_point['data'], measure_units=measure_units)
-        )
 
 
 def test_get_not_converted_ftm_log(ftm_project):
@@ -938,4 +924,3 @@ def test_get_not_converted_ftm_log(ftm_project):
 
     for idx, log_point in enumerate(points):
         assert np_is_close(points_df.at[idx, 'md'], log_point['md'])
-        assert np_is_close(points_df.at[idx, 'data'], log_point['data'])
