@@ -43,12 +43,12 @@ class Log(ComplexObject):
         }
 
     def _get_points(self, get_converted: bool):
-        points_data = self._papi_client.get_well_log_data(log_id=self.uuid)
+        points_data = self._papi_client.get_log_data(log_id=self.uuid)
         if get_converted:
             return [
                 {
                     'md': self.convert_z(point['md'], measure_units=self.well.project.measure_unit),
-                    'data': self.convert_z(point['data'], measure_units=self.well.project.measure_unit),
+                    'data': point['data'],
                 }
                 for point in points_data
             ]

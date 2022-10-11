@@ -64,7 +64,7 @@ def fetch_well_logs(**kwargs):
     return LOGS_DATA_RESPONSE
 
 
-def fetch_well_log_points(**kwargs):
+def fetch_log_points(**kwargs):
     return LOG_POINTS_DATA_RESPONSE['log_points']
 
 
@@ -83,7 +83,7 @@ def solo_client():
     solo_client._papi_client.fetch_well_nested_wells = fetch_well_nested_wells
     solo_client._papi_client.fetch_nested_well_raw_trajectory = fetch_nested_well_raw_trajectory
     solo_client._papi_client.fetch_well_logs = fetch_well_logs
-    solo_client._papi_client.fetch_well_log_points = fetch_well_log_points
+    solo_client._papi_client.fetch_log_points = fetch_log_points
 
     return solo_client
 

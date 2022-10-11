@@ -492,7 +492,7 @@ class PapiClient(BasePapiClient):
             headers=headers
         )
 
-    def fetch_well_log_points(self, log_id: str, headers: Optional[Dict[str, Any]] = None):
+    def fetch_log_points(self, log_id: str, headers: Optional[Dict[str, Any]] = None):
         """
         Fetches log points data
         :param log_id:
@@ -500,6 +500,6 @@ class PapiClient(BasePapiClient):
         :return:
         """
 
-        data = self._send_request(url=f'logs/{log_id}/data', headers=headers)
+        data = self._send_request(url=f'logs/{log_id}/data/raw', headers=headers)
 
         return data['log_points']

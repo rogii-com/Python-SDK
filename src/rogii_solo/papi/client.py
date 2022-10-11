@@ -138,9 +138,9 @@ class PapiClient(SdkPapiClient):
             **kwargs
         ))
 
-    def get_well_log_data(self, log_id: str, **kwargs) -> PapiDataList:
+    def get_log_data(self, log_id: str, **kwargs) -> PapiDataList:
         return [
-            self.parse_papi_data(data_item) for data_item in self.fetch_well_log_points(
+            self.parse_papi_data(data_item) for data_item in self.fetch_log_points(
                 log_id=log_id,
                 **kwargs
             )

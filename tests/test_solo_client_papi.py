@@ -275,25 +275,17 @@ def test_new_nested_well_header_same_as_parent_well(project_papi):
     assert new_nested_well.convergence == well.convergence
 
 
-def test_get_well_logs(project_papi):
+def test_get_log(project_papi):
     logs = project_papi.wells.find_by_name(WELL_NAME).logs
-
-    logs_data = logs.to_dict()
-    logs_df = logs.to_df()
-
-    assert logs_data
-    assert not logs_df.empty
-
-
-def test_get_well_log_points(project_papi):
-    log = project_papi.wells.find_by_name(WELL_NAME).logs.find_by_name(LOG_NAME)
+    log = logs.find_by_name(LOG_NAME)
 
     assert log is not None
 
     log_data = log.to_dict()
     log_df = log.to_df()
 
+    assert 'meta' in log_data
+    assert 'points' in log_data
+
     assert log_data['meta']['name'] == LOG_NAME
     assert log_df['meta'].at[0, 'name'] == LOG_NAME
-    assert isinstance(log_data['points'][0]['md'], float)
-
