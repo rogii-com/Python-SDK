@@ -2,7 +2,8 @@ from tests.utils import np_is_close
 
 from tests.papi_data import (
     WELL_NAME,
-    HORIZON_NAME
+    HORIZON_NAME,
+    LOG_NAME
 )
 from rogii_solo.base import Convertable
 
@@ -782,3 +783,144 @@ def test_get_not_converted_ftm_nested_well_trajectory(ftm_project):
         assert np_is_close(trajectory_df.at[idx, 'md'], trajectory_point.md)
         assert np_is_close(trajectory_df.at[idx, 'incl'], trajectory_point.incl)
         assert np_is_close(trajectory_df.at[idx, 'azim'], trajectory_point.azim)
+
+
+def test_get_converted_meter_log(project):
+    logs = project.wells.find_by_name(WELL_NAME).logs
+    log = logs.find_by_name(LOG_NAME)
+
+    assert log is not None
+
+    log_data = log.to_dict(get_converted=False)
+    log_df = log.to_df()
+
+    assert 'meta' in log_data
+    assert 'points' in log_data
+
+    points = log_data['points']
+    points_df = log_df['points']
+
+    assert len(points) == len(points_df.index)
+
+    measure_units = log.well.project.measure_unit
+
+    for idx, log_point in enumerate(points):
+        assert np_is_close(
+            points_df.at[idx, 'md'],
+            Convertable.convert_z(value=log_point['md'], measure_units=measure_units)
+        )
+
+
+def test_get_not_converted_meter_log(project):
+    logs = project.wells.find_by_name(WELL_NAME).logs
+    log = logs.find_by_name(LOG_NAME)
+
+    assert log is not None
+
+    log_data = log.to_dict(get_converted=False)
+    log_df = log.to_df(get_converted=False)
+
+    assert 'meta' in log_data
+    assert 'points' in log_data
+
+    points = log_data['points']
+    points_df = log_df['points']
+
+    assert len(points) == len(points_df.index)
+
+    for idx, log_point in enumerate(points):
+        assert np_is_close(points_df.at[idx, 'md'], log_point['md'])
+
+
+def test_get_converted_foot_log(ft_project):
+    logs = ft_project.wells.find_by_name(WELL_NAME).logs
+    log = logs.find_by_name(LOG_NAME)
+
+    assert log is not None
+
+    log_data = log.to_dict(get_converted=False)
+    log_df = log.to_df()
+
+    assert 'meta' in log_data
+    assert 'points' in log_data
+
+    points = log_data['points']
+    points_df = log_df['points']
+
+    assert len(points) == len(points_df.index)
+
+    measure_units = log.well.project.measure_unit
+
+    for idx, log_point in enumerate(points):
+        assert np_is_close(
+            points_df.at[idx, 'md'],
+            Convertable.convert_z(value=log_point['md'], measure_units=measure_units)
+        )
+
+
+def test_get_not_converted_foot_log(ft_project):
+    logs = ft_project.wells.find_by_name(WELL_NAME).logs
+    log = logs.find_by_name(LOG_NAME)
+
+    assert log is not None
+
+    log_data = log.to_dict(get_converted=False)
+    log_df = log.to_df(get_converted=False)
+
+    assert 'meta' in log_data
+    assert 'points' in log_data
+
+    points = log_data['points']
+    points_df = log_df['points']
+
+    assert len(points) == len(points_df.index)
+
+    for idx, log_point in enumerate(points):
+        assert np_is_close(points_df.at[idx, 'md'], log_point['md'])
+
+
+def test_get_converted_ftm_log(ftm_project):
+    logs = ftm_project.wells.find_by_name(WELL_NAME).logs
+    log = logs.find_by_name(LOG_NAME)
+
+    assert log is not None
+
+    log_data = log.to_dict(get_converted=False)
+    log_df = log.to_df()
+
+    assert 'meta' in log_data
+    assert 'points' in log_data
+
+    points = log_data['points']
+    points_df = log_df['points']
+
+    assert len(points) == len(points_df.index)
+
+    measure_units = log.well.project.measure_unit
+
+    for idx, log_point in enumerate(points):
+        assert np_is_close(
+            points_df.at[idx, 'md'],
+            Convertable.convert_z(value=log_point['md'], measure_units=measure_units)
+        )
+
+
+def test_get_not_converted_ftm_log(ftm_project):
+    logs = ftm_project.wells.find_by_name(WELL_NAME).logs
+    log = logs.find_by_name(LOG_NAME)
+
+    assert log is not None
+
+    log_data = log.to_dict(get_converted=False)
+    log_df = log.to_df(get_converted=False)
+
+    assert 'meta' in log_data
+    assert 'points' in log_data
+
+    points = log_data['points']
+    points_df = log_df['points']
+
+    assert len(points) == len(points_df.index)
+
+    for idx, log_point in enumerate(points):
+        assert np_is_close(points_df.at[idx, 'md'], log_point['md'])

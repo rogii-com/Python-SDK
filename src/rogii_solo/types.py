@@ -14,3 +14,8 @@ class Interpretation(TypedDict):
 class Horizon(TypedDict):
     meta: DataFrame
     points: DataFrame
+
+
+class Log(TypedDict):
+    meta: DataFrame
+    points: DataFrame

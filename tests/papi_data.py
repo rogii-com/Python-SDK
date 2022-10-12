@@ -33,6 +33,8 @@ NESTED_WELL_NAME = 'Nested Well'
 STARRED_NESTED_WELL_NAME = 'Starred Nested Well'
 STARRED_NESTED_WELL_ID = uuid4()
 
+LOG_NAME = 'GR'
+
 PROJECTS_DATA_RESPONSE = {
     'content': [
         {
@@ -3155,4 +3157,109 @@ NESTED_WELLS_DATA_RESPONSE = {
     'total': 3,
     'first': True,
     'last': True
+}
+
+
+LOGS_DATA_RESPONSE = {
+    'content': [ 
+        {
+            'name': LOG_NAME,
+            'uuid': '1b6424cf-1af1-4bdc-a371-561063689b94'
+        },
+        {
+            'name': 'Gamma Ray',
+            'uuid': '1070fbaf-25e2-4ede-807a-98a1c2e0f763'
+        }
+    ],
+    'offset': 0,
+    'limit': 10,
+    'total': 2,
+    'first': True,
+    'last': True
+}
+
+
+LOG_POINTS_DATA_RESPONSE = {
+    'log_points': [
+        {
+            'data': {
+                'val': -3688.6927
+            },
+            'md': {
+                'val': 744.6263999999999
+            }
+        },
+        {
+            'data': {
+                'val': 16.581
+            },
+            'md': {
+                'val': 744.7787999999999
+            }
+        },
+        {
+            'data': {
+                'val': -11.85
+            },
+            'md': {
+                'val': 744.9311999999999
+            }
+        },
+        {
+            'data': {
+                'val': 15.187
+            },
+            'md': {
+                'val': 745.0835999999999
+            }
+        },
+        {
+            'data': {
+                'val': -4.363
+            },
+            'md': {
+                'val': 745.2359999999999
+            }
+        },
+        {
+            'data': {
+                'val': -40.475
+            },
+            'md': {
+                'val': 745.3883999999999
+            }
+        },
+        {
+            'data': {
+                'val': 61.463
+            },
+            'md': {
+                'val': 745.5407999999999
+            }
+        },
+        {
+            'data': {
+                'val': 82.305
+            },
+            'md': {
+                'val': 745.6931999999999
+            }
+        },
+        {
+            'data': {
+                'val': 114.139
+            },
+            'md': {
+                'val': 745.8455999999999
+            }
+        },
+        {
+            'data': {
+                'val': 144.503
+            },
+            'md': {
+                'val': 745.9979999999999
+            }
+        }
+    ]
 }
