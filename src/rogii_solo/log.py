@@ -43,7 +43,7 @@ class Log(ComplexObject):
         }
 
     def _get_points(self, get_converted: bool):
-        points_data = self._papi_client.get_log_data(log_id=self.uuid)
+        points_data = self._papi_client.get_log_data(self.uuid)
 
         if get_converted:
             return [
