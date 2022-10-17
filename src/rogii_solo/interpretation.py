@@ -27,6 +27,8 @@ class Interpretation(ComplexObject):
 
         self._assembled_segments_data: Optional[PapiAssembledSegments] = None
 
+        self._horizons_tvt_data: Optional[DataList] = None
+
         self._horizons_data: Optional[DataList] = None
         self._horizons: Optional[ObjectRepository[Horizon]] = None
 
@@ -49,6 +51,15 @@ class Interpretation(ComplexObject):
             )
 
         return self._assembled_segments_data
+
+    def get_horizons_tvt_data(self, md_step: int = 10) -> DataList:
+        if self._horizons_tvt_data is None:
+            self._horizons_tvt_data = self._papi_client.get_horizons_tvt_data(
+                interpretation_id=self.uuid,
+                md_step=md_step
+            )
+
+        return self._horizons_tvt_data
 
     @property
     def horizons(self) -> ObjectRepository[Horizon]:

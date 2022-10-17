@@ -321,6 +321,26 @@ class PapiClient(BasePapiClient):
             headers=headers
         )
 
+    def fetch_horizons_tvt_data(self,
+                                interpretation_id: str,
+                                md_step: int,
+                                headers: Optional[Dict[str, Any]] = None
+                                ):
+        """
+        Fetches calculated by step horizons data
+        :param interpretation_id:
+        :param md_step:
+        :param headers:
+        :return:
+        """
+
+        data = self._send_request(
+            url=f'interpretations/{interpretation_id}/horizons/data/spacing/{md_step}',
+            headers=headers
+        )
+
+        return data['content']
+
     def fetch_interpretation_assembled_segments(self,
                                                 interpretation_id: str,
                                                 headers: Optional[Dict[str, Any]] = None
