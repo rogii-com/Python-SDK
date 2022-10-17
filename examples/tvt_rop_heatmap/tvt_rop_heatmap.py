@@ -34,9 +34,7 @@ def get_nearest_values(value: Any, input_list: List[Any]) -> Any:
     return values
 
 
-def get_interpolated_trajectory(solo_client: SoloClient,
-                                well: 'rogii_solo.well.Well',
-                                ) -> List[Dict[str, float]]:
+def get_interpolated_trajectory(solo_client: SoloClient, well: 'rogii_solo.well.Well') -> List[Dict[str, float]]:
     well_data = well.to_dict()
     calculated_trajectory = calculate_trajectory(
         raw_trajectory=well.trajectory.to_dict(),
@@ -80,7 +78,7 @@ def get_horizons(interpretation: Interpretation, md_step: int) -> List[Dict[str,
     horizons = interpretation.get_horizons_tvt_data(md_step=md_step)
 
     if not horizons:
-        raise Exception('Horizons for interpretation not found.')
+        raise Exception('Horizons\' data not found.')
 
     return horizons
 
@@ -209,7 +207,7 @@ def get_horizon_scatters(xedges2: Any,
     return data
 
 
-def create_tvt_rop_heatmap(script_settings: Dict[str, Any]):
+def build_tvt_rop_heatmap(script_settings: Dict[str, Any]):
     project_name, well_name = script_settings['project_name'], script_settings['well_name']
     x_log_name, filter_window = script_settings['x_log'], script_settings['filter_window']
     tvt_min, tvt_max = script_settings['tvt_min'], script_settings['tvt_max']
@@ -298,7 +296,6 @@ def create_tvt_rop_heatmap(script_settings: Dict[str, Any]):
 if __name__ == '__main__':
     script_settings = {
         'project_name': '',
-        'use_virtual_project': False,  # if False global project will be used
         'well_name': '',
         'x_log': '',
         'tvt_min': -1,
@@ -307,6 +304,4 @@ if __name__ == '__main__':
         'bins': 60
     }
 
-    create_tvt_rop_heatmap(
-        script_settings=script_settings
-    )
+    build_tvt_rop_heatmap(script_settings)
