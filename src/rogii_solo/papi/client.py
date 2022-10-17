@@ -98,6 +98,14 @@ class PapiClient(SdkPapiClient):
             **kwargs
         ))
 
+    def get_horizons_tvt_data(self, interpretation_id: str, **kwargs) -> PapiDataList:
+        return [
+            self.parse_papi_data(tvt_data) for tvt_data in self.fetch_horizons_tvt_data(
+                interpretation_id=interpretation_id,
+                **kwargs
+            )
+        ]
+
     def get_interpretation_assembled_segments_data(self, interpretation_id: str, **kwargs) -> PapiData:
         assembled_segments = self.fetch_interpretation_assembled_segments(
             interpretation_id=interpretation_id,
