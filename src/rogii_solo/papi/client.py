@@ -36,7 +36,8 @@ class PapiClient(SdkPapiClient):
             papi_auth_url=papi_auth_url,
             papi_client_id=settings_auth.client_id,
             papi_client_secret=settings_auth.client_secret,
-            headers=headers
+            headers=headers,
+            proxies=settings_auth.proxies
         )
 
     def prepare_papi_var(self, value: float) -> PapiVar:

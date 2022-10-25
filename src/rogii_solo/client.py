@@ -16,13 +16,15 @@ class SoloClient:
     def __init__(self,
                  client_id: str,
                  client_secret: str,
-                 papi_domain_name: str = SOLO_PAPI_DEFAULT_DOMAIN_NAME
+                 papi_domain_name: str = SOLO_PAPI_DEFAULT_DOMAIN_NAME,
+                 proxies: dict = None
                  ):
         self._papi_client = PapiClient(
             SettingsAuth(
                 client_id=client_id,
                 client_secret=client_secret,
-                papi_domain_name=papi_domain_name
+                papi_domain_name=papi_domain_name,
+                proxies=proxies
             )
         )
 
