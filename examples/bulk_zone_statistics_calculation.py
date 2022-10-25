@@ -14,10 +14,6 @@ from rogii_solo.horizon import Horizon
 from rogii_solo.interpretation import Interpretation
 from rogii_solo.well import Well
 
-PROJECT_NAME = 'nsapegin (m)'
-WELL_NAME = 'Copy of Lateral1'
-WELL_NAME2 = 'Copy of Lateral2'
-MEASURE_UNITS = EMeasureUnits.METER
 STEP_LENGTH = 1
 MAX_STEP_NUMBER = 50
 # Inclination for start MD range, degrees
@@ -350,7 +346,7 @@ def calc_zone_statistics(well: Well,
         well=well_data,
         assembled_segments=assembled_segments_data['segments'],
         calculated_trajectory=calculated_trajectory,
-        measure_units=MEASURE_UNITS
+        measure_units=measure_units
     )
     tvds_segments = calculate_segment_vs_tvds(segments, assembled_segments_data)
 
@@ -400,7 +396,8 @@ def calc_zone_statistics(well: Well,
     return {'in_zone': in_zone_length, 'in_zone_percent': in_zone_length / total_length * 100}
 
 
-def bulk_calc_zone_statistics(well_names: str,
+def bulk_calc_zone_statistics(project_name: str,
+                              well_names: str,
                               top_horizon: str,
                               base_horizon: str,
                               landing_point_topset: str,
@@ -411,14 +408,14 @@ def bulk_calc_zone_statistics(well_names: str,
         client_secret=environ.get('ROGII_SOLO_CLIENT_SECRET'),
         papi_domain_name=environ.get('ROGII_SOLO_PAPI_DOMAIN_NAME')
     )
-    solo_client.set_project_by_name(PROJECT_NAME)
+    solo_client.set_project_by_name(project_name)
 
     statistics = {}
     for well_name in well_names:
         well = solo_client.project.wells.find_by_name(well_name)
 
         if well is None:
-            print(f'Well "{WELL_NAME}" not found.')
+            print(f'Well "{well_name}" not found.')
             continue
 
         well_data = well.to_dict(get_converted=False)
@@ -447,11 +444,12 @@ def bulk_calc_zone_statistics(well_names: str,
 if __name__ == '__main__':
     # Put horizon names for top and base if it's not starred
     script_settings = {
-        'well_names': [WELL_NAME, WELL_NAME2],
-        'top_horizon': 'Top_Trgt horizon',
-        'base_horizon': 'Base_Trgt horizon',
-        'landing_point_topset': 'Copy of Topset1',
-        'landing_point_top': 'STG16'
+        'project_name': 'Project',
+        'well_names': ['Lateral1', 'Lateral2'],
+        'top_horizon': 'Top Target Horizon',
+        'base_horizon': 'Base Target Horizon',
+        'landing_point_topset': '',
+        'landing_point_top': ''
     }
 
     if ((not script_settings['landing_point_topset'] and script_settings['landing_point_top']) or
