@@ -1,7 +1,7 @@
 from os import environ
 from typing import Any, Dict, List, Optional, Tuple
 
-import numpy as np
+from numpy import arange, ndarray
 
 from rogii_solo import SoloClient
 from rogii_solo.calculations.base import calc_hypotenuse_length, get_nearest_values
@@ -21,21 +21,19 @@ LANDING_INCLINATION = 75
 DELTA = 0.000001
 
 
-def restrict_trajectory(trajectory: Trajectory, start_md: float):
+def restrict_trajectory(trajectory: Trajectory, start_md: float) -> Trajectory:
     index = next((index for index, item in enumerate(trajectory) if item['md'] > start_md), None)
     return trajectory[index:]
 
 
-def get_segment_range(start_md, end_md, default_segment_step: float):
-    """
-    function don't return the start_md as a part of the array
-    """
+def get_segment_range(start_md, end_md, default_segment_step: float) -> ndarray:
     segment_length = end_md - start_md
     step_number = min(segment_length // default_segment_step, MAX_STEP_NUMBER)
     md_step = segment_length / step_number
 
+    # function don't return the start_md as a part of the array
     # end_md must be in the returned range, so use: end_md + md_step
-    return np.arange(start_md + md_step, end_md + md_step, md_step, dtype=float)
+    return arange(start_md + md_step, end_md + md_step, md_step, dtype=float)
 
 
 def interpolate_trajectory(well_data: Dict[str, Any],
@@ -107,7 +105,7 @@ def calculate_segment_vs_tvds(segments: List[Dict[str, Any]],
                 horizon_shift['end_vs'] = segments[i + 1]['vs']
                 horizon_shift['end_tvd'] = horizon_tvd + horizon_shift['end']
 
-    # remove last trajectory point data
+    # remove pseudo-segment with last trajectory point
     del segments[-1]
 
     return segments
@@ -204,17 +202,18 @@ def is_point_inside_horizons_shifts(point: TrajectoryPoint,
                                     top_horizon_shift: Dict[str, Any],
                                     base_horizon_shift: Dict[str, Any]
                                     ) -> bool:
-    return in_polygon(point_x=point['vs'],
-                      point_y=point['tvd'],
-                      top_horizon_start_x=top_horizon_shift['start_vs'],
-                      top_horizon_start_y=top_horizon_shift['start_tvd'],
-                      top_horizon_end_x=top_horizon_shift['end_vs'],
-                      top_horizon_end_y=top_horizon_shift['end_tvd'],
-                      base_horizon_start_x=base_horizon_shift['start_vs'],
-                      base_horizon_start_y=base_horizon_shift['start_tvd'],
-                      base_horizon_end_x=base_horizon_shift['end_vs'],
-                      base_horizon_end_y=base_horizon_shift['end_tvd'],
-                      )
+    return in_polygon(
+        point_x=point['vs'],
+        point_y=point['tvd'],
+        top_horizon_start_x=top_horizon_shift['start_vs'],
+        top_horizon_start_y=top_horizon_shift['start_tvd'],
+        top_horizon_end_x=top_horizon_shift['end_vs'],
+        top_horizon_end_y=top_horizon_shift['end_tvd'],
+        base_horizon_start_x=base_horizon_shift['start_vs'],
+        base_horizon_start_y=base_horizon_shift['start_tvd'],
+        base_horizon_end_x=base_horizon_shift['end_vs'],
+        base_horizon_end_y=base_horizon_shift['end_tvd'],
+    )
 
 
 def calculate_lines_intersection(x1: float,
@@ -240,7 +239,7 @@ def calculate_lines_intersection(x1: float,
     ua = ((x4 - x3) * (y1 - y3) - (y4 - y3) * (x1 - x3)) / denominator
     ub = ((x2 - x1) * (y1 - y3) - (y2 - y1) * (x1 - x3)) / denominator
 
-    #  is the intersection along the segments
+    #  Is the intersection along the segments
     if (ua < 0 or ua > 1 or ub < 0 or ub > 1) and not find_outside_segment:
         return None, None
 
@@ -255,22 +254,28 @@ def calculate_intersection_points_with_horizon(point: TrajectoryPoint,
                                                right_point: TrajectoryPoint,
                                                top_horizon: Dict[str, Any]
                                                ):
-    vs, tvd = calculate_lines_intersection(point['vs'],
-                                           point['tvd'],
-                                           right_point['vs'],
-                                           right_point['tvd'],
-                                           top_horizon['start_vs'],
-                                           top_horizon['start_tvd'],
-                                           top_horizon['end_vs'],
-                                           top_horizon['end_tvd'],
-                                           )
+    vs, tvd = calculate_lines_intersection(
+        point['vs'],
+        point['tvd'],
+        right_point['vs'],
+        right_point['tvd'],
+        top_horizon['start_vs'],
+        top_horizon['start_tvd'],
+        top_horizon['end_vs'],
+        top_horizon['end_tvd'],
+    )
 
-    return {'vs': vs, 'tvd': tvd}
+    return {
+        'vs': vs,
+        'tvd': tvd
+    }
 
 
 def is_in_segment(segment: Dict[str, Any], left_point: TrajectoryPoint, right_point: TrajectoryPoint) -> bool:
-    return (segment['md'] <= left_point['md'] <= segment['end_md']
-            and segment['md'] <= right_point['md'] <= segment['end_md'])
+    return (
+            segment['md'] <= left_point['md'] <= segment['end_md']
+            and segment['md'] <= right_point['md'] <= segment['end_md']
+    )
 
 
 def get_length_in_piece(
@@ -295,7 +300,8 @@ def get_length_in_piece(
 
     if not left_point_inside and not right_point_inside:
         return 0
-    elif left_point_inside and right_point_inside:
+
+    if left_point_inside and right_point_inside:
         return right_point['md'] - left_point['md']
 
     # calculate intersected part of piece
@@ -308,13 +314,19 @@ def get_length_in_piece(
             top_point if top_point['vs'] is not None
             else base_point
         )
-        end_point = {'vs': left_point['vs'], 'tvd': left_point['tvd']}
+        end_point = {
+            'vs': left_point['vs'],
+            'tvd': left_point['tvd']
+        }
     elif not left_point_inside and right_point_inside:
         start_point = (
             top_point if top_point['vs'] is not None
             else base_point
         )
-        end_point = {'vs': right_point['vs'], 'tvd': right_point['tvd']}
+        end_point = {
+            'vs': right_point['vs'],
+            'tvd': right_point['tvd']
+        }
     else:
         start_point = top_point
         end_point = base_point
@@ -393,7 +405,10 @@ def calc_zone_statistics(well: Well,
                 base_horizon_uuid=base_horizon.uuid
             )
 
-    return {'in_zone': in_zone_length, 'in_zone_percent': in_zone_length / total_length * 100}
+    return {
+        'in_zone': in_zone_length,
+        'in_zone_percent': in_zone_length / total_length * 100
+    }
 
 
 def bulk_calc_zone_statistics(project_name: str,
@@ -411,6 +426,7 @@ def bulk_calc_zone_statistics(project_name: str,
     solo_client.set_project_by_name(project_name)
 
     statistics = {}
+
     for well_name in well_names:
         well = solo_client.project.wells.find_by_name(well_name)
 
@@ -444,18 +460,21 @@ def bulk_calc_zone_statistics(project_name: str,
 if __name__ == '__main__':
     # Put horizon names for top and base if it's not starred
     script_settings = {
-        'project_name': 'Project',
-        'well_names': ['Lateral1', 'Lateral2'],
-        'top_horizon': 'Top Target Horizon',
-        'base_horizon': 'Base Target Horizon',
+        'project_name': '',
+        'well_names': [],
+        'top_horizon': '',
+        'base_horizon': '',
         'landing_point_topset': '',
         'landing_point_top': ''
     }
 
-    if ((not script_settings['landing_point_topset'] and script_settings['landing_point_top']) or
-            (script_settings['landing_point_topset'] and not script_settings['landing_point_top'])):
+    if (
+            (not script_settings['landing_point_topset'] and script_settings['landing_point_top']) or
+            (script_settings['landing_point_topset'] and not script_settings['landing_point_top'])
+    ):
         raise Exception('Set correct data for both topset and top, please.')
 
     zone_statistics = bulk_calc_zone_statistics(**script_settings)
+
     for well_name in zone_statistics:
         print(f'Well "{well_name}" is {zone_statistics[well_name]}')

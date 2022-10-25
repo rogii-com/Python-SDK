@@ -8,7 +8,7 @@ from rogii_solo.calculations.trajectory import calculate_trajectory
 
 PROJECT_NAME = 'Global project'
 WELL_NAME = 'Lateral'
-MEASURE_UNITS = EMeasureUnits.METER_FOOT
+MEASURE_UNITS = EMeasureUnits.METER
 DLS_THRESHOLD = 0.5
 
 
