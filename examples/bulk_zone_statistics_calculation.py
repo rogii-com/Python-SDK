@@ -26,12 +26,12 @@ def restrict_trajectory(trajectory: Trajectory, start_md: float) -> Trajectory:
     return trajectory[index:]
 
 
-def get_segment_range(start_md, end_md, default_segment_step: float) -> ndarray:
+def get_segment_range(start_md: float, end_md: float, default_segment_step: float) -> ndarray:
     segment_length = end_md - start_md
     step_number = min(segment_length // default_segment_step, MAX_STEP_NUMBER)
     md_step = segment_length / step_number
 
-    # function don't return the start_md as a part of the array
+    # Function doesn't return the start_md as a part of the array.
     # end_md must be in the returned range, so use: end_md + md_step
     return arange(start_md + md_step, end_md + md_step, md_step, dtype=float)
 
@@ -105,7 +105,7 @@ def calculate_segment_vs_tvds(segments: List[Dict[str, Any]],
                 horizon_shift['end_vs'] = segments[i + 1]['vs']
                 horizon_shift['end_tvd'] = horizon_tvd + horizon_shift['end']
 
-    # remove pseudo-segment with last trajectory point
+    # Remove pseudo-segment with last trajectory point
     del segments[-1]
 
     return segments
@@ -130,7 +130,7 @@ def get_horizons_and_landing_md(well: Well,
 
     if not top_horizon:
         raise Exception(
-            f'Top of zone in the interpretation "{interpretation.name}" in the well {well.name} not found.'
+            f'Top of zone in the interpretation "{interpretation.name}" in the well "{well.name}" not found.'
         )
 
     base_horizon = (
@@ -140,7 +140,7 @@ def get_horizons_and_landing_md(well: Well,
 
     if not base_horizon:
         raise Exception(
-            f'Bottom of zone in the interpretation "{interpretation.name}" in the well {well.name} not found.'
+            f'Bottom of zone in the interpretation "{interpretation.name}" in the well "{well.name}" not found.'
         )
 
     landing_md: float = 0.0
@@ -304,7 +304,7 @@ def get_length_in_piece(
     if left_point_inside and right_point_inside:
         return right_point['md'] - left_point['md']
 
-    # calculate intersected part of piece
+    # Calculate intersected part of piece
 
     top_point = calculate_intersection_points_with_horizon(left_point, right_point, top_horizon)
     base_point = calculate_intersection_points_with_horizon(left_point, right_point, base_horizon)
@@ -452,7 +452,7 @@ def bulk_calc_zone_statistics(project_name: str,
                 measure_units=solo_client.project.measure_unit
             )
         except Exception as exception:
-            print(f'Warning! Statistics for well "{well.name}" won\'t bee calculated.', exception)
+            print(f'Warning! Statistics for well "{well.name}" is not calculated.', exception)
 
     return statistics
 
