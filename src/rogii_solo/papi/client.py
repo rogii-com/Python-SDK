@@ -1,7 +1,7 @@
 import base64
 import hashlib
 import uuid
-from typing import Any, Callable, Dict
+from typing import Any, Callable
 from urllib.parse import urljoin, urlparse
 
 from rogii_solo import __version__
@@ -13,7 +13,9 @@ from rogii_solo.papi.types import (
     PapiStarredHorizons,
     PapiStarredTops,
     PapiVar,
-    SettingsAuth
+    ProxyData,
+    SettingsAuth,
+    UserProxyData
 )
 from rogii_solo.utils.constants import PYTHON_SDK_APP_ID, SOLO_OPEN_AUTH_SERVICE_URL, SOLO_PAPI_URL
 
@@ -37,24 +39,25 @@ class PapiClient(SdkPapiClient):
             papi_client_id=settings_auth.client_id,
             papi_client_secret=settings_auth.client_secret,
             headers=headers,
-            proxies=self._get_proxies(proxies_data=settings_auth.proxies)
+            proxies=self._get_proxies(settings_auth.proxies)
         )
 
-    def _get_proxies(self, proxies_data: Dict[str, Any]) -> Dict[str, Any]:
-        proxies = {}
+    def _get_proxies(self, proxies_data: UserProxyData) -> ProxyData:
+        proxies: ProxyData = {}
 
         if not proxies_data:
             return proxies
 
-        for scheme in proxies_data:
+        for scheme, netloc in proxies_data.items():
             if scheme not in ['https', 'http']:
                 continue
 
-            proxies[scheme] = self._get_proxy_url(
-                    scheme=scheme,
-                    host=proxies_data[scheme]['host'],
-                    port=proxies_data[scheme]['port']
-                )
+            proxies['scheme'] = scheme
+            proxies['netloc'] = self._get_proxy_url(
+                scheme=scheme,
+                host=netloc['host'],
+                port=netloc['port']
+            )
 
         return proxies
 

@@ -5,12 +5,6 @@ from rogii_solo import SoloClient
 
 PROJECT_NAME = 'Global project'
 WELL_NAME = 'Lateral'
-PROXIES = {
-    'http': {
-        'host': '128.128.128.128',
-        'port': 1234
-    }
-}
 
 
 def prepare_well_plan():
@@ -18,7 +12,6 @@ def prepare_well_plan():
         client_id=environ.get('ROGII_SOLO_CLIENT_ID'),
         client_secret=environ.get('ROGII_SOLO_CLIENT_SECRET'),
         papi_domain_name=environ.get('ROGII_SOLO_PAPI_DOMAIN_NAME'),
-        proxies=PROXIES
     )
 
     solo_client.set_project_by_name(PROJECT_NAME)

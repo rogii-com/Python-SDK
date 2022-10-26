@@ -1,11 +1,24 @@
-from typing import Any, Dict, Iterator, List, Literal, NamedTuple, Optional, TypedDict
+from typing import Any, Dict, Iterator, List, Literal, NamedTuple, TypedDict
+
+
+class ProxyData(TypedDict):
+    scheme: Literal['http'] | Literal['https']
+    netloc: str
+
+
+class ProxyNetloc(TypedDict):
+    host: str
+    port: int
+
+
+UserProxyData = Dict[Literal['http'] | Literal['https'], ProxyNetloc]
 
 
 class SettingsAuth(NamedTuple):
     client_id: str
     client_secret: str
     papi_domain_name: str
-    proxies: Optional[Dict[str, Any]]
+    proxies: ProxyData
 
 
 PapiVar = Dict[Literal['val'] | Literal['undefined'], Any]
