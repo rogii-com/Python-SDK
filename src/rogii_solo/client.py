@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Any, Dict, Optional
 
 from rogii_solo.base import ObjectRepository
 from rogii_solo.exceptions import InvalidProjectException, ProjectNotFoundException
@@ -17,7 +17,7 @@ class SoloClient:
                  client_id: str,
                  client_secret: str,
                  papi_domain_name: str = SOLO_PAPI_DEFAULT_DOMAIN_NAME,
-                 proxies: dict = None
+                 proxies: Optional[Dict[str, Any]] = None
                  ):
         self._papi_client = PapiClient(
             SettingsAuth(

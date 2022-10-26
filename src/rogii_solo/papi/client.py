@@ -1,8 +1,8 @@
 import base64
 import hashlib
 import uuid
-from typing import Any, Callable
-from urllib.parse import urljoin
+from typing import Any, Callable, Dict
+from urllib.parse import urljoin, urlparse
 
 from rogii_solo import __version__
 from rogii_solo.papi.base import PapiClient as SdkPapiClient
@@ -37,8 +37,35 @@ class PapiClient(SdkPapiClient):
             papi_client_id=settings_auth.client_id,
             papi_client_secret=settings_auth.client_secret,
             headers=headers,
-            proxies=settings_auth.proxies
+            proxies=self._get_proxies(proxies_data=settings_auth.proxies)
         )
+
+    def _get_proxies(self, proxies_data: Dict[str, Any]) -> Dict[str, Any]:
+        proxies = {}
+
+        if not proxies_data:
+            return proxies
+
+        for scheme in proxies_data:
+            if scheme not in ['https', 'http']:
+                continue
+
+            proxies[scheme] = self._get_proxy_url(
+                    scheme=scheme,
+                    host=proxies_data[scheme]['host'],
+                    port=proxies_data[scheme]['port']
+                )
+
+        return proxies
+
+    def _get_proxy_url(self, scheme: str, host: str, port: int) -> str:
+        parsed_host = urlparse(host)
+        parsed_schema = parsed_host.scheme
+
+        if not parsed_schema:
+            return f'{scheme}://{host}:{port}'
+
+        return f'{host}:{port}'
 
     def prepare_papi_var(self, value: float) -> PapiVar:
         """

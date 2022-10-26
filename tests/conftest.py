@@ -89,7 +89,7 @@ def fetch_topset_starred_tops(**kwargs):
 
 @pytest.fixture(scope='function')
 def solo_client():
-    solo_client = SoloClient(client_id='client_id', client_secret='client_secret')
+    solo_client = SoloClient(client_id='client_id', client_secret='client_secret', proxies='proxies')
 
     solo_client._papi_client.fetch_projects = fetch_projects
     solo_client._papi_client.fetch_virtual_projects = fetch_virtual_projects

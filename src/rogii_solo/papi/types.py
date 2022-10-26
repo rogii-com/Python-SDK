@@ -1,10 +1,11 @@
-from typing import Any, Dict, Iterator, List, Literal, NamedTuple, TypedDict
+from typing import Any, Dict, Iterator, List, Literal, NamedTuple, Optional, TypedDict
 
 
 class SettingsAuth(NamedTuple):
     client_id: str
     client_secret: str
     papi_domain_name: str
+    proxies: Optional[Dict[str, Any]]
 
 
 PapiVar = Dict[Literal['val'] | Literal['undefined'], Any]
