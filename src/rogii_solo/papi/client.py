@@ -2,7 +2,7 @@ import base64
 import hashlib
 import uuid
 from typing import Any, Callable
-from urllib.parse import urljoin
+from urllib.parse import urljoin, urlparse
 
 from rogii_solo import __version__
 from rogii_solo.papi.base import PapiClient as SdkPapiClient
@@ -13,6 +13,7 @@ from rogii_solo.papi.types import (
     PapiStarredHorizons,
     PapiStarredTops,
     PapiVar,
+    ProxyData,
     SettingsAuth
 )
 from rogii_solo.utils.constants import PYTHON_SDK_APP_ID, SOLO_OPEN_AUTH_SERVICE_URL, SOLO_PAPI_URL
@@ -36,8 +37,32 @@ class PapiClient(SdkPapiClient):
             papi_auth_url=papi_auth_url,
             papi_client_id=settings_auth.client_id,
             papi_client_secret=settings_auth.client_secret,
-            headers=headers
+            headers=headers,
+            proxies=self._get_proxies(settings_auth.proxies)
         )
+
+    def _get_proxies(self, proxies_data: ProxyData) -> ProxyData:
+        proxies: ProxyData = {}
+
+        if not proxies_data:
+            return proxies
+
+        for scheme, url in proxies_data.items():
+            if self._is_correct_proxy_url(url):
+                proxies[scheme] = url
+
+        return proxies
+
+    def _is_correct_proxy_url(self, url: str) -> bool:
+        parsed_url = urlparse(url)
+
+        if parsed_url.scheme not in ['https', 'http']:
+            return False
+
+        if not isinstance(parsed_url.port, int):
+            return False
+
+        return True
 
     def prepare_papi_var(self, value: float) -> PapiVar:
         """
