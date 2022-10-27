@@ -48,19 +48,18 @@ class PapiClient(SdkPapiClient):
             return proxies
 
         for scheme, url in proxies_data.items():
-
             if self._is_correct_proxy_url(url):
                 proxies[scheme] = url
 
         return proxies
 
     def _is_correct_proxy_url(self, url: str) -> bool:
-        parsed_host = urlparse(url)
+        parsed_url = urlparse(url)
 
-        if parsed_host.scheme not in ['https', 'http']:
+        if parsed_url.scheme not in ['https', 'http']:
             return False
 
-        if not isinstance(parsed_host.port, int):
+        if not isinstance(parsed_url.port, int):
             return False
 
         return True
