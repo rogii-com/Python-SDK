@@ -14,8 +14,7 @@ from rogii_solo.papi.types import (
     PapiStarredTops,
     PapiVar,
     ProxyData,
-    SettingsAuth,
-    UserProxyData
+    SettingsAuth
 )
 from rogii_solo.utils.constants import PYTHON_SDK_APP_ID, SOLO_OPEN_AUTH_SERVICE_URL, SOLO_PAPI_URL
 
@@ -42,33 +41,29 @@ class PapiClient(SdkPapiClient):
             proxies=self._get_proxies(settings_auth.proxies)
         )
 
-    def _get_proxies(self, proxies_data: UserProxyData) -> ProxyData:
+    def _get_proxies(self, proxies_data: ProxyData) -> ProxyData:
         proxies: ProxyData = {}
 
         if not proxies_data:
             return proxies
 
-        for scheme, netloc in proxies_data.items():
-            if scheme not in ['https', 'http']:
-                continue
+        for scheme, url in proxies_data.items():
 
-            proxies['scheme'] = scheme
-            proxies['netloc'] = self._get_proxy_url(
-                scheme=scheme,
-                host=netloc['host'],
-                port=netloc['port']
-            )
+            if self._is_correct_proxy_url(url):
+                proxies[scheme] = url
 
         return proxies
 
-    def _get_proxy_url(self, scheme: str, host: str, port: int) -> str:
-        parsed_host = urlparse(host)
-        parsed_schema = parsed_host.scheme
+    def _is_correct_proxy_url(self, url: str) -> bool:
+        parsed_host = urlparse(url)
 
-        if not parsed_schema:
-            return f'{scheme}://{host}:{port}'
+        if parsed_host.scheme not in ['https', 'http']:
+            return False
 
-        return f'{host}:{port}'
+        if not isinstance(parsed_host.port, int):
+            return False
+
+        return True
 
     def prepare_papi_var(self, value: float) -> PapiVar:
         """

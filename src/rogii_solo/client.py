@@ -1,9 +1,9 @@
-from typing import Any, Dict, Optional
+from typing import Optional
 
 from rogii_solo.base import ObjectRepository
 from rogii_solo.exceptions import InvalidProjectException, ProjectNotFoundException
 from rogii_solo.papi.client import PapiClient
-from rogii_solo.papi.types import SettingsAuth
+from rogii_solo.papi.types import ProxyData, SettingsAuth
 from rogii_solo.project import Project
 from rogii_solo.types import DataList
 from rogii_solo.utils.constants import SOLO_PAPI_DEFAULT_DOMAIN_NAME
@@ -17,7 +17,7 @@ class SoloClient:
                  client_id: str,
                  client_secret: str,
                  papi_domain_name: str = SOLO_PAPI_DEFAULT_DOMAIN_NAME,
-                 proxies: Optional[Dict[str, Any]] = None
+                 proxies: Optional[ProxyData] = None
                  ):
         self._papi_client = PapiClient(
             SettingsAuth(

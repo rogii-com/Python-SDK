@@ -1,17 +1,10 @@
 from typing import Any, Dict, Iterator, List, Literal, NamedTuple, TypedDict
 
+Scheme = Literal['http', 'https']
+
 
 class ProxyData(TypedDict):
-    scheme: Literal['http'] | Literal['https']
-    netloc: str
-
-
-class ProxyNetloc(TypedDict):
-    host: str
-    port: int
-
-
-UserProxyData = Dict[Literal['http'] | Literal['https'], ProxyNetloc]
+    Scheme: str
 
 
 class SettingsAuth(NamedTuple):
