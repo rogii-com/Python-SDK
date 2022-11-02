@@ -215,7 +215,9 @@ class Well(ComplexObject):
     def mudlogs(self) -> ObjectRepository[Mudlog]:
         if self._mudlogs is None:
             self._mudlogs = ObjectRepository(
-                objects=[Mudlog(papi_client=self._papi_client, well=self, **item) for item in self._get_mudlogs_data()]
+                objects=[
+                    Mudlog(papi_client=self._papi_client, well=self, **item) for item in self._get_mudlogs_data()
+                ]
             )
 
         return self._mudlogs

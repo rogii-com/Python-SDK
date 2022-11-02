@@ -27,18 +27,19 @@ class Mudlog(ComplexObject):
         return self._get_data(get_converted)
 
     def to_df(self, get_converted: bool = True) -> DataFrame:
-        data = self._get_data(get_converted)
-        logs_data = data['logs']
-        mudlog_data = {}
+        logs_data = self._get_logs(get_converted)
+        data, columns = [], []
 
-        if len(logs_data):
-            first_log = logs_data[0]
-            mudlog_data['MD'] = [point['md'] for point in first_log['log_points']]
+        if logs_data:
+            columns = ['MD'] + [log['name'] for log in logs_data]
+            first_log_points = logs_data[0]['log_points']
+            points_length = len(first_log_points)
 
-            for log in logs_data:
-                mudlog_data[log['name']] = [point['data'] for point in log['log_points']]
+            for i in range(points_length):
+                row = [first_log_points[i]['md']] + [log['log_points'][i]['data'] for log in logs_data]
+                data.append(row)
 
-        return DataFrame(mudlog_data)
+        return DataFrame(data, columns=columns)
 
     def _get_data(self, get_converted: bool):
         meta = {
@@ -62,12 +63,14 @@ class Mudlog(ComplexObject):
                     'name': log['name'],
                     'log_points': [
                         {
-                            'md': self.convert_z(value=log_point['md'], measure_units=self.well.project.measure_unit),
+                            'md': self.convert_z(
+                                value=log_point['md'],
+                                measure_units=self.well.project.measure_unit
+                            ),
                             'data': log_point['data']
                         }
                         for log_point in log['log_points']
-                    ],
-                    'properties': log['properties']
+                    ]
                 }
                 for log in logs_data
             ]

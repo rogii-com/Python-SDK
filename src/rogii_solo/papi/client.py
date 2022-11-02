@@ -241,7 +241,7 @@ class PapiClient(SdkPapiClient):
 
     def get_mudlog_data(self, mudlog_id: str) -> PapiDataList:
         return [
-            self.parse_papi_data(data_item) for data_item in self.fetch_mudlog_logs(mudlog_id=mudlog_id)
+            self.parse_papi_data(data_item) for data_item in self.fetch_mudlog_logs(mudlog_id)
         ]
 
     def _gen_data_page(self, func: Callable, **kwargs) -> PapiDataIterator:
