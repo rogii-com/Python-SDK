@@ -5,6 +5,7 @@ from pandas import DataFrame
 import rogii_solo.project
 from rogii_solo.base import ComplexObject, ObjectRepository
 from rogii_solo.interpretation import Interpretation
+from rogii_solo.mudlog import Mudlog
 from rogii_solo.papi.client import PapiClient
 from rogii_solo.target_line import TargetLine
 from rogii_solo.topset import Topset
@@ -52,6 +53,9 @@ class Well(ComplexObject):
         self._topsets_data: Optional[DataList] = None
         self._topsets: Optional[ObjectRepository[Topset]] = None
         self._starred_topset:  Optional[Topset] = None
+
+        self._mudlogs_data: Optional[DataList] = None
+        self._mudlogs: Optional[ObjectRepository[Mudlog]] = None
 
     def to_dict(self, get_converted: bool = True) -> Dict[str, Any]:
         measure_units = self.project.measure_unit
@@ -206,6 +210,21 @@ class Well(ComplexObject):
             self._starred_topset = self.topsets.find_by_id(starred_topset_id)
 
         return self._starred_topset
+
+    @property
+    def mudlogs(self) -> ObjectRepository[Mudlog]:
+        if self._mudlogs is None:
+            self._mudlogs = ObjectRepository(
+                objects=[Mudlog(papi_client=self._papi_client, well=self, **item) for item in self._get_mudlogs_data()]
+            )
+
+        return self._mudlogs
+
+    def _get_mudlogs_data(self) -> DataList:
+        if self._mudlogs_data is None:
+            self._mudlogs_data = self._papi_client.get_well_mudlogs_data(well_id=self.uuid)
+
+        return self._mudlogs_data
 
     def create_nested_well(self,
                            nested_well_name: str,
@@ -391,6 +410,9 @@ class Typewell(ComplexObject):
         self._topsets: Optional[ObjectRepository[Topset]] = None
         self._starred_topset:  Optional[Topset] = None
 
+        self._mudlogs_data: Optional[DataList] = None
+        self._mudlogs: Optional[ObjectRepository[Mudlog]] = None
+
     def to_dict(self, get_converted: bool = True) -> Dict[str, Any]:
         return {
             'uuid': self.uuid,
@@ -450,3 +472,18 @@ class Typewell(ComplexObject):
             typewell_id=self.uuid,
             topset_name=topset_name
         )
+
+    @property
+    def mudlogs(self) -> ObjectRepository[Mudlog]:
+        if self._mudlogs is None:
+            self._mudlogs = ObjectRepository(
+                objects=[Mudlog(papi_client=self._papi_client, well=self, **item) for item in self._get_mudlogs_data()]
+            )
+
+        return self._mudlogs
+
+    def _get_mudlogs_data(self) -> DataList:
+        if self._mudlogs_data is None:
+            self._mudlogs_data = self._papi_client.get_typewell_mudlogs_data(typewell_id=self.uuid)
+
+        return self._mudlogs_data

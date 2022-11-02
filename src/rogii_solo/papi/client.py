@@ -225,6 +225,25 @@ class PapiClient(SdkPapiClient):
             bottom=starred_tops['bottom']
         )
 
+    def get_well_mudlogs_data(self, well_id: str, **kwargs) -> PapiDataList:
+        return list(self._gen_data_page(
+            func=self.fetch_well_mudlogs,
+            well_id=well_id,
+            **kwargs
+        ))
+
+    def get_typewell_mudlogs_data(self, typewell_id: str, **kwargs) -> PapiDataList:
+        return list(self._gen_data_page(
+            func=self.fetch_typewell_mudlogs,
+            typewell_id=typewell_id,
+            **kwargs
+        ))
+
+    def get_mudlog_data(self, mudlog_id: str) -> PapiDataList:
+        return [
+            self.parse_papi_data(data_item) for data_item in self.fetch_mudlog_logs(mudlog_id=mudlog_id)
+        ]
+
     def _gen_data_page(self, func: Callable, **kwargs) -> PapiDataIterator:
         offset = kwargs.pop('offset', None) or self.DEFAULT_OFFSET
         limit = kwargs.pop('limit', None) or self.DEFAULT_LIMIT
