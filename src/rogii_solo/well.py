@@ -294,6 +294,47 @@ class Well(ComplexObject):
         self._target_lines_data = None
         self._target_lines = None
 
+    def update_meta(self,
+                    name: str,
+                    operator: str,
+                    api: str,
+                    xsrf: float,
+                    ysrf: float,
+                    kb: float,
+                    azimuth: float,
+                    convergence: float,
+                    tie_in_tvd: float,
+                    tie_in_ns: float,
+                    tie_in_ew: float
+                    ):
+        self._papi_client.update_well_meta(
+            well_id=self.uuid,
+            well_name=name,
+            operator=operator,
+            api=api,
+            xsrf=self._papi_client.prepare_papi_var(xsrf),
+            ysrf=self._papi_client.prepare_papi_var(ysrf),
+            kb=self._papi_client.prepare_papi_var(kb),
+            azimuth=self._papi_client.prepare_papi_var(azimuth),
+            convergence=self._papi_client.prepare_papi_var(convergence),
+            tie_in_tvd=self._papi_client.prepare_papi_var(tie_in_tvd),
+            tie_in_ns=self._papi_client.prepare_papi_var(tie_in_ns),
+            tie_in_ew=self._papi_client.prepare_papi_var(tie_in_ew)
+        )
+
+        self.name = None
+        self.xsrf = None
+        self.ysrf = None
+        self.kb = None
+        self.api = None
+        self.operator = None
+        self.azimuth = None
+        self.convergence = None
+        self.tie_in_tvd = None
+        self.tie_in_ns = None
+        self.tie_in_ew = None
+        self.starred = None
+
 
 class NestedWell(ComplexObject):
     def __init__(self, papi_client: PapiClient, well: Well, **kwargs):
@@ -544,3 +585,43 @@ class Typewell(ComplexObject):
             self._mudlogs_data = self._papi_client.get_typewell_mudlogs_data(typewell_id=self.uuid)
 
         return self._mudlogs_data
+
+    def update_meta(self,
+                    name: str,
+                    # operator: str,
+                    api: str,
+                    # xsrf: float,
+                    # ysrf: float,
+                    # kb: float,
+                    # azi: float,
+                    # convergence: float,
+                    # tie_in_tvd: float,
+                    # tie_in_ns: float,
+                    # tie_in_ew: float
+                    ):
+        self._papi_client.update_typewell_meta(
+            typewell_id=self.uuid,
+            typewell_name=name,
+            # operator=operator,
+            api=api,
+            # xsrf=self._papi_client.prepare_papi_var(xsrf),
+            # ysrf=self._papi_client.prepare_papi_var(ysrf),
+            # kb=self._papi_client.prepare_papi_var(kb),
+            # convergence=self._papi_client.prepare_papi_var(convergence),
+            # tie_in_tvd=self._papi_client.prepare_papi_var(tie_in_tvd),
+            # tie_in_ns=self._papi_client.prepare_papi_var(tie_in_ns),
+            # tie_in_ew=self._papi_client.prepare_papi_var(tie_in_ew)
+        )
+
+        self.name = None
+        # self.xsrf = None
+        # self.ysrf = None
+        # self.kb = None
+        self.api = None
+        # self.operator = None
+        # self.azimuth = None
+        # self.convergence = None
+        # self.tie_in_tvd = None
+        # self.tie_in_ns = None
+        # self.tie_in_ew = None
+        self.starred = None

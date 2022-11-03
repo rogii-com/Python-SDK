@@ -149,6 +149,20 @@ class BasePapiClient:
         if response.text:
             return response.json()
 
+    def _send_patch_request(self,
+                            url: str,
+                            request_data: Dict[str, Any],
+                            headers: Optional[Dict[str, Any]] = None
+                            ):
+        response = self.session.patch(f"{self.papi_url}/{url}", json=request_data, headers=headers)
+
+        if response.status_code != status_codes.ok:
+            error = response.json()
+            raise BasePapiClientException(error)
+
+        if response.text:
+            return response.json()
+
 
 class PapiClient(BasePapiClient):
     def __init__(self,
@@ -771,3 +785,65 @@ class PapiClient(BasePapiClient):
             center=starred_tops['center'],
             bottom=starred_tops['bottom']
         )
+
+    def update_well_meta(self,
+                         well_id: str,
+                         well_name: str,
+                         operator: str,
+                         api: str,
+                         xsrf: PapiVar,
+                         ysrf: PapiVar,
+                         kb: PapiVar,
+                         azimuth: PapiVar,
+                         convergence: PapiVar,
+                         tie_in_tvd: PapiVar,
+                         tie_in_ns: PapiVar,
+                         tie_in_ew: PapiVar,
+                         headers: Optional[Dict[str, Any]] = None
+                         ):
+        url = f'wells/{well_id}'
+        request_data = {
+            'name': well_name,
+            'operator': operator,
+            'api': api,
+            'xsrf': xsrf,
+            'ysrf': ysrf,
+            'kb': kb,
+            'azimuth': azimuth,
+            'convergence': convergence,
+            'tie_in_tvd': tie_in_tvd,
+            'tie_in_ns': tie_in_ns,
+            'tie_in_ew': tie_in_ew,
+        }
+
+        return self._send_patch_request(url=url, request_data=request_data, headers=headers)
+
+    def update_typewell_meta(self,
+                             typewell_id: str,
+                             typewell_name: str,
+                             operator: str,
+                             api: str,
+                             xsrf: PapiVar,
+                             ysrf: PapiVar,
+                             kb: PapiVar,
+                             convergence: PapiVar,
+                             tie_in_tvd: PapiVar,
+                             tie_in_ns: PapiVar,
+                             tie_in_ew: PapiVar,
+                             headers: Optional[Dict[str, Any]] = None
+                             ):
+        url = f'typewells/{typewell_id}'
+        request_data = {
+            'name': typewell_name,
+            'operator': operator,
+            'api': api,
+            'xsrf': xsrf,
+            'ysrf': ysrf,
+            'kb': kb,
+            'convergence': convergence,
+            'tie_in_tvd': tie_in_tvd,
+            'tie_in_ns': tie_in_ns,
+            'tie_in_ew': tie_in_ew,
+        }
+
+        return self._send_patch_request(url=url, request_data=request_data, headers=headers)

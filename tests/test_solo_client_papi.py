@@ -466,3 +466,45 @@ def test_get_mudlog(project_papi):
 
     assert mudlog_data['meta']['name'] == MUDLOG_NAME
     assert mudlog_df.at[0, 'MD'] == mudlog_data['logs'][0]['points'][0]['md']
+
+
+def test_update_well_meta(project_papi):
+    well = project_papi.wells.find_by_name('Lateral (Nik test) (feet)')
+
+    assert well is not None
+
+    well_meta = well.to_dict()
+
+    old_operator = well_meta['operator']
+    new_operator = old_operator + str(random.randint(0, 1000))
+    well_meta['operator'] = new_operator
+    del well_meta['uuid']
+    del well_meta['starred']
+
+    well.update_meta(**well_meta)
+
+    well_meta = well.to_dict()
+
+    assert well_meta['operator'] != old_operator
+    assert well_meta['operator'] == new_operator
+
+
+def test_update_typewell_meta(project_papi):
+    typewell = project_papi.typewells.find_by_name('Lateral (Nik test) (feet)')
+
+    assert typewell is not None
+
+    typewell_meta = typewell.to_dict()
+
+    old_api = typewell_meta['api']
+    new_api = old_api + str(random.randint(0, 1000))
+    typewell_meta['api'] = new_api
+    del typewell_meta['uuid']
+    del typewell_meta['starred']
+
+    typewell.update_meta(**typewell_meta)
+
+    typewell_meta = typewell.to_dict()
+
+    assert typewell_meta['api'] != old_api
+    assert typewell_meta['api'] == new_api
