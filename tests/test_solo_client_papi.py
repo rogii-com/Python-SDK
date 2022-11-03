@@ -457,4 +457,4 @@ def test_get_mudlog(project_papi):
     assert 'logs' in mudlog_data
 
     assert mudlog_data['meta']['name'] == MUDLOG_NAME
-    assert mudlog_df.at[0, 'MD'] == mudlog_data['logs'][0]['log_points'][0]['md']
+    assert mudlog_df.at[0, 'MD'] == mudlog_data['logs'][0]['points'][0]['md']

@@ -21,7 +21,7 @@ from tests.papi_data import (
     STARRED_HORIZONS_DATA_RESPONSE,
     STARRED_TOPS_DATA_RESPONSE,
     MUDLOGS_DATA_RESPONSE,
-    MUDLOG_POINTS_DATA_RESPONSE
+    MUDLOG_DATA_RESPONSE
 )
 
 
@@ -94,7 +94,7 @@ def fetch_well_mudlogs(**kwargs):
 
 
 def fetch_mudlog_logs(*args, **kwargs):
-    return MUDLOG_POINTS_DATA_RESPONSE['logs']
+    return MUDLOG_DATA_RESPONSE['logs']
 
 
 @pytest.fixture(scope='function')

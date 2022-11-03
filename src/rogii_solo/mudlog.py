@@ -32,11 +32,11 @@ class Mudlog(ComplexObject):
 
         if logs_data:
             columns = ['MD'] + [log['name'] for log in logs_data]
-            first_log_points = logs_data[0]['log_points']
+            first_log_points = logs_data[0]['points']
             points_length = len(first_log_points)
 
             for i in range(points_length):
-                row = [first_log_points[i]['md']] + [log['log_points'][i]['data'] for log in logs_data]
+                row = [first_log_points[i]['md']] + [log['points'][i]['data'] for log in logs_data]
                 data.append(row)
 
         return DataFrame(data, columns=columns)
@@ -56,23 +56,22 @@ class Mudlog(ComplexObject):
     def _get_logs(self, get_converted: bool):
         logs_data = self._papi_client.get_mudlog_data(self.uuid)
 
-        if get_converted:
-            return [
-                {
-                    'uuid': log['uuid'],
-                    'name': log['name'],
-                    'log_points': [
-                        {
-                            'md': self.convert_z(
-                                value=log_point['md'],
-                                measure_units=self.well.project.measure_unit
-                            ),
-                            'data': log_point['data']
-                        }
-                        for log_point in log['log_points']
-                    ]
-                }
-                for log in logs_data
-            ]
+        logs_data = [
+            {
+                'uuid': log['uuid'],
+                'name': log['name'],
+                'points': log['log_points'] if not get_converted else [
+                    {
+                        'md': self.convert_z(
+                            value=log_point['md'],
+                            measure_units=self.well.project.measure_unit
+                        ),
+                        'data': log_point['data']
+                    }
+                    for log_point in log['log_points']
+                ]
+            }
+            for log in logs_data
+        ]
 
         return logs_data
