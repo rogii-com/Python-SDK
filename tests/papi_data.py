@@ -46,6 +46,8 @@ STARRED_TOP_TOP_NAME = 'Top'
 STARRED_TOP_CENTER_NAME = 'Top 2'
 STARRED_TOP_BOTTOM_NAME = 'Top 3'
 
+MUDLOG_NAME = 'Mudlog'
+
 PROJECTS_DATA_RESPONSE = {
     'content': [
         {
@@ -3442,4 +3444,78 @@ STARRED_TOPS_DATA_RESPONSE = {
     'top': 'c0332dab-9468-4b27-b1f6-3d4d7c875ecf',
     'center': '3e5f09a8-0a0a-4722-ab1a-c52c769fc72b',
     'bottom': '77b3db2b-83f0-4122-8068-647ce432d221',
+}
+
+MUDLOGS_DATA_RESPONSE = {
+    'content': [
+        {
+            'name': MUDLOG_NAME,
+            'uuid': 'fc927f99-aae2-4ac5-b16e-676c4d70d8b7'
+        }
+    ],
+    'offset': 0,
+    'limit': 10,
+    'total': 1,
+    'first': True,
+    'last': True
+}
+
+MUDLOG_POINTS_DATA_RESPONSE = {
+    "logs": [
+        {
+            "uuid": "0a157968-8265-44c7-99a4-a18d17baa71a",
+            "name": "(60B) - GRMA - (1)",
+            "log_points": [
+                {
+                    "md": {
+                        "val": 9465.499999999998
+                    },
+                    "data": {
+                        "val": 16.917995
+                    }
+                }, {
+                    "md": {
+                        "val": 9465.999999999998
+                    },
+                    "data": {
+                        "val": 17.194681
+                    }
+                }, {
+                    "md": {
+                        "val": 9466.499999999998
+                    },
+                    "data": {
+                        "val": 18.103792
+                    }
+                }
+            ]
+        }, {
+            "uuid": "f2f36585-2036-4d90-a291-1da771c2b04d",
+            "name": "(60B) - RHOB - (1)",
+            "log_points": [
+                {
+                    "md": {
+                        "val": 9465.499999999998
+                    },
+                    "data": {
+                        "val": 2.241943
+                    }
+                }, {
+                    "md": {
+                        "val": 9465.999999999998
+                    },
+                    "data": {
+                        "val": 2.269067
+                    }
+                }, {
+                    "md": {
+                        "val": 9466.499999999998
+                    },
+                    "data": {
+                        "val": 2.287254
+                    }
+                }
+            ]
+        }
+    ]
 }
