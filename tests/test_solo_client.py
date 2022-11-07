@@ -19,6 +19,7 @@ from tests.papi_data import (
     STARRED_TOP_TOP_NAME,
     STARRED_TOP_CENTER_NAME,
     STARRED_TOP_BOTTOM_NAME,
+    MUDLOG_NAME,
 )
 
 
@@ -322,3 +323,19 @@ def test_get_topset_starred_tops(project):
 
     assert starred_top_bottom_data['name'] == STARRED_TOP_BOTTOM_NAME
     assert starred_top_bottom_df.at[0, 'name'] == STARRED_TOP_BOTTOM_NAME
+
+
+def test_get_mudlog(project):
+    mudlogs = project.wells.find_by_name(WELL_NAME).mudlogs
+    mudlog = mudlogs.find_by_name(MUDLOG_NAME)
+
+    assert mudlog is not None
+
+    mudlog_data = mudlog.to_dict()
+    mudlog_df = mudlog.to_df()
+
+    assert 'meta' in mudlog_data
+    assert 'logs' in mudlog_data
+
+    assert mudlog_data['meta']['name'] == MUDLOG_NAME
+    assert mudlog_df.at[0, 'MD'] == mudlog_data['logs'][0]['points'][0]['md']

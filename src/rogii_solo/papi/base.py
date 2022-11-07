@@ -455,6 +455,72 @@ class PapiClient(BasePapiClient):
 
         return data['content']
 
+    def fetch_well_mudlogs(self,
+                           well_id: str,
+                           offset: int = BasePapiClient.DEFAULT_OFFSET,
+                           limit: int = BasePapiClient.DEFAULT_LIMIT,
+                           mudlog_filter: str = None,
+                           headers: Optional[Dict[str, Any]] = None
+                           ):
+        """
+        Fetches well mudlogs
+        :param well_id:
+        :param offset:
+        :param limit:
+        :param mudlog_filter:
+        :param headers:
+        :return:
+        """
+
+        return self._send_request(
+            url=f'wells/{well_id}/mudlogs',
+            params={
+                'offset': offset,
+                'limit': limit,
+                'filter': mudlog_filter
+            },
+            headers=headers
+        )
+
+    def fetch_typewell_mudlogs(self,
+                               typewell_id: str,
+                               offset: int = BasePapiClient.DEFAULT_OFFSET,
+                               limit: int = BasePapiClient.DEFAULT_LIMIT,
+                               mudlog_filter: str = None,
+                               headers: Optional[Dict[str, Any]] = None
+                               ):
+        """
+        Fetches typewell mudlogs
+        :param typewell_id:
+        :param offset:
+        :param limit:
+        :param mudlog_filter:
+        :param headers:
+        :return:
+        """
+
+        return self._send_request(
+            url=f'typewells/{typewell_id}/mudlogs',
+            params={
+                'offset': offset,
+                'limit': limit,
+                'filter': mudlog_filter
+            },
+            headers=headers
+        )
+
+    def fetch_mudlog_logs(self, mudlog_id: str, headers: Optional[Dict[str, Any]] = None):
+        """
+        Fetches mudlog logs data
+        :param mudlog_id:
+        :param headers
+        :return:
+        """
+
+        data = self._send_request(url=f'mudlogs/{mudlog_id}/data/raw', headers=headers)
+
+        return data['logs']
+
     def fetch_project_typewells(self,
                                 project_id: str,
                                 offset: int = BasePapiClient.DEFAULT_OFFSET,
