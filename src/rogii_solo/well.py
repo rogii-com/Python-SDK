@@ -73,10 +73,7 @@ class Well(ComplexObject):
                 measure_units=measure_units,
                 force_to_meters=True
             ) if get_converted else self.ysrf,
-            'kb': self.convert_z(
-                value=self.kb,
-                measure_units=measure_units
-            ) if get_converted else self.kb,
+            'kb': self.convert_z(value=self.kb, measure_units=measure_units) if get_converted else self.kb,
             'api': self.api,
             'operator': self.operator,
             'azimuth': self.convert_angle(self.azimuth) if get_converted else self.azimuth,
