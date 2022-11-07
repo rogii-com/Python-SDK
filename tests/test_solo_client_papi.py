@@ -21,6 +21,9 @@ from tests.papi_data import (
     STARRED_TOP_CENTER_NAME,
     STARRED_TOP_BOTTOM_NAME,
     MUDLOG_NAME,
+    TYPEWELL_XSRF,
+    TYPEWELL_YSRF,
+    TYPEWELL_KB
 )
 
 
@@ -289,6 +292,11 @@ def test_get_project_typewells(project_papi):
 
     assert typewells_data
     assert not typewells_df.empty
+
+    assert typewells_data[0]['name'] == TYPEWELL_NAME
+    assert typewells_data[0]['kb'] == TYPEWELL_KB
+    assert typewells_data[0]['xsrf'] == TYPEWELL_XSRF
+    assert typewells_data[0]['ysrf'] == TYPEWELL_YSRF
 
 
 def test_get_typewell(project_papi):

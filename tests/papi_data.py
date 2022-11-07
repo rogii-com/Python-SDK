@@ -38,6 +38,10 @@ STARRED_NESTED_WELL_NAME = 'Starred Nested Well'
 STARRED_NESTED_WELL_ID = uuid4()
 
 TYPEWELL_NAME = 'Typewell'
+TYPEWELL_XSRF = 500000.0
+TYPEWELL_YSRF = 600000.0
+TYPEWELL_KB = 100.0
+TYPEWELL_CONVERGENCE = 0.17453292519944444
 
 STARRED_TOPSET_NAME = 'Starred Topset'
 STARRED_TOPSET_ID = uuid4()
@@ -3359,12 +3363,66 @@ TYPEWELLS_DATA_RESPONSE = {
         {
             'uuid': 'fc1e3e0c-12ed-4cc6-adcf-6a14dc3db7ae',
             'name': TYPEWELL_NAME,
-            'api': 'Typewell API'
+            'api': 'Typewell API',
+            'xsrf': {
+                'val': TYPEWELL_XSRF
+            },
+            'ysrf': {
+                'val': TYPEWELL_YSRF
+            },
+            'xsrf_real': {
+                'val': 500000.0
+            },
+            'ysrf_real': {
+                'val': 600000.0
+            },
+            'kb': {
+                'val': TYPEWELL_KB
+            },
+            'convergence': {
+                'val': TYPEWELL_CONVERGENCE
+            },
+            'tie_in_tvd': {
+                'val': 125.0
+            },
+            'tie_in_ns': {
+                'val': 150.5
+            },
+            'tie_in_ew': {
+                'val': 250.5
+            }
         },
         {
             'name': 'Typewell 2',
             'uuid': '66a1dd35-6bc2-4d01-a550-c5054d956146',
-            'api': 'Typewell 2 API'
+            'api': 'Typewell 2 API',
+            'xsrf': {
+                'val': TYPEWELL_XSRF
+            },
+            'ysrf': {
+                'val': TYPEWELL_YSRF
+            },
+            'xsrf_real': {
+                'val': 500000.0
+            },
+            'ysrf_real': {
+                'val': 600000.0
+            },
+            'kb': {
+                'val': TYPEWELL_KB
+            },
+            'convergence': {
+                'val': TYPEWELL_CONVERGENCE
+            },
+            'tie_in_tvd': {
+                'val': 125.0
+            },
+            'tie_in_ns': {
+                'val': 150.5
+            },
+            'tie_in_ew': {
+                'val': 250.5
+            }
         }
     ],
     'offset': 0,
