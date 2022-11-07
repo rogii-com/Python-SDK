@@ -2,7 +2,8 @@ from tests.utils import np_is_close
 
 from tests.papi_data import (
     WELL_NAME,
-    HORIZON_NAME
+    HORIZON_NAME,
+    TYPEWELL_NAME
 )
 from rogii_solo.base import Convertable
 
@@ -782,3 +783,165 @@ def test_get_not_converted_ftm_nested_well_trajectory(ftm_project):
         assert np_is_close(trajectory_df.at[idx, 'md'], trajectory_point.md)
         assert np_is_close(trajectory_df.at[idx, 'incl'], trajectory_point.incl)
         assert np_is_close(trajectory_df.at[idx, 'azim'], trajectory_point.azim)
+
+
+def test_get_converted_meter_typewell(project):
+    typewell = project.typewells.find_by_name(TYPEWELL_NAME)
+
+    assert typewell is not None
+
+    typewell_df = typewell.to_df()
+
+    assert not typewell_df.empty
+
+    assert np_is_close(
+        typewell_df['xsrf'],
+        Convertable.convert_xy(value=typewell.xsrf, measure_units=project.measure_unit, force_to_meters=True)
+    )
+    assert np_is_close(
+        typewell_df['ysrf'],
+        Convertable.convert_xy(value=typewell.ysrf, measure_units=project.measure_unit, force_to_meters=True)
+    )
+    assert np_is_close(
+        typewell_df['kb'],
+        Convertable.convert_z(value=typewell.kb, measure_units=project.measure_unit)
+    )
+    assert np_is_close(typewell_df['convergence'], Convertable.convert_angle(typewell.convergence))
+    assert np_is_close(
+        typewell_df['tie_in_tvd'],
+        Convertable.convert_z(value=typewell.tie_in_tvd, measure_units=project.measure_unit)
+    )
+    assert np_is_close(
+        typewell_df['tie_in_ns'],
+        Convertable.convert_xy(value=typewell.tie_in_ns, measure_units=project.measure_unit)
+    )
+    assert np_is_close(
+        typewell_df['tie_in_ew'],
+        Convertable.convert_xy(value=typewell.tie_in_ew, measure_units=project.measure_unit)
+    )
+
+
+def test_get_not_converted_meter_typewell(project):
+    typewell = project.typewells.find_by_name(TYPEWELL_NAME)
+
+    assert typewell is not None
+
+    typewell_df = typewell.to_df(get_converted=False)
+
+    assert not typewell_df.empty
+
+    assert np_is_close(typewell_df['xsrf'], typewell.xsrf)
+    assert np_is_close(typewell_df['ysrf'], typewell.ysrf)
+    assert np_is_close(typewell_df['kb'], typewell.kb)
+    assert np_is_close(typewell_df['convergence'], typewell.convergence)
+    assert np_is_close(typewell_df['tie_in_tvd'], typewell.tie_in_tvd)
+    assert np_is_close(typewell_df['tie_in_ns'], typewell.tie_in_ns)
+    assert np_is_close(typewell_df['tie_in_ew'], typewell.tie_in_ew)
+
+
+def test_get_converted_foot_typewell(ft_project):
+    typewell = ft_project.typewells.find_by_name(TYPEWELL_NAME)
+
+    assert typewell is not None
+
+    typewell_df = typewell.to_df()
+
+    assert not typewell_df.empty
+
+    assert np_is_close(
+        typewell_df['xsrf'],
+        Convertable.convert_xy(value=typewell.xsrf, measure_units=ft_project.measure_unit, force_to_meters=True)
+    )
+    assert np_is_close(
+        typewell_df['ysrf'],
+        Convertable.convert_xy(value=typewell.ysrf, measure_units=ft_project.measure_unit, force_to_meters=True)
+    )
+    assert np_is_close(
+        typewell_df['kb'],
+        Convertable.convert_z(value=typewell.kb, measure_units=ft_project.measure_unit)
+    )
+    assert np_is_close(typewell_df['convergence'], Convertable.convert_angle(typewell.convergence))
+    assert np_is_close(
+        typewell_df['tie_in_tvd'],
+        Convertable.convert_z(value=typewell.tie_in_tvd, measure_units=ft_project.measure_unit)
+    )
+    assert np_is_close(
+        typewell_df['tie_in_ns'],
+        Convertable.convert_xy(value=typewell.tie_in_ns, measure_units=ft_project.measure_unit)
+    )
+    assert np_is_close(
+        typewell_df['tie_in_ew'],
+        Convertable.convert_xy(value=typewell.tie_in_ew, measure_units=ft_project.measure_unit)
+    )
+
+
+def test_get_not_converted_foot_typewell(ft_project):
+    typewell = ft_project.typewells.find_by_name(TYPEWELL_NAME)
+
+    assert typewell is not None
+
+    typewell_df = typewell.to_df(get_converted=False)
+
+    assert not typewell_df.empty
+
+    assert np_is_close(typewell_df['xsrf'], typewell.xsrf)
+    assert np_is_close(typewell_df['ysrf'], typewell.ysrf)
+    assert np_is_close(typewell_df['kb'], typewell.kb)
+    assert np_is_close(typewell_df['convergence'], typewell.convergence)
+    assert np_is_close(typewell_df['tie_in_tvd'], typewell.tie_in_tvd)
+    assert np_is_close(typewell_df['tie_in_ns'], typewell.tie_in_ns)
+    assert np_is_close(typewell_df['tie_in_ew'], typewell.tie_in_ew)
+
+
+def test_get_converted_ftm_typewell(ftm_project):
+    typewell = ftm_project.typewells.find_by_name(TYPEWELL_NAME)
+
+    assert typewell is not None
+
+    typewell_df = typewell.to_df()
+
+    assert not typewell_df.empty
+
+    assert np_is_close(
+        typewell_df['xsrf'],
+        Convertable.convert_xy(value=typewell.xsrf, measure_units=ftm_project.measure_unit, force_to_meters=True)
+    )
+    assert np_is_close(
+        typewell_df['ysrf'],
+        Convertable.convert_xy(value=typewell.ysrf, measure_units=ftm_project.measure_unit, force_to_meters=True)
+    )
+    assert np_is_close(
+        typewell_df['kb'],
+        Convertable.convert_z(value=typewell.kb, measure_units=ftm_project.measure_unit)
+    )
+    assert np_is_close(typewell_df['convergence'], Convertable.convert_angle(typewell.convergence))
+    assert np_is_close(
+        typewell_df['tie_in_tvd'],
+        Convertable.convert_z(value=typewell.tie_in_tvd, measure_units=ftm_project.measure_unit)
+    )
+    assert np_is_close(
+        typewell_df['tie_in_ns'],
+        Convertable.convert_xy(value=typewell.tie_in_ns, measure_units=ftm_project.measure_unit)
+    )
+    assert np_is_close(
+        typewell_df['tie_in_ew'],
+        Convertable.convert_xy(value=typewell.tie_in_ew, measure_units=ftm_project.measure_unit)
+    )
+
+
+def test_get_not_converted_ftm_typewell(ftm_project):
+    typewell = ftm_project.typewells.find_by_name(TYPEWELL_NAME)
+
+    assert typewell is not None
+
+    typewell_df = typewell.to_df(get_converted=False)
+
+    assert not typewell_df.empty
+
+    assert np_is_close(typewell_df['xsrf'], typewell.xsrf)
+    assert np_is_close(typewell_df['ysrf'], typewell.ysrf)
+    assert np_is_close(typewell_df['kb'], typewell.kb)
+    assert np_is_close(typewell_df['convergence'], typewell.convergence)
+    assert np_is_close(typewell_df['tie_in_tvd'], typewell.tie_in_tvd)
+    assert np_is_close(typewell_df['tie_in_ns'], typewell.tie_in_ns)
+    assert np_is_close(typewell_df['tie_in_ew'], typewell.tie_in_ew)

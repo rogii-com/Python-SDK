@@ -539,7 +539,7 @@ class PapiClient(BasePapiClient):
         """
 
         return self._send_request(
-            url=f'projects/{project_id}/typewells',
+            url=f'projects/{project_id}/typewells/raw',
             params={
                 'offset': offset,
                 'limit': limit,

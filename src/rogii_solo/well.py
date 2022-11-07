@@ -64,22 +64,32 @@ class Well(ComplexObject):
             'uuid': self.uuid,
             'name': self.name,
             'xsrf': self.convert_xy(
-                self.xsrf, measure_units=measure_units, force_to_meters=True
+                value=self.xsrf,
+                measure_units=measure_units,
+                force_to_meters=True
             ) if get_converted else self.xsrf,
             'ysrf': self.convert_xy(
-                self.ysrf, measure_units=measure_units, force_to_meters=True
+                value=self.ysrf,
+                measure_units=measure_units,
+                force_to_meters=True
             ) if get_converted else self.ysrf,
-            'kb': self.convert_z(self.kb, measure_units=measure_units) if get_converted else self.kb,
+            'kb': self.convert_z(value=self.kb, measure_units=measure_units) if get_converted else self.kb,
             'api': self.api,
             'operator': self.operator,
             'azimuth': self.convert_angle(self.azimuth) if get_converted else self.azimuth,
             'convergence': self.convert_angle(self.convergence) if get_converted else self.convergence,
-            'tie_in_tvd':
-                self.convert_z(self.tie_in_tvd, measure_units=measure_units) if get_converted else self.tie_in_tvd,
-            'tie_in_ns':
-                self.convert_xy(self.tie_in_ns, measure_units=measure_units) if get_converted else self.tie_in_ns,
-            'tie_in_ew':
-                self.convert_xy(self.tie_in_ew, measure_units=measure_units) if get_converted else self.tie_in_ew,
+            'tie_in_tvd': self.convert_z(
+                value=self.tie_in_tvd,
+                measure_units=measure_units
+            ) if get_converted else self.tie_in_tvd,
+            'tie_in_ns': self.convert_xy(
+                value=self.tie_in_ns,
+                measure_units=measure_units
+            ) if get_converted else self.tie_in_ns,
+            'tie_in_ew': self.convert_xy(
+                value=self.tie_in_ew,
+                measure_units=measure_units
+            ) if get_converted else self.tie_in_ew,
             'starred': self.starred,
         }
 
@@ -321,22 +331,32 @@ class NestedWell(ComplexObject):
             'uuid': self.uuid,
             'name': self.name,
             'xsrf': self.convert_xy(
-                self.xsrf, measure_units=measure_units, force_to_meters=True
+                value=self.xsrf,
+                measure_units=measure_units,
+                force_to_meters=True
             ) if get_converted else self.xsrf,
             'ysrf': self.convert_xy(
-                self.ysrf, measure_units=measure_units, force_to_meters=True
+                value=self.ysrf,
+                measure_units=measure_units,
+                force_to_meters=True
             ) if get_converted else self.ysrf,
-            'kb': self.convert_z(self.kb, measure_units=measure_units) if get_converted else self.kb,
+            'kb': self.convert_z(value=self.kb, measure_units=measure_units) if get_converted else self.kb,
             'api': self.api,
             'operator': self.operator,
             'azimuth': self.convert_angle(self.azimuth) if get_converted else self.azimuth,
             'convergence': self.convert_angle(self.convergence) if get_converted else self.convergence,
-            'tie_in_tvd':
-                self.convert_z(self.tie_in_tvd, measure_units=measure_units) if get_converted else self.tie_in_tvd,
-            'tie_in_ns':
-                self.convert_xy(self.tie_in_ns, measure_units=measure_units) if get_converted else self.tie_in_ns,
-            'tie_in_ew':
-                self.convert_xy(self.tie_in_ew, measure_units=measure_units) if get_converted else self.tie_in_ew,
+            'tie_in_tvd': self.convert_z(
+                value=self.tie_in_tvd,
+                measure_units=measure_units
+            ) if get_converted else self.tie_in_tvd,
+            'tie_in_ns': self.convert_xy(
+                value=self.tie_in_ns,
+                measure_units=measure_units
+            ) if get_converted else self.tie_in_ns,
+            'tie_in_ew': self.convert_xy(
+                value=self.tie_in_ew,
+                measure_units=measure_units
+            ) if get_converted else self.tie_in_ew,
         }
 
     def to_df(self, get_converted: bool = True) -> DataFrame:
@@ -401,6 +421,14 @@ class Typewell(ComplexObject):
         self.uuid = None
         self.name = None
         self.api = None
+        self.kb = None
+        self.operator = None
+        self.xsrf = None
+        self.ysrf = None
+        self.convergence = None
+        self.tie_in_tvd = None
+        self.tie_in_ns = None
+        self.tie_in_ew = None
         self.starred = None
 
         self.__dict__.update(kwargs)
@@ -416,10 +444,37 @@ class Typewell(ComplexObject):
         self._mudlogs: Optional[ObjectRepository[Mudlog]] = None
 
     def to_dict(self, get_converted: bool = True) -> Dict[str, Any]:
+        measure_units = self.project.measure_unit
+
         return {
             'uuid': self.uuid,
             'name': self.name,
             'api': self.api,
+            'xsrf': self.convert_xy(
+                value=self.xsrf,
+                measure_units=measure_units,
+                force_to_meters=True
+            ) if get_converted else self.xsrf,
+            'ysrf': self.convert_xy(
+                value=self.ysrf,
+                measure_units=measure_units,
+                force_to_meters=True
+            ) if get_converted else self.ysrf,
+            'kb': self.convert_z(value=self.kb, measure_units=measure_units) if get_converted else self.kb,
+            'operator': self.operator,
+            'convergence': self.convert_angle(self.convergence) if get_converted else self.convergence,
+            'tie_in_tvd': self.convert_z(
+                value=self.tie_in_tvd,
+                measure_units=measure_units
+            ) if get_converted else self.tie_in_tvd,
+            'tie_in_ns': self.convert_xy(
+                value=self.tie_in_ns,
+                measure_units=measure_units
+            ) if get_converted else self.tie_in_ns,
+            'tie_in_ew': self.convert_xy(
+                value=self.tie_in_ew,
+                measure_units=measure_units
+            ) if get_converted else self.tie_in_ew,
         }
 
     def to_df(self, get_converted: bool = True) -> DataFrame:
