@@ -1,6 +1,7 @@
 from typing import Any, Dict, Optional
 
 from pandas import DataFrame
+from requests import codes as status_codes
 
 import rogii_solo.project
 from rogii_solo.base import ComplexObject, ObjectRepository
@@ -307,7 +308,7 @@ class Well(ComplexObject):
                     tie_in_ns: float,
                     tie_in_ew: float
                     ):
-        self._papi_client.update_well_meta(
+        response = self._papi_client.update_well_meta(
             well_id=self.uuid,
             well_name=name,
             operator=operator,
@@ -322,18 +323,20 @@ class Well(ComplexObject):
             tie_in_ew=self._papi_client.prepare_papi_var(tie_in_ew)
         )
 
-        self.name = None
-        self.xsrf = None
-        self.ysrf = None
-        self.kb = None
-        self.api = None
-        self.operator = None
-        self.azimuth = None
-        self.convergence = None
-        self.tie_in_tvd = None
-        self.tie_in_ns = None
-        self.tie_in_ew = None
-        self.starred = None
+        if response.status_code == status_codes.ok:
+            self.name = name
+            self.xsrf = xsrf
+            self.ysrf = ysrf
+            self.kb = kb
+            self.api = api
+            self.operator = operator
+            self.azimuth = azimuth
+            self.convergence = convergence
+            self.tie_in_tvd = tie_in_tvd
+            self.tie_in_ns = tie_in_ns
+            self.tie_in_ew = tie_in_ew
+
+        return response
 
 
 class NestedWell(ComplexObject):
@@ -588,40 +591,40 @@ class Typewell(ComplexObject):
 
     def update_meta(self,
                     name: str,
-                    # operator: str,
+                    operator: str,
                     api: str,
-                    # xsrf: float,
-                    # ysrf: float,
-                    # kb: float,
-                    # azi: float,
-                    # convergence: float,
-                    # tie_in_tvd: float,
-                    # tie_in_ns: float,
-                    # tie_in_ew: float
+                    xsrf: float,
+                    ysrf: float,
+                    kb: float,
+                    convergence: float,
+                    tie_in_tvd: float,
+                    tie_in_ns: float,
+                    tie_in_ew: float
                     ):
-        self._papi_client.update_typewell_meta(
+        response = self._papi_client.update_typewell_meta(
             typewell_id=self.uuid,
             typewell_name=name,
-            # operator=operator,
+            operator=operator,
             api=api,
-            # xsrf=self._papi_client.prepare_papi_var(xsrf),
-            # ysrf=self._papi_client.prepare_papi_var(ysrf),
-            # kb=self._papi_client.prepare_papi_var(kb),
-            # convergence=self._papi_client.prepare_papi_var(convergence),
-            # tie_in_tvd=self._papi_client.prepare_papi_var(tie_in_tvd),
-            # tie_in_ns=self._papi_client.prepare_papi_var(tie_in_ns),
-            # tie_in_ew=self._papi_client.prepare_papi_var(tie_in_ew)
+            xsrf=self._papi_client.prepare_papi_var(xsrf),
+            ysrf=self._papi_client.prepare_papi_var(ysrf),
+            kb=self._papi_client.prepare_papi_var(kb),
+            convergence=self._papi_client.prepare_papi_var(convergence),
+            tie_in_tvd=self._papi_client.prepare_papi_var(tie_in_tvd),
+            tie_in_ns=self._papi_client.prepare_papi_var(tie_in_ns),
+            tie_in_ew=self._papi_client.prepare_papi_var(tie_in_ew)
         )
 
-        self.name = None
-        # self.xsrf = None
-        # self.ysrf = None
-        # self.kb = None
-        self.api = None
-        # self.operator = None
-        # self.azimuth = None
-        # self.convergence = None
-        # self.tie_in_tvd = None
-        # self.tie_in_ns = None
-        # self.tie_in_ew = None
-        self.starred = None
+        if response.status_code == status_codes.ok:
+            self.name = name
+            self.xsrf = xsrf
+            self.ysrf = ysrf
+            self.kb = kb
+            self.api = api
+            self.operator = operator
+            self.convergence = convergence
+            self.tie_in_tvd = tie_in_tvd
+            self.tie_in_ns = tie_in_ns
+            self.tie_in_ew = tie_in_ew
+
+        return response

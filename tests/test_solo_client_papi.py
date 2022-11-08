@@ -1,4 +1,5 @@
 import random
+from requests import codes as status_codes
 import pytest
 
 from rogii_solo.exceptions import ProjectNotFoundException, InvalidProjectException
@@ -481,7 +482,9 @@ def test_update_well_meta(project_papi):
     del well_meta['uuid']
     del well_meta['starred']
 
-    well.update_meta(**well_meta)
+    response = well.update_meta(**well_meta)
+
+    assert response.status_code == status_codes.ok
 
     well_meta = well.to_dict()
 
@@ -496,15 +499,17 @@ def test_update_typewell_meta(project_papi):
 
     typewell_meta = typewell.to_dict()
 
-    old_api = typewell_meta['api']
-    new_api = old_api + str(random.randint(0, 1000))
-    typewell_meta['api'] = new_api
+    old_operator = typewell_meta['operator']
+    new_operator = old_operator + str(random.randint(0, 1000))
+    typewell_meta['operator'] = new_operator
     del typewell_meta['uuid']
     del typewell_meta['starred']
 
-    typewell.update_meta(**typewell_meta)
+    response = typewell.update_meta(**typewell_meta)
+
+    assert response.status_code == status_codes.ok
 
     typewell_meta = typewell.to_dict()
 
-    assert typewell_meta['api'] != old_api
-    assert typewell_meta['api'] == new_api
+    assert typewell_meta['operator'] != old_operator
+    assert typewell_meta['operator'] == new_operator

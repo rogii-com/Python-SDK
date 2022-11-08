@@ -163,6 +163,8 @@ class BasePapiClient:
         if response.text:
             return response.json()
 
+        return response
+
 
 class PapiClient(BasePapiClient):
     def __init__(self,
