@@ -1,7 +1,6 @@
 from typing import Any, Dict, Optional
 
 from pandas import DataFrame
-from requests import codes as status_codes
 
 import rogii_solo.project
 from rogii_solo.base import ComplexObject, ObjectRepository
@@ -296,19 +295,20 @@ class Well(ComplexObject):
         self._target_lines = None
 
     def update_meta(self,
-                    name: str,
-                    operator: str,
-                    api: str,
-                    xsrf: float,
-                    ysrf: float,
-                    kb: float,
-                    azimuth: float,
-                    convergence: float,
-                    tie_in_tvd: float,
-                    tie_in_ns: float,
-                    tie_in_ew: float
+                    name: Optional[str] = None,
+                    operator: Optional[str] = None,
+                    api: Optional[str] = None,
+                    xsrf: Optional[float] = None,
+                    ysrf: Optional[float] = None,
+                    kb: Optional[float] = None,
+                    azimuth: Optional[float] = None,
+                    convergence: Optional[float] = None,
+                    tie_in_tvd: Optional[float] = None,
+                    tie_in_ns: Optional[float] = None,
+                    tie_in_ew: Optional[float] = None
                     ):
-        response = self._papi_client.update_well_meta(
+        is_success = self._papi_client.update_well_meta(
+            well_type='wells',
             well_id=self.uuid,
             well_name=name,
             operator=operator,
@@ -323,20 +323,20 @@ class Well(ComplexObject):
             tie_in_ew=self._papi_client.prepare_papi_var(tie_in_ew)
         )
 
-        if response.status_code == status_codes.ok:
-            self.name = name
-            self.xsrf = xsrf
-            self.ysrf = ysrf
-            self.kb = kb
-            self.api = api
-            self.operator = operator
-            self.azimuth = azimuth
-            self.convergence = convergence
-            self.tie_in_tvd = tie_in_tvd
-            self.tie_in_ns = tie_in_ns
-            self.tie_in_ew = tie_in_ew
+        if is_success:
+            self.name = name if name else self.name
+            self.xsrf = xsrf if xsrf else self.xsrf
+            self.ysrf = ysrf if ysrf else self.ysrf
+            self.kb = kb if kb else self.kb
+            self.api = api if api else self.api
+            self.operator = operator if operator else self.operator
+            self.azimuth = azimuth if azimuth else self.azimuth
+            self.convergence = convergence if convergence else self.convergence
+            self.tie_in_tvd = tie_in_tvd if tie_in_tvd else self.tie_in_tvd
+            self.tie_in_ns = tie_in_ns if tie_in_ns else self.tie_in_ns
+            self.tie_in_ew = tie_in_ew if tie_in_ew else self.tie_in_ew
 
-        return response
+        return self
 
 
 class NestedWell(ComplexObject):
@@ -454,6 +454,44 @@ class NestedWell(ComplexObject):
             nested_well_id=self.uuid,
             topset_name=topset_name
         )
+
+    def update_meta(self,
+                    name: Optional[str] = None,
+                    operator: Optional[str] = None,
+                    api: Optional[str] = None,
+                    xsrf: Optional[float] = None,
+                    ysrf: Optional[float] = None,
+                    kb: Optional[float] = None,
+                    tie_in_tvd: Optional[float] = None,
+                    tie_in_ns: Optional[float] = None,
+                    tie_in_ew: Optional[float] = None
+                    ):
+        is_success = self._papi_client.update_well_meta(
+            well_type='nestedwells',
+            well_id=self.uuid,
+            well_name=name,
+            operator=operator,
+            api=api,
+            xsrf=self._papi_client.prepare_papi_var(xsrf),
+            ysrf=self._papi_client.prepare_papi_var(ysrf),
+            kb=self._papi_client.prepare_papi_var(kb),
+            tie_in_tvd=self._papi_client.prepare_papi_var(tie_in_tvd),
+            tie_in_ns=self._papi_client.prepare_papi_var(tie_in_ns),
+            tie_in_ew=self._papi_client.prepare_papi_var(tie_in_ew)
+        )
+
+        if is_success:
+            self.name = name if name else self.name
+            self.xsrf = xsrf if xsrf else self.xsrf
+            self.ysrf = ysrf if ysrf else self.ysrf
+            self.kb = kb if kb else self.kb
+            self.api = api if api else self.api
+            self.operator = operator if operator else self.operator
+            self.tie_in_tvd = tie_in_tvd if tie_in_tvd else self.tie_in_tvd
+            self.tie_in_ns = tie_in_ns if tie_in_ns else self.tie_in_ns
+            self.tie_in_ew = tie_in_ew if tie_in_ew else self.tie_in_ew
+
+        return self
 
 
 class Typewell(ComplexObject):
@@ -590,20 +628,21 @@ class Typewell(ComplexObject):
         return self._mudlogs_data
 
     def update_meta(self,
-                    name: str,
-                    operator: str,
-                    api: str,
-                    xsrf: float,
-                    ysrf: float,
-                    kb: float,
-                    convergence: float,
-                    tie_in_tvd: float,
-                    tie_in_ns: float,
-                    tie_in_ew: float
+                    name: Optional[str] = None,
+                    operator: Optional[str] = None,
+                    api: Optional[str] = None,
+                    xsrf: Optional[float] = None,
+                    ysrf: Optional[float] = None,
+                    kb: Optional[float] = None,
+                    convergence: Optional[float] = None,
+                    tie_in_tvd: Optional[float] = None,
+                    tie_in_ns: Optional[float] = None,
+                    tie_in_ew: Optional[float] = None
                     ):
-        response = self._papi_client.update_typewell_meta(
-            typewell_id=self.uuid,
-            typewell_name=name,
+        is_success = self._papi_client.update_well_meta(
+            well_type='typewells',
+            well_id=self.uuid,
+            well_name=name,
             operator=operator,
             api=api,
             xsrf=self._papi_client.prepare_papi_var(xsrf),
@@ -615,16 +654,16 @@ class Typewell(ComplexObject):
             tie_in_ew=self._papi_client.prepare_papi_var(tie_in_ew)
         )
 
-        if response.status_code == status_codes.ok:
-            self.name = name
-            self.xsrf = xsrf
-            self.ysrf = ysrf
-            self.kb = kb
-            self.api = api
-            self.operator = operator
-            self.convergence = convergence
-            self.tie_in_tvd = tie_in_tvd
-            self.tie_in_ns = tie_in_ns
-            self.tie_in_ew = tie_in_ew
+        if is_success:
+            self.name = name if name else self.name
+            self.xsrf = xsrf if xsrf else self.xsrf
+            self.ysrf = ysrf if ysrf else self.ysrf
+            self.kb = kb if kb else self.kb
+            self.api = api if api else self.api
+            self.operator = operator if operator else self.operator
+            self.convergence = convergence if convergence else self.convergence
+            self.tie_in_tvd = tie_in_tvd if tie_in_tvd else self.tie_in_tvd
+            self.tie_in_ns = tie_in_ns if tie_in_ns else self.tie_in_ns
+            self.tie_in_ew = tie_in_ew if tie_in_ew else self.tie_in_ew
 
-        return response
+        return self

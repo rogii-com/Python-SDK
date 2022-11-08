@@ -1,5 +1,5 @@
+import copy
 import random
-from requests import codes as status_codes
 import pytest
 
 from rogii_solo.exceptions import ProjectNotFoundException, InvalidProjectException
@@ -469,47 +469,206 @@ def test_get_mudlog(project_papi):
     assert mudlog_df.at[0, 'MD'] == mudlog_data['logs'][0]['points'][0]['md']
 
 
-def test_update_well_meta(project_papi):
+def test_update_well_operator(project_papi):
     well = project_papi.wells.find_by_name('Lateral (Nik test) (feet)')
 
     assert well is not None
 
-    well_meta = well.to_dict()
+    new_operator = 'Operator ' + str(random.randint(0, 1000))
 
-    old_operator = well_meta['operator']
-    new_operator = old_operator + str(random.randint(0, 1000))
+    well_meta = dict()
     well_meta['operator'] = new_operator
-    del well_meta['uuid']
-    del well_meta['starred']
 
-    response = well.update_meta(**well_meta)
-
-    assert response.status_code == status_codes.ok
-
+    well = well.update_meta(**well_meta)
     well_meta = well.to_dict()
 
-    assert well_meta['operator'] != old_operator
     assert well_meta['operator'] == new_operator
 
 
+def test_update_well_meta(project_papi):
+    well = project_papi.wells.find_by_name(WELL_NAME)
+
+    assert well is not None
+
+    well_meta = well.to_dict()
+    old_well_meta = copy.deepcopy(well_meta)
+
+    del well_meta['uuid']
+    del well_meta['starred']
+    del old_well_meta['uuid']
+    del old_well_meta['starred']
+
+    new_name = well_meta['name'] + ' ' + str(random.randint(0, 1000))
+    well_meta['name'] = new_name
+
+    new_operator = well_meta['operator'] + ' ' + str(random.randint(0, 1000))
+    well_meta['operator'] = new_operator
+
+    new_api = well_meta['api'] + ' ' + str(random.randint(0, 1000))
+    well_meta['api'] = new_api
+
+    new_xsrf = well_meta['xsrf'] + 99
+    well_meta['xsrf'] = new_xsrf
+
+    new_ysrf = well_meta['ysrf'] + 99
+    well_meta['ysrf'] = new_ysrf
+
+    new_kb = well_meta['kb'] + 99
+    well_meta['kb'] = new_kb
+
+    new_azimuth = well_meta['azimuth'] + 0.1
+    well_meta['azimuth'] = new_azimuth
+
+    new_convergence = well_meta['convergence'] + 0.1
+    well_meta['convergence'] = new_convergence
+
+    new_tie_in_tvd = well_meta['tie_in_tvd'] + 99
+    well_meta['tie_in_tvd'] = new_tie_in_tvd
+
+    new_tie_in_ns = well_meta['tie_in_ns'] + 99
+    well_meta['tie_in_ns'] = new_tie_in_ns
+
+    new_tie_in_ew = well_meta['tie_in_ew'] + 99
+    well_meta['tie_in_ew'] = new_tie_in_ew
+
+    well.update_meta(**well_meta)
+    well_meta = well.to_dict()
+
+    assert well_meta['name'] == new_name
+    assert well_meta['operator'] == new_operator
+    assert well_meta['api'] == new_api
+    assert well_meta['xsrf'] == new_xsrf
+    assert well_meta['ysrf'] == new_ysrf
+    assert well_meta['kb'] == new_kb
+    assert well_meta['azimuth'] == well.convert_angle(new_azimuth)
+    assert well_meta['convergence'] == well.convert_angle(new_convergence)
+    assert well_meta['tie_in_tvd'] == new_tie_in_tvd
+    assert well_meta['tie_in_ns'] == new_tie_in_ns
+    assert well_meta['tie_in_ew'] == new_tie_in_ew
+
+    # return old values to well
+    well.update_meta(**old_well_meta)
+
+
 def test_update_typewell_meta(project_papi):
-    typewell = project_papi.typewells.find_by_name('Lateral (Nik test) (feet)')
+    typewell = project_papi.typewells.find_by_name(TYPEWELL_NAME)
 
     assert typewell is not None
 
     typewell_meta = typewell.to_dict()
+    old_typewell_meta = copy.deepcopy(typewell_meta)
 
-    old_operator = typewell_meta['operator']
-    new_operator = old_operator + str(random.randint(0, 1000))
-    typewell_meta['operator'] = new_operator
     del typewell_meta['uuid']
-    del typewell_meta['starred']
+    del old_typewell_meta['uuid']
 
-    response = typewell.update_meta(**typewell_meta)
+    new_name = typewell_meta['name'] + ' ' + str(random.randint(0, 1000))
+    typewell_meta['name'] = new_name
 
-    assert response.status_code == status_codes.ok
+    new_operator = typewell_meta['operator'] + ' ' + str(random.randint(0, 1000))
+    typewell_meta['operator'] = new_operator
 
+    new_api = typewell_meta['api'] + ' ' + str(random.randint(0, 1000))
+    typewell_meta['api'] = new_api
+
+    new_xsrf = typewell_meta['xsrf'] + 99
+    typewell_meta['xsrf'] = new_xsrf
+
+    new_ysrf = typewell_meta['ysrf'] + 99
+    typewell_meta['ysrf'] = new_ysrf
+
+    new_kb = typewell_meta['kb'] + 99
+    typewell_meta['kb'] = new_kb
+
+    new_convergence = typewell_meta['convergence'] + 0.1
+    typewell_meta['convergence'] = new_convergence
+
+    new_tie_in_tvd = typewell_meta['tie_in_tvd'] + 99
+    typewell_meta['tie_in_tvd'] = new_tie_in_tvd
+
+    new_tie_in_ns = typewell_meta['tie_in_ns'] + 99
+    typewell_meta['tie_in_ns'] = new_tie_in_ns
+
+    new_tie_in_ew = typewell_meta['tie_in_ew'] + 99
+    typewell_meta['tie_in_ew'] = new_tie_in_ew
+
+    typewell.update_meta(**typewell_meta)
     typewell_meta = typewell.to_dict()
 
-    assert typewell_meta['operator'] != old_operator
+    assert typewell_meta['name'] == new_name
     assert typewell_meta['operator'] == new_operator
+    assert typewell_meta['api'] == new_api
+    assert typewell_meta['xsrf'] == new_xsrf
+    assert typewell_meta['ysrf'] == new_ysrf
+    assert typewell_meta['kb'] == new_kb
+    assert typewell_meta['convergence'] == typewell.convert_angle(new_convergence)
+    assert typewell_meta['tie_in_tvd'] == new_tie_in_tvd
+    assert typewell_meta['tie_in_ns'] == new_tie_in_ns
+    assert typewell_meta['tie_in_ew'] == new_tie_in_ew
+
+    # return old values to well
+    typewell.update_meta(**old_typewell_meta)
+
+
+def test_update_nested_well_meta(project_papi):
+    well = project_papi.wells.find_by_name(WELL_NAME)
+
+    assert well is not None
+
+    nested_well = well.nested_wells.find_by_name(NESTED_WELL_NAME)
+
+    assert nested_well is not None
+
+    nested_well_meta = nested_well.to_dict()
+    old_nested_well_meta = copy.deepcopy(nested_well_meta)
+
+    del nested_well_meta['uuid']
+    del old_nested_well_meta['uuid']
+
+    # update_meta() for nested wells doesn't work with azimuth and convergence
+    del nested_well_meta['azimuth']
+    del nested_well_meta['convergence']
+    del old_nested_well_meta['azimuth']
+    del old_nested_well_meta['convergence']
+
+    new_name = nested_well_meta['name'] + ' ' + str(random.randint(0, 1000))
+    nested_well_meta['name'] = new_name
+
+    new_operator = nested_well_meta['operator'] + ' ' + str(random.randint(0, 1000))
+    nested_well_meta['operator'] = new_operator
+
+    new_api = nested_well_meta['api'] + ' ' + str(random.randint(0, 1000))
+    nested_well_meta['api'] = new_api
+
+    new_xsrf = nested_well_meta['xsrf'] + 99
+    nested_well_meta['xsrf'] = new_xsrf
+
+    new_ysrf = nested_well_meta['ysrf'] + 99
+    nested_well_meta['ysrf'] = new_ysrf
+
+    new_kb = nested_well_meta['kb'] + 99
+    nested_well_meta['kb'] = new_kb
+
+    new_tie_in_tvd = nested_well_meta['tie_in_tvd'] + 99
+    nested_well_meta['tie_in_tvd'] = new_tie_in_tvd
+
+    new_tie_in_ns = nested_well_meta['tie_in_ns'] + 99
+    nested_well_meta['tie_in_ns'] = new_tie_in_ns
+
+    new_tie_in_ew = nested_well_meta['tie_in_ew'] + 99
+    nested_well_meta['tie_in_ew'] = new_tie_in_ew
+
+    nested_well.update_meta(**nested_well_meta)
+    nested_well_meta = nested_well.to_dict()
+
+    assert nested_well_meta['name'] == new_name
+    assert nested_well_meta['operator'] == new_operator
+    assert nested_well_meta['api'] == new_api
+    assert nested_well_meta['xsrf'] == new_xsrf
+    assert nested_well_meta['ysrf'] == new_ysrf
+    assert nested_well_meta['kb'] == new_kb
+    assert nested_well_meta['tie_in_tvd'] == new_tie_in_tvd
+    assert nested_well_meta['tie_in_ns'] == new_tie_in_ns
+    assert nested_well_meta['tie_in_ew'] == new_tie_in_ew
+
+    # return old values to nested_well
+    nested_well.update_meta(**old_nested_well_meta)

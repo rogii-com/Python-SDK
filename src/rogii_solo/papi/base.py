@@ -121,6 +121,8 @@ class BasePapiClient:
         if response.text:
             return response.json()
 
+        return response
+
     def _send_post_request(self,
                            url: str,
                            request_data: Dict[str, Any],
@@ -135,6 +137,8 @@ class BasePapiClient:
         if response.text:
             return response.json()
 
+        return response
+
     def _send_put_request(self,
                           url: str,
                           request_data: Dict[str, Any],
@@ -148,6 +152,8 @@ class BasePapiClient:
 
         if response.text:
             return response.json()
+
+        return response
 
     def _send_patch_request(self,
                             url: str,
@@ -789,21 +795,22 @@ class PapiClient(BasePapiClient):
         )
 
     def update_well_meta(self,
+                         well_type: str,
                          well_id: str,
-                         well_name: str,
-                         operator: str,
-                         api: str,
-                         xsrf: PapiVar,
-                         ysrf: PapiVar,
-                         kb: PapiVar,
-                         azimuth: PapiVar,
-                         convergence: PapiVar,
-                         tie_in_tvd: PapiVar,
-                         tie_in_ns: PapiVar,
-                         tie_in_ew: PapiVar,
+                         well_name: Optional[str] = None,
+                         operator: Optional[str] = None,
+                         api: Optional[str] = None,
+                         xsrf: Optional[PapiVar] = None,
+                         ysrf: Optional[PapiVar] = None,
+                         kb: Optional[PapiVar] = None,
+                         azimuth: Optional[PapiVar] = None,
+                         convergence: Optional[PapiVar] = None,
+                         tie_in_tvd: Optional[PapiVar] = None,
+                         tie_in_ns: Optional[PapiVar] = None,
+                         tie_in_ew: Optional[PapiVar] = None,
                          headers: Optional[Dict[str, Any]] = None
                          ):
-        url = f'wells/{well_id}'
+        url = f'{well_type}/{well_id}'
         request_data = {
             'name': well_name,
             'operator': operator,
@@ -818,34 +825,6 @@ class PapiClient(BasePapiClient):
             'tie_in_ew': tie_in_ew,
         }
 
-        return self._send_patch_request(url=url, request_data=request_data, headers=headers)
+        response = self._send_patch_request(url=url, request_data=request_data, headers=headers)
 
-    def update_typewell_meta(self,
-                             typewell_id: str,
-                             typewell_name: str,
-                             operator: str,
-                             api: str,
-                             xsrf: PapiVar,
-                             ysrf: PapiVar,
-                             kb: PapiVar,
-                             convergence: PapiVar,
-                             tie_in_tvd: PapiVar,
-                             tie_in_ns: PapiVar,
-                             tie_in_ew: PapiVar,
-                             headers: Optional[Dict[str, Any]] = None
-                             ):
-        url = f'typewells/{typewell_id}'
-        request_data = {
-            'name': typewell_name,
-            'operator': operator,
-            'api': api,
-            'xsrf': xsrf,
-            'ysrf': ysrf,
-            'kb': kb,
-            'convergence': convergence,
-            'tie_in_tvd': tie_in_tvd,
-            'tie_in_ns': tie_in_ns,
-            'tie_in_ew': tie_in_ew,
-        }
-
-        return self._send_patch_request(url=url, request_data=request_data, headers=headers)
+        return response.status_code == status_codes.ok
