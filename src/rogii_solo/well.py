@@ -307,34 +307,23 @@ class Well(ComplexObject):
                     tie_in_ns: Optional[float] = None,
                     tie_in_ew: Optional[float] = None
                     ):
-        is_success = self._papi_client.update_well_meta(
-            well_type='wells',
+        update_data = {
+            func_param: func_arg
+            for func_param, func_arg in locals().items()
+            if func_arg is not None and func_param != 'self'
+        }
+        request_data = {
+            key: self._papi_client.prepare_papi_var(value)
+            for key, value in update_data.items()
+        }
+
+        is_updated = self._papi_client.update_well_meta(
             well_id=self.uuid,
-            well_name=name,
-            operator=operator,
-            api=api,
-            xsrf=self._papi_client.prepare_papi_var(xsrf),
-            ysrf=self._papi_client.prepare_papi_var(ysrf),
-            kb=self._papi_client.prepare_papi_var(kb),
-            azimuth=self._papi_client.prepare_papi_var(azimuth),
-            convergence=self._papi_client.prepare_papi_var(convergence),
-            tie_in_tvd=self._papi_client.prepare_papi_var(tie_in_tvd),
-            tie_in_ns=self._papi_client.prepare_papi_var(tie_in_ns),
-            tie_in_ew=self._papi_client.prepare_papi_var(tie_in_ew)
+            **request_data
         )
 
-        if is_success:
-            self.name = name if name else self.name
-            self.xsrf = xsrf if xsrf else self.xsrf
-            self.ysrf = ysrf if ysrf else self.ysrf
-            self.kb = kb if kb else self.kb
-            self.api = api if api else self.api
-            self.operator = operator if operator else self.operator
-            self.azimuth = azimuth if azimuth else self.azimuth
-            self.convergence = convergence if convergence else self.convergence
-            self.tie_in_tvd = tie_in_tvd if tie_in_tvd else self.tie_in_tvd
-            self.tie_in_ns = tie_in_ns if tie_in_ns else self.tie_in_ns
-            self.tie_in_ew = tie_in_ew if tie_in_ew else self.tie_in_ew
+        if is_updated:
+            self.__dict__.update(update_data)
 
         return self
 
@@ -466,30 +455,23 @@ class NestedWell(ComplexObject):
                     tie_in_ns: Optional[float] = None,
                     tie_in_ew: Optional[float] = None
                     ):
-        is_success = self._papi_client.update_well_meta(
-            well_type='nestedwells',
+        update_data = {
+            func_param: func_arg
+            for func_param, func_arg in locals().items()
+            if func_arg is not None and func_param != 'self'
+        }
+        request_data = {
+            key: self._papi_client.prepare_papi_var(value)
+            for key, value in update_data.items()
+        }
+
+        is_updated = self._papi_client.update_nested_well_meta(
             well_id=self.uuid,
-            well_name=name,
-            operator=operator,
-            api=api,
-            xsrf=self._papi_client.prepare_papi_var(xsrf),
-            ysrf=self._papi_client.prepare_papi_var(ysrf),
-            kb=self._papi_client.prepare_papi_var(kb),
-            tie_in_tvd=self._papi_client.prepare_papi_var(tie_in_tvd),
-            tie_in_ns=self._papi_client.prepare_papi_var(tie_in_ns),
-            tie_in_ew=self._papi_client.prepare_papi_var(tie_in_ew)
+            **request_data
         )
 
-        if is_success:
-            self.name = name if name else self.name
-            self.xsrf = xsrf if xsrf else self.xsrf
-            self.ysrf = ysrf if ysrf else self.ysrf
-            self.kb = kb if kb else self.kb
-            self.api = api if api else self.api
-            self.operator = operator if operator else self.operator
-            self.tie_in_tvd = tie_in_tvd if tie_in_tvd else self.tie_in_tvd
-            self.tie_in_ns = tie_in_ns if tie_in_ns else self.tie_in_ns
-            self.tie_in_ew = tie_in_ew if tie_in_ew else self.tie_in_ew
+        if is_updated:
+            self.__dict__.update(update_data)
 
         return self
 
@@ -639,31 +621,22 @@ class Typewell(ComplexObject):
                     tie_in_ns: Optional[float] = None,
                     tie_in_ew: Optional[float] = None
                     ):
-        is_success = self._papi_client.update_well_meta(
-            well_type='typewells',
+        update_data = {
+            func_param: func_arg
+            for func_param, func_arg in locals().items()
+            if func_arg is not None and func_param != 'self'
+        }
+        request_data = {
+            key: self._papi_client.prepare_papi_var(value)
+            for key, value in update_data.items()
+        }
+
+        is_updated = self._papi_client.update_typewell_meta(
             well_id=self.uuid,
-            well_name=name,
-            operator=operator,
-            api=api,
-            xsrf=self._papi_client.prepare_papi_var(xsrf),
-            ysrf=self._papi_client.prepare_papi_var(ysrf),
-            kb=self._papi_client.prepare_papi_var(kb),
-            convergence=self._papi_client.prepare_papi_var(convergence),
-            tie_in_tvd=self._papi_client.prepare_papi_var(tie_in_tvd),
-            tie_in_ns=self._papi_client.prepare_papi_var(tie_in_ns),
-            tie_in_ew=self._papi_client.prepare_papi_var(tie_in_ew)
+            **request_data
         )
 
-        if is_success:
-            self.name = name if name else self.name
-            self.xsrf = xsrf if xsrf else self.xsrf
-            self.ysrf = ysrf if ysrf else self.ysrf
-            self.kb = kb if kb else self.kb
-            self.api = api if api else self.api
-            self.operator = operator if operator else self.operator
-            self.convergence = convergence if convergence else self.convergence
-            self.tie_in_tvd = tie_in_tvd if tie_in_tvd else self.tie_in_tvd
-            self.tie_in_ns = tie_in_ns if tie_in_ns else self.tie_in_ns
-            self.tie_in_ew = tie_in_ew if tie_in_ew else self.tie_in_ew
+        if is_updated:
+            self.__dict__.update(update_data)
 
         return self
