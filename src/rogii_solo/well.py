@@ -307,14 +307,14 @@ class Well(ComplexObject):
                     tie_in_ns: Optional[float] = None,
                     tie_in_ew: Optional[float] = None
                     ):
-        update_data = {
+        func_data = {
             func_param: func_arg
             for func_param, func_arg in locals().items()
             if func_arg is not None and func_param != 'self'
         }
         request_data = {
             key: self._papi_client.prepare_papi_var(value)
-            for key, value in update_data.items()
+            for key, value in func_data.items()
         }
 
         is_updated = self._papi_client.update_well_meta(
@@ -323,7 +323,7 @@ class Well(ComplexObject):
         )
 
         if is_updated:
-            self.__dict__.update(update_data)
+            self.__dict__.update(func_data)
 
         return self
 
@@ -455,14 +455,14 @@ class NestedWell(ComplexObject):
                     tie_in_ns: Optional[float] = None,
                     tie_in_ew: Optional[float] = None
                     ):
-        update_data = {
+        func_data = {
             func_param: func_arg
             for func_param, func_arg in locals().items()
             if func_arg is not None and func_param != 'self'
         }
         request_data = {
             key: self._papi_client.prepare_papi_var(value)
-            for key, value in update_data.items()
+            for key, value in func_data.items()
         }
 
         is_updated = self._papi_client.update_nested_well_meta(
@@ -471,7 +471,7 @@ class NestedWell(ComplexObject):
         )
 
         if is_updated:
-            self.__dict__.update(update_data)
+            self.__dict__.update(func_data)
 
         return self
 
@@ -621,14 +621,14 @@ class Typewell(ComplexObject):
                     tie_in_ns: Optional[float] = None,
                     tie_in_ew: Optional[float] = None
                     ):
-        update_data = {
+        func_data = {
             func_param: func_arg
             for func_param, func_arg in locals().items()
             if func_arg is not None and func_param != 'self'
         }
         request_data = {
             key: self._papi_client.prepare_papi_var(value)
-            for key, value in update_data.items()
+            for key, value in func_data.items()
         }
 
         is_updated = self._papi_client.update_typewell_meta(
@@ -637,6 +637,6 @@ class Typewell(ComplexObject):
         )
 
         if is_updated:
-            self.__dict__.update(update_data)
+            self.__dict__.update(func_data)
 
         return self
