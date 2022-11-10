@@ -474,7 +474,7 @@ def test_update_well_kb(project_papi):
     assert well is not None
 
     well_new_meta = {'kb': random.randint(0, 100)}
-    well = well.update_meta(**well_new_meta)
+    well.update_meta(**well_new_meta)
 
     assert well.kb == well_new_meta['kb']
 
@@ -485,7 +485,7 @@ def test_update_typewell_kb(project_papi):
     assert typewell is not None
 
     typewell_new_meta = {'kb': random.randint(0, 100)}
-    typewell = typewell.update_meta(**typewell_new_meta)
+    typewell.update_meta(**typewell_new_meta)
 
     assert typewell.kb == typewell_new_meta['kb']
 
@@ -500,7 +500,7 @@ def test_update_nested_well_kb(project_papi):
     assert nested_well is not None
 
     nested_well_new_meta = {'kb': random.randint(0, 100)}
-    nested_well = nested_well.update_meta(**nested_well_new_meta)
+    nested_well.update_meta(**nested_well_new_meta)
 
     assert nested_well.kb == nested_well_new_meta['kb']
 

@@ -809,9 +809,8 @@ class PapiClient(BasePapiClient):
                          tie_in_ew: Optional[PapiVar] = None,
                          headers: Optional[Dict[str, Any]] = None
                          ):
-        url = f'wells/{well_id}'
         return self._update_meta(
-            url=url,
+            url=f'wells/{well_id}',
             name=name,
             operator=operator,
             api=api,
@@ -840,9 +839,8 @@ class PapiClient(BasePapiClient):
                              tie_in_ew: Optional[PapiVar] = None,
                              headers: Optional[Dict[str, Any]] = None
                              ):
-        url = f'typewells/{well_id}'
         return self._update_meta(
-            url=url,
+            url=f'typewells/{well_id}',
             name=name,
             operator=operator,
             api=api,
@@ -869,9 +867,8 @@ class PapiClient(BasePapiClient):
                                 tie_in_ew: Optional[PapiVar] = None,
                                 headers: Optional[Dict[str, Any]] = None
                                 ):
-        url = f'nestedwells/{well_id}'
         return self._update_meta(
-            url=url,
+            url=f'nestedwells/{well_id}',
             name=name,
             operator=operator,
             api=api,
