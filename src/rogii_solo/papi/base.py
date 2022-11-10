@@ -112,7 +112,7 @@ class BasePapiClient:
                       params: Optional[Dict[str, Any]] = None,
                       headers: Optional[Dict[str, Any]] = None
                       ):
-        response = self.session.get(f"{self.papi_url}/{url}", params=params, headers=headers)
+        response = self.session.get(f'{self.papi_url}/{url}', params=params, headers=headers)
 
         if response.status_code != status_codes.ok:
             error = response.json()
@@ -120,13 +120,15 @@ class BasePapiClient:
 
         if response.text:
             return response.json()
+
+        return response
 
     def _send_post_request(self,
                            url: str,
                            request_data: Dict[str, Any],
                            headers: Optional[Dict[str, Any]] = None
                            ):
-        response = self.session.post(f"{self.papi_url}/{url}", json=request_data, headers=headers)
+        response = self.session.post(f'{self.papi_url}/{url}', json=request_data, headers=headers)
 
         if response.status_code != status_codes.ok:
             error = response.json()
@@ -134,13 +136,15 @@ class BasePapiClient:
 
         if response.text:
             return response.json()
+
+        return response
 
     def _send_put_request(self,
                           url: str,
                           request_data: Dict[str, Any],
                           headers: Optional[Dict[str, Any]] = None
                           ):
-        response = self.session.put(f"{self.papi_url}/{url}", json=request_data, headers=headers)
+        response = self.session.put(f'{self.papi_url}/{url}', json=request_data, headers=headers)
 
         if response.status_code != status_codes.ok:
             error = response.json()
@@ -148,6 +152,24 @@ class BasePapiClient:
 
         if response.text:
             return response.json()
+
+        return response
+
+    def _send_patch_request(self,
+                            url: str,
+                            request_data: Dict[str, Any],
+                            headers: Optional[Dict[str, Any]] = None
+                            ):
+        response = self.session.patch(f'{self.papi_url}/{url}', json=request_data, headers=headers)
+
+        if response.status_code != status_codes.ok:
+            error = response.json()
+            raise BasePapiClientException(error)
+
+        if response.text:
+            return response.json()
+
+        return response
 
 
 class PapiClient(BasePapiClient):
@@ -771,3 +793,123 @@ class PapiClient(BasePapiClient):
             center=starred_tops['center'],
             bottom=starred_tops['bottom']
         )
+
+    def update_well_meta(self,
+                         well_id: str,
+                         name: Optional[str] = None,
+                         operator: Optional[str] = None,
+                         api: Optional[str] = None,
+                         xsrf: Optional[PapiVar] = None,
+                         ysrf: Optional[PapiVar] = None,
+                         kb: Optional[PapiVar] = None,
+                         azimuth: Optional[PapiVar] = None,
+                         convergence: Optional[PapiVar] = None,
+                         tie_in_tvd: Optional[PapiVar] = None,
+                         tie_in_ns: Optional[PapiVar] = None,
+                         tie_in_ew: Optional[PapiVar] = None,
+                         headers: Optional[Dict[str, Any]] = None
+                         ):
+        return self._update_meta(
+            url=f'wells/{well_id}',
+            name=name,
+            operator=operator,
+            api=api,
+            xsrf=xsrf,
+            ysrf=ysrf,
+            kb=kb,
+            azimuth=azimuth,
+            convergence=convergence,
+            tie_in_tvd=tie_in_tvd,
+            tie_in_ns=tie_in_ns,
+            tie_in_ew=tie_in_ew,
+            headers=headers
+        )
+
+    def update_typewell_meta(self,
+                             well_id: str,
+                             name: Optional[str] = None,
+                             operator: Optional[str] = None,
+                             api: Optional[str] = None,
+                             xsrf: Optional[PapiVar] = None,
+                             ysrf: Optional[PapiVar] = None,
+                             kb: Optional[PapiVar] = None,
+                             convergence: Optional[PapiVar] = None,
+                             tie_in_tvd: Optional[PapiVar] = None,
+                             tie_in_ns: Optional[PapiVar] = None,
+                             tie_in_ew: Optional[PapiVar] = None,
+                             headers: Optional[Dict[str, Any]] = None
+                             ):
+        return self._update_meta(
+            url=f'typewells/{well_id}',
+            name=name,
+            operator=operator,
+            api=api,
+            xsrf=xsrf,
+            ysrf=ysrf,
+            kb=kb,
+            convergence=convergence,
+            tie_in_tvd=tie_in_tvd,
+            tie_in_ns=tie_in_ns,
+            tie_in_ew=tie_in_ew,
+            headers=headers
+        )
+
+    def update_nested_well_meta(self,
+                                well_id: str,
+                                name: Optional[str] = None,
+                                operator: Optional[str] = None,
+                                api: Optional[str] = None,
+                                xsrf: Optional[PapiVar] = None,
+                                ysrf: Optional[PapiVar] = None,
+                                kb: Optional[PapiVar] = None,
+                                tie_in_tvd: Optional[PapiVar] = None,
+                                tie_in_ns: Optional[PapiVar] = None,
+                                tie_in_ew: Optional[PapiVar] = None,
+                                headers: Optional[Dict[str, Any]] = None
+                                ):
+        return self._update_meta(
+            url=f'nestedwells/{well_id}',
+            name=name,
+            operator=operator,
+            api=api,
+            xsrf=xsrf,
+            ysrf=ysrf,
+            kb=kb,
+            tie_in_tvd=tie_in_tvd,
+            tie_in_ns=tie_in_ns,
+            tie_in_ew=tie_in_ew,
+            headers=headers
+        )
+
+    def _update_meta(self,
+                     url: str,
+                     name: Optional[str] = None,
+                     operator: Optional[str] = None,
+                     api: Optional[str] = None,
+                     xsrf: Optional[PapiVar] = None,
+                     ysrf: Optional[PapiVar] = None,
+                     kb: Optional[PapiVar] = None,
+                     azimuth: Optional[PapiVar] = None,
+                     convergence: Optional[PapiVar] = None,
+                     tie_in_tvd: Optional[PapiVar] = None,
+                     tie_in_ns: Optional[PapiVar] = None,
+                     tie_in_ew: Optional[PapiVar] = None,
+                     headers: Optional[Dict[str, Any]] = None
+                     ):
+        request_data = {
+            'name': name,
+            'operator': operator,
+            'api': api,
+            'xsrf': xsrf,
+            'ysrf': ysrf,
+            'kb': kb,
+            'azimuth': azimuth,
+            'convergence': convergence,
+            'tie_in_tvd': tie_in_tvd,
+            'tie_in_ns': tie_in_ns,
+            'tie_in_ew': tie_in_ew,
+        }
+
+        response = self._send_patch_request(url=url, request_data=request_data, headers=headers)
+
+        return response.status_code == status_codes.ok

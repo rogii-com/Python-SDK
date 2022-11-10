@@ -294,6 +294,39 @@ class Well(ComplexObject):
         self._target_lines_data = None
         self._target_lines = None
 
+    def update_meta(self,
+                    name: Optional[str] = None,
+                    operator: Optional[str] = None,
+                    api: Optional[str] = None,
+                    xsrf: Optional[float] = None,
+                    ysrf: Optional[float] = None,
+                    kb: Optional[float] = None,
+                    azimuth: Optional[float] = None,
+                    convergence: Optional[float] = None,
+                    tie_in_tvd: Optional[float] = None,
+                    tie_in_ns: Optional[float] = None,
+                    tie_in_ew: Optional[float] = None
+                    ):
+        func_data = {
+            func_param: func_arg
+            for func_param, func_arg in locals().items()
+            if func_arg is not None and func_param != 'self'
+        }
+        request_data = {
+            key: self._papi_client.prepare_papi_var(value)
+            for key, value in func_data.items()
+        }
+
+        is_updated = self._papi_client.update_well_meta(
+            well_id=self.uuid,
+            **request_data
+        )
+
+        if is_updated:
+            self.__dict__.update(func_data)
+
+        return self
+
 
 class NestedWell(ComplexObject):
     def __init__(self, papi_client: PapiClient, well: Well, **kwargs):
@@ -410,6 +443,37 @@ class NestedWell(ComplexObject):
             nested_well_id=self.uuid,
             topset_name=topset_name
         )
+
+    def update_meta(self,
+                    name: Optional[str] = None,
+                    operator: Optional[str] = None,
+                    api: Optional[str] = None,
+                    xsrf: Optional[float] = None,
+                    ysrf: Optional[float] = None,
+                    kb: Optional[float] = None,
+                    tie_in_tvd: Optional[float] = None,
+                    tie_in_ns: Optional[float] = None,
+                    tie_in_ew: Optional[float] = None
+                    ):
+        func_data = {
+            func_param: func_arg
+            for func_param, func_arg in locals().items()
+            if func_arg is not None and func_param != 'self'
+        }
+        request_data = {
+            key: self._papi_client.prepare_papi_var(value)
+            for key, value in func_data.items()
+        }
+
+        is_updated = self._papi_client.update_nested_well_meta(
+            well_id=self.uuid,
+            **request_data
+        )
+
+        if is_updated:
+            self.__dict__.update(func_data)
+
+        return self
 
 
 class Typewell(ComplexObject):
@@ -544,3 +608,35 @@ class Typewell(ComplexObject):
             self._mudlogs_data = self._papi_client.get_typewell_mudlogs_data(typewell_id=self.uuid)
 
         return self._mudlogs_data
+
+    def update_meta(self,
+                    name: Optional[str] = None,
+                    operator: Optional[str] = None,
+                    api: Optional[str] = None,
+                    xsrf: Optional[float] = None,
+                    ysrf: Optional[float] = None,
+                    kb: Optional[float] = None,
+                    convergence: Optional[float] = None,
+                    tie_in_tvd: Optional[float] = None,
+                    tie_in_ns: Optional[float] = None,
+                    tie_in_ew: Optional[float] = None
+                    ):
+        func_data = {
+            func_param: func_arg
+            for func_param, func_arg in locals().items()
+            if func_arg is not None and func_param != 'self'
+        }
+        request_data = {
+            key: self._papi_client.prepare_papi_var(value)
+            for key, value in func_data.items()
+        }
+
+        is_updated = self._papi_client.update_typewell_meta(
+            well_id=self.uuid,
+            **request_data
+        )
+
+        if is_updated:
+            self.__dict__.update(func_data)
+
+        return self

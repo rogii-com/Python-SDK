@@ -70,6 +70,9 @@ class PapiClient(SdkPapiClient):
         :param value:
         :return:
         """
+        if isinstance(value, str):
+            return value
+
         if value is None:
             return {'undefined': True}
 

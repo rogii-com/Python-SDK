@@ -466,3 +466,140 @@ def test_get_mudlog(project_papi):
 
     assert mudlog_data['meta']['name'] == MUDLOG_NAME
     assert mudlog_df.at[0, 'MD'] == mudlog_data['logs'][0]['points'][0]['md']
+
+
+def test_update_well_kb(project_papi):
+    well = project_papi.wells.find_by_name(WELL_NAME)
+
+    assert well is not None
+
+    well_new_meta = {'kb': random.randint(0, 100)}
+    well.update_meta(**well_new_meta)
+
+    assert well.kb == well_new_meta['kb']
+
+
+def test_update_typewell_kb(project_papi):
+    typewell = project_papi.typewells.find_by_name(TYPEWELL_NAME)
+
+    assert typewell is not None
+
+    typewell_new_meta = {'kb': random.randint(0, 100)}
+    typewell.update_meta(**typewell_new_meta)
+
+    assert typewell.kb == typewell_new_meta['kb']
+
+
+def test_update_nested_well_kb(project_papi):
+    well = project_papi.wells.find_by_name(WELL_NAME)
+
+    assert well is not None
+
+    nested_well = project_papi.nested_wells.find_by_name(NESTED_WELL_NAME)
+
+    assert nested_well is not None
+
+    nested_well_new_meta = {'kb': random.randint(0, 100)}
+    nested_well.update_meta(**nested_well_new_meta)
+
+    assert nested_well.kb == nested_well_new_meta['kb']
+
+
+def test_update_well_meta(project_papi):
+    well = project_papi.wells.find_by_name(WELL_NAME)
+
+    assert well is not None
+
+    well_new_meta = {
+        'name': f'Well {random.randint(0, 1000)}',
+        'operator': f'Operator {random.randint(0, 1000)}',
+        'api': f'Lateral API {random.randint(0, 1000)}',
+        'xsrf': random.randint(0, 100),
+        'ysrf': random.randint(0, 100),
+        'kb': random.randint(0, 100),
+        'azimuth': random.randint(0, 270),
+        'convergence': random.randint(0, 10),
+        'tie_in_tvd': random.randint(0, 100),
+        'tie_in_ns': random.randint(0, 100),
+        'tie_in_ew': random.randint(0, 100),
+    }
+
+    well.update_meta(**well_new_meta)
+
+    assert well.name == well_new_meta['name']
+    assert well.operator == well_new_meta['operator']
+    assert well.api == well_new_meta['api']
+    assert well.xsrf == well_new_meta['xsrf']
+    assert well.ysrf == well_new_meta['ysrf']
+    assert well.kb == well_new_meta['kb']
+    assert well.azimuth == well_new_meta['azimuth']
+    assert well.convergence == well_new_meta['convergence']
+    assert well.tie_in_tvd == well_new_meta['tie_in_tvd']
+    assert well.tie_in_ns == well_new_meta['tie_in_ns']
+    assert well.tie_in_ew == well_new_meta['tie_in_ew']
+
+
+def test_update_typewell_meta(project_papi):
+    typewell = project_papi.typewells.find_by_name(TYPEWELL_NAME)
+
+    assert typewell is not None
+
+    typewell_new_meta = {
+        'name': f'Typewell {random.randint(0, 1000)}',
+        'operator': f'Operator {random.randint(0, 1000)}',
+        'api': f'Lateral API {random.randint(0, 1000)}',
+        'xsrf': random.randint(0, 100),
+        'ysrf': random.randint(0, 100),
+        'kb': random.randint(0, 100),
+        'convergence': random.randint(0, 10),
+        'tie_in_tvd': random.randint(0, 100),
+        'tie_in_ns': random.randint(0, 100),
+        'tie_in_ew': random.randint(0, 100),
+    }
+
+    typewell.update_meta(**typewell_new_meta)
+
+    assert typewell.name == typewell_new_meta['name']
+    assert typewell.operator == typewell_new_meta['operator']
+    assert typewell.api == typewell_new_meta['api']
+    assert typewell.xsrf == typewell_new_meta['xsrf']
+    assert typewell.ysrf == typewell_new_meta['ysrf']
+    assert typewell.kb == typewell_new_meta['kb']
+    assert typewell.convergence == typewell_new_meta['convergence']
+    assert typewell.tie_in_tvd == typewell_new_meta['tie_in_tvd']
+    assert typewell.tie_in_ns == typewell_new_meta['tie_in_ns']
+    assert typewell.tie_in_ew == typewell_new_meta['tie_in_ew']
+
+
+def test_update_nested_well_meta(project_papi):
+    well = project_papi.wells.find_by_name(WELL_NAME)
+
+    assert well is not None
+
+    nested_well = well.nested_wells.find_by_name(NESTED_WELL_NAME)
+
+    assert nested_well is not None
+
+    nested_well_new_meta = {
+        'name': f'nested_well {random.randint(0, 1000)}',
+        'operator': f'Operator {random.randint(0, 1000)}',
+        'api': f'Lateral API {random.randint(0, 1000)}',
+        'xsrf': random.randint(0, 100),
+        'ysrf': random.randint(0, 100),
+        'kb': random.randint(0, 100),
+        'tie_in_tvd': random.randint(0, 100),
+        'tie_in_ns': random.randint(0, 100),
+        'tie_in_ew': random.randint(0, 100),
+    }
+
+    nested_well.update_meta(**nested_well_new_meta)
+
+    assert nested_well.name == nested_well_new_meta['name']
+    assert nested_well.operator == nested_well_new_meta['operator']
+    assert nested_well.api == nested_well_new_meta['api']
+    assert nested_well.xsrf == nested_well_new_meta['xsrf']
+    assert nested_well.ysrf == nested_well_new_meta['ysrf']
+    assert nested_well.kb == nested_well_new_meta['kb']
+    assert nested_well.tie_in_tvd == nested_well_new_meta['tie_in_tvd']
+    assert nested_well.tie_in_ns == nested_well_new_meta['tie_in_ns']
+    assert nested_well.tie_in_ew == nested_well_new_meta['tie_in_ew']
