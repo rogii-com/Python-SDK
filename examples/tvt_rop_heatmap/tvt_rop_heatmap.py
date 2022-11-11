@@ -207,6 +207,10 @@ def get_horizon_scatters(xedges2: Any,
     return data
 
 
+def refine_log_points(log_points: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    return [point for point in log_points if point['data'] is not None]
+
+
 def build_tvt_rop_heatmap(script_settings: Dict[str, Any]):
     project_name, well_name = script_settings['project_name'], script_settings['well_name']
     x_log_name, filter_window = script_settings['x_log'], script_settings['filter_window']
@@ -251,7 +255,7 @@ def build_tvt_rop_heatmap(script_settings: Dict[str, Any]):
     histogram2d, xedges2, yedges2 = get_heatmap_data(
         trajectory=trajectory,
         filter_window=filter_window,
-        x_log=x_log.to_dict()['points'],
+        x_log=refine_log_points(x_log.to_dict()['points']),
         tvt_min=tvt_min,
         tvt_max=tvt_max,
         bins=bins
