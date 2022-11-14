@@ -34,6 +34,10 @@ class Well(ComplexObject):
 
         self.__dict__.update(kwargs)
 
+        self.kb = 0 if self.kb is None else self.kb
+        self.tie_in_ns = 0 if self.kb is None else self.tie_in_ns
+        self.tie_in_ew = 0 if self.kb is None else self.tie_in_ew
+
         self._trajectory_data: Optional[DataList] = None
         self._trajectory: Optional[TrajectoryPointRepository[TrajectoryPoint]] = None
 
@@ -244,6 +248,10 @@ class NestedWell(ComplexObject):
         self.tie_in_ew = None
 
         self.__dict__.update(kwargs)
+
+        self.kb = 0 if self.kb is None else self.kb
+        self.tie_in_ns = 0 if self.kb is None else self.tie_in_ns
+        self.tie_in_ew = 0 if self.kb is None else self.tie_in_ew
 
         self._trajectory_data: Optional[DataList] = None
         self._trajectory: Optional[TrajectoryPointRepository[TrajectoryPoint]] = None
