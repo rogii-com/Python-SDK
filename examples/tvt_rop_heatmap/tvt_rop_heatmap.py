@@ -132,7 +132,7 @@ def get_heatmap_data(trajectory: List[Dict[str, float]],
                      tvt_min: int,
                      tvt_max: int,
                      bins: int
-                     ) -> Tuple[Any, Any, Any]:
+                     ) -> Tuple[Any, Any, Any, float, float]:
     x, y = [], []
 
     for i in range(filter_window, len(x_log) - 1 - filter_window):
@@ -166,7 +166,7 @@ def get_heatmap_data(trajectory: List[Dict[str, float]],
             for j in range(bins):
                 histogram2d[i][j] = histogram2d[i][j] / max_val
 
-    return histogram2d, xedges2, yedges2
+    return histogram2d, xedges2, yedges2, x[-1], y[-1]
 
 
 def get_horizon_scatters(xedges2: Any,
@@ -205,6 +205,20 @@ def get_horizon_scatters(xedges2: Any,
             )
 
     return data
+
+
+def get_last_rop_point_scatter(last_x: float, last_y: float) -> go.Scatter:
+    return go.Scatter(
+        x=[last_x, ],
+        y=[last_y, ],
+        mode='markers',
+        marker={
+            'color': 'White',
+            'size': 20,
+            'line': {'width': 2, 'color': 'Red'},
+        },
+        showlegend=False
+    )
 
 
 def refine_log_points(log_points: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
@@ -252,7 +266,7 @@ def build_tvt_rop_heatmap(script_settings: Dict[str, Any]):
 
     # start plotting
     data = []
-    histogram2d, xedges2, yedges2 = get_heatmap_data(
+    histogram2d, xedges2, yedges2, last_x, last_y = get_heatmap_data(
         trajectory=trajectory,
         filter_window=filter_window,
         x_log=refine_log_points(x_log.to_dict()['points']),
@@ -270,6 +284,10 @@ def build_tvt_rop_heatmap(script_settings: Dict[str, Any]):
         zero_horizon_uuid=interpretation_data['meta']['properties']['zero_horizon_uuid']
     )
     data.extend(horizon_scatters)
+
+    last_rop_point_scatter = get_last_rop_point_scatter(last_x, last_y)
+    data.append(last_rop_point_scatter)
+
     layout = go.Layout(
         font={'size': 16},
         yaxis={
