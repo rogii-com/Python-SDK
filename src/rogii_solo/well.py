@@ -333,6 +333,7 @@ class NestedWell(ComplexObject):
         super().__init__(papi_client)
 
         self.well = well
+        self.project = well.project
 
         self.uuid = None
         self.name = None
