@@ -98,9 +98,9 @@ class PapiClient(SdkPapiClient):
             **kwargs
         ))
 
-    def get_horizons_tvt_data(self, interpretation_id: str, **kwargs) -> PapiDataList:
+    def get_interpretation_tvt_data(self, interpretation_id: str, **kwargs) -> PapiDataList:
         return [
-            self.parse_papi_data(tvt_data) for tvt_data in self.fetch_horizons_tvt_data(
+            self.parse_papi_data(tvt_data) for tvt_data in self.fetch_interpretation_horizons_data(
                 interpretation_id=interpretation_id,
                 **kwargs
             )

@@ -10,28 +10,10 @@ from scipy import stats
 
 import rogii_solo.well
 from rogii_solo import SoloClient
+from rogii_solo.calculations.base import get_nearest_values
 from rogii_solo.calculations.interpretation import interpolate_trajectory_point
 from rogii_solo.calculations.trajectory import calculate_trajectory
 from rogii_solo.interpretation import Interpretation
-
-
-def get_nearest_values(value: Any, input_list: List[Any]) -> Any:
-    if not input_list:
-        return
-
-    pos = bisect_left(input_list, value)
-
-    if pos == 0:
-        values = [input_list[0]]
-    elif pos == len(input_list):
-        values = [input_list[-1]]
-    else:
-        values = [
-            input_list[pos - 1],
-            input_list[pos]
-        ]
-
-    return values
 
 
 def get_interpolated_trajectory(solo_client: SoloClient, well: 'rogii_solo.well.Well') -> List[Dict[str, float]]:
@@ -75,12 +57,28 @@ def get_interpolated_trajectory(solo_client: SoloClient, well: 'rogii_solo.well.
 
 
 def get_horizons(interpretation: Interpretation, md_step: int) -> List[Dict[str, Any]]:
-    horizons = interpretation.get_horizons_tvt_data(md_step=md_step)
+    horizons = interpretation.get_tvt_data(md_step)
 
     if not horizons:
         raise Exception('Horizons\' data not found.')
 
     return horizons
+
+
+def get_horizon_tvts(interpretation: Interpretation) -> List[Dict[str, Any]]:
+    horizon_tvts = []
+    horizons_data = interpretation.assembled_segments['horizons'].values()
+
+    for horizon in horizons_data:
+        horizon_tvts.append(
+            {
+                'name': horizon['name'],
+                'uuid': horizon['uuid'],
+                'tvt': horizon['tvd'],
+            }
+        )
+
+    return horizon_tvts
 
 
 def get_horizons_data_by_md(horizons: List[Dict[str, Any]], md: float) -> Dict[str, Any]:
@@ -172,7 +170,6 @@ def get_heatmap_data(trajectory: List[Dict[str, float]],
 def get_horizon_scatters(xedges2: Any,
                          yedges2: Any,
                          horizons: List[Dict[str, Any]],
-                         kb: float,
                          zero_horizon_uuid: str
                          ) -> List[go.Scatter]:
     tvt_margin = 0.1
@@ -183,11 +180,11 @@ def get_horizon_scatters(xedges2: Any,
 
     for horizon in horizons:
         if horizon['uuid'] == zero_horizon_uuid:
-            zero_tvt = kb - horizon['tvdss']
+            zero_tvt = horizon['tvt']
             break
 
     for horizon in horizons:
-        tvt = kb - horizon['tvdss'] - zero_tvt
+        tvt = horizon['tvt'] - zero_tvt
 
         if y_min - tvt_margin <= tvt <= y_max + tvt_margin:
             data.append(
@@ -275,12 +272,12 @@ def build_tvt_rop_heatmap(script_settings: Dict[str, Any]):
         bins=bins
     )
     data.append(go.Heatmap(x=xedges2, y=yedges2, z=histogram2d, showscale=False))
-    well_data = well.to_dict()
+
+    horizon_tvts = get_horizon_tvts(interpretation)
     horizon_scatters = get_horizon_scatters(
         xedges2=xedges2,
         yedges2=yedges2,
-        horizons=horizons[0]['horizons'],
-        kb=well_data['kb'],
+        horizons=horizon_tvts,
         zero_horizon_uuid=interpretation_data['meta']['properties']['zero_horizon_uuid']
     )
     data.extend(horizon_scatters)

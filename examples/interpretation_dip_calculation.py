@@ -42,13 +42,13 @@ def calc_interpretation_dip():
 
     segments = get_segments(
         well=well_data,
-        assembled_segments=interpretation.get_assembled_segments_data()['segments'],
+        assembled_segments=interpretation.assembled_segments['segments'],
         calculated_trajectory=calculated_trajectory,
         measure_units=MEASURE_UNITS
     )
     segments_with_dip = get_segments_with_dip(
         segments=segments,
-        assembled_horizons=interpretation.get_assembled_segments_data()['horizons']
+        assembled_horizons=interpretation.assembled_segments['horizons']
     )
 
     calculated_dips = DataFrame(segments_with_dip, columns=['md', 'dip'])
