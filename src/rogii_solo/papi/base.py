@@ -321,11 +321,11 @@ class PapiClient(BasePapiClient):
             headers=headers
         )
 
-    def fetch_horizons_tvt_data(self,
-                                interpretation_id: str,
-                                md_step: int,
-                                headers: Optional[Dict[str, Any]] = None
-                                ):
+    def fetch_interpretation_horizons_data(self,
+                                           interpretation_id: str,
+                                           md_step: int,
+                                           headers: Optional[Dict[str, Any]] = None
+                                           ):
         """
         Fetches calculated by step horizons data
         :param interpretation_id:

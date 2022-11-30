@@ -3159,9 +3159,8 @@ NESTED_WELLS_DATA_RESPONSE = {
     'last': True
 }
 
-
 LOGS_DATA_RESPONSE = {
-    'content': [ 
+    'content': [
         {
             'name': LOG_NAME,
             'uuid': '1b6424cf-1af1-4bdc-a371-561063689b94'
@@ -3177,7 +3176,6 @@ LOGS_DATA_RESPONSE = {
     'first': True,
     'last': True
 }
-
 
 LOG_POINTS_DATA_RESPONSE = {
     'log_points': [
@@ -3259,6 +3257,110 @@ LOG_POINTS_DATA_RESPONSE = {
             },
             'md': {
                 'val': 745.9979999999999
+            }
+        }
+    ]
+}
+
+HORIZONS_TVT_DATA_RESPONSE = {
+    'content': [
+        {
+            'azimuth': {
+                'val': 71.543
+            },
+            'horizons': [
+                {
+                    'name': HORIZON_NAME,
+                    'tvdss': {
+                        'val': 22.965879265091868
+                    },
+                    'uuid': HORIZON_ID
+                }, {
+                    'name': 'Horizon 2',
+                    'tvdss': {
+                        'val': -3257.8740157480324
+                    },
+                    'uuid': '586a5e44-2a1c-402d-88bf-e82304e8fa2e'
+                }
+            ],
+            'inclination': {
+                'val': 0
+            },
+            'kb': {
+                'val': 22.965879265091868
+            },
+            'md': {
+                'val': 0
+            },
+            'tvt': {
+                'val': 0
+            },
+            'vs_azim': {
+                'azimuth': {
+                    'val': 0
+                },
+                'vs': {
+                    'val': 3.280839895013124
+                }
+            },
+            'well_name': WELL_NAME,
+            'x': {
+                'val': 19.68503937007874
+            },
+            'y': {
+                'val': 36.08923884514436
+            },
+            'z': {
+                'val': 22.965879265091868
+            }
+        }, {
+            'azimuth': {
+                'val': 149.253
+            },
+            'horizons': [
+                {
+                    'name': HORIZON_NAME,
+                    'tvdss': {
+                        'val': 22.965879265091868
+                    },
+                    'uuid': HORIZON_ID
+                }, {
+                    'name': 'Horizon 2',
+                    'tvdss': {
+                        'val': -3257.8740157480324
+                    },
+                    'uuid': '586a5e44-2a1c-402d-88bf-e82304e8fa2e'
+                }
+            ],
+            'inclination': {
+                'val': 1.33
+            },
+            'kb': {
+                'val': 22.965879265091868
+            },
+            'md': {
+                'val': 3280.839895013124
+            },
+            'tvt': {
+                'val': 3280.0196063852154
+            },
+            'vs_azim': {
+                'azimuth': {
+                    'val': 0
+                },
+                'vs': {
+                    'val': -60.07861128428071
+                }
+            },
+            'well_name': WELL_NAME,
+            'x': {
+                'val': 53.715600823725445
+            },
+            'y': {
+                'val': -27.270212334149477
+            },
+            'z': {
+                'val': -3257.0537271201238
             }
         }
     ]

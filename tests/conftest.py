@@ -16,7 +16,8 @@ from tests.papi_data import (
     TARGET_LINES_DATA_RESPONSE,
     NESTED_WELLS_DATA_RESPONSE,
     LOGS_DATA_RESPONSE,
-    LOG_POINTS_DATA_RESPONSE
+    LOG_POINTS_DATA_RESPONSE,
+    HORIZONS_TVT_DATA_RESPONSE
 )
 
 
@@ -46,6 +47,10 @@ def fetch_interpretation_horizons(**kwargs):
 
 def fetch_interpretation_assembled_segments(**kwargs):
     return ASSEMBLED_SEGMENTS_DATA_RESPONSE['assembled_segments']
+
+
+def fetch_interpretation_horizons_data(**kwargs):
+    return HORIZONS_TVT_DATA_RESPONSE['content']
 
 
 def fetch_well_target_lines(**kwargs):
@@ -84,6 +89,7 @@ def solo_client():
     solo_client._papi_client.fetch_nested_well_raw_trajectory = fetch_nested_well_raw_trajectory
     solo_client._papi_client.fetch_well_logs = fetch_well_logs
     solo_client._papi_client.fetch_log_points = fetch_log_points
+    solo_client._papi_client.fetch_interpretation_horizons_data = fetch_interpretation_horizons_data
 
     return solo_client
 
