@@ -134,6 +134,14 @@ class PapiClient(SdkPapiClient):
             **kwargs
         ))
 
+    def get_interpretation_tvt_data(self, interpretation_id: str, **kwargs) -> PapiDataList:
+        return [
+            self.parse_papi_data(tvt_data) for tvt_data in self.fetch_interpretation_horizons_data(
+                interpretation_id=interpretation_id,
+                **kwargs
+            )
+        ]
+
     def get_interpretation_assembled_segments_data(self, interpretation_id: str, **kwargs) -> PapiData:
         assembled_segments = self.fetch_interpretation_assembled_segments(
             interpretation_id=interpretation_id,
@@ -174,6 +182,18 @@ class PapiClient(SdkPapiClient):
                 nested_well_id=nested_well_id,
                 **kwargs
             )
+        ]
+
+    def get_well_logs_data(self, well_id: str, **kwargs) -> PapiDataList:
+        return list(self._gen_data_page(
+            func=self.fetch_well_logs,
+            well_id=well_id,
+            **kwargs
+        ))
+
+    def get_log_data(self, log_id: str) -> PapiDataList:
+        return [
+            self.parse_papi_data(data_item) for data_item in self.fetch_log_points(log_id=log_id)
         ]
 
     def get_project_typewells_data(self, project_id: str, **kwargs) -> PapiDataList:

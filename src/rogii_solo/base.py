@@ -47,15 +47,14 @@ class BaseObject(ABC, Convertable):
         """
         pass
 
-    def _find_by_path(
-            self,
-            obj: Dict or Iterable[Dict],
-            path: str or Iterable[str],
-            default: Any = None,
-            divider: str = None,
-            check_none: bool = False,
-            to_list: bool = False,
-    ) -> Any:
+    def _find_by_path(self,
+                      obj: Dict or Iterable[Dict],
+                      path: str or Iterable[str],
+                      default: Any = None,
+                      divider: str = None,
+                      check_none: bool = False,
+                      to_list: bool = False,
+                      ) -> Any:
         """
         Find nested key value in dict
         :param obj:
@@ -94,15 +93,14 @@ class BaseObject(ABC, Convertable):
 
         return result
 
-    def __find_by_path(
-            self,
-            obj: Dict,
-            path: str,
-            default: Any = None,
-            divider: str = None,
-            check_none: bool = False,
-            to_list: bool = False,
-    ) -> Any:
+    def __find_by_path(self,
+                       obj: Dict,
+                       path: str,
+                       default: Any = None,
+                       divider: str = None,
+                       check_none: bool = False,
+                       to_list: bool = False,
+                       ) -> Any:
         if not obj:
             return None if not to_list else []
 

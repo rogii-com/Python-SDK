@@ -4,11 +4,15 @@ from pandas import DataFrame
 
 import rogii_solo.well
 from rogii_solo.base import ComplexObject, ObjectRepository
+from rogii_solo.calculations.converters import meters_to_feet
+from rogii_solo.calculations.enums import EMeasureUnits
 from rogii_solo.horizon import Horizon
 from rogii_solo.papi.client import PapiClient
 from rogii_solo.papi.types import PapiAssembledSegments, PapiStarredHorizons
 from rogii_solo.types import DataList
 from rogii_solo.types import Interpretation as InterpretationType
+
+TVT_DATA_MAX_MD_STEP = 100000
 
 
 class Interpretation(ComplexObject):
@@ -47,13 +51,38 @@ class Interpretation(ComplexObject):
             'segments': DataFrame(data['segments']),
         }
 
-    def get_assembled_segments_data(self) -> PapiAssembledSegments:
-        if self._assembled_segments_data is None:
-            self._assembled_segments_data = self._papi_client.get_interpretation_assembled_segments_data(
-                interpretation_id=self.uuid
-            )
+    @property
+    def assembled_segments(self):
+        if self._assembled_segments_data is not None:
+            return {
+                'horizons': self._assembled_segments_data['horizons'],
+                'segments': self._assembled_segments_data['segments']
+            }
 
-        return self._assembled_segments_data
+        self._assembled_segments_data = self._papi_client.get_interpretation_assembled_segments_data(
+            interpretation_id=self.uuid
+        )
+
+        assembled_horizons_data = self._assembled_segments_data['horizons']
+        measure_units = self.well.project.measure_unit
+
+        for horizon in self._get_horizons_data():
+            assembled_horizons_data[horizon['uuid']]['name'] = horizon['name']
+            if measure_units != EMeasureUnits.METER:
+                assembled_horizons_data[horizon['uuid']]['tvd'] = meters_to_feet(
+                    assembled_horizons_data[horizon['uuid']]['tvd']
+                )
+
+        return {
+            'horizons': self._assembled_segments_data['horizons'],
+            'segments': self._assembled_segments_data['segments']
+        }
+
+    def get_tvt_data(self, md_step: int = 1) -> DataList:
+        return self._papi_client.get_interpretation_tvt_data(
+            interpretation_id=self.uuid,
+            md_step=md_step
+        )
 
     @property
     def horizons(self) -> ObjectRepository[Horizon]:
@@ -95,11 +124,6 @@ class Interpretation(ComplexObject):
         return self._starred_horizon_bottom
 
     def _get_data(self):
-        assembled_segments = self.get_assembled_segments_data()
-
-        for horizon in self._get_horizons_data():
-            assembled_segments['horizons'][horizon['uuid']]['name'] = horizon['name']
-
         meta = {
             'uuid': self.uuid,
             'name': self.name,
@@ -110,8 +134,8 @@ class Interpretation(ComplexObject):
 
         return {
             'meta': meta,
-            'horizons': assembled_segments['horizons'],
-            'segments': assembled_segments['segments'],
+            'horizons': self.assembled_segments['horizons'],
+            'segments': self.assembled_segments['segments'],
         }
 
     def _get_starred_horizons_data(self):

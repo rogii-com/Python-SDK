@@ -337,6 +337,26 @@ class PapiClient(BasePapiClient):
             headers=headers
         )
 
+    def fetch_interpretation_horizons_data(self,
+                                           interpretation_id: str,
+                                           md_step: int,
+                                           headers: Optional[Dict[str, Any]] = None
+                                           ):
+        """
+        Fetches calculated by step horizons data
+        :param interpretation_id:
+        :param md_step:
+        :param headers:
+        :return:
+        """
+
+        data = self._send_request(
+            url=f'interpretations/{interpretation_id}/horizons/data/spacing/{md_step}',
+            headers=headers
+        )
+
+        return data['content']
+
     def fetch_interpretation_assembled_segments(self,
                                                 interpretation_id: str,
                                                 headers: Optional[Dict[str, Any]] = None
@@ -476,6 +496,69 @@ class PapiClient(BasePapiClient):
         data = self._send_request(url=f'nestedwells/{nested_well_id}/trajectory/raw', headers=headers)
 
         return data['content']
+
+    def fetch_well_logs(self,
+                        well_id: str,
+                        offset: int = BasePapiClient.DEFAULT_OFFSET,
+                        limit: int = BasePapiClient.DEFAULT_LIMIT,
+                        log_filter: str = None,
+                        headers: Optional[Dict[str, Any]] = None
+                        ):
+        """
+        Fetches well logs
+        :param well_id:
+        :param offset:
+        :param limit:
+        :param log_filter:
+        :param headers:
+        :return:
+        """
+
+        return self._send_request(
+            url=f'wells/{well_id}/logs',
+            params={
+                'offset': offset,
+                'limit': limit,
+                'filter': log_filter
+            },
+            headers=headers
+        )
+
+    def fetch_typewell_logs(self,
+                            typewell_id: str,
+                            offset: int = BasePapiClient.DEFAULT_OFFSET,
+                            limit: int = BasePapiClient.DEFAULT_LIMIT,
+                            headers: Optional[Dict[str, Any]] = None
+                            ):
+        """
+        Fetches typewell logs
+        :param typewell_id:
+        :param offset:
+        :param limit:
+        :param headers:
+        :return:
+        """
+
+        return self._send_request(
+            url=f'typewells/{typewell_id}/logs',
+            params={
+                'offset': offset,
+                'limit': limit,
+            },
+            headers=headers
+        )
+
+    def fetch_log_points(self, log_id: str, headers: Optional[Dict[str, Any]] = None):
+        """
+        Fetches log points data
+        :param log_id:
+        :param headers
+        :return:
+        """
+
+        data = self._send_request(url=f'logs/{log_id}/data/raw', headers=headers)
+
+        return data['log_points']
 
     def fetch_well_mudlogs(self,
                            well_id: str,
