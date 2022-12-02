@@ -577,23 +577,22 @@ class Typewell(ComplexObject):
         return DataFrame([self.to_dict(get_converted)])
 
     @property
-    def trajectory_data(self) -> DataList:
-        if self._trajectory_data is None:
-            self._trajectory_data = self._papi_client.get_typewell_trajectory_data(typewell_id=self.uuid)
-
-        return self._trajectory_data
-
-    @property
     def trajectory(self) -> TrajectoryPointRepository[TrajectoryPoint]:
         if self._trajectory is None:
             self._trajectory = TrajectoryPointRepository(
                 objects=[
                     TrajectoryPoint(measure_units=self.project.measure_unit, **item)
-                    for item in self.trajectory_data
+                    for item in self._get_trajectory_data()
                 ]
             )
 
         return self._trajectory
+
+    def _get_trajectory_data(self) -> DataList:
+        if self._trajectory_data is None:
+            self._trajectory_data = self._papi_client.get_typewell_trajectory_data(typewell_id=self.uuid)
+
+        return self._trajectory_data
 
     @property
     def topsets(self) -> ObjectRepository[Topset]:
