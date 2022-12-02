@@ -387,9 +387,9 @@ class PapiClient(BasePapiClient):
         )
 
         return PapiStarredHorizons(
-            top=starred_horizons['top'],
-            center=starred_horizons['center'],
-            bottom=starred_horizons['bottom']
+            top=starred_horizons.get('top'),
+            center=starred_horizons.get('center'),
+            bottom=starred_horizons.get('bottom')
         )
 
     def fetch_well_nested_wells(self,
@@ -872,9 +872,9 @@ class PapiClient(BasePapiClient):
         starred_tops = self._send_request(url=f'topsets/{topset_id}/starred', headers=headers)
 
         return PapiStarredTops(
-            top=starred_tops['top'],
-            center=starred_tops['center'],
-            bottom=starred_tops['bottom']
+            top=starred_tops.get('top'),
+            center=starred_tops.get('center'),
+            bottom=starred_tops.get('bottom')
         )
 
     def update_well_meta(self,
