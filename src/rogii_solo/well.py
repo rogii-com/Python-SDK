@@ -4,6 +4,7 @@ from pandas import DataFrame
 
 import rogii_solo.project
 from rogii_solo.base import ComplexObject, ObjectRepository
+from rogii_solo.calculations.enums import ELogMeasureUnits
 from rogii_solo.interpretation import Interpretation
 from rogii_solo.log import Log
 from rogii_solo.mudlog import Mudlog
@@ -294,6 +295,30 @@ class Well(ComplexObject):
             topset_name=topset_name
         )
 
+    def create_log(self, log_name: str, log_points: DataList):
+        log_id = self._papi_client.create_well_log(
+            well_id=self.uuid,
+            log_name=log_name
+        )
+
+        if log_id.get('uuid') is None:
+            return
+
+        prepared_log_points = [
+            {key: self._papi_client.prepare_papi_var(value) for key, value in point.items()}
+            for point in log_points
+        ]
+
+        units = ELogMeasureUnits.convert_from_measure_units(self.project.measure_unit)
+        self._papi_client.replace_log(
+            log_id=log_id['uuid'],
+            index_unit=units,
+            log_points=prepared_log_points
+        )
+
+        self._logs = None
+        self._logs_data = None
+
     def create_target_line(self,
                            target_line_name: str,
                            origin_x: float,
@@ -532,6 +557,9 @@ class Typewell(ComplexObject):
         self._trajectory_data: Optional[DataList] = None
         self._trajectory: Optional[TrajectoryPointRepository[TrajectoryPoint]] = None
 
+        self._logs_data: Optional[DataList] = None
+        self._logs: Optional[ObjectRepository[Log]] = None
+
         self._topsets_data: Optional[DataList] = None
         self._topsets: Optional[ObjectRepository[Topset]] = None
         self._starred_topset:  Optional[Topset] = None
@@ -595,6 +623,21 @@ class Typewell(ComplexObject):
         return self._trajectory_data
 
     @property
+    def logs(self) -> ObjectRepository[Log]:
+        if self._logs is None:
+            self._logs = ObjectRepository(
+                objects=[Log(papi_client=self._papi_client, well=self, **item) for item in self._get_logs_data()]
+            )
+
+        return self._logs
+
+    def _get_logs_data(self) -> DataList:
+        if self._logs_data is None:
+            self._logs_data = self._papi_client.get_typewell_logs_data(typewell_id=self.uuid)
+
+        return self._logs_data
+
+    @property
     def topsets(self) -> ObjectRepository[Topset]:
         if self._topsets is None:
             self._topsets = ObjectRepository(
@@ -624,6 +667,30 @@ class Typewell(ComplexObject):
             typewell_id=self.uuid,
             topset_name=topset_name
         )
+
+    def create_log(self, log_name: str, log_points: DataList):
+        log_id = self._papi_client.create_typewell_log(
+            typewell_id=self.uuid,
+            log_name=log_name
+        )
+
+        if log_id.get('uuid') is None:
+            return
+
+        prepared_log_points = [
+            {key: self._papi_client.prepare_papi_var(value) for key, value in point.items()}
+            for point in log_points
+        ]
+
+        units = ELogMeasureUnits.convert_from_measure_units(self.project.measure_unit)
+        self._papi_client.replace_log(
+            log_id=log_id['uuid'],
+            index_unit=units,
+            log_points=prepared_log_points
+        )
+
+        self._logs = None
+        self._logs_data = None
 
     @property
     def mudlogs(self) -> ObjectRepository[Mudlog]:

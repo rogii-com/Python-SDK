@@ -191,6 +191,13 @@ class PapiClient(SdkPapiClient):
             **kwargs
         ))
 
+    def get_typewell_logs_data(self, typewell_id: str, **kwargs) -> PapiDataList:
+        return list(self._gen_data_page(
+            func=self.fetch_typewell_logs,
+            typewell_id=typewell_id,
+            **kwargs
+        ))
+
     def get_log_data(self, log_id: str) -> PapiDataList:
         return [
             self.parse_papi_data(data_item) for data_item in self.fetch_log_points(log_id=log_id)
