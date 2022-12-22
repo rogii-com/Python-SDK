@@ -35,6 +35,11 @@ class PapiStarredTops(TypedDict):
     bottom: str
 
 
+class PapiLogPoint(TypedDict):
+    index: PapiVar
+    value: PapiVar
+
+
 PapiTrajectory = List[PapiTrajectoryPoint]
 
 PapiData = Dict[str, Any]

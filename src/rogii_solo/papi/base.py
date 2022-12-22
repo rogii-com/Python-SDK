@@ -6,7 +6,7 @@ from requests.auth import HTTPBasicAuth
 from requests_oauthlib import OAuth2Session
 
 from rogii_solo.papi.exceptions import AccessTokenFailureException, BasePapiClientException
-from rogii_solo.papi.types import PapiStarredHorizons, PapiStarredTops, PapiTrajectory, PapiVar
+from rogii_solo.papi.types import PapiLogPoint, PapiStarredHorizons, PapiStarredTops, PapiTrajectory, PapiVar
 
 
 class BasePapiClient:
@@ -876,6 +876,72 @@ class PapiClient(BasePapiClient):
             center=starred_tops.get('center'),
             bottom=starred_tops.get('bottom')
         )
+
+    def create_well_log(self,
+                        well_id: str,
+                        log_name: str,
+                        headers: Optional[Dict[str, Any]] = None
+                        ):
+        """
+        Create log in the well
+        :param well_id:
+        :param log_name:
+        :param headers:
+        :return:
+        """
+
+        url = f'wells/{well_id}/logs'
+        request_data = {
+            'name': log_name,
+        }
+
+        return self._send_post_request(url=url, request_data=request_data, headers=headers)
+
+    def replace_log(self,
+                    log_id: str,
+                    index_unit: str,
+                    log_points: PapiLogPoint,
+                    value_unit: Optional[str] = None,
+                    headers: Optional[Dict[str, Any]] = None
+                    ):
+        """
+        Replace log data
+        :param log_id:
+        :param index_unit:
+        :param log_points:
+        :param value_unit:
+        :param headers:
+        :return:
+        """
+
+        url = f'logs/{log_id}/data'
+        request_data = {
+            'index_unit': index_unit,
+            'value_unit': value_unit,
+            'log_points': log_points,
+        }
+
+        return self._send_put_request(url=url, request_data=request_data, headers=headers)
+
+    def create_typewell_log(self,
+                            typewell_id: str,
+                            log_name: str,
+                            headers: Optional[Dict[str, Any]] = None
+                            ):
+        """
+        Create log in the typewell
+        :param typewell_id:
+        :param log_name:
+        :param headers:
+        :return:
+        """
+
+        url = f'typewells/{typewell_id}/logs'
+        request_data = {
+            'name': log_name,
+        }
+
+        return self._send_post_request(url=url, request_data=request_data, headers=headers)
 
     def update_well_meta(self,
                          well_id: str,

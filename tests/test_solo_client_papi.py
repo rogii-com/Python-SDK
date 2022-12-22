@@ -365,6 +365,26 @@ def test_create_nested_well_topset(project_papi):
     assert starred_nested_well.topsets.find_by_name(topset_name) is not None
 
 
+def test_create_well_log(project_papi):
+    well = project_papi.wells.find_by_name(WELL_NAME)
+    log_name = 'Log ' + str(random.randint(0, 10000))
+
+    log_points = [{'index': 0, 'value': 1}]
+    well.create_log(log_name=log_name, log_points=log_points)
+
+    assert well.logs.find_by_name(log_name) is not None
+
+
+def test_create_typewell_log(project_papi):
+    typewell = project_papi.typewells.find_by_name(TYPEWELL_NAME)
+    log_name = 'Log ' + str(random.randint(0, 10000))
+
+    log_points = [{'index': 0, 'value': 1}]
+    typewell.create_log(log_name=log_name, log_points=log_points)
+
+    assert typewell.logs.find_by_name(log_name) is not None
+
+
 def test_create_target_line(project_papi):
     well = project_papi.wells.find_by_name(WELL_NAME)
 
@@ -485,17 +505,6 @@ def test_get_mudlog(project_papi):
     assert mudlog_df.at[0, 'MD'] == mudlog_data['logs'][0]['points'][0]['md']
 
 
-def test_update_typewell_kb(project_papi):
-    typewell = project_papi.typewells.find_by_name(TYPEWELL_NAME)
-
-    assert typewell is not None
-
-    typewell_new_meta = {'kb': random.randint(0, 100)}
-    typewell.update_meta(**typewell_new_meta)
-
-    assert typewell.kb == typewell_new_meta['kb']
-
-
 def test_update_typewell_meta(project_papi):
     typewell = project_papi.typewells.find_by_name(TYPEWELL_NAME)
 
@@ -527,20 +536,14 @@ def test_update_typewell_meta(project_papi):
     assert typewell.tie_in_ns == typewell_new_meta['tie_in_ns']
     assert typewell.tie_in_ew == typewell_new_meta['tie_in_ew']
 
-
-def test_update_nested_well_kb(project_papi):
-    well = project_papi.wells.find_by_name(WELL_NAME)
-
-    assert well is not None
-
-    nested_well = well.nested_wells.find_by_name(NESTED_WELL_NAME)
-
-    assert nested_well is not None
-
-    nested_well_new_meta = {'kb': random.randint(0, 100)}
-    nested_well.update_meta(**nested_well_new_meta)
-
-    assert nested_well.kb == nested_well_new_meta['kb']
+    typewell_saved_meta = {
+        'name': TYPEWELL_NAME,
+        'api': typewell.api,
+        'xsrf': TYPEWELL_XSRF,
+        'ysrf': TYPEWELL_YSRF,
+        'kb': TYPEWELL_KB,
+    }
+    typewell.update_meta(**typewell_saved_meta)
 
 
 def test_update_nested_well_meta(project_papi):
@@ -576,16 +579,10 @@ def test_update_nested_well_meta(project_papi):
     assert nested_well.tie_in_ns == nested_well_new_meta['tie_in_ns']
     assert nested_well.tie_in_ew == nested_well_new_meta['tie_in_ew']
 
-
-def test_update_well_kb(project_papi):
-    well = project_papi.wells.find_by_name(WELL_NAME)
-
-    assert well is not None
-
-    well_new_meta = {'kb': random.randint(0, 100)}
-    well.update_meta(**well_new_meta)
-
-    assert well.kb == well_new_meta['kb']
+    nested_well_saved_meta = {
+        'name': NESTED_WELL_NAME,
+    }
+    nested_well.update_meta(**nested_well_saved_meta)
 
 
 def test_update_well_meta(project_papi):
@@ -620,3 +617,8 @@ def test_update_well_meta(project_papi):
     assert well.tie_in_tvd == well_new_meta['tie_in_tvd']
     assert well.tie_in_ns == well_new_meta['tie_in_ns']
     assert well.tie_in_ew == well_new_meta['tie_in_ew']
+
+    well_saved_meta = {
+        'name': WELL_NAME,
+    }
+    well.update_meta(**well_saved_meta)
