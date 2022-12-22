@@ -342,6 +342,8 @@ def test_create_well_topset(project_papi):
     well = project_papi.wells.find_by_name(WELL_NAME)
     topset_name = 'Topset ' + str(random.randint(0, 10000))
 
+    assert well.topsets is not None
+
     well.create_topset(topset_name)
     assert well.topsets.find_by_name(topset_name) is not None
 
@@ -349,6 +351,8 @@ def test_create_well_topset(project_papi):
 def test_create_typewell_topset(project_papi):
     typewell = project_papi.typewells.find_by_name(TYPEWELL_NAME)
     topset_name = 'Topset ' + str(random.randint(0, 10000))
+
+    assert typewell.topsets is not None
 
     typewell.create_topset(topset_name)
     assert typewell.topsets.find_by_name(topset_name) is not None
@@ -358,6 +362,7 @@ def test_create_nested_well_topset(project_papi):
     starred_nested_well = project_papi.wells.find_by_name(WELL_NAME).starred_nested_well
 
     assert starred_nested_well is not None
+    assert starred_nested_well.topsets is not None
 
     topset_name = 'Topset ' + str(random.randint(0, 10000))
     starred_nested_well.create_topset(topset_name)
