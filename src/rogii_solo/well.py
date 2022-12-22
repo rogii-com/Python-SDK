@@ -295,6 +295,9 @@ class Well(ComplexObject):
             topset_name=topset_name
         )
 
+        self._topsets = None
+        self._topsets_data = None
+
     def create_log(self, log_name: str, log_points: DataList):
         log_id = self._papi_client.create_well_log(
             well_id=self.uuid,
@@ -497,6 +500,9 @@ class NestedWell(ComplexObject):
             topset_name=topset_name
         )
 
+        self._topsets = None
+        self._topsets_data = None
+
     def update_meta(self,
                     name: Optional[str] = None,
                     operator: Optional[str] = None,
@@ -667,6 +673,9 @@ class Typewell(ComplexObject):
             typewell_id=self.uuid,
             topset_name=topset_name
         )
+
+        self._topsets = None
+        self._topsets_data = None
 
     def create_log(self, log_name: str, log_points: DataList):
         log_id = self._papi_client.create_typewell_log(
