@@ -24,7 +24,10 @@ from tests.papi_data import (
     STARRED_HORIZONS_DATA_RESPONSE,
     STARRED_TOPS_DATA_RESPONSE,
     MUDLOGS_DATA_RESPONSE,
-    MUDLOG_DATA_RESPONSE
+    MUDLOG_DATA_RESPONSE,
+    TRACES_DATA_RESPONSE,
+    MAPPED_TRACES_DATA_RESPONSE,
+    TIME_TRACE_DATA_RESPONSE
 )
 
 
@@ -112,6 +115,18 @@ def fetch_mudlog_logs(*args, **kwargs):
     return MUDLOG_DATA_RESPONSE['logs']
 
 
+def fetch_traces(**kwargs):
+    return TRACES_DATA_RESPONSE['content']
+
+
+def fetch_well_mapped_traces(**kwargs):
+    return MAPPED_TRACES_DATA_RESPONSE['content']
+
+
+def fetch_well_time_trace(**kwargs):
+    return TIME_TRACE_DATA_RESPONSE['content']
+
+
 @pytest.fixture(scope='function')
 def solo_client():
     solo_client = SoloClient(client_id='client_id', client_secret='client_secret')
@@ -137,6 +152,9 @@ def solo_client():
     solo_client._papi_client.fetch_topset_starred_tops = fetch_topset_starred_tops
     solo_client._papi_client.fetch_well_mudlogs = fetch_well_mudlogs
     solo_client._papi_client.fetch_mudlog_logs = fetch_mudlog_logs
+    solo_client._papi_client.fetch_traces = fetch_traces
+    solo_client._papi_client.fetch_well_mapped_traces = fetch_well_mapped_traces
+    solo_client._papi_client.fetch_well_time_trace = fetch_well_time_trace
 
     return solo_client
 

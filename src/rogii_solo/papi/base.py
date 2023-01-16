@@ -6,7 +6,14 @@ from requests.auth import HTTPBasicAuth
 from requests_oauthlib import OAuth2Session
 
 from rogii_solo.papi.exceptions import AccessTokenFailureException, BasePapiClientException
-from rogii_solo.papi.types import PapiLogPoint, PapiStarredHorizons, PapiStarredTops, PapiTrajectory, PapiVar
+from rogii_solo.papi.types import (
+    PapiLogPoint,
+    PapiStarredHorizons,
+    PapiStarredTops,
+    PapiTrajectory,
+    PapiVar,
+    TraceType
+)
 
 
 class BasePapiClient:
@@ -126,9 +133,10 @@ class BasePapiClient:
     def _send_post_request(self,
                            url: str,
                            request_data: Dict[str, Any],
+                           params: Optional[Dict[str, Any]] = None,
                            headers: Optional[Dict[str, Any]] = None
                            ):
-        response = self.session.post(f'{self.papi_url}/{url}', json=request_data, headers=headers)
+        response = self.session.post(f'{self.papi_url}/{url}', params=params, json=request_data, headers=headers)
 
         if response.status_code != status_codes.ok:
             error = response.json()
@@ -942,6 +950,69 @@ class PapiClient(BasePapiClient):
         }
 
         return self._send_post_request(url=url, request_data=request_data, headers=headers)
+
+    def fetch_traces(self, headers: Optional[Dict[str, Any]] = None):
+        """
+        Fetches traces collection
+        :param headers:
+        :return:
+        """
+        data = self._send_request(
+            url='traces',
+            headers=headers,
+        )
+
+        return data['content']
+
+    def fetch_well_mapped_traces(self,
+                                 well_id: str,
+                                 trace_type: TraceType,
+                                 headers: Optional[Dict[str, Any]] = None
+                                 ):
+        """
+        Fetches well traces with trace_type
+        :param well_id:
+        :param trace_type:
+        :param headers:
+        :return:
+        """
+        data = self._send_request(
+            url=f'laterals/{well_id}/traces/mapped/',
+            params={'type': trace_type},
+            headers=headers,
+        )
+
+        return data['content']
+
+    def fetch_well_time_trace(self,
+                              well_id: str,
+                              trace_id: str,
+                              time_from: str,
+                              time_to: Optional[str] = None,
+                              trace_hash: Optional[str] = None,
+                              headers: Optional[Dict[str, Any]] = None
+                              ):
+        """
+        Fetches well time trace
+        :param well_id:
+        :param trace_id:
+        :param trace_hash:
+        :param time_from:
+        :param time_to:
+        :param headers:
+        :return:
+        """
+        data = self._send_request(
+            url=f'laterals/{well_id}/traces/{trace_id}/data/time/',
+            params={
+                'from': time_from,
+                'to': time_to,
+                'hash': trace_hash
+            },
+            headers=headers,
+        )
+
+        return data['content']
 
     def update_well_meta(self,
                          well_id: str,

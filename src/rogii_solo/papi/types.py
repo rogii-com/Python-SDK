@@ -1,6 +1,7 @@
 from typing import Any, Dict, Iterator, List, Literal, NamedTuple, TypedDict
 
 Scheme = Literal['http', 'https']
+TraceType = Literal['DEPTH', 'TIME']
 
 
 class ProxyData(TypedDict):

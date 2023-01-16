@@ -17,6 +17,10 @@ WELL_KB = 100.0
 WELL_AZIMUTH = 5.672320068981945
 WELL_CONVERGENCE = 0.17453292519944444
 
+TRACE_NAME = 'Bit depth'
+START_DATETIME = '2020-09-06 10:00:00.0'
+END_DATETIME = '2020-09-06 10:00:10.0'
+
 INTERPRETATION_NAME = 'Interpretation'
 
 STARRED_INTERPRETATION_NAME = 'Starred Interpretation'
@@ -3785,6 +3789,391 @@ MUDLOG_DATA_RESPONSE = {
                     }
                 }
             ]
+        }
+    ]
+}
+
+
+TRACES_DATA_RESPONSE = {
+    'content': [
+        {
+            'uuid': '793b06f6-d494-45e0-9ed8-b5e8e916a2a8',
+            'name': 'Bit depth'
+        },
+        {
+            'uuid': '11b379f9-184b-465a-beb8-7307c7b4b1d9',
+            'name': 'Hole Depth'
+        },
+        {
+            'uuid': '491c2160-c65b-4ca0-afa9-7514fc6f7c56',
+            'name': 'Block position'
+        },
+        {
+            'uuid': '8752123d-d270-4eb6-b132-ba0f3e0d83b8',
+            'name': 'Hookload'
+        },
+        {
+            'uuid': 'c908bc68-0e9b-4368-a2be-97b48cbd5440',
+            'name': 'Surface RPM'
+        },
+        {
+            'uuid': 'a07b5bc6-a36f-4b8c-a3bb-4ce426eac7c0',
+            'name': 'Surface Torque'
+        },
+        {
+            'uuid': '2b2ad244-f208-4bb9-9b7c-6bbde9483635',
+            'name': 'Standpipe Pressure'
+        },
+        {
+            'uuid': '77c1bd4d-0fc1-470f-a24c-e28a5dd4c5fc',
+            'name': 'Mud Weight IN'
+        },
+        {
+            'uuid': '0a745541-0a23-45be-870d-9fdd8a1849c6',
+            'name': 'Downhole WOB'
+        },
+        {
+            'uuid': '9f7ed05c-66cd-441c-855d-a4aec51b33e2',
+            'name': 'SPM1'
+        },
+        {
+            'uuid': 'e0a2398e-21ad-4410-9cdd-e212c516061a',
+            'name': 'SPM2'
+        },
+        {
+            'uuid': '98bce1cd-fda0-41dd-8d04-e6020dd6e3e1',
+            'name': 'SPM3'
+        },
+        {
+            'uuid': '14b6654f-ba57-4bc5-8374-e219fc491e75',
+            'name': 'Surface Torque Max'
+        },
+        {
+            'uuid': '24624b80-b34c-4062-98c8-d42dea5fa125',
+            'name': 'Block Velocity'
+        },
+        {
+            'uuid': '6f83f7e7-40ac-448c-a2ce-e3c72d828735',
+            'name': 'Gas'
+        },
+        {
+            'uuid': '66d264d4-d935-49c8-bf17-c15c88d1f082',
+            'name': 'Total Tank Volume'
+        },
+        {
+            'uuid': 'b72b91cd-9482-47a7-8914-fe4c17b7aa02',
+            'name': 'Trip Tank Volume'
+        },
+        {
+            'uuid': 'accde91d-d6a3-4bc1-9986-f117a59f17e9',
+            'name': 'Mud Weight Out'
+        },
+        {
+            'uuid': '2c32a691-8787-49a6-83a1-c54d859a43ff',
+            'name': 'Survey MD'
+        },
+        {
+            'uuid': '16968239-944d-480e-ba34-195d4ba12927',
+            'name': 'Inclination'
+        },
+        {
+            'uuid': 'fa3a2cfb-c858-4c4f-8776-4130c475e594',
+            'name': 'Cont Inclination'
+        },
+        {
+            'uuid': '01da81cf-b8c7-4a3b-b561-3fdaf2f61dd4',
+            'name': 'Azimuth'
+        },
+        {
+            'uuid': 'ea9f7ad6-0880-4a5a-bddc-79e7c79d26bc',
+            'name': 'Cont Azimuth'
+        },
+        {
+            'uuid': '4022fb41-6279-4a5a-bec0-e8e0563119cc',
+            'name': 'Gamma Ray'
+        },
+        {
+            'uuid': '02f37da6-ced8-4b57-8a7d-0a583615a196',
+            'name': 'Resistivity'
+        },
+        {
+            'uuid': '865ba522-5800-40df-9271-5b8d8efece5c',
+            'name': 'Density'
+        },
+        {
+            'uuid': 'e58a09e4-9036-4bf4-b645-b1ef1984b867',
+            'name': 'Caliper'
+        },
+        {
+            'uuid': '83a18db4-e419-4671-8191-2d67149ac67e',
+            'name': 'ECD'
+        },
+        {
+            'uuid': '7572a7e5-8d99-444f-9be6-3de328354274',
+            'name': 'StickSlip'
+        },
+        {
+            'uuid': '061a437d-74de-41d0-b21d-c5858293d3e5',
+            'name': 'Shock Levels'
+        },
+        {
+            'uuid': '88d7ccaf-dafe-495f-934f-ad56e2e16c42',
+            'name': 'On bottom hours'
+        },
+        {
+            'uuid': 'd30498b6-6e8a-41b0-a6a4-9be5be5319e5',
+            'name': 'Circulation hours'
+        },
+        {
+            'uuid': '9fc059d1-85c6-429a-b03e-d92fb466b168',
+            'name': 'User Defined 1'
+        },
+        {
+            'uuid': '9e26b22f-b4ef-4284-80a9-f2716aac718c',
+            'name': 'User Defined 2'
+        },
+        {
+            'uuid': 'dbcf25d9-f808-4877-b3ca-90accf3d784b',
+            'name': 'User Defined 3'
+        },
+        {
+            'uuid': '908905a3-0269-4711-8007-1b7755471528',
+            'name': 'User Defined 4'
+        },
+        {
+            'uuid': '4be6e7f7-1eae-4f4e-ac6a-350327e59a39',
+            'name': 'User Defined 5'
+        },
+        {
+            'uuid': '54cd355d-8acf-4442-b62f-a50c78c189f8',
+            'name': 'User Defined 6'
+        },
+        {
+            'uuid': '6f304e26-802b-4118-a9ec-189b0d08d58f',
+            'name': 'User Defined 7'
+        },
+        {
+            'uuid': 'aaddd315-5693-4aac-ba31-4b5fd592923c',
+            'name': 'User Defined 8'
+        },
+        {
+            'uuid': '45369f92-7074-431f-8e9a-c47a0c64afff',
+            'name': 'User Defined 9'
+        },
+        {
+            'uuid': '435990bc-ead8-4268-8821-a8aea9e93944',
+            'name': 'User Defined 10'
+        },
+        {
+            'uuid': '074cb1e6-2bec-4b61-9e76-f48ebecf5ddd',
+            'name': 'Mud Flow In'
+        },
+        {
+            'uuid': 'ff172791-85e2-43cc-95f9-1fbb719abc6c',
+            'name': 'SMP Total'
+        },
+        {
+            'uuid': '227f118f-7845-49b2-9896-55dc5222519d',
+            'name': 'WOB'
+        },
+        {
+            'uuid': '9cb51894-17ff-4928-b8b4-4919f492c5c9',
+            'name': 'In Slips'
+        },
+        {
+            'uuid': '1b2beeff-a4a1-4e13-a25a-feabdc593da7',
+            'name': 'GTF'
+        },
+        {
+            'uuid': '0abaf4b2-6a97-4b0b-8609-f7ac37136a3b',
+            'name': 'MTF'
+        },
+        {
+            'uuid': '30146cef-6942-4247-bc75-521d76b85127',
+            'name': 'ROP'
+        },
+        {
+            'uuid': '7e01b567-d5f6-4912-bfe0-2ba189db6b2f',
+            'name': 'Downhole TQ'
+        },
+        {
+            'uuid': '9f0cb268-e4b7-425e-a191-596489da81d2',
+            'name': 'Temperature In'
+        },
+        {
+            'uuid': '009f1d02-b17a-41cf-9166-d02c37bcd834',
+            'name': 'Temperature Out'
+        },
+        {
+            'uuid': '36c53c74-8836-4a91-b95b-d5c3785c1f27',
+            'name': 'Bit Depth Vertical'
+        },
+        {
+            'uuid': '81a04429-a30f-4f13-ba33-138ab0981183',
+            'name': 'Total RPM'
+        },
+        {
+            'uuid': '7b021e39-f422-462c-87ac-d7e1105ac188',
+            'name': 'WOB Max'
+        },
+        {
+            'uuid': 'a8bfeb47-37f3-4bf8-b256-2f773307ee5b',
+            'name': 'Mud Flow Out'
+        },
+        {
+            'uuid': '82db3825-d6eb-4925-a73d-f5af1d1d6743',
+            'name': 'Pump Stroke Count'
+        },
+        {
+            'uuid': 'fe637ea0-4ae2-48d3-8c1d-2a4a84f8e06f',
+            'name': 'Hole Depth Vertical'
+        },
+        {
+            'uuid': '6eecd916-a7d2-47de-a72c-8afe5dd36373',
+            'name': 'Flow'
+        },
+        {
+            'uuid': '8eb6a4af-9453-44e7-ade3-aace18e0024a',
+            'name': 'Casing Pressure'
+        },
+        {
+            'uuid': 'c3b19920-8f01-47cb-acd9-0da8843e3ce7',
+            'name': 'KPI: Slip to slip'
+        },
+        {
+            'uuid': 'a0448fd5-d2d5-435f-9f57-dc23bafec82d',
+            'name': 'Rig Activity'
+        },
+        {
+            'uuid': '3fe5ea4a-e7d4-4679-aa10-0eba283a1e7d',
+            'name': 'KPI: Trip In: Connection'
+        },
+        {
+            'uuid': 'c0e7707d-24df-44c8-bd71-24aee1a5abe6',
+            'name': 'KPI: Trip Out: Running'
+        },
+        {
+            'uuid': 'a6f3ad7b-5363-427c-98ec-8bfee338cdd8',
+            'name': 'KPI: Trip In: Running'
+        },
+        {
+            'uuid': '6455f4ed-2ee7-4b1a-8535-d8df017e4b83',
+            'name': 'KPI: Weight to Weight'
+        },
+        {
+            'uuid': 'b35c6e45-45b1-46ea-8463-21237bf53353',
+            'name': 'KPI: Trip Out: Connection'
+        }
+    ]
+}
+
+
+MAPPED_TRACES_DATA_RESPONSE = {
+    'content': [
+        {
+            'uuid': '793b06f6-d494-45e0-9ed8-b5e8e916a2a8',
+            'hash': 'bd9863171705c3a0bf3e334cdcfcb85d',
+            'unit': ''
+        },
+        {
+            'uuid': '11b379f9-184b-465a-beb8-7307c7b4b1d9',
+            'hash': 'bdf8d4fbfc4a9238a0a77077fc8c7e89',
+            'unit': 'm'
+        },
+        {
+            'uuid': '491c2160-c65b-4ca0-afa9-7514fc6f7c56',
+            'hash': '1afd16706047b52fae650a4c90c5e212',
+            'unit': 'm'
+        },
+        {
+            'uuid': '8752123d-d270-4eb6-b132-ba0f3e0d83b8',
+            'hash': '68e05d9c28dc1440d606cd2ea421e822',
+            'unit': ''
+        },
+        {
+            'uuid': '8752123d-d270-4eb6-b132-ba0f3e0d83b8',
+            'hash': 'f057732b91f6c397cfe98f4233f882fd',
+            'unit': ''
+        },
+        {
+            'uuid': 'c908bc68-0e9b-4368-a2be-97b48cbd5440',
+            'hash': '62c94c73d18fa1dab139a63fadd6cda2',
+            'unit': ''
+        },
+        {
+            'uuid': '2b2ad244-f208-4bb9-9b7c-6bbde9483635',
+            'hash': '9ffabe39ac818d9a5452710039cd0044',
+            'unit': ''
+        },
+        {
+            'uuid': '77c1bd4d-0fc1-470f-a24c-e28a5dd4c5fc',
+            'hash': '10d2ef4b350e8321309310af6aaab08c',
+            'unit': ''
+        },
+        {
+            'uuid': '0a745541-0a23-45be-870d-9fdd8a1849c6',
+            'hash': '8046e97e52a04a93f3401c5afcd06340',
+            'unit': ''
+        },
+        {
+            'uuid': '9f7ed05c-66cd-441c-855d-a4aec51b33e2',
+            'hash': 'd0419aeed61716dda7a784e237fa0323',
+            'unit': ''
+        },
+        {
+            'uuid': '98bce1cd-fda0-41dd-8d04-e6020dd6e3e1',
+            'hash': '7fd89649a07b54b842712965799b7d99',
+            'unit': ''
+        }
+    ]
+}
+
+
+TIME_TRACE_DATA_RESPONSE = {
+    'content': [
+        {
+            'index': '2020-09-06T10:00:00.000Z',
+            'value': '661.08'
+        },
+        {
+            'index': '2020-09-06T10:00:01.000Z',
+            'value': '661.16'
+        },
+        {
+            'index': '2020-09-06T10:00:02.000Z',
+            'value': '661.24'
+        },
+        {
+            'index': '2020-09-06T10:00:03.000Z',
+            'value': '661.32'
+        },
+        {
+            'index': '2020-09-06T10:00:04.000Z',
+            'value': '661.41'
+        },
+        {
+            'index': '2020-09-06T10:00:05.000Z',
+            'value': '661.49'
+        },
+        {
+            'index': '2020-09-06T10:00:06.000Z',
+            'value': '661.57'
+        },
+        {
+            'index': '2020-09-06T10:00:07.000Z',
+            'value': '661.66'
+        },
+        {
+            'index': '2020-09-06T10:00:08.000Z',
+            'value': '661.74'
+        },
+        {
+            'index': '2020-09-06T10:00:09.000Z',
+            'value': '661.82'
+        },
+        {
+            'index': '2020-09-06T10:00:10.000Z',
+            'value': '661.91'
         }
     ]
 }

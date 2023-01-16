@@ -8,3 +8,7 @@ class ProjectNotFoundException(BaseRogiiSoloException):
 
 class InvalidProjectException(BaseRogiiSoloException):
     pass
+
+
+class TraceNotFoundException(BaseRogiiSoloException):
+    pass

@@ -9,7 +9,7 @@ from rogii_solo.papi.client import PapiClient
 from rogii_solo.types import DataList
 
 
-class Convertable:
+class Convertible:
     @staticmethod
     def convert_xy(value: float, measure_units: EMeasureUnits, force_to_meters: bool = False) -> Optional[float]:
         if value is not None:
@@ -26,13 +26,13 @@ class Convertable:
             return radians_to_degrees(value)
 
 
-class BaseObject(ABC, Convertable):
+class BaseObject(ABC, Convertible):
     """
     Base data object
     """
 
     @abstractmethod
-    def to_dict(self, get_converted: bool = True) -> Dict[str, Any]:
+    def to_dict(self, *args, **kwargs) -> Dict[str, Any]:
         """
         Convert object to dict
         :return
@@ -40,7 +40,7 @@ class BaseObject(ABC, Convertable):
         pass
 
     @abstractmethod
-    def to_df(self, get_converted: bool = True) -> DataFrame:
+    def to_df(self, *args, **kwargs) -> DataFrame:
         """
         Convert object to DataFrame
         :return
@@ -125,11 +125,11 @@ class ComplexObject(BaseObject):
 
         self._papi_client = papi_client
 
-    def to_dict(self, get_converted: bool = True) -> Dict[str, Any]:
+    def to_dict(self, *args, **kwargs) -> Dict[str, Any]:
         return {}
 
-    def to_df(self, get_converted: bool = True) -> DataFrame:
-        return DataFrame([self.to_dict(get_converted)])
+    def to_df(self, *args, **kwargs) -> DataFrame:
+        return DataFrame([self.to_dict(*args, **kwargs)])
 
 
 T = TypeVar('T', bound=BaseObject)
