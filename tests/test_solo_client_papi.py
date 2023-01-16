@@ -1,3 +1,4 @@
+from datetime import datetime
 import random
 import pytest
 
@@ -24,7 +25,10 @@ from tests.papi_data import (
     MUDLOG_NAME,
     TYPEWELL_XSRF,
     TYPEWELL_YSRF,
-    TYPEWELL_KB
+    TYPEWELL_KB,
+    TRACE_NAME,
+    START_DATETIME,
+    END_DATETIME
 )
 
 
@@ -627,3 +631,33 @@ def test_update_well_meta(project_papi):
         'name': WELL_NAME,
     }
     well.update_meta(**well_saved_meta)
+
+
+def test_get_time_trace(project_papi):
+    tz_datetime_template = '%Y-%m-%dT%H:%M:%S.%fZ'
+    usual_datetime_template = '%Y-%m-%d %H:%M:%S.%f'
+
+    well = project_papi.wells.find_by_name(WELL_NAME)
+
+    assert well is not None
+
+    time_trace = well.time_traces.find_by_name(TRACE_NAME)
+
+    assert time_trace is not None
+
+    def convert_to_datetime_tz(time_string: str):
+        dt = datetime.strptime(time_string, usual_datetime_template)
+
+        return dt.strftime(tz_datetime_template)
+
+    start_datetime_tz = convert_to_datetime_tz(START_DATETIME)
+    end_datetime_tz = convert_to_datetime_tz(END_DATETIME)
+    time_trace_data = time_trace.to_dict(start_datetime_tz, end_datetime_tz)
+    time_trace_df = time_trace.to_df(start_datetime_tz, end_datetime_tz)
+
+    assert time_trace_data['meta']['name'] == TRACE_NAME
+
+    test_datetime = datetime.strptime(time_trace_data['points'][0]['index'], tz_datetime_template)
+
+    assert test_datetime == datetime.strptime(start_datetime_tz, tz_datetime_template)
+    assert time_trace_df['meta'].at[0, 'name'] == TRACE_NAME

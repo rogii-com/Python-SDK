@@ -274,6 +274,24 @@ class PapiClient(SdkPapiClient):
             self.parse_papi_data(data_item) for data_item in self.fetch_mudlog_logs(mudlog_id)
         ]
 
+    def get_traces(self, **kwargs) -> PapiDataList:
+        return self.fetch_traces(**kwargs)
+
+    def get_well_mapped_time_traces_data(self, well_id: str, **kwargs) -> PapiDataList:
+        return self.fetch_well_mapped_traces(well_id=well_id, trace_type='TIME', **kwargs)
+
+    def get_well_time_trace_data(self,
+                                 well_id: str,
+                                 trace_id: str,
+                                 time_from: str,
+                                 **kwargs) -> PapiDataList:
+        return self.fetch_well_time_trace(
+            well_id=well_id,
+            trace_id=trace_id,
+            time_from=time_from,
+            **kwargs
+        )
+
     def _gen_data_page(self, func: Callable, **kwargs) -> PapiDataIterator:
         offset = kwargs.pop('offset', None) or self.DEFAULT_OFFSET
         limit = kwargs.pop('limit', None) or self.DEFAULT_LIMIT
