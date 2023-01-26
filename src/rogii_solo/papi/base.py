@@ -1133,3 +1133,52 @@ class PapiClient(BasePapiClient):
         response = self._send_patch_request(url=url, request_data=request_data, headers=headers)
 
         return response.status_code == status_codes.ok
+
+    def create_well(self,
+                    project_id: str,
+                    well_name: str,
+                    operator: str,
+                    api: str,
+                    convergence: PapiVar,
+                    azimuth: PapiVar,
+                    kb: PapiVar,
+                    tie_in_tvd: PapiVar,
+                    tie_in_ns: PapiVar,
+                    tie_in_ew: PapiVar,
+                    xsrf_real: PapiVar,
+                    ysrf_real: PapiVar,
+                    headers: Optional[Dict[str, Any]] = None
+                    ):
+        """
+        Create lateral in the project
+        :param project_id:
+        :param well_name:
+        :param operator:
+        :param api:
+        :param convergence:
+        :param azimuth:
+        :param kb:
+        :param tie_in_tvd:
+        :param tie_in_ns:
+        :param tie_in_ew:
+        :param xsrf_real:
+        :param ysrf_real:
+        :param headers:
+        :return:
+        """
+        url = f'projects/{project_id}/laterals'
+        request_data = {
+            'name': well_name,
+            'operator': operator,
+            'api': api,
+            'convergence': convergence,
+            'azimuth': azimuth,
+            'kb': kb,
+            'tieintvd': tie_in_tvd,
+            'tieinns': tie_in_ns,
+            'tieinew': tie_in_ew,
+            'xsrfreal': xsrf_real,
+            'ysrfreal': ysrf_real,
+        }
+
+        return self._send_post_request(url=url, request_data=request_data, headers=headers)

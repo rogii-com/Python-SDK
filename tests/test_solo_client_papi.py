@@ -1,11 +1,13 @@
 from datetime import datetime
 from math import fabs
+import random
 import pytest
 import random
 from typing import Any
 
 
 from rogii_solo.calculations.constants import DELTA
+from rogii_solo.calculations.converters import radians_to_degrees
 from rogii_solo.calculations.interpretation import get_segments, get_segments_with_dip
 from rogii_solo.calculations.trajectory import calculate_trajectory
 from rogii_solo.exceptions import ProjectNotFoundException, InvalidProjectException
@@ -740,3 +742,36 @@ def test_endless_interpretation_dips(project_papi):
     ei_last_segment_dip = get_last_segment_dip(well=well, interpretation=endless_interpretation)
 
     assert fabs(last_segment_dip - ei_last_segment_dip) < DELTA
+
+def test_create_well(project_papi):
+    # Angles in degrees, depth values in project units
+    well_data = {
+        'well_name': f'Well_{random.randint(0, 10000)}',
+        'operator': f'Operator_{random.randint(0, 10000)}',
+        'api': f'Api_{random.randint(0, 10000)}',
+        'convergence': random.uniform(0, 10),
+        'azimuth': random.uniform(0, 359),
+        'kb': random.uniform(0, 100),
+        'tie_in_tvd': random.uniform(0, 100),
+        'tie_in_ns': random.uniform(0, 100),
+        'tie_in_ew': random.uniform(0, 100),
+        'xsrf_real': random.uniform(0, 100),
+        'ysrf_real': random.uniform(0, 100),
+    }
+
+    project_papi.create_well(**well_data)
+
+    well = project_papi.wells.find_by_name(well_data['well_name'])
+
+    assert well is not None
+
+    assert well.operator == well_data['operator']
+    assert well.api == well_data['api']
+    assert fabs(radians_to_degrees(well.convergence) - well_data['convergence']) < DELTA
+    assert fabs(radians_to_degrees(well.azimuth) - well_data['azimuth']) < DELTA
+    assert well.kb == well_data['kb']
+    assert well.tie_in_tvd == well_data['tie_in_tvd']
+    assert well.tie_in_ns == well_data['tie_in_ns']
+    assert well.tie_in_ew == well_data['tie_in_ew']
+    assert well.xsrf_real == well_data['xsrf_real']
+    assert well.ysrf_real == well_data['ysrf_real']
