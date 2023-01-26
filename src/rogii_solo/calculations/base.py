@@ -1,9 +1,12 @@
 import math
 from bisect import bisect_left
 from collections import Counter
-from typing import Any, Dict, List, Optional
+from typing import Any, Callable, Dict, List, Optional, TypeVar
 
 from rogii_solo.calculations.constants import DELTA
+
+T = TypeVar('T')
+V = TypeVar('V')
 
 
 def calc_hypotenuse_length(cathetus1: float, cathetus2: float) -> Optional[float]:
@@ -58,11 +61,11 @@ def normalize_angle(angle: float) -> float:
     return modified_angle
 
 
-def get_nearest_values(value: Any, input_list: List[Any]) -> Any:
+def get_nearest_values(value: Any, input_list: List[Any], key: Optional[Callable[[T], V]] = None) -> Any:
     if not input_list:
         return
 
-    pos = bisect_left(input_list, value)
+    pos = bisect_left(input_list, value, key=key)
 
     if pos == 0:
         values = [input_list[0]]
@@ -122,3 +125,17 @@ def find_by_md(value: float, input_list: List[Dict[str, Any]]) -> Dict[str, Any]
 
 def find_last_by_md(value: float, input_list: List[Dict[str, Any]]) -> Dict[str, Any]:
     return find_last_by_key('md', value, input_list)
+
+
+def calc_segment_vs_length(x1: float, y1: float, x2: float, y2: float, azimuth_vs: float) -> float:
+    """
+    Azimuth in radians
+    Segment start point (x1, y1)
+    Segment end point (x2, y2)
+    """
+    vs_line_param = math.sin(azimuth_vs) * (x2 - x1) + math.cos(azimuth_vs) * (y2 - y1)
+
+    x = vs_line_param * math.sin(azimuth_vs)
+    y = vs_line_param * math.cos(azimuth_vs)
+
+    return math.sqrt(x ** 2 + y ** 2)

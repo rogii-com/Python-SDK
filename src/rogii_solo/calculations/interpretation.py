@@ -23,12 +23,11 @@ from rogii_solo.calculations.types import (
 from rogii_solo.papi.types import PapiAssembledSegments
 
 
-def get_segments(
-        well: Dict[str, Any],
-        calculated_trajectory: Trajectory,
-        assembled_segments: PapiAssembledSegments,
-        measure_units: EMeasureUnits
-) -> List[Segment]:
+def get_segments(well: Dict[str, Any],
+                 calculated_trajectory: Trajectory,
+                 assembled_segments: PapiAssembledSegments,
+                 measure_units: EMeasureUnits
+                 ) -> List[Segment]:
     segments = []
     mds, mds_map = [], {}
 
@@ -65,7 +64,10 @@ def get_segments(
             vs=interpolated_point['vs'],
             start=assembled_segment['start'],
             end=assembled_segment['end'],
+            x=interpolated_point['x'],
+            y=interpolated_point['y'],
             horizon_shifts=assembled_segment['horizon_shifts'],
+            boundary_type=assembled_segment['boundary_type'],
         ))
 
     last_trajectory_point = calculated_trajectory[-1]
@@ -74,16 +76,16 @@ def get_segments(
         vs=last_trajectory_point['vs'],
         start=None,
         end=None,
+        x=last_trajectory_point['x'],
+        y=last_trajectory_point['y'],
         horizon_shifts=segments[-1]['horizon_shifts'],
+        boundary_type=segments[-1]['boundary_type'],
     ))
 
     return segments
 
 
-def get_segments_with_dip(
-        segments: List[Segment],
-        assembled_horizons: AssembledHorizons
-) -> List[SegmentWithDip]:
+def get_segments_with_dip(segments: List[Segment], assembled_horizons: AssembledHorizons) -> List[SegmentWithDip]:
     segments_with_dip = [
         SegmentWithDip(**segment, dip=None) for segment in segments
     ]

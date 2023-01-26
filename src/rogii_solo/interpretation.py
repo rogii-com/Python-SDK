@@ -1,18 +1,24 @@
+from itertools import pairwise
+from math import fabs
 from typing import Any, Dict, Optional
 
 from pandas import DataFrame
 
 import rogii_solo.well
 from rogii_solo.base import ComplexObject, ObjectRepository
+from rogii_solo.calculations.base import calc_segment_vs_length, get_nearest_values
 from rogii_solo.calculations.converters import meters_to_feet
 from rogii_solo.calculations.enums import EMeasureUnits
+from rogii_solo.calculations.trajectory import calculate_trajectory, interpolate_trajectory_point
+from rogii_solo.calculations.types import HorizonShift, Segment
 from rogii_solo.horizon import Horizon
 from rogii_solo.papi.client import PapiClient
-from rogii_solo.papi.types import PapiAssembledSegments, PapiStarredHorizons
+from rogii_solo.papi.types import PapiAssembledSegments, PapiStarredHorizons, PapiTrajectory
 from rogii_solo.types import DataList
 from rogii_solo.types import Interpretation as InterpretationType
 
 TVT_DATA_MAX_MD_STEP = 100000
+ENDLESS_INTERPRETATION_VERSION = 'v2'
 
 
 class Interpretation(ComplexObject):
@@ -26,6 +32,7 @@ class Interpretation(ComplexObject):
         self.mode = None
         self.owner = None
         self.properties = None
+        self.format: Optional[str] = None
 
         self.__dict__.update(kwargs)
 
@@ -63,11 +70,25 @@ class Interpretation(ComplexObject):
             interpretation_id=self.uuid
         )
 
+        if self.format == ENDLESS_INTERPRETATION_VERSION:
+            well_data = self.well.to_dict(get_converted=False)
+            calculated_trajectory = calculate_trajectory(
+                raw_trajectory=self.well.trajectory.to_dict(get_converted=False),
+                well=well_data,
+                measure_units=self.well.project.measure_unit
+            )
+            self._fit_on_trajectory(
+                calculated_trajectory=calculated_trajectory,
+                well=well_data,
+                measure_units=self.well.project.measure_unit
+            )
+
         assembled_horizons_data = self._assembled_segments_data['horizons']
         measure_units = self.well.project.measure_unit
 
         for horizon in self._get_horizons_data():
             assembled_horizons_data[horizon['uuid']]['name'] = horizon['name']
+
             if measure_units != EMeasureUnits.METER:
                 assembled_horizons_data[horizon['uuid']]['tvd'] = meters_to_feet(
                     assembled_horizons_data[horizon['uuid']]['tvd']
@@ -129,6 +150,7 @@ class Interpretation(ComplexObject):
             'name': self.name,
             'mode': self.mode,
             'owner': self.owner,
+            'format': self.format,
             'properties': self.properties,
         }
 
@@ -143,3 +165,75 @@ class Interpretation(ComplexObject):
             self._starred_horizons_data = self._papi_client.get_interpretation_starred_horizons(self.uuid)
 
         return self._starred_horizons_data
+
+    def _truncate_segment(self,
+                          left: Segment,
+                          right: Segment,
+                          well: Dict[str, Any],
+                          trajectory: DataList,
+                          measure_unit: EMeasureUnits,
+                          ) -> Segment:
+        new_shifts = {}
+        end_point = trajectory[-1]
+        segment_length_vs = calc_segment_vs_length(left['x'], left['y'], right['x'], right['y'], well['azimuth'])
+
+        nearest = get_nearest_values(left['md'], trajectory, key=lambda it: it['md'])
+        left_point = interpolate_trajectory_point(nearest[0], nearest[1], left['md'], well, measure_unit)
+        left_point_vs = left_point['vs']
+        segment_cut_length_vs = fabs(end_point['vs'] - left_point_vs)
+
+        for uuid, horizons_shift in left['horizon_shifts'].items():
+            shift_height = horizons_shift['end'] - horizons_shift['start']
+            end = shift_height * segment_cut_length_vs / segment_length_vs + horizons_shift['start']
+
+            new_shifts[uuid] = HorizonShift(
+                uuid=horizons_shift['uuid'],
+                start=horizons_shift['start'],
+                end=end
+            )
+
+        return Segment(
+            md=left['md'],
+            start=left['start'],
+            end=left['end'],
+            boundary_type=left['boundary_type'],
+            horizon_shifts=new_shifts,
+            vs=segment_cut_length_vs,
+            x=left['x'],
+            y=left['y']
+        )
+
+    def _fit_on_trajectory(self,
+                           calculated_trajectory: PapiTrajectory,
+                           well: Dict[str, Any],
+                           measure_units: EMeasureUnits
+                           ):
+        segments = self._assembled_segments_data['segments']
+
+        if len(segments) == 1:
+            return
+
+        min_trajectory_md = calculated_trajectory[0]['md']
+        max_trajectory_md = calculated_trajectory[-1]['md']
+        result = []
+
+        for left, right in pairwise(segments):
+            if left['md'] < min_trajectory_md:
+                # Extra check for possible invalid data.
+                continue
+            elif left['md'] >= max_trajectory_md:
+                break
+            elif left['md'] < max_trajectory_md < right['md']:
+                result.append(
+                    self._truncate_segment(
+                        left=left,
+                        right=right,
+                        well=well,
+                        trajectory=calculated_trajectory,
+                        measure_unit=measure_units
+                    )
+                )
+            else:
+                result.append(left)
+
+        self._assembled_segments_data['segments'] = result
