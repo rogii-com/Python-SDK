@@ -5,7 +5,6 @@ import pytest
 import random
 from typing import Any
 
-
 from rogii_solo.calculations.constants import DELTA
 from rogii_solo.calculations.converters import radians_to_degrees
 from rogii_solo.calculations.interpretation import get_segments, get_segments_with_dip
@@ -743,6 +742,7 @@ def test_endless_interpretation_dips(project_papi):
 
     assert fabs(last_segment_dip - ei_last_segment_dip) < DELTA
 
+
 def test_create_well(project_papi):
     # Angles in degrees, depth values in project units
     well_data = {
@@ -775,3 +775,35 @@ def test_create_well(project_papi):
     assert well.tie_in_ew == well_data['tie_in_ew']
     assert well.xsrf_real == well_data['xsrf_real']
     assert well.ysrf_real == well_data['ysrf_real']
+
+
+def test_create_typewell(project_papi):
+    # Angles in degrees, depth values in project units
+    typewell_data = {
+        'typewell_name': f'typewell_{random.randint(0, 10000)}',
+        'operator': f'Operator_{random.randint(0, 10000)}',
+        'api': f'Api_{random.randint(0, 10000)}',
+        'convergence': random.uniform(0, 10),
+        'kb': random.uniform(0, 100),
+        'tie_in_tvd': random.uniform(0, 100),
+        'tie_in_ns': random.uniform(0, 100),
+        'tie_in_ew': random.uniform(0, 100),
+        'xsrf_real': random.uniform(0, 100),
+        'ysrf_real': random.uniform(0, 100),
+    }
+
+    project_papi.create_typewell(**typewell_data)
+
+    typewell = project_papi.typewells.find_by_name(typewell_data['typewell_name'])
+
+    assert typewell is not None
+
+    assert typewell.operator == typewell_data['operator']
+    assert typewell.api == typewell_data['api']
+    assert fabs(radians_to_degrees(typewell.convergence) - typewell_data['convergence']) < DELTA
+    assert typewell.kb == typewell_data['kb']
+    assert typewell.tie_in_tvd == typewell_data['tie_in_tvd']
+    assert typewell.tie_in_ns == typewell_data['tie_in_ns']
+    assert typewell.tie_in_ew == typewell_data['tie_in_ew']
+    assert typewell.xsrf_real == typewell_data['xsrf_real']
+    assert typewell.ysrf_real == typewell_data['ysrf_real']

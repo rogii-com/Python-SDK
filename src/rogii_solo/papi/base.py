@@ -1182,3 +1182,49 @@ class PapiClient(BasePapiClient):
         }
 
         return self._send_post_request(url=url, request_data=request_data, headers=headers)
+
+    def create_typewell(self,
+                        project_id: str,
+                        typewell_name: str,
+                        operator: str,
+                        api: str,
+                        convergence: PapiVar,
+                        kb: PapiVar,
+                        tie_in_tvd: PapiVar,
+                        tie_in_ns: PapiVar,
+                        tie_in_ew: PapiVar,
+                        xsrf_real: PapiVar,
+                        ysrf_real: PapiVar,
+                        headers: Optional[Dict[str, Any]] = None
+                        ):
+        """
+        Create typewell in the project
+        :param project_id:
+        :param typewell_name:
+        :param operator:
+        :param api:
+        :param convergence:
+        :param kb:
+        :param tie_in_tvd:
+        :param tie_in_ns:
+        :param tie_in_ew:
+        :param xsrf_real:
+        :param ysrf_real:
+        :param headers:
+        :return:
+        """
+        url = f'projects/{project_id}/typewells'
+        request_data = {
+            'name': typewell_name,
+            'operator': operator,
+            'api': api,
+            'convergence': convergence,
+            'kb': kb,
+            'tieintvd': tie_in_tvd,
+            'tieinns': tie_in_ns,
+            'tieinew': tie_in_ew,
+            'xsrfreal': xsrf_real,
+            'ysrfreal': ysrf_real,
+        }
+
+        return self._send_post_request(url=url, request_data=request_data, headers=headers)
