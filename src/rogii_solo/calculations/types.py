@@ -44,7 +44,11 @@ class Segment(TypedDict):
     vs: float
     start: Optional[float]
     end: Optional[float]
+    x: float
+    y: float
     horizon_shifts: Dict[str, HorizonShift]
+    boundary_type: int
+    fake: str
 
 
 class SegmentWithDip(Segment):

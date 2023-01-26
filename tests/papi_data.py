@@ -1,6 +1,5 @@
 from uuid import uuid4
 
-
 METER_PROJECT_NAME = 'Global project'
 METER_PROJECT_ID = uuid4()
 
@@ -16,6 +15,9 @@ WELL_YSRF = 2000000.0
 WELL_KB = 100.0
 WELL_AZIMUTH = 5.672320068981945
 WELL_CONVERGENCE = 0.17453292519944444
+
+ENDLESS_INTERPRETATION_NAME = 'Endless Interpretation'
+ENDLESS_INTERPRETATION_ID = uuid4()
 
 TRACE_NAME = 'Bit depth'
 START_DATETIME = '2020-09-06 10:00:00.0'
@@ -148,10 +150,10 @@ WELLS_DATA_RESPONSE = {
                 'val': WELL_YSRF
             },
             'xsrf_real': {
-                'val': 3000000.0
+                'val': WELL_XSRF
             },
             'ysrf_real': {
-                'val': 4000000.0
+                'val': WELL_YSRF
             },
             'kb': {
                 'val': WELL_KB
@@ -160,13 +162,13 @@ WELLS_DATA_RESPONSE = {
                 'val': WELL_CONVERGENCE
             },
             'tie_in_tvd': {
-                'val': 125.0
+                'val': 0.0
             },
             'tie_in_ns': {
-                'val': 150.5
+                'val': 49.0
             },
             'tie_in_ew': {
-                'val': 250.5
+                'val': 69.0
             },
             'azimuth': {
                 'val': WELL_AZIMUTH
@@ -222,7 +224,7 @@ WELLS_DATA_RESPONSE = {
     ],
     'offset': 0,
     'limit': 100,
-    'total': 2,
+    'total': 3,
     'first': True,
     'last': True
 }
@@ -363,7 +365,7 @@ TRAJECTORY_DATA_RESPONSE = {
         },
         {
             'azim': {
-                'val': 3.347541505325344
+                'val': 3.3475415053253434
             },
             'incl': {
                 'val': 0.005235987755983333
@@ -902,7 +904,7 @@ TRAJECTORY_DATA_RESPONSE = {
         },
         {
             'azim': {
-                'val': 6.113888369736538
+                'val': 6.113888369736537
             },
             'incl': {
                 'val': 0.013962634015955556
@@ -1100,7 +1102,7 @@ TRAJECTORY_DATA_RESPONSE = {
         },
         {
             'azim': {
-                'val': 0.45378560551855546
+                'val': 0.4537856055185554
             },
             'incl': {
                 'val': 0.036651914291883324
@@ -1111,7 +1113,7 @@ TRAJECTORY_DATA_RESPONSE = {
         },
         {
             'azim': {
-                'val': 0.23911010752323883
+                'val': 0.2391101075232388
             },
             'incl': {
                 'val': 0.01919862177193889
@@ -1169,7 +1171,7 @@ TRAJECTORY_DATA_RESPONSE = {
                 'val': 5.7613318608336614
             },
             'incl': {
-                'val': 0.05410520681182777
+                'val': 0.05410520681182776
             },
             'md': {
                 'val': 10913
@@ -1235,7 +1237,7 @@ TRAJECTORY_DATA_RESPONSE = {
                 'val': 5.703735995517844
             },
             'incl': {
-                'val': 0.35081117965088326
+                'val': 0.3508111796508832
             },
             'md': {
                 'val': 11101
@@ -1268,7 +1270,7 @@ TRAJECTORY_DATA_RESPONSE = {
                 'val': 5.628686837682083
             },
             'incl': {
-                'val': 0.47822021504647766
+                'val': 0.4782202150464776
             },
             'md': {
                 'val': 11195
@@ -1378,7 +1380,7 @@ TRAJECTORY_DATA_RESPONSE = {
                 'val': 5.69850000776186
             },
             'incl': {
-                'val': 0.9721483933609054
+                'val': 0.9721483933609053
             },
             'md': {
                 'val': 11506
@@ -1862,7 +1864,7 @@ TRAJECTORY_DATA_RESPONSE = {
                 'val': 5.695009349257872
             },
             'incl': {
-                'val': 1.5934856070709273
+                'val': 1.5934856070709271
             },
             'md': {
                 'val': 14994.000000000002
@@ -1892,7 +1894,7 @@ TRAJECTORY_DATA_RESPONSE = {
         },
         {
             'azim': {
-                'val': 5.792747787369559
+                'val': 5.792747787369558
             },
             'incl': {
                 'val': 1.6109388995908722
@@ -2046,7 +2048,7 @@ TRAJECTORY_DATA_RESPONSE = {
         },
         {
             'azim': {
-                'val': 5.607742886658149
+                'val': 5.607742886658148
             },
             'incl': {
                 'val': 1.5725416560469943
@@ -2117,7 +2119,8 @@ INTERPRETATIONS_DATA_RESPONSE = {
                 'display_hidden_segment': True
             },
             'owner': 3,
-            'mode': 'PUBLIC'
+            'mode': 'PUBLIC',
+            'format': None
         },
         {
             'uuid': 'a4811211-cf40-4b2a-9536-aa7f41b56b08',
@@ -2143,7 +2146,8 @@ INTERPRETATIONS_DATA_RESPONSE = {
                 'display_hidden_segment': True
             },
             'owner': 1,
-            'mode': 'PUBLIC'
+            'mode': 'PUBLIC',
+            'format': None
         },
         {
             'uuid': '1e78d781-4804-42b6-974f-6f53830d9fb7',
@@ -2169,12 +2173,40 @@ INTERPRETATIONS_DATA_RESPONSE = {
                 'display_hidden_segment': True
             },
             'owner': 2,
-            'mode': 'PUBLIC'
-        }
+            'mode': 'PUBLIC',
+            'format': None
+        },
+        {
+            'uuid': ENDLESS_INTERPRETATION_ID,
+            'name': ENDLESS_INTERPRETATION_NAME,
+            'properties': {
+                'cutoff': {
+                    'val': 0
+                },
+                'palette': 10,
+                'lightness': 0,
+                'transparency': 0,
+                'typelogFillUuid': '39980ce2-2961-4a35-8baf-8941e9b0169a',
+                'extensionGridUuid': '00000000-0000-0000-0000-000000000000',
+                'faultLabelVisible': True,
+                'reverse_extension': False,
+                'zero_horizon_uuid': '00000000-0000-0000-0000-000000000000',
+                'coloredLogsVisible': True,
+                'boundaryPointsColor': '#ffa5a5a5',
+                'interpretationExtend': {
+                    'val': 0
+                },
+                'boundaryPointsVisible': True,
+                'display_hidden_segment': True
+            },
+            'owner': 4,
+            'mode': 'PUBLIC',
+            'format': 'v2',
+        },
     ],
     'offset': 0,
     'limit': 100,
-    'total': 3,
+    'total': 4,
     'first': True,
     'last': True
 }
@@ -4128,6 +4160,923 @@ MAPPED_TRACES_DATA_RESPONSE = {
     ]
 }
 
+ENDLESS_INTERPRETATION_ASSEMBLED_SEGMENTS_DATA_RESPONSE = {
+    'assembled_segments': {
+        'horizons': {
+            '586a5e44-2a1c-402d-88bf-e82304e8fa2e': {
+                'tvd': {
+                    'val': 11517.84276413585
+                },
+                'uuid': '586a5e44-2a1c-402d-88bf-e82304e8fa2e'
+            },
+            HORIZON_ID: {
+                'tvd': {
+                    'val': 11517.84276413585
+                },
+                'uuid': HORIZON_ID
+            },
+            '86831e2a-3a0b-4085-9e63-90500a8b47ac': {
+                'tvd': {
+                    'val': 11519.84276413585
+                },
+                'uuid': '86831e2a-3a0b-4085-9e63-90500a8b47ac'
+            }
+        },
+        'segments': [
+            {
+                'boundary_type': 1,
+                'end': {
+                    'val': -6.5656962603957885
+                },
+                'horizon_shifts': {
+                    '586a5e44-2a1c-402d-88bf-e82304e8fa2e': {
+                        'end': {
+                            'val': -6.5656962603957885
+                        },
+                        'start': {
+                            'val': 0
+                        },
+                        'uuid': '586a5e44-2a1c-402d-88bf-e82304e8fa2e'
+                    },
+                    HORIZON_ID: {
+                        'end': {
+                            'val': -6.5656962603957885
+                        },
+                        'start': {
+                            'val': 0
+                        },
+                        'uuid': HORIZON_ID
+                    },
+                    '86831e2a-3a0b-4085-9e63-90500a8b47ac': {
+                        'end': {
+                            'val': -6.5656962603957885
+                        },
+                        'start': {
+                            'val': 0
+                        },
+                        'uuid': '86831e2a-3a0b-4085-9e63-90500a8b47ac'
+                    }
+                },
+                'md': {
+                    'val': 11284.942670449882
+                },
+                'start': {
+                    'val': 0
+                },
+                'uuid': '17d78c2b-1544-42f9-9ffb-7aa07de5a90c'
+            },
+            {
+                'boundary_type': 1,
+                'end': {
+                    'val': -18.912379033568882
+                },
+                'horizon_shifts': {
+                    '586a5e44-2a1c-402d-88bf-e82304e8fa2e': {
+                        'end': {
+                            'val': -18.912379033568882
+                        },
+                        'start': {
+                            'val': -6.565715689306932
+                        },
+                        'uuid': '586a5e44-2a1c-402d-88bf-e82304e8fa2e'
+                    },
+                    HORIZON_ID: {
+                        'end': {
+                            'val': -18.912379033568882
+                        },
+                        'start': {
+                            'val': -6.565715689306932
+                        },
+                        'uuid': HORIZON_ID
+                    },
+                    '86831e2a-3a0b-4085-9e63-90500a8b47ac': {
+                        'end': {
+                            'val': -18.912379033568882
+                        },
+                        'start': {
+                            'val': -6.565715689306932
+                        },
+                        'uuid': '86831e2a-3a0b-4085-9e63-90500a8b47ac'
+                    }
+                },
+                'md': {
+                    'val': 11511
+                },
+                'start': {
+                    'val': -6.565715689306932
+                },
+                'uuid': 'b8e4b757-3612-4fe0-8fb3-82f3f7a3bcd4'
+            },
+            {
+                'boundary_type': 1,
+                'end': {
+                    'val': -33.516118275710916
+                },
+                'horizon_shifts': {
+                    '586a5e44-2a1c-402d-88bf-e82304e8fa2e': {
+                        'end': {
+                            'val': -33.516118275710916
+                        },
+                        'start': {
+                            'val': -18.91237067033499
+                        },
+                        'uuid': '586a5e44-2a1c-402d-88bf-e82304e8fa2e'
+                    },
+                    HORIZON_ID: {
+                        'end': {
+                            'val': -33.516118275710916
+                        },
+                        'start': {
+                            'val': -18.91237067033499
+                        },
+                        'uuid': HORIZON_ID
+                    },
+                    '86831e2a-3a0b-4085-9e63-90500a8b47ac': {
+                        'end': {
+                            'val': -33.516118275710916
+                        },
+                        'start': {
+                            'val': -18.91237067033499
+                        },
+                        'uuid': '86831e2a-3a0b-4085-9e63-90500a8b47ac'
+                    }
+                },
+                'md': {
+                    'val': 11606
+                },
+                'start': {
+                    'val': -18.91237067033499
+                },
+                'uuid': 'b7b5e05a-f6dd-4a7f-a84c-a44aca48e0ab'
+            },
+            {
+                'boundary_type': 1,
+                'end': {
+                    'val': -62.39180676689853
+                },
+                'horizon_shifts': {
+                    '586a5e44-2a1c-402d-88bf-e82304e8fa2e': {
+                        'end': {
+                            'val': -58.95023687660797
+                        },
+                        'start': {
+                            'val': -33.516119686481034
+                        },
+                        'uuid': '586a5e44-2a1c-402d-88bf-e82304e8fa2e'
+                    },
+                    HORIZON_ID: {
+                        'end': {
+                            'val': -58.95023687660797
+                        },
+                        'start': {
+                            'val': -33.516119686481034
+                        },
+                        'uuid': HORIZON_ID
+                    },
+                    '86831e2a-3a0b-4085-9e63-90500a8b47ac': {
+                        'end': {
+                            'val': -58.95023687660797
+                        },
+                        'start': {
+                            'val': -33.516119686481034
+                        },
+                        'uuid': '86831e2a-3a0b-4085-9e63-90500a8b47ac'
+                    }
+                },
+                'md': {
+                    'val': 12186.000000000002
+                },
+                'start': {
+                    'val': -33.5161196864814
+                },
+                'uuid': 'a482bf78-0224-42fa-808a-5f847ea93b7d'
+            },
+            {
+                'boundary_type': 1,
+                'end': {
+                    'val': 0
+                },
+                'horizon_shifts': {
+                    '586a5e44-2a1c-402d-88bf-e82304e8fa2e': {
+                        'end': {
+                            'val': -59.10163924450717
+                        },
+                        'start': {
+                            'val': -58.95023687660797
+                        },
+                        'uuid': '586a5e44-2a1c-402d-88bf-e82304e8fa2e'
+                    },
+                    HORIZON_ID: {
+                        'end': {
+                            'val': -59.10163924450717
+                        },
+                        'start': {
+                            'val': -58.95023687660797
+                        },
+                        'uuid': HORIZON_ID
+                    },
+                    '86831e2a-3a0b-4085-9e63-90500a8b47ac': {
+                        'end': {
+                            'val': -59.10163924450717
+                        },
+                        'start': {
+                            'val': -58.95023687660797
+                        },
+                        'uuid': '86831e2a-3a0b-4085-9e63-90500a8b47ac'
+                    }
+                },
+                'md': {
+                    'val': 13056.70686045735
+                },
+                'start': {
+                    'val': 0
+                },
+                'uuid': 'c7d83962-def5-4c76-90c0-2477886d45b5'
+            },
+            {
+                'boundary_type': 0,
+                'end': {
+                    'val': -59.393141961814116
+                },
+                'horizon_shifts': {
+                    '586a5e44-2a1c-402d-88bf-e82304e8fa2e': {
+                        'end': {
+                            'val': -56.70307051967029
+                        },
+                        'start': {
+                            'val': -51.812185591572415
+                        },
+                        'uuid': '586a5e44-2a1c-402d-88bf-e82304e8fa2e'
+                    },
+                    HORIZON_ID: {
+                        'end': {
+                            'val': -56.70307051967029
+                        },
+                        'start': {
+                            'val': -51.812185591572415
+                        },
+                        'uuid': HORIZON_ID
+                    },
+                    '86831e2a-3a0b-4085-9e63-90500a8b47ac': {
+                        'end': {
+                            'val': -56.70307051967029
+                        },
+                        'start': {
+                            'val': -51.812185591572415
+                        },
+                        'uuid': '86831e2a-3a0b-4085-9e63-90500a8b47ac'
+                    }
+                },
+                'md': {
+                    'val': 13400.753488110999
+                },
+                'start': {
+                    'val': -49.79941990825468
+                },
+                'uuid': 'd432f117-01bc-4b3b-9dcc-18f0276b74cd'
+            },
+            {
+                'boundary_type': 1,
+                'end': {
+                    'val': 0
+                },
+                'horizon_shifts': {
+                    '586a5e44-2a1c-402d-88bf-e82304e8fa2e': {
+                        'end': {
+                            'val': -60.56338690861413
+                        },
+                        'start': {
+                            'val': -56.70307051967029
+                        },
+                        'uuid': '586a5e44-2a1c-402d-88bf-e82304e8fa2e'
+                    },
+                    HORIZON_ID: {
+                        'end': {
+                            'val': -60.56338690861413
+                        },
+                        'start': {
+                            'val': -56.70307051967029
+                        },
+                        'uuid': HORIZON_ID
+                    },
+                    '86831e2a-3a0b-4085-9e63-90500a8b47ac': {
+                        'end': {
+                            'val': -60.56338690861413
+                        },
+                        'start': {
+                            'val': -56.70307051967029
+                        },
+                        'uuid': '86831e2a-3a0b-4085-9e63-90500a8b47ac'
+                    }
+                },
+                'md': {
+                    'val': 13849.900000000045
+                },
+                'start': {
+                    'val': 0
+                },
+                'uuid': '78f86c64-73e3-4daf-a861-fd7039a4d82a'
+            },
+            {
+                'boundary_type': 0,
+                'end': {
+                    'val': -110.61396071446408
+                },
+                'horizon_shifts': {
+                    '586a5e44-2a1c-402d-88bf-e82304e8fa2e': {
+                        'end': {
+                            'val': -103.06310344580925
+                        },
+                        'start': {
+                            'val': -99.99209841093398
+                        },
+                        'uuid': '586a5e44-2a1c-402d-88bf-e82304e8fa2e'
+                    },
+                    HORIZON_ID: {
+                        'end': {
+                            'val': -103.06310344580925
+                        },
+                        'start': {
+                            'val': -99.99209841093398
+                        },
+                        'uuid': HORIZON_ID
+                    },
+                    '86831e2a-3a0b-4085-9e63-90500a8b47ac': {
+                        'end': {
+                            'val': -103.06310344580925
+                        },
+                        'start': {
+                            'val': -99.99209841093398
+                        },
+                        'uuid': '86831e2a-3a0b-4085-9e63-90500a8b47ac'
+                    }
+                },
+                'md': {
+                    'val': 13990.412233060615
+                },
+                'start': {
+                    'val': -103.33964736322979
+                },
+                'uuid': 'aef9b467-8759-447a-bd83-4eebbd8ec403'
+            },
+            {
+                'boundary_type': 1,
+                'end': {
+                    'val': 0
+                },
+                'horizon_shifts': {
+                    '586a5e44-2a1c-402d-88bf-e82304e8fa2e': {
+                        'end': {
+                            'val': -110.61396071446325
+                        },
+                        'start': {
+                            'val': -103.06310344580925
+                        },
+                        'uuid': '586a5e44-2a1c-402d-88bf-e82304e8fa2e'
+                    },
+                    HORIZON_ID: {
+                        'end': {
+                            'val': -110.61396071446325
+                        },
+                        'start': {
+                            'val': -103.06310344580925
+                        },
+                        'uuid': HORIZON_ID
+                    },
+                    '86831e2a-3a0b-4085-9e63-90500a8b47ac': {
+                        'end': {
+                            'val': -110.61396071446325
+                        },
+                        'start': {
+                            'val': -103.06310344580925
+                        },
+                        'uuid': '86831e2a-3a0b-4085-9e63-90500a8b47ac'
+                    }
+                },
+                'md': {
+                    'val': 14151.700000000004
+                },
+                'start': {
+                    'val': 0
+                },
+                'uuid': '212c1744-1fce-414a-a569-15be33a2e863'
+            },
+            {
+                'boundary_type': 1,
+                'end': {
+                    'val': -118.64063807436037
+                },
+                'horizon_shifts': {
+                    '586a5e44-2a1c-402d-88bf-e82304e8fa2e': {
+                        'end': {
+                            'val': -118.64063807436037
+                        },
+                        'start': {
+                            'val': -110.61403385396254
+                        },
+                        'uuid': '586a5e44-2a1c-402d-88bf-e82304e8fa2e'
+                    },
+                    HORIZON_ID: {
+                        'end': {
+                            'val': -118.64063807436037
+                        },
+                        'start': {
+                            'val': -110.61403385396254
+                        },
+                        'uuid': HORIZON_ID
+                    },
+                    '86831e2a-3a0b-4085-9e63-90500a8b47ac': {
+                        'end': {
+                            'val': -118.64063807436037
+                        },
+                        'start': {
+                            'val': -110.61403385396254
+                        },
+                        'uuid': '86831e2a-3a0b-4085-9e63-90500a8b47ac'
+                    }
+                },
+                'md': {
+                    'val': 14240.500000000002
+                },
+                'start': {
+                    'val': -110.61403385396254
+                },
+                'uuid': '17cb4109-690e-4f45-a39a-a64532e25eb9'
+            },
+            {
+                'boundary_type': 1,
+                'end': {
+                    'val': -141.0744362926588
+                },
+                'horizon_shifts': {
+                    '586a5e44-2a1c-402d-88bf-e82304e8fa2e': {
+                        'end': {
+                            'val': -135.60868693330121
+                        },
+                        'start': {
+                            'val': -118.6403753720424
+                        },
+                        'uuid': '586a5e44-2a1c-402d-88bf-e82304e8fa2e'
+                    },
+                    HORIZON_ID: {
+                        'end': {
+                            'val': -135.60868693330121
+                        },
+                        'start': {
+                            'val': -118.6403753720424
+                        },
+                        'uuid': HORIZON_ID
+                    },
+                    '86831e2a-3a0b-4085-9e63-90500a8b47ac': {
+                        'end': {
+                            'val': -135.60868693330121
+                        },
+                        'start': {
+                            'val': -118.6403753720424
+                        },
+                        'uuid': '86831e2a-3a0b-4085-9e63-90500a8b47ac'
+                    }
+                },
+                'md': {
+                    'val': 14466.000000000002
+                },
+                'start': {
+                    'val': -118.6403753720431
+                },
+                'uuid': '200b0a28-ffc6-483e-99c7-2168ac7119b4'
+            },
+            {
+                'boundary_type': 1,
+                'end': {
+                    'val': 0
+                },
+                'horizon_shifts': {
+                    '586a5e44-2a1c-402d-88bf-e82304e8fa2e': {
+                        'end': {
+                            'val': -154.195111448762
+                        },
+                        'start': {
+                            'val': -135.60868693330121
+                        },
+                        'uuid': '586a5e44-2a1c-402d-88bf-e82304e8fa2e'
+                    },
+                    HORIZON_ID: {
+                        'end': {
+                            'val': -154.195111448762
+                        },
+                        'start': {
+                            'val': -135.60868693330121
+                        },
+                        'uuid': HORIZON_ID
+                    },
+                    '86831e2a-3a0b-4085-9e63-90500a8b47ac': {
+                        'end': {
+                            'val': -154.195111448762
+                        },
+                        'start': {
+                            'val': -135.60868693330121
+                        },
+                        'uuid': '86831e2a-3a0b-4085-9e63-90500a8b47ac'
+                    }
+                },
+                'md': {
+                    'val': 14565.360000000022
+                },
+                'start': {
+                    'val': 0
+                },
+                'uuid': 'faa9cc04-7841-4b0a-989d-da0d25be8a7d'
+            },
+            {
+                'boundary_type': 0,
+                'end': {
+                    'val': -210.65888770893307
+                },
+                'horizon_shifts': {
+                    '586a5e44-2a1c-402d-88bf-e82304e8fa2e': {
+                        'end': {
+                            'val': -211.69246022414336
+                        },
+                        'start': {
+                            'val': -213.8141818373515
+                        },
+                        'uuid': '586a5e44-2a1c-402d-88bf-e82304e8fa2e'
+                    },
+                    HORIZON_ID: {
+                        'end': {
+                            'val': -211.69246022414336
+                        },
+                        'start': {
+                            'val': -213.8141818373515
+                        },
+                        'uuid': HORIZON_ID
+                    },
+                    '86831e2a-3a0b-4085-9e63-90500a8b47ac': {
+                        'end': {
+                            'val': -211.69246022414336
+                        },
+                        'start': {
+                            'val': -213.8141818373515
+                        },
+                        'uuid': '86831e2a-3a0b-4085-9e63-90500a8b47ac'
+                    }
+                },
+                'md': {
+                    'val': 14605.513625420313
+                },
+                'start': {
+                    'val': -214.98207144576187
+                },
+                'uuid': 'c957b420-5c52-414e-902f-77005c3d12ea'
+            },
+            {
+                'boundary_type': 1,
+                'end': {
+                    'val': 0
+                },
+                'horizon_shifts': {
+                    '586a5e44-2a1c-402d-88bf-e82304e8fa2e': {
+                        'end': {
+                            'val': -215.79805967196262
+                        },
+                        'start': {
+                            'val': -211.69246022414336
+                        },
+                        'uuid': '586a5e44-2a1c-402d-88bf-e82304e8fa2e'
+                    },
+                    HORIZON_ID: {
+                        'end': {
+                            'val': -215.79805967196262
+                        },
+                        'start': {
+                            'val': -211.69246022414336
+                        },
+                        'uuid': HORIZON_ID
+                    },
+                    '86831e2a-3a0b-4085-9e63-90500a8b47ac': {
+                        'end': {
+                            'val': -215.79805967196262
+                        },
+                        'start': {
+                            'val': -211.69246022414336
+                        },
+                        'uuid': '86831e2a-3a0b-4085-9e63-90500a8b47ac'
+                    }
+                },
+                'md': {
+                    'val': 14795.660000000045
+                },
+                'start': {
+                    'val': 0
+                },
+                'uuid': '393d4368-b131-47a3-b9cc-019e548cf126'
+            },
+            {
+                'boundary_type': 1,
+                'end': {
+                    'val': 0
+                },
+                'horizon_shifts': {
+                    '586a5e44-2a1c-402d-88bf-e82304e8fa2e': {
+                        'end': {
+                            'val': -221.2564026611872
+                        },
+                        'start': {
+                            'val': -215.79805967196262
+                        },
+                        'uuid': '586a5e44-2a1c-402d-88bf-e82304e8fa2e'
+                    },
+                    HORIZON_ID: {
+                        'end': {
+                            'val': -221.2564026611872
+                        },
+                        'start': {
+                            'val': -215.79805967196262
+                        },
+                        'uuid': HORIZON_ID
+                    },
+                    '86831e2a-3a0b-4085-9e63-90500a8b47ac': {
+                        'end': {
+                            'val': -221.2564026611872
+                        },
+                        'start': {
+                            'val': -215.79805967196262
+                        },
+                        'uuid': '86831e2a-3a0b-4085-9e63-90500a8b47ac'
+                    }
+                },
+                'md': {
+                    'val': 14976.140000000043
+                },
+                'start': {
+                    'val': 0
+                },
+                'uuid': 'ff743f11-6101-42a8-8870-724189962750'
+            },
+            {
+                'boundary_type': 1,
+                'end': {
+                    'val': 0
+                },
+                'horizon_shifts': {
+                    '586a5e44-2a1c-402d-88bf-e82304e8fa2e': {
+                        'end': {
+                            'val': -229.80925200626916
+                        },
+                        'start': {
+                            'val': -221.2564026611872
+                        },
+                        'uuid': '586a5e44-2a1c-402d-88bf-e82304e8fa2e'
+                    },
+                    HORIZON_ID: {
+                        'end': {
+                            'val': -229.80925200626916
+                        },
+                        'start': {
+                            'val': -221.2564026611872
+                        },
+                        'uuid': HORIZON_ID
+                    },
+                    '86831e2a-3a0b-4085-9e63-90500a8b47ac': {
+                        'end': {
+                            'val': -229.80925200626916
+                        },
+                        'start': {
+                            'val': -221.2564026611872
+                        },
+                        'uuid': '86831e2a-3a0b-4085-9e63-90500a8b47ac'
+                    }
+                },
+                'md': {
+                    'val': 15243.45000000002
+                },
+                'start': {
+                    'val': 0
+                },
+                'uuid': 'f4178ffa-f443-4a0b-bee0-33925e0458ff'
+            },
+            {
+                'boundary_type': 1,
+                'end': {
+                    'val': 0
+                },
+                'horizon_shifts': {
+                    '586a5e44-2a1c-402d-88bf-e82304e8fa2e': {
+                        'end': {
+                            'val': -230.16893424342015
+                        },
+                        'start': {
+                            'val': -229.80925200626916
+                        },
+                        'uuid': '586a5e44-2a1c-402d-88bf-e82304e8fa2e'
+                    },
+                    HORIZON_ID: {
+                        'end': {
+                            'val': -230.16893424342015
+                        },
+                        'start': {
+                            'val': -229.80925200626916
+                        },
+                        'uuid': HORIZON_ID
+                    },
+                    '86831e2a-3a0b-4085-9e63-90500a8b47ac': {
+                        'end': {
+                            'val': -230.16893424342015
+                        },
+                        'start': {
+                            'val': -229.80925200626916
+                        },
+                        'uuid': '86831e2a-3a0b-4085-9e63-90500a8b47ac'
+                    }
+                },
+                'md': {
+                    'val': 15501.950000000032
+                },
+                'start': {
+                    'val': 0
+                },
+                'uuid': '01dda0be-8d5f-4d00-aba8-8bb9cc39a50a'
+            },
+            {
+                'boundary_type': 1,
+                'end': {
+                    'val': -235.85437670843604
+                },
+                'horizon_shifts': {
+                    '586a5e44-2a1c-402d-88bf-e82304e8fa2e': {
+                        'end': {
+                            'val': -235.85437670843567
+                        },
+                        'start': {
+                            'val': -230.16893424342015
+                        },
+                        'uuid': '586a5e44-2a1c-402d-88bf-e82304e8fa2e'
+                    },
+                    HORIZON_ID: {
+                        'end': {
+                            'val': -235.85437670843567
+                        },
+                        'start': {
+                            'val': -230.16893424342015
+                        },
+                        'uuid': HORIZON_ID
+                    },
+                    '86831e2a-3a0b-4085-9e63-90500a8b47ac': {
+                        'end': {
+                            'val': -235.85437670843567
+                        },
+                        'start': {
+                            'val': -230.16893424342015
+                        },
+                        'uuid': '86831e2a-3a0b-4085-9e63-90500a8b47ac'
+                    }
+                },
+                'md': {
+                    'val': 15613.183002760585
+                },
+                'start': {
+                    'val': -229.73977518065405
+                },
+                'uuid': 'a5e7554a-fd09-483b-92eb-ad029771996a'
+            },
+            {
+                'boundary_type': 1,
+                'end': {
+                    'val': -254.64365643654796
+                },
+                'horizon_shifts': {
+                    '586a5e44-2a1c-402d-88bf-e82304e8fa2e': {
+                        'end': {
+                            'val': -256.70260195632545
+                        },
+                        'start': {
+                            'val': -235.8287914731427
+                        },
+                        'uuid': '586a5e44-2a1c-402d-88bf-e82304e8fa2e'
+                    },
+                    HORIZON_ID: {
+                        'end': {
+                            'val': -256.70260195632545
+                        },
+                        'start': {
+                            'val': -235.8287914731427
+                        },
+                        'uuid': HORIZON_ID
+                    },
+                    '86831e2a-3a0b-4085-9e63-90500a8b47ac': {
+                        'end': {
+                            'val': -256.70260195632545
+                        },
+                        'start': {
+                            'val': -235.8287914731427
+                        },
+                        'uuid': '86831e2a-3a0b-4085-9e63-90500a8b47ac'
+                    }
+                },
+                'md': {
+                    'val': 15967.5
+                },
+                'start': {
+                    'val': -235.8287914731423
+                },
+                'uuid': '7bfea2b5-fbe4-42f7-ae83-41316f79e1d9',
+                'x': -3225.8079920962136,
+                'y': 3284.1141864352785,
+            },
+            {
+                'boundary_type': 1,
+                'end': {
+                    'val': 0
+                },
+                'horizon_shifts': {
+                    '586a5e44-2a1c-402d-88bf-e82304e8fa2e': {
+                        'end': {
+                            'val': -225.49538329945972
+                        },
+                        'start': {
+                            'val': -256.70260195632545
+                        },
+                        'uuid': '586a5e44-2a1c-402d-88bf-e82304e8fa2e'
+                    },
+                    HORIZON_ID: {
+                        'end': {
+                            'val': -225.49538329945972
+                        },
+                        'start': {
+                            'val': -256.70260195632545
+                        },
+                        'uuid': HORIZON_ID
+                    },
+                    '86831e2a-3a0b-4085-9e63-90500a8b47ac': {
+                        'end': {
+                            'val': -225.49538329945972
+                        },
+                        'start': {
+                            'val': -256.70260195632545
+                        },
+                        'uuid': '86831e2a-3a0b-4085-9e63-90500a8b47ac'
+                    }
+                },
+                'md': {
+                    'val': 16951.101163762378,
+                },
+                'start': {
+                    'val': 0
+                },
+                'uuid': '7bfea2b5-fbe4-42f7-ae83-41316f79e1d9',
+                'x': -3953.9766627137483,
+                'y': 3944.985613623949
+            },
+            {
+                'boundary_type': 1,
+                'end': {
+                    'val': 0
+                },
+                'fake': {
+                    'val': True
+                },
+                'horizon_shifts': {
+                    '9e26d2ea-7291-4f29-8ebf-bcc47efbdcf2': {
+                        'end': {
+                            'val': -225.49538329945972
+                        },
+                        'start': {
+                            'val': -225.49538329945972
+                        },
+                        'uuid': '9e26d2ea-7291-4f29-8ebf-bcc47efbdcf2'
+                    },
+                    HORIZON_ID: {
+                        'end': {
+                            'val': -225.49538329945972
+                        },
+                        'start': {
+                            'val': -225.49538329945972
+                        },
+                        'uuid': HORIZON_ID
+                    },
+                    'f58e6db4-9525-4a16-b0bf-2f1971594e86': {
+                        'end': {
+                            'val': -225.49538329945972
+                        },
+                        'start': {
+                            'val': -225.49538329945972
+                        },
+                        'uuid': 'f58e6db4-9525-4a16-b0bf-2f1971594e86'
+                    }
+                },
+                'md': {
+                    'val': 17411.271089701007,
+                },
+                'start': {
+                    'val': 0
+                },
+                'uuid': '7bfea2b5-fbe4-42f7-ae83-41316f79e1d9',
+                'x': -4295.88654055529,
+                'y': 4252.842650417853,
+            }
+        ]
+    }
+}
 
 TIME_TRACE_DATA_RESPONSE = {
     'content': [
