@@ -16,9 +16,8 @@ Python 3.10
 from rogii_solo import SoloClient
 
 solo_client = SoloClient(client_id='my-client-id', client_secret='my-client-secret')
-solo_client.set_project_by_name('My project')
+project = solo_client.set_project_by_name('My project')
 
-project = solo_client.project
 wells = project.wells
 
 wells_data = wells.to_dict() # List of dicts

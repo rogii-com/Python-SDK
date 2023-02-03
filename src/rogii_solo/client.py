@@ -50,27 +50,29 @@ class SoloClient:
 
         return self._projects_data
 
-    def set_project_by_id(self, project_id: str):
+    def set_project_by_id(self, project_id: str) -> Optional[Project]:
         project = self.projects.find_by_id(project_id)
 
         if project is None:
             raise ProjectNotFoundException('Project not found.')
 
-        self.set_project(project)
+        return self.set_project(project)
 
-    def set_project_by_name(self, project_name: str):
+    def set_project_by_name(self, project_name: str) -> Optional[Project]:
         project = self.projects.find_by_name(project_name)
 
         if project is None:
             raise ProjectNotFoundException('Project not found.')
 
-        self.set_project(project)
+        return self.set_project(project)
 
-    def set_project(self, project: Project):
+    def set_project(self, project: Project) -> Optional[Project]:
         if not isinstance(project, Project):
             raise InvalidProjectException('Must be the "Project" instance.')
 
         self.project = project
+
+        return self.project
 
     def replace_nested_well_trajectory(self,
                                        nested_well_id: str,
