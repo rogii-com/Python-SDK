@@ -12,3 +12,7 @@ class InvalidProjectException(BaseRogiiSoloException):
 
 class TraceNotFoundException(BaseRogiiSoloException):
     pass
+
+
+class InterpretationOutOfTrajectoryException(BaseRogiiSoloException):
+    pass

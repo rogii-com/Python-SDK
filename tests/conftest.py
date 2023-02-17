@@ -28,8 +28,12 @@ from tests.papi_data import (
     TRACES_DATA_RESPONSE,
     MAPPED_TRACES_DATA_RESPONSE,
     TIME_TRACE_DATA_RESPONSE,
-    ENDLESS_INTERPRETATION_ID,
-    ENDLESS_INTERPRETATION_ASSEMBLED_SEGMENTS_DATA_RESPONSE
+    EI_LAST_SEGMENT_EXTENDED_ID,
+    EI_LAST_SEGMENT_EXTENDED_ASSEMBLED_SEGMENTS_DATA_RESPONSE,
+    EI_LAST_SEGMENT_OUT_ID,
+    EI_LAST_SEGMENT_OUT_ASSEMBLED_SEGMENTS_DATA_RESPONSE,
+    EI_ALL_SEGMENTS_OUT_ID,
+    EI_ALL_SEGMENTS_OUT_ASSEMBLED_SEGMENTS_DATA_RESPONSE
 )
 
 
@@ -58,8 +62,12 @@ def fetch_interpretation_horizons(**kwargs):
 
 
 def fetch_interpretation_assembled_segments(**kwargs):
-    if kwargs['interpretation_id'] == ENDLESS_INTERPRETATION_ID:
-        return ENDLESS_INTERPRETATION_ASSEMBLED_SEGMENTS_DATA_RESPONSE['assembled_segments']
+    if kwargs['interpretation_id'] == EI_LAST_SEGMENT_EXTENDED_ID:
+        return EI_LAST_SEGMENT_EXTENDED_ASSEMBLED_SEGMENTS_DATA_RESPONSE['assembled_segments']
+    elif kwargs['interpretation_id'] == EI_LAST_SEGMENT_OUT_ID:
+        return EI_LAST_SEGMENT_OUT_ASSEMBLED_SEGMENTS_DATA_RESPONSE['assembled_segments']
+    elif kwargs['interpretation_id'] == EI_ALL_SEGMENTS_OUT_ID:
+        return EI_ALL_SEGMENTS_OUT_ASSEMBLED_SEGMENTS_DATA_RESPONSE['assembled_segments']
 
     return ASSEMBLED_SEGMENTS_DATA_RESPONSE['assembled_segments']
 
