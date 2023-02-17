@@ -1,4 +1,3 @@
-from itertools import pairwise
 from math import fabs
 from typing import Any, Dict, Optional
 
@@ -11,14 +10,15 @@ from rogii_solo.calculations.converters import meters_to_feet
 from rogii_solo.calculations.enums import EMeasureUnits
 from rogii_solo.calculations.trajectory import calculate_trajectory, interpolate_trajectory_point
 from rogii_solo.calculations.types import HorizonShift, Segment
+from rogii_solo.exceptions import InterpretationOutOfTrajectoryException
 from rogii_solo.horizon import Horizon
 from rogii_solo.papi.client import PapiClient
 from rogii_solo.papi.types import PapiAssembledSegments, PapiStarredHorizons, PapiTrajectory
 from rogii_solo.types import DataList
 from rogii_solo.types import Interpretation as InterpretationType
+from rogii_solo.utils.constants import ENDLESS_INTERPRETATION_VERSION
 
 TVT_DATA_MAX_MD_STEP = 100000
-ENDLESS_INTERPRETATION_VERSION = 'v2'
 
 
 class Interpretation(ComplexObject):
@@ -61,27 +61,32 @@ class Interpretation(ComplexObject):
     @property
     def assembled_segments(self):
         if self._assembled_segments_data is not None:
-            return {
-                'horizons': self._assembled_segments_data['horizons'],
-                'segments': self._assembled_segments_data['segments']
-            }
+            return self._assembled_segments_data
 
         self._assembled_segments_data = self._papi_client.get_interpretation_assembled_segments_data(
             interpretation_id=self.uuid
         )
 
         if self.format == ENDLESS_INTERPRETATION_VERSION:
-            well_data = self.well.to_dict(get_converted=False)
-            calculated_trajectory = calculate_trajectory(
-                raw_trajectory=self.well.trajectory.to_dict(get_converted=False),
-                well=well_data,
-                measure_units=self.well.project.measure_unit
-            )
-            self._fit_on_trajectory(
-                calculated_trajectory=calculated_trajectory,
-                well=well_data,
-                measure_units=self.well.project.measure_unit
-            )
+            try:
+                well_data = self.well.to_dict(get_converted=False)
+                calculated_trajectory = calculate_trajectory(
+                    raw_trajectory=self.well.trajectory.to_dict(get_converted=False),
+                    well=well_data,
+                    measure_units=self.well.project.measure_unit
+                )
+                self._assembled_segments_data['segments'] = self._get_fixed_segments(
+                    calculated_trajectory=calculated_trajectory,
+                    well=well_data,
+                    measure_units=self.well.project.measure_unit
+                )
+            except InterpretationOutOfTrajectoryException:
+                self._assembled_segments_data = None
+
+                return {
+                    'horizons': None,
+                    'segments': None
+                }
 
         assembled_horizons_data = self._assembled_segments_data['horizons']
         measure_units = self.well.project.measure_unit
@@ -94,10 +99,7 @@ class Interpretation(ComplexObject):
                     assembled_horizons_data[horizon['uuid']]['tvd']
                 )
 
-        return {
-            'horizons': self._assembled_segments_data['horizons'],
-            'segments': self._assembled_segments_data['segments']
-        }
+        return self._assembled_segments_data
 
     def get_tvt_data(self, md_step: int = 1) -> DataList:
         return self._papi_client.get_interpretation_tvt_data(
@@ -166,74 +168,96 @@ class Interpretation(ComplexObject):
 
         return self._starred_horizons_data
 
+    def _get_fixed_segments(self,
+                            calculated_trajectory: PapiTrajectory,
+                            well: Dict[str, Any],
+                            measure_units: EMeasureUnits
+                            ):
+        segments = self._assembled_segments_data['segments']
+
+        if segments is None:
+            return
+
+        fixed_segments = []
+        min_trajectory_md = calculated_trajectory[0]['md']
+        max_trajectory_md = calculated_trajectory[-1]['md']
+
+        if segments[0]['md'] >= max_trajectory_md:
+            raise InterpretationOutOfTrajectoryException
+
+        for i, segment in enumerate(segments):
+            left_segment = segment
+
+            try:
+                right_segment = segments[i + 1]
+            except IndexError:
+                right_segment = None
+
+            if left_segment['md'] < min_trajectory_md or left_segment['md'] >= max_trajectory_md:
+                continue
+            elif right_segment and (left_segment['md'] <= max_trajectory_md <= right_segment['md']):
+                fixed_segments.append(
+                    self._truncate_segment(
+                        left=left_segment,
+                        right=right_segment,
+                        well=well,
+                        trajectory=calculated_trajectory,
+                        measure_units=measure_units
+                    )
+                )
+            else:
+                fixed_segments.append(left_segment)
+
+        return fixed_segments
+
     def _truncate_segment(self,
                           left: Segment,
                           right: Segment,
                           well: Dict[str, Any],
                           trajectory: DataList,
-                          measure_unit: EMeasureUnits,
+                          measure_units: EMeasureUnits,
                           ) -> Segment:
         new_shifts = {}
-        end_point = trajectory[-1]
-        segment_length_vs = calc_segment_vs_length(left['x'], left['y'], right['x'], right['y'], well['azimuth'])
-
-        nearest = get_nearest_values(left['md'], trajectory, key=lambda it: it['md'])
-        left_point = interpolate_trajectory_point(nearest[0], nearest[1], left['md'], well, measure_unit)
+        segment_vs_length = calc_segment_vs_length(
+            x1=left['x'],
+            y1=left['y'],
+            x2=right['x'],
+            y2=right['y'],
+            azimuth_vs=well['azimuth']
+        )
+        nearest_left_point, nearest_right_point = get_nearest_values(
+            value=left['md'],
+            input_list=trajectory,
+            key=lambda it: it['md']
+        )
+        left_point = interpolate_trajectory_point(
+            left_point=nearest_left_point,
+            right_point=nearest_right_point,
+            md=left['md'],
+            well=well,
+            measure_units=measure_units
+        )
         left_point_vs = left_point['vs']
-        segment_cut_length_vs = fabs(end_point['vs'] - left_point_vs)
+        right_point_vs = trajectory[-1]['vs']
 
         for uuid, horizons_shift in left['horizon_shifts'].items():
             shift_height = horizons_shift['end'] - horizons_shift['start']
-            end = shift_height * segment_cut_length_vs / segment_length_vs + horizons_shift['start']
+            truncated_segment_vs_length = fabs(right_point_vs - left_point_vs)
+            shift_new_end = shift_height * truncated_segment_vs_length / segment_vs_length + horizons_shift['start']
 
             new_shifts[uuid] = HorizonShift(
                 uuid=horizons_shift['uuid'],
                 start=horizons_shift['start'],
-                end=end
+                end=shift_new_end
             )
 
         return Segment(
             md=left['md'],
+            x=left['x'],
+            y=left['y'],
+            vs=left_point_vs,
+            boundary_type=left['boundary_type'],
             start=left['start'],
             end=left['end'],
-            boundary_type=left['boundary_type'],
-            horizon_shifts=new_shifts,
-            vs=segment_cut_length_vs,
-            x=left['x'],
-            y=left['y']
+            horizon_shifts=new_shifts
         )
-
-    def _fit_on_trajectory(self,
-                           calculated_trajectory: PapiTrajectory,
-                           well: Dict[str, Any],
-                           measure_units: EMeasureUnits
-                           ):
-        segments = self._assembled_segments_data['segments']
-
-        if len(segments) == 1:
-            return
-
-        min_trajectory_md = calculated_trajectory[0]['md']
-        max_trajectory_md = calculated_trajectory[-1]['md']
-        result = []
-
-        for left, right in pairwise(segments):
-            if left['md'] < min_trajectory_md:
-                # Extra check for possible invalid data.
-                continue
-            elif left['md'] >= max_trajectory_md:
-                break
-            elif left['md'] < max_trajectory_md < right['md']:
-                result.append(
-                    self._truncate_segment(
-                        left=left,
-                        right=right,
-                        well=well,
-                        trajectory=calculated_trajectory,
-                        measure_unit=measure_units
-                    )
-                )
-            else:
-                result.append(left)
-
-        self._assembled_segments_data['segments'] = result

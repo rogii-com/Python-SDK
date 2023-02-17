@@ -11,7 +11,7 @@ from rogii_solo.calculations.base import (
 )
 from rogii_solo.calculations.constants import DELTA
 from rogii_solo.calculations.enums import EMeasureUnits
-from rogii_solo.calculations.trajectory import interpolate_trajectory_point
+from rogii_solo.calculations.trajectory import calculate_trajectory, interpolate_trajectory_point
 from rogii_solo.calculations.types import (
     AssembledHorizons,
     Segment,
@@ -181,6 +181,27 @@ def get_segments_boundaries(assembled_segments: List[Segment], calculated_trajec
         )
 
     return segments_boundaries
+
+
+def get_last_segment_dip(well: Any, assembled_segments: Any, measure_units: EMeasureUnits):
+    well_data = well.to_dict(get_converted=False)
+    calculated_trajectory = calculate_trajectory(
+        raw_trajectory=well.trajectory.to_dict(get_converted=False),
+        well=well_data,
+        measure_units=measure_units
+    )
+    segments = get_segments(
+        well=well_data,
+        assembled_segments=assembled_segments['segments'],
+        calculated_trajectory=calculated_trajectory,
+        measure_units=measure_units
+    )
+    segments_with_dip = get_segments_with_dip(
+        segments=segments,
+        assembled_horizons=assembled_segments['horizons']
+    )
+
+    return segments_with_dip[-1]['dip']
 
 
 def interpolate_horizon(segments_boundaries: SegmentsBoundaries, horizon_uuid: str, horizon_tvd: float):

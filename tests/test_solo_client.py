@@ -1,11 +1,9 @@
 from datetime import datetime
 from math import fabs
-import pytest
-from typing import Any
 
-from rogii_solo.calculations.constants import DELTA
-from rogii_solo.calculations.interpretation import get_segments, get_segments_with_dip
-from rogii_solo.calculations.trajectory import calculate_trajectory
+import pytest
+
+from rogii_solo.calculations.interpretation import get_last_segment_dip
 from rogii_solo.exceptions import ProjectNotFoundException, InvalidProjectException
 from tests.papi_data import (
     METER_PROJECT_NAME,
@@ -33,8 +31,12 @@ from tests.papi_data import (
     TRACE_NAME,
     START_DATETIME,
     END_DATETIME,
-    ENDLESS_INTERPRETATION_ID
+    EI_LAST_SEGMENT_EXTENDED_ID,
+    EI_LAST_SEGMENT_OUT_ID,
+    EI_ALL_SEGMENTS_OUT_ID
 )
+
+DELTA_EI_DIP = 0.001
 
 
 def test_get_projects(solo_client):
@@ -408,44 +410,62 @@ def test_get_time_trace(project):
     assert time_trace_df['meta'].at[0, 'name'] == TRACE_NAME
 
 
-def test_endless_interpretation_shifts(project):
+def test_ei_last_segment_extended(project):
     well = project.wells.find_by_name(WELL_NAME)
 
     assert well is not None
 
     interpretation = well.starred_interpretation
-    endless_interpretation = well.interpretations.find_by_id(ENDLESS_INTERPRETATION_ID)
+    endless_interpretation = well.interpretations.find_by_id(EI_LAST_SEGMENT_EXTENDED_ID)
 
     assert interpretation is not None
     assert endless_interpretation is not None
 
-    interpretation_data = interpretation.to_dict()
-    endless_interpretation_data = endless_interpretation.to_dict()
-
-    last_segment = interpretation_data['segments'][-1]
-    last_segment_horizon_shifts = list(last_segment['horizon_shifts'].values())
-
-    ei_last_segment = endless_interpretation_data['segments'][-1]
-    ei_last_segment_horizon_shifts = list(ei_last_segment['horizon_shifts'].values())
-
-    assert last_segment['md'] == ei_last_segment['md']
-
-    for idx, horizon_shift in enumerate(last_segment_horizon_shifts):
-        assert fabs(horizon_shift['start'] - ei_last_segment_horizon_shifts[idx]['start']) < DELTA
-        assert fabs(horizon_shift['end'] - ei_last_segment_horizon_shifts[idx]['end']) < DELTA
+    _test_ei_case(
+        well=well,
+        interpretation=interpretation,
+        endless_interpretation=endless_interpretation,
+        measure_units=project.measure_unit
+    )
 
 
-def test_endless_interpretation_dips(project):
+def test_ei_last_segment_out(project):
     well = project.wells.find_by_name(WELL_NAME)
 
     assert well is not None
 
     interpretation = well.starred_interpretation
-    endless_interpretation = well.interpretations.find_by_id(ENDLESS_INTERPRETATION_ID)
+    endless_interpretation = well.interpretations.find_by_id(EI_LAST_SEGMENT_OUT_ID)
 
     assert interpretation is not None
     assert endless_interpretation is not None
 
+    _test_ei_case(
+        well=well,
+        interpretation=interpretation,
+        endless_interpretation=endless_interpretation,
+        measure_units=project.measure_unit
+    )
+
+
+def test_ei_all_segments_out(project):
+    well = project.wells.find_by_name(WELL_NAME)
+
+    assert well is not None
+
+    interpretation = well.starred_interpretation
+    endless_interpretation = well.interpretations.find_by_id(EI_ALL_SEGMENTS_OUT_ID)
+
+    assert interpretation is not None
+    assert endless_interpretation is not None
+
+    endless_interpretation_data = endless_interpretation.to_dict()
+
+    assert endless_interpretation_data['horizons'] is None
+    assert endless_interpretation_data['segments'] is None
+
+
+def _test_ei_case(well, interpretation, endless_interpretation, measure_units):
     interpretation_data = interpretation.to_dict()
     endless_interpretation_data = endless_interpretation.to_dict()
 
@@ -454,27 +474,15 @@ def test_endless_interpretation_dips(project):
 
     assert last_segment['md'] == ei_last_segment['md']
 
-    def get_last_segment_dip(well: Any, interpretation: Any):
-        well_data = well.to_dict(get_converted=False)
-        calculated_trajectory = calculate_trajectory(
-            raw_trajectory=well.trajectory.to_dict(get_converted=False),
-            well=well_data,
-            measure_units=project.measure_unit
-        )
-        segments = get_segments(
-            well=well_data,
-            assembled_segments=interpretation.assembled_segments['segments'],
-            calculated_trajectory=calculated_trajectory,
-            measure_units=project.measure_unit
-        )
-        segments_with_dip = get_segments_with_dip(
-            segments=segments,
-            assembled_horizons=interpretation.assembled_segments['horizons']
-        )
+    last_segment_dip = get_last_segment_dip(
+        well=well,
+        assembled_segments=interpretation.assembled_segments,
+        measure_units=measure_units
+    )
+    ei_last_segment_dip = get_last_segment_dip(
+        well=well,
+        assembled_segments=endless_interpretation.assembled_segments,
+        measure_units=measure_units
+    )
 
-        return segments_with_dip[-1]['dip']
-
-    last_segment_dip = get_last_segment_dip(well=well, interpretation=interpretation)
-    ei_last_segment_dip = get_last_segment_dip(well=well, interpretation=endless_interpretation)
-
-    assert fabs(last_segment_dip - ei_last_segment_dip) < DELTA
+    assert fabs(last_segment_dip - ei_last_segment_dip) < DELTA_EI_DIP

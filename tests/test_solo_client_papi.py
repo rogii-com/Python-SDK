@@ -36,7 +36,7 @@ from tests.papi_data import (
     TRACE_NAME,
     START_DATETIME,
     END_DATETIME,
-    ENDLESS_INTERPRETATION_NAME
+    EI_LAST_SEGMENT_EXTENDED_NAME
 )
 
 
@@ -671,40 +671,13 @@ def test_get_time_trace(project_papi):
     assert time_trace_df['meta'].at[0, 'name'] == TRACE_NAME
 
 
-def test_endless_interpretation_shifts(project_papi):
-    well = project_papi.wells.find_by_name(WELL_NAME)
-
-    assert well is not None
-
-    interpretation = well.starred_interpretation
-    endless_interpretation = well.interpretations.find_by_name(ENDLESS_INTERPRETATION_NAME)
-
-    assert interpretation is not None
-    assert endless_interpretation is not None
-
-    interpretation_data = interpretation.to_dict()
-    endless_interpretation_data = endless_interpretation.to_dict()
-
-    last_segment = interpretation_data['segments'][-1]
-    last_segment_horizon_shifts = list(last_segment['horizon_shifts'].values())
-
-    ei_last_segment = endless_interpretation_data['segments'][-1]
-    ei_last_segment_horizon_shifts = list(ei_last_segment['horizon_shifts'].values())
-
-    assert last_segment['md'] == ei_last_segment['md']
-
-    for idx, horizon_shift in enumerate(last_segment_horizon_shifts):
-        assert fabs(horizon_shift['start'] - ei_last_segment_horizon_shifts[idx]['start']) < DELTA
-        assert fabs(horizon_shift['end'] - ei_last_segment_horizon_shifts[idx]['end']) < DELTA
-
-
 def test_endless_interpretation_dips(project_papi):
     well = project_papi.wells.find_by_name(WELL_NAME)
 
     assert well is not None
 
     interpretation = well.starred_interpretation
-    endless_interpretation = well.interpretations.find_by_name(ENDLESS_INTERPRETATION_NAME)
+    endless_interpretation = well.interpretations.find_by_name(EI_LAST_SEGMENT_EXTENDED_NAME)
 
     assert interpretation is not None
     assert endless_interpretation is not None
