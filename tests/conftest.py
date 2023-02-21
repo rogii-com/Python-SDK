@@ -33,7 +33,8 @@ from tests.papi_data import (
     EI_LAST_SEGMENT_OUT_ID,
     EI_LAST_SEGMENT_OUT_ASSEMBLED_SEGMENTS_DATA_RESPONSE,
     EI_ALL_SEGMENTS_OUT_ID,
-    EI_ALL_SEGMENTS_OUT_ASSEMBLED_SEGMENTS_DATA_RESPONSE
+    EI_ALL_SEGMENTS_OUT_ASSEMBLED_SEGMENTS_DATA_RESPONSE,
+    WELL_LINKED_TYPEWELLS_DATA_RESPONSE,
 )
 
 
@@ -139,6 +140,9 @@ def fetch_well_mapped_traces(**kwargs):
 def fetch_well_time_trace(**kwargs):
     return TIME_TRACE_DATA_RESPONSE['content']
 
+def fetch_well_linked_typewells(**kwargs):
+    return WELL_LINKED_TYPEWELLS_DATA_RESPONSE
+
 
 @pytest.fixture(scope='function')
 def solo_client():
@@ -168,6 +172,7 @@ def solo_client():
     solo_client._papi_client.fetch_traces = fetch_traces
     solo_client._papi_client.fetch_well_mapped_traces = fetch_well_mapped_traces
     solo_client._papi_client.fetch_well_time_trace = fetch_well_time_trace
+    solo_client._papi_client.fetch_well_linked_typewells = fetch_well_linked_typewells
 
     return solo_client
 

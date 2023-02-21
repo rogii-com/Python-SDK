@@ -57,6 +57,7 @@ STARRED_NESTED_WELL_ID = uuid4()
 
 LOG_NAME = 'GR'
 
+TYPEWELL_ID = uuid4()
 TYPEWELL_NAME = 'Typewell'
 TYPEWELL_XSRF = 500000.0
 TYPEWELL_YSRF = 600000.0
@@ -2201,7 +2202,7 @@ HORIZONS_TVT_DATA_RESPONSE = {
 TYPEWELLS_DATA_RESPONSE = {
     'content': [
         {
-            'uuid': 'fc1e3e0c-12ed-4cc6-adcf-6a14dc3db7ae',
+            'uuid': TYPEWELL_ID,
             'name': TYPEWELL_NAME,
             'api': 'Typewell API',
             'xsrf': {
@@ -3453,4 +3454,20 @@ EI_ALL_SEGMENTS_OUT_ASSEMBLED_SEGMENTS_DATA_RESPONSE = {
             }
         ]
     }
+}
+
+WELL_LINKED_TYPEWELLS_DATA_RESPONSE = {
+    'content': [
+        {
+            "shift": {
+                "val": 123.0
+            },
+            "typewell_id": TYPEWELL_ID
+        }
+    ],
+    'offset': 0,
+    'limit': 100,
+    'total': 1,
+    'first': True,
+    'last': True
 }

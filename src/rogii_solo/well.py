@@ -71,6 +71,9 @@ class Well(ComplexObject):
         self._time_traces_data: Optional[DataList] = None
         self._time_traces: Optional[ObjectRepository[TimeTrace]] = None
 
+        self._linked_typewells_data: Optional[DataList] = None
+        self._linked_typewells: Optional[ObjectRepository[Typewell]] = None
+
     def to_dict(self, get_converted: bool = True) -> Dict[str, Any]:
         measure_units = self.project.measure_unit
 
@@ -194,6 +197,42 @@ class Well(ComplexObject):
             self._nested_wells_data = self._papi_client.get_well_nested_wells_data(well_id=self.uuid)
 
         return self._nested_wells_data
+
+    @property
+    def linked_typewells(self) -> ObjectRepository['Typewell']:
+        if self._linked_typewells is None:
+            self._linked_typewells = ObjectRepository(
+                objects=[
+                    Typewell(papi_client=self._papi_client, project=self.project, **item)
+                    for item in self._get_linked_typewells_data()
+                ]
+            )
+
+        return self._linked_typewells
+
+    def _get_linked_typewells_data(self) -> DataList:
+        if self._linked_typewells_data is None:
+            self._linked_typewells_data = []
+            project_typewells_data = self._papi_client.get_project_typewells_data(project_id=self.project.uuid)
+            linked_typewells_data = self._papi_client.get_well_linked_typewells_data(well_id=self.uuid)
+
+            def get_shift(typewell_id: str, typewells_data: DataList) -> Optional[float]:
+                for typewell_data in typewells_data:
+                    if typewell_data['typewell_id'] == typewell_id:
+                        return typewell_data['shift']
+
+            for typewell_data in project_typewells_data:
+                shift = get_shift(typewell_id=typewell_data['uuid'], typewells_data=linked_typewells_data)
+
+                if shift is not None:
+                    self._linked_typewells_data.append(
+                        {
+                            **typewell_data,
+                            'shift': shift
+                        }
+                    )
+
+        return self._linked_typewells_data
 
     @property
     def starred_nested_well(self) -> Optional['NestedWell']:
@@ -591,6 +630,7 @@ class Typewell(ComplexObject):
         self.tie_in_ns = None
         self.tie_in_ew = None
         self.starred = None
+        self.shift = None
 
         self.__dict__.update(kwargs)
 
@@ -643,6 +683,10 @@ class Typewell(ComplexObject):
                 value=self.tie_in_ew,
                 measure_units=measure_units
             ) if get_converted else self.tie_in_ew,
+            'shift': self.convert_z(
+                value=self.shift,
+                measure_units=measure_units
+            ) if get_converted else self.shift,
         }
 
     def to_df(self, get_converted: bool = True) -> DataFrame:
