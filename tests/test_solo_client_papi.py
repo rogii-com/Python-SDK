@@ -780,3 +780,15 @@ def test_create_typewell(project_papi):
     assert typewell.tie_in_ew == typewell_data['tie_in_ew']
     assert typewell.xsrf_real == typewell_data['xsrf_real']
     assert typewell.ysrf_real == typewell_data['ysrf_real']
+
+
+def test_get_well_linked_typewells(project_papi):
+    well = project_papi.wells.find_by_name(WELL_NAME)
+    typewell = project_papi.typewells.find_by_name(TYPEWELL_NAME)
+
+    assert well is not None
+    assert typewell is not None
+
+    linked_typewells = well.linked_typewells.to_dict()
+
+    assert linked_typewells[0]['uuid'] == typewell.uuid

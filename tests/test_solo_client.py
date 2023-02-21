@@ -410,6 +410,18 @@ def test_get_time_trace(project):
     assert time_trace_df['meta'].at[0, 'name'] == TRACE_NAME
 
 
+def test_get_well_linked_typewells(project):
+    well = project.wells.find_by_name(WELL_NAME)
+    typewell = project.typewells.find_by_name(TYPEWELL_NAME)
+
+    assert well is not None
+    assert typewell is not None
+
+    linked_typewells = well.linked_typewells.to_dict()
+
+    assert linked_typewells[0]['uuid'] == typewell.uuid
+
+
 def test_ei_last_segment_extended(project):
     well = project.wells.find_by_name(WELL_NAME)
 
