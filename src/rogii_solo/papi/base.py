@@ -958,7 +958,7 @@ class PapiClient(BasePapiClient):
     def fetch_well_time_trace(self,
                               well_id: str,
                               trace_id: str,
-                              time_from: str,
+                              time_from: Optional[str] = None,
                               time_to: Optional[str] = None,
                               trace_hash: Optional[str] = None,
                               headers: Optional[Dict] = None

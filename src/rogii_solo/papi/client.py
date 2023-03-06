@@ -283,12 +283,10 @@ class PapiClient(SdkPapiClient):
     def get_well_time_trace_data(self,
                                  well_id: str,
                                  trace_id: str,
-                                 time_from: str,
                                  **kwargs) -> PapiDataList:
         return self.fetch_well_time_trace(
             well_id=well_id,
             trace_id=trace_id,
-            time_from=time_from,
             **kwargs
         )
 

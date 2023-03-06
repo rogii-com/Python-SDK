@@ -1,4 +1,4 @@
-from typing import Any, Dict
+from typing import Dict
 
 from pandas import DataFrame
 
@@ -17,7 +17,7 @@ class Trace(ComplexObject):
 
         self.__dict__.update(kwargs)
 
-    def to_dict(self, *args, **kwargs) -> Dict[str, Any]:
+    def to_dict(self, *args, **kwargs) -> Dict:
         return self._get_data()
 
     def to_df(self, *args, **kwargs) -> TraceType:
@@ -47,13 +47,15 @@ class TimeTrace(Trace):
         self.well = well
         self.hash = None
         self.unit = None
+        self.start_date_time_index = None
+        self.last_date_time_index = None
 
         self.__dict__.update(kwargs)
 
-    def to_dict(self, time_from: str, time_to: str) -> Dict[str, Any]:
+    def to_dict(self, time_from: str = None, time_to: str = None) -> Dict:
         return self._get_data(time_from=time_from, time_to=time_to)
 
-    def to_df(self, time_from: str, time_to: str) -> TraceType:
+    def to_df(self, time_from: str = None, time_to: str = None) -> TraceType:
         data = self._get_data(time_from=time_from, time_to=time_to)
 
         return {
@@ -61,12 +63,20 @@ class TimeTrace(Trace):
             'points': DataFrame(data['points']),
         }
 
-    def _get_data(self, time_from: str, time_to: str):
+    def _get_data(self, time_from: str = None, time_to: str = None):
+        if time_from is None:
+            time_from = self.start_date_time_index
+
+        if time_to is None:
+            time_to = self.last_date_time_index
+
         meta = {
             'uuid': self.uuid,
             'name': self.name,
             'hash': self.hash,
-            'unit': self.unit
+            'unit': self.unit,
+            'start_date_time_index': self.start_date_time_index,
+            'last_date_time_index': self.last_date_time_index
         }
         points = self._get_points(time_from=time_from, time_to=time_to)
 
@@ -76,9 +86,6 @@ class TimeTrace(Trace):
         }
 
     def _get_points(self, time_from: str, time_to: str):
-        if time_from is None or time_to is None:
-            return []
-
         return self._papi_client.get_well_time_trace_data(
             well_id=self.well.uuid,
             trace_id=self.uuid,

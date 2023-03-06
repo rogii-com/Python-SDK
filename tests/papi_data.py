@@ -2698,58 +2698,35 @@ MAPPED_TRACES_DATA_RESPONSE = {
     'content': [
         {
             'uuid': '793b06f6-d494-45e0-9ed8-b5e8e916a2a8',
+            'name': 'Bit depth',
             'hash': 'bd9863171705c3a0bf3e334cdcfcb85d',
-            'unit': ''
+            'unit': '',
+            'start_date_time_index': '2020-09-01T10:00:00Z',
+            'last_date_time_index':  '2020-09-13T10:53:19Z'
         },
         {
             'uuid': '11b379f9-184b-465a-beb8-7307c7b4b1d9',
+            'name': 'Hole Depth',
             'hash': 'bdf8d4fbfc4a9238a0a77077fc8c7e89',
-            'unit': 'm'
+            'unit': 'm',
+            'start_date_time_index': '2020-09-01T10:00:00Z',
+            'last_date_time_index':  '2020-09-13T10:53:19Z'
         },
         {
             'uuid': '491c2160-c65b-4ca0-afa9-7514fc6f7c56',
+            'name': 'Block position',
             'hash': '1afd16706047b52fae650a4c90c5e212',
-            'unit': 'm'
+            'unit': 'm',
+            'start_date_time_index': '2020-09-01T10:00:00Z',
+            'last_date_time_index': '2020-09-13T10:53:19Z'
         },
         {
             'uuid': '8752123d-d270-4eb6-b132-ba0f3e0d83b8',
+            'name': 'Hookload',
             'hash': '68e05d9c28dc1440d606cd2ea421e822',
-            'unit': ''
-        },
-        {
-            'uuid': '8752123d-d270-4eb6-b132-ba0f3e0d83b8',
-            'hash': 'f057732b91f6c397cfe98f4233f882fd',
-            'unit': ''
-        },
-        {
-            'uuid': 'c908bc68-0e9b-4368-a2be-97b48cbd5440',
-            'hash': '62c94c73d18fa1dab139a63fadd6cda2',
-            'unit': ''
-        },
-        {
-            'uuid': '2b2ad244-f208-4bb9-9b7c-6bbde9483635',
-            'hash': '9ffabe39ac818d9a5452710039cd0044',
-            'unit': ''
-        },
-        {
-            'uuid': '77c1bd4d-0fc1-470f-a24c-e28a5dd4c5fc',
-            'hash': '10d2ef4b350e8321309310af6aaab08c',
-            'unit': ''
-        },
-        {
-            'uuid': '0a745541-0a23-45be-870d-9fdd8a1849c6',
-            'hash': '8046e97e52a04a93f3401c5afcd06340',
-            'unit': ''
-        },
-        {
-            'uuid': '9f7ed05c-66cd-441c-855d-a4aec51b33e2',
-            'hash': 'd0419aeed61716dda7a784e237fa0323',
-            'unit': ''
-        },
-        {
-            'uuid': '98bce1cd-fda0-41dd-8d04-e6020dd6e3e1',
-            'hash': '7fd89649a07b54b842712965799b7d99',
-            'unit': ''
+            'unit': '',
+            'start_date_time_index': '2020-09-01T10:00:00Z',
+            'last_date_time_index': '2020-09-13T10:53:19Z'
         }
     ]
 }
