@@ -1,6 +1,5 @@
 from datetime import datetime
 from math import fabs
-import random
 import pytest
 import random
 from typing import Any
@@ -660,8 +659,8 @@ def test_get_time_trace(project_papi):
 
     start_datetime_tz = convert_to_datetime_tz(START_DATETIME)
     end_datetime_tz = convert_to_datetime_tz(END_DATETIME)
-    time_trace_data = time_trace.to_dict(start_datetime_tz, end_datetime_tz)
-    time_trace_df = time_trace.to_df(start_datetime_tz, end_datetime_tz)
+    time_trace_data = time_trace.to_dict(time_from=start_datetime_tz, time_to=end_datetime_tz)
+    time_trace_df = time_trace.to_df(time_from=start_datetime_tz, time_to=end_datetime_tz)
 
     assert time_trace_data['meta']['name'] == TRACE_NAME
 

@@ -5,7 +5,6 @@ from pandas import DataFrame
 import rogii_solo.project
 from rogii_solo.base import ComplexObject, ObjectRepository
 from rogii_solo.calculations.enums import ELogMeasureUnits
-from rogii_solo.exceptions import TraceNotFoundException
 from rogii_solo.interpretation import Interpretation
 from rogii_solo.log import Log
 from rogii_solo.mudlog import Mudlog
@@ -303,35 +302,15 @@ class Well(ComplexObject):
     def time_traces(self) -> ObjectRepository[TimeTrace]:
         if self._time_traces is None:
             mapped_traces = self._get_time_traces_data()
-            named_traces = []
-
-            for mapped_trace in mapped_traces:
-                try:
-                    name = self._get_trace_name(mapped_trace['uuid'])
-                except TraceNotFoundException:
-                    name = 'Unknown trace'
-                named_traces.append({
-                    **mapped_trace,
-                    'name': name
-                })
 
             self._time_traces = ObjectRepository(
                 objects=[
                     TimeTrace(papi_client=self._papi_client, well=self, **item)
-                    for item in named_traces
+                    for item in mapped_traces
                 ]
             )
 
         return self._time_traces
-
-    def _get_trace_name(self, trace_id: str):
-        traces = self._papi_client.get_traces()
-
-        for trace in traces:
-            if trace['uuid'] == trace_id:
-                return trace['name']
-
-        raise TraceNotFoundException(f'Trace with id={trace_id} not found.')
 
     def _get_time_traces_data(self) -> DataList:
         if self._time_traces_data is None:
