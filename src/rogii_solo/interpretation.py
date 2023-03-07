@@ -252,6 +252,7 @@ class Interpretation(ComplexObject):
             )
 
         return Segment(
+            uuid=left['uuid'],
             md=left['md'],
             x=left['x'],
             y=left['y'],
