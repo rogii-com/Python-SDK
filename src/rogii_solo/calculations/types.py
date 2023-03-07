@@ -40,6 +40,7 @@ class HorizonShift(TypedDict):
 
 
 class Segment(TypedDict):
+    uuid: str
     md: float
     vs: Optional[float]
     start: Optional[float]
