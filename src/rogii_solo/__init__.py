@@ -1,4 +1,4 @@
-__version__ = '0.2.0'  # Must be at the top of module
+__version__ = '0.4.0'  # Must be at the top of module
 
 from rogii_solo.client import SoloClient
 

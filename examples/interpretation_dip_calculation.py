@@ -11,7 +11,7 @@ from rogii_solo.calculations.trajectory import calculate_trajectory
 PROJECT_NAME = 'Global project'
 WELL_NAME = 'Lateral'
 INTERPRETATION_NAME = 'Interpretation'
-MEASURE_UNITS = EMeasureUnits.METER_FOOT
+MEASURE_UNITS = EMeasureUnits.METER
 
 
 def calc_interpretation_dip():

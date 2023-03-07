@@ -3,7 +3,7 @@ from typing import Optional
 from rogii_solo.base import ObjectRepository
 from rogii_solo.exceptions import InvalidProjectException, ProjectNotFoundException
 from rogii_solo.papi.client import PapiClient
-from rogii_solo.papi.types import SettingsAuth
+from rogii_solo.papi.types import ProxyData, SettingsAuth
 from rogii_solo.project import Project
 from rogii_solo.types import DataList
 from rogii_solo.utils.constants import SOLO_PAPI_DEFAULT_DOMAIN_NAME
@@ -16,13 +16,15 @@ class SoloClient:
     def __init__(self,
                  client_id: str,
                  client_secret: str,
-                 papi_domain_name: str = SOLO_PAPI_DEFAULT_DOMAIN_NAME
+                 papi_domain_name: str = SOLO_PAPI_DEFAULT_DOMAIN_NAME,
+                 proxies: Optional[ProxyData] = None
                  ):
         self._papi_client = PapiClient(
             SettingsAuth(
                 client_id=client_id,
                 client_secret=client_secret,
-                papi_domain_name=papi_domain_name
+                papi_domain_name=papi_domain_name,
+                proxies=proxies
             )
         )
 
@@ -48,27 +50,29 @@ class SoloClient:
 
         return self._projects_data
 
-    def set_project_by_id(self, project_id: str):
+    def set_project_by_id(self, project_id: str) -> Optional[Project]:
         project = self.projects.find_by_id(project_id)
 
         if project is None:
             raise ProjectNotFoundException('Project not found.')
 
-        self.set_project(project)
+        return self.set_project(project)
 
-    def set_project_by_name(self, project_name: str):
+    def set_project_by_name(self, project_name: str) -> Optional[Project]:
         project = self.projects.find_by_name(project_name)
 
         if project is None:
             raise ProjectNotFoundException('Project not found.')
 
-        self.set_project(project)
+        return self.set_project(project)
 
-    def set_project(self, project: Project):
+    def set_project(self, project: Project) -> Optional[Project]:
         if not isinstance(project, Project):
             raise InvalidProjectException('Must be the "Project" instance.')
 
         self.project = project
+
+        return self.project
 
     def replace_nested_well_trajectory(self,
                                        nested_well_id: str,

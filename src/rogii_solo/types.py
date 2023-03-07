@@ -19,3 +19,8 @@ class Horizon(TypedDict):
 class Log(TypedDict):
     meta: DataFrame
     points: DataFrame
+
+
+class Trace(TypedDict):
+    meta: DataFrame
+    points: DataFrame

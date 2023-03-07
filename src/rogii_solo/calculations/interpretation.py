@@ -11,7 +11,7 @@ from rogii_solo.calculations.base import (
 )
 from rogii_solo.calculations.constants import DELTA
 from rogii_solo.calculations.enums import EMeasureUnits
-from rogii_solo.calculations.trajectory import interpolate_trajectory_point
+from rogii_solo.calculations.trajectory import calculate_trajectory, interpolate_trajectory_point
 from rogii_solo.calculations.types import (
     AssembledHorizons,
     Segment,
@@ -23,12 +23,11 @@ from rogii_solo.calculations.types import (
 from rogii_solo.papi.types import PapiAssembledSegments
 
 
-def get_segments(
-        well: Dict[str, Any],
-        calculated_trajectory: Trajectory,
-        assembled_segments: PapiAssembledSegments,
-        measure_units: EMeasureUnits
-) -> List[Segment]:
+def get_segments(well: Dict[str, Any],
+                 calculated_trajectory: Trajectory,
+                 assembled_segments: PapiAssembledSegments,
+                 measure_units: EMeasureUnits
+                 ) -> List[Segment]:
     segments = []
     mds, mds_map = [], {}
 
@@ -65,7 +64,10 @@ def get_segments(
             vs=interpolated_point['vs'],
             start=assembled_segment['start'],
             end=assembled_segment['end'],
+            x=interpolated_point['x'],
+            y=interpolated_point['y'],
             horizon_shifts=assembled_segment['horizon_shifts'],
+            boundary_type=assembled_segment['boundary_type'],
         ))
 
     last_trajectory_point = calculated_trajectory[-1]
@@ -74,16 +76,16 @@ def get_segments(
         vs=last_trajectory_point['vs'],
         start=None,
         end=None,
+        x=last_trajectory_point['x'],
+        y=last_trajectory_point['y'],
         horizon_shifts=segments[-1]['horizon_shifts'],
+        boundary_type=segments[-1]['boundary_type'],
     ))
 
     return segments
 
 
-def get_segments_with_dip(
-        segments: List[Segment],
-        assembled_horizons: AssembledHorizons
-) -> List[SegmentWithDip]:
+def get_segments_with_dip(segments: List[Segment], assembled_horizons: AssembledHorizons) -> List[SegmentWithDip]:
     segments_with_dip = [
         SegmentWithDip(**segment, dip=None) for segment in segments
     ]
@@ -179,6 +181,27 @@ def get_segments_boundaries(assembled_segments: List[Segment], calculated_trajec
         )
 
     return segments_boundaries
+
+
+def get_last_segment_dip(well: Any, assembled_segments: Any, measure_units: EMeasureUnits):
+    well_data = well.to_dict(get_converted=False)
+    calculated_trajectory = calculate_trajectory(
+        raw_trajectory=well.trajectory.to_dict(get_converted=False),
+        well=well_data,
+        measure_units=measure_units
+    )
+    segments = get_segments(
+        well=well_data,
+        assembled_segments=assembled_segments['segments'],
+        calculated_trajectory=calculated_trajectory,
+        measure_units=measure_units
+    )
+    segments_with_dip = get_segments_with_dip(
+        segments=segments,
+        assembled_horizons=assembled_segments['horizons']
+    )
+
+    return segments_with_dip[-1]['dip']
 
 
 def interpolate_horizon(segments_boundaries: SegmentsBoundaries, horizon_uuid: str, horizon_tvd: float):

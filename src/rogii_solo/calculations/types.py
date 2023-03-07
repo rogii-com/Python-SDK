@@ -40,11 +40,15 @@ class HorizonShift(TypedDict):
 
 
 class Segment(TypedDict):
+    uuid: str
     md: float
-    vs: float
+    vs: Optional[float]
     start: Optional[float]
     end: Optional[float]
+    x: float
+    y: float
     horizon_shifts: Dict[str, HorizonShift]
+    boundary_type: int
 
 
 class SegmentWithDip(Segment):

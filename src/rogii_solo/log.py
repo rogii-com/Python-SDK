@@ -1,4 +1,4 @@
-from typing import Any, Dict
+from typing import Any, Dict, Union
 
 from pandas import DataFrame
 
@@ -7,9 +7,14 @@ from rogii_solo.base import ComplexObject
 from rogii_solo.papi.client import PapiClient
 from rogii_solo.types import Log as LogType
 
+WellType = Union[
+    'rogii_solo.well.Well',
+    'rogii_solo.well.Typewell'
+]
+
 
 class Log(ComplexObject):
-    def __init__(self, papi_client: PapiClient, well: 'rogii_solo.well.Well', **kwargs):
+    def __init__(self, papi_client: PapiClient, well: WellType, **kwargs):
         super().__init__(papi_client)
 
         self.well = well
