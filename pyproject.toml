@@ -24,11 +24,12 @@ keywords = [
     "drilling",
     "geosteering"
 ]
-requires-python = "==3.10.*"
+requires-python = ">=3.10.*"
 
 classifiers = [
     "Programming Language :: Python :: 3 :: Only",
     "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
     "License :: Other/Proprietary License",
     "Operating System :: OS Independent",
     "Development Status :: 4 - Beta",
