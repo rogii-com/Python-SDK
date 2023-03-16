@@ -33,7 +33,9 @@ from tests.papi_data import (
     END_DATETIME,
     EI_LAST_SEGMENT_EXTENDED_ID,
     EI_LAST_SEGMENT_OUT_ID,
-    EI_ALL_SEGMENTS_OUT_ID
+    EI_ALL_SEGMENTS_OUT_ID,
+    EI_ABSENT_HORIZONS_LAST_SEGMENT_OUT_ID,
+    INTERPRETATION_ABSENT_HORIZONS_ID,
 )
 
 DELTA_EI_DIP = 0.001
@@ -455,6 +457,25 @@ def test_ei_last_segment_out(project):
     _test_ei_case(
         well=well,
         interpretation=interpretation,
+        endless_interpretation=endless_interpretation,
+        measure_units=project.measure_unit
+    )
+
+
+def test_ei_absent_horizons_last_segment_out(project):
+    well = project.wells.find_by_name(WELL_NAME)
+
+    assert well is not None
+
+    absent_horizons_interpretation = well.interpretations.find_by_id(INTERPRETATION_ABSENT_HORIZONS_ID)
+    endless_interpretation = well.interpretations.find_by_id(EI_ABSENT_HORIZONS_LAST_SEGMENT_OUT_ID)
+
+    assert absent_horizons_interpretation is not None
+    assert endless_interpretation is not None
+
+    _test_ei_case(
+        well=well,
+        interpretation=absent_horizons_interpretation,
         endless_interpretation=endless_interpretation,
         measure_units=project.measure_unit
     )

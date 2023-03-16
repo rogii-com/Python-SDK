@@ -215,7 +215,7 @@ class Interpretation(ComplexObject):
                           right: Segment,
                           well: Dict[str, Any],
                           trajectory: DataList,
-                          measure_units: EMeasureUnits,
+                          measure_units: EMeasureUnits
                           ) -> Segment:
         new_shifts = {}
         segment_vs_length = calc_segment_vs_length(
@@ -240,9 +240,14 @@ class Interpretation(ComplexObject):
         left_point_vs = left_point['vs']
         right_point_vs = trajectory[-1]['vs']
 
+        truncated_segment_vs_length = fabs(right_point_vs - left_point_vs)
+        truncated_segment_height = left['end'] - left['start']
+        truncated_segment_new_end = (
+            truncated_segment_height * truncated_segment_vs_length / segment_vs_length + left['start']
+        )
+
         for uuid, horizons_shift in left['horizon_shifts'].items():
             shift_height = horizons_shift['end'] - horizons_shift['start']
-            truncated_segment_vs_length = fabs(right_point_vs - left_point_vs)
             shift_new_end = shift_height * truncated_segment_vs_length / segment_vs_length + horizons_shift['start']
 
             new_shifts[uuid] = HorizonShift(
@@ -259,6 +264,6 @@ class Interpretation(ComplexObject):
             vs=left_point_vs,
             boundary_type=left['boundary_type'],
             start=left['start'],
-            end=left['end'],
+            end=truncated_segment_new_end,
             horizon_shifts=new_shifts
         )
