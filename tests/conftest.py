@@ -35,6 +35,11 @@ from tests.papi_data import (
     EI_ALL_SEGMENTS_OUT_ID,
     EI_ALL_SEGMENTS_OUT_ASSEMBLED_SEGMENTS_DATA_RESPONSE,
     WELL_LINKED_TYPEWELLS_DATA_RESPONSE,
+    EI_ABSENT_HORIZONS_LAST_SEGMENT_OUT_ID,
+    EI_ABSENT_HORIZONS_LAST_SEGMENT_OUT_ASSEMBLED_SEGMENTS_DATA_RESPONSE,
+    ABSENT_HORIZONS_DATA_RESPONSE,
+    INTERPRETATION_ABSENT_HORIZONS_ID,
+    ASSEMBLED_SEGMENTS_ABSENT_HORIZONS_DATA_RESPONSE,
 )
 
 
@@ -59,6 +64,11 @@ def fetch_well_raw_interpretations(**kwargs):
 
 
 def fetch_interpretation_horizons(**kwargs):
+    if kwargs['interpretation_id'] == EI_ABSENT_HORIZONS_LAST_SEGMENT_OUT_ID:
+        return ABSENT_HORIZONS_DATA_RESPONSE
+    elif kwargs['interpretation_id'] == INTERPRETATION_ABSENT_HORIZONS_ID:
+        return ABSENT_HORIZONS_DATA_RESPONSE
+
     return HORIZONS_DATA_RESPONSE
 
 
@@ -69,6 +79,10 @@ def fetch_interpretation_assembled_segments(**kwargs):
         return EI_LAST_SEGMENT_OUT_ASSEMBLED_SEGMENTS_DATA_RESPONSE['assembled_segments']
     elif kwargs['interpretation_id'] == EI_ALL_SEGMENTS_OUT_ID:
         return EI_ALL_SEGMENTS_OUT_ASSEMBLED_SEGMENTS_DATA_RESPONSE['assembled_segments']
+    elif kwargs['interpretation_id'] == EI_ABSENT_HORIZONS_LAST_SEGMENT_OUT_ID:
+        return EI_ABSENT_HORIZONS_LAST_SEGMENT_OUT_ASSEMBLED_SEGMENTS_DATA_RESPONSE['assembled_segments']
+    elif kwargs['interpretation_id'] == INTERPRETATION_ABSENT_HORIZONS_ID:
+        return ASSEMBLED_SEGMENTS_ABSENT_HORIZONS_DATA_RESPONSE['assembled_segments']
 
     return ASSEMBLED_SEGMENTS_DATA_RESPONSE['assembled_segments']
 
@@ -139,6 +153,7 @@ def fetch_well_mapped_traces(**kwargs):
 
 def fetch_well_time_trace(**kwargs):
     return TIME_TRACE_DATA_RESPONSE['content']
+
 
 def fetch_well_linked_typewells(**kwargs):
     return WELL_LINKED_TYPEWELLS_DATA_RESPONSE

@@ -22,6 +22,9 @@ EI_LAST_SEGMENT_EXTENDED_ID = uuid4()
 EI_LAST_SEGMENT_OUT_NAME = 'EI Last Segment Out Of Trajectory'
 EI_LAST_SEGMENT_OUT_ID = uuid4()
 
+EI_ABSENT_HORIZONS_LAST_SEGMENT_OUT_NAME = 'EI Absent Horizons Last Segment Out Of Trajectory'
+EI_ABSENT_HORIZONS_LAST_SEGMENT_OUT_ID = uuid4()
+
 EI_ALL_SEGMENTS_OUT_NAME = 'EI All Segments Out Of Trajectory'
 EI_ALL_SEGMENTS_OUT_ID = uuid4()
 
@@ -33,6 +36,9 @@ INTERPRETATION_NAME = 'Interpretation'
 
 STARRED_INTERPRETATION_NAME = 'Starred Interpretation'
 STARRED_INTERPRETATION_ID = uuid4()
+
+INTERPRETATION_ABSENT_HORIZONS_NAME = 'Interpretation Without Horizons'
+INTERPRETATION_ABSENT_HORIZONS_ID = uuid4()
 
 HORIZON_NAME = 'Horizon'
 HORIZON_ID = uuid4()
@@ -354,6 +360,60 @@ INTERPRETATIONS_DATA_RESPONSE = {
             'format': 'v2',
         },
         {
+            'uuid': EI_ABSENT_HORIZONS_LAST_SEGMENT_OUT_ID,
+            'name': EI_ABSENT_HORIZONS_LAST_SEGMENT_OUT_NAME,
+            'properties': {
+                'cutoff': {
+                    'val': 0
+                },
+                'palette': 10,
+                'lightness': 0,
+                'transparency': 0,
+                'typelogFillUuid': '39980ce2-2961-4a35-8baf-8941e9b0169a',
+                'extensionGridUuid': '00000000-0000-0000-0000-000000000000',
+                'faultLabelVisible': True,
+                'reverse_extension': False,
+                'zero_horizon_uuid': '00000000-0000-0000-0000-000000000000',
+                'coloredLogsVisible': True,
+                'boundaryPointsColor': '#ffa5a5a5',
+                'interpretationExtend': {
+                    'val': 0
+                },
+                'boundaryPointsVisible': True,
+                'display_hidden_segment': True
+            },
+            'owner': 4,
+            'mode': 'PUBLIC',
+            'format': 'v2',
+        },
+        {
+            'uuid': INTERPRETATION_ABSENT_HORIZONS_ID,
+            'name': INTERPRETATION_ABSENT_HORIZONS_NAME,
+            'properties': {
+                'cutoff': {
+                    'val': 0
+                },
+                'palette': 10,
+                'lightness': 0,
+                'transparency': 0,
+                'typelogFillUuid': '19389162-0b8b-4df3-a373-90a2ba12a307',
+                'extensionGridUuid': '00000000-0000-0000-0000-000000000000',
+                'faultLabelVisible': True,
+                'reverse_extension': False,
+                'zero_horizon_uuid': '00000000-0000-0000-0000-000000000000',
+                'coloredLogsVisible': True,
+                'boundaryPointsColor': '#ffa5a5a5',
+                'interpretationExtend': {
+                    'val': 0
+                },
+                'boundaryPointsVisible': True,
+                'display_hidden_segment': True
+            },
+            'owner': 3,
+            'mode': 'PUBLIC',
+            'format': None,
+        },
+        {
             'uuid': EI_LAST_SEGMENT_OUT_ID,
             'name': EI_LAST_SEGMENT_OUT_NAME,
             'properties': {
@@ -410,7 +470,7 @@ INTERPRETATIONS_DATA_RESPONSE = {
     ],
     'offset': 0,
     'limit': 100,
-    'total': 6,
+    'total': 8,
     'first': True,
     'last': True
 }
@@ -433,6 +493,15 @@ HORIZONS_DATA_RESPONSE = {
     'offset': 0,
     'limit': 100,
     'total': 3,
+    'first': True,
+    'last': True
+}
+
+ABSENT_HORIZONS_DATA_RESPONSE = {
+    'content': [],
+    'offset': 0,
+    'limit': 100,
+    'total': 0,
     'first': True,
     'last': True
 }
@@ -2911,6 +2980,65 @@ ASSEMBLED_SEGMENTS_DATA_RESPONSE = {
         ]
     }
 }
+
+ASSEMBLED_SEGMENTS_ABSENT_HORIZONS_DATA_RESPONSE = {
+    'assembled_segments': {
+        'horizons': {},
+        'interp_end_md': {
+            'val': 9553.16627586735
+        },
+        'interp_end_x': {
+            'val': 1506.8463116346054
+        },
+        'interp_end_y': {
+            'val': -1064.5840083926553
+        },
+        'linked_to_trj_end': True,
+        'segments': [
+            {
+                'boundary_type': 1,
+                'end': {
+                    'val': 0
+                },
+                'horizon_shifts': {},
+                'md': {
+                    'val': 7627.5
+                },
+                'start': {
+                    'val': 0
+                },
+                'uuid': '021eac1c-fa18-479d-a1fe-ceec4446e86f',
+                'x': {
+                    'val': 0
+                },
+                'y': {
+                    'val': 0
+                }
+            },
+            {
+                'boundary_type': 1,
+                'end': {
+                    'val': 0
+                },
+                'horizon_shifts': {},
+                'md': {
+                    'val': 8756.1
+                },
+                'start': {
+                    'val': 0
+                },
+                'uuid': 'd77b1874-a4d6-468b-8102-17086350b634',
+                'x': {
+                    'val': 936.0090093403047
+                },
+                'y': {
+                    'val': -512.7027100919538
+                }
+            }
+        ]
+    }
+}
+
 EI_LAST_SEGMENT_EXTENDED_ASSEMBLED_SEGMENTS_DATA_RESPONSE = {
     'assembled_segments': {
         'horizons': {
@@ -3312,6 +3440,105 @@ EI_LAST_SEGMENT_OUT_ASSEMBLED_SEGMENTS_DATA_RESPONSE = {
                     'val': 0
                 },
                 'uuid': 'ff150e23-d57b-4604-85b0-7a37752d1868',
+                'x': {
+                    'val': 2328.0135891272166
+                },
+                'y': {
+                    'val': -1914.927616987544
+                }
+            }
+        ]
+    }
+}
+
+EI_ABSENT_HORIZONS_LAST_SEGMENT_OUT_ASSEMBLED_SEGMENTS_DATA_RESPONSE = {
+    'assembled_segments': {
+        'horizons': {},
+        'interp_end_md': {
+            'val': 10741.239115452869
+        },
+        'interp_end_x': {
+            'val': 2328.0135891272166
+        },
+        'interp_end_y': {
+            'val': -1914.927616987544
+        },
+        'linked_to_trj_end': False,
+        'segments': [
+            {
+                'boundary_type': 1,
+                'end': {
+                    'val': 0
+                },
+                'horizon_shifts': {},
+                'md': {
+                    'val': 7627.5
+                },
+                'start': {
+                    'val': 0
+                },
+                'uuid': '975a8cee-ac1c-4ce1-9aa6-b7c51131a49a',
+                'x': {
+                    'val': 0
+                },
+                'y': {
+                    'val': 0
+                }
+            },
+            {
+                'boundary_type': 1,
+                'end': {
+                    'val': 0
+                },
+                'horizon_shifts': {},
+                'md': {
+                    'val': 8756.1
+                },
+                'start': {
+                    'val': 0
+                },
+                'uuid': 'b7089fc1-6973-46a5-b1f5-559b219eadd7',
+                'x': {
+                    'val': 936.0090093403047
+                },
+                'y': {
+                    'val': -512.7027100919538
+                }
+            },
+            {
+                'boundary_type': 1,
+                'end': {
+                    'val': 0
+                },
+                'horizon_shifts': {},
+                'md': {
+                    'val': 9553.16627586735
+                },
+                'start': {
+                    'val': 0
+                },
+                'uuid': '9a29ef17-5c48-4d7c-a610-974730472e2f',
+                'x': {
+                    'val': 1506.8463116346054
+                },
+                'y': {
+                    'val': -1064.5840083926553
+                }
+            },
+            {
+                'boundary_type': 1,
+                'end': {
+                    'val': 0
+                },
+                'fake': True,
+                'horizon_shifts': {},
+                'md': {
+                    'val': 10741.239115452869
+                },
+                'start': {
+                    'val': 0
+                },
+                'uuid': '3e890133-2b73-465b-880a-ec74971c11a2',
                 'x': {
                     'val': 2328.0135891272166
                 },
