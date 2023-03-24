@@ -16,7 +16,7 @@ def get_trajectory_dls():
     solo_client = SoloClient(
         client_id=environ.get('ROGII_SOLO_CLIENT_ID'),
         client_secret=environ.get('ROGII_SOLO_CLIENT_SECRET'),
-        papi_domain_name=environ.get('ROGII_SOLO_PAPI_DOMAIN_NAME')
+        papi_domain_name=environ.get('ROGII_SOLO_PAPI_DOMAIN_NAME'),
     )
     solo_client.set_project_by_name(PROJECT_NAME)
 
@@ -29,14 +29,14 @@ def get_trajectory_dls():
     calculated_trajectory = calculate_trajectory(
         raw_trajectory=well.trajectory.to_dict(get_converted=False),
         well=well.to_dict(get_converted=False),
-        measure_units=MEASURE_UNITS
+        measure_units=MEASURE_UNITS,
     )
 
     return [
         {
             'md': trajectory_point['md'],
             'dls': trajectory_point['dls'],
-            'exceeds': trajectory_point['dls'] > DLS_THRESHOLD
+            'exceeds': trajectory_point['dls'] > DLS_THRESHOLD,
         }
         for trajectory_point in calculated_trajectory
     ]

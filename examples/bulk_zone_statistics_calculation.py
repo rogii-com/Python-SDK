@@ -8,7 +8,10 @@ from rogii_solo.calculations.base import calc_hypotenuse_length, get_nearest_val
 from rogii_solo.calculations.converters import feet_to_meters, radians_to_degrees
 from rogii_solo.calculations.enums import EMeasureUnits
 from rogii_solo.calculations.interpretation import get_segments
-from rogii_solo.calculations.trajectory import calculate_trajectory, interpolate_trajectory_point
+from rogii_solo.calculations.trajectory import (
+    calculate_trajectory,
+    interpolate_trajectory_point,
+)
 from rogii_solo.calculations.types import Trajectory, TrajectoryPoint
 from rogii_solo.horizon import Horizon
 from rogii_solo.interpretation import Interpretation
@@ -36,10 +39,9 @@ def get_segment_range(start_md: float, end_md: float, default_segment_step: floa
     return arange(start_md + md_step, end_md + md_step, md_step, dtype=float)
 
 
-def interpolate_trajectory(well_data: Dict[str, Any],
-                           trajectory: Trajectory,
-                           measure_units: EMeasureUnits
-                           ) -> Trajectory:
+def interpolate_trajectory(
+    well_data: Dict[str, Any], trajectory: Trajectory, measure_units: EMeasureUnits
+) -> Trajectory:
     interpolated_trajectory = [trajectory[0]]
     step = feet_to_meters(STEP_LENGTH) if measure_units != EMeasureUnits.METER else STEP_LENGTH
 
@@ -52,18 +54,16 @@ def interpolate_trajectory(well_data: Dict[str, Any],
                 right_point=trajectory[i + 1],
                 md=md,
                 well=well_data,
-                measure_units=EMeasureUnits.METER
+                measure_units=EMeasureUnits.METER,
             )
             interpolated_trajectory.append(interpolated_point)
 
     return interpolated_trajectory
 
 
-def insert_points_in_trajectory(well_data: Dict[str, Any],
-                                trajectory: Trajectory,
-                                point_mds: List[float],
-                                measure_units: EMeasureUnits
-                                ):
+def insert_points_in_trajectory(
+    well_data: Dict[str, Any], trajectory: Trajectory, point_mds: List[float], measure_units: EMeasureUnits
+):
     for point_md in point_mds:
         mds, mds_map = [], {}
 
@@ -71,10 +71,7 @@ def insert_points_in_trajectory(well_data: Dict[str, Any],
             mds.append(point['md'])
             mds_map[point['md']] = i
 
-        nearest_mds = get_nearest_values(
-            value=point_md,
-            input_list=mds
-        )
+        nearest_mds = get_nearest_values(value=point_md, input_list=mds)
 
         left_point_md, right_point_md = nearest_mds
         left_point = trajectory[mds_map[left_point_md]]
@@ -91,9 +88,9 @@ def insert_points_in_trajectory(well_data: Dict[str, Any],
         trajectory.insert(mds_map[right_point_md], interpolated_point)
 
 
-def calculate_segment_vs_tvds(segments: List[Dict[str, Any]],
-                              assembled_segments_data: Dict[str, Any]
-                              ) -> List[Dict[str, Any]]:
+def calculate_segment_vs_tvds(
+    segments: List[Dict[str, Any]], assembled_segments_data: Dict[str, Any]
+) -> List[Dict[str, Any]]:
     for i, segment in enumerate(segments):
         if i < len(segments) - 1:
             segment['end_md'] = segments[i + 1]['md']
@@ -111,20 +108,22 @@ def calculate_segment_vs_tvds(segments: List[Dict[str, Any]],
     return segments
 
 
-def get_horizons_and_landing_md(well: Well,
-                                calculated_trajectory: Any,
-                                top_horizon_name: str,
-                                base_horizon_name: str,
-                                landing_point_topset_name: str,
-                                landing_point_top_name: str
-                                ) -> Tuple[Interpretation, Horizon, Horizon, float]:
+def get_horizons_and_landing_md(
+    well: Well,
+    calculated_trajectory: Any,
+    top_horizon_name: str,
+    base_horizon_name: str,
+    landing_point_topset_name: str,
+    landing_point_top_name: str,
+) -> Tuple[Interpretation, Horizon, Horizon, float]:
     interpretation = well.starred_interpretation
 
     if not interpretation:
         raise Exception(f'Starred interpretation in the well "{well.name}" not found.')
 
     top_horizon = (
-        interpretation.horizons.find_by_name(top_horizon_name) if top_horizon_name
+        interpretation.horizons.find_by_name(top_horizon_name)
+        if top_horizon_name
         else interpretation.starred_horizon_top.name
     )
 
@@ -134,7 +133,8 @@ def get_horizons_and_landing_md(well: Well,
         )
 
     base_horizon = (
-        interpretation.horizons.find_by_name(base_horizon_name) if base_horizon_name
+        interpretation.horizons.find_by_name(base_horizon_name)
+        if base_horizon_name
         else interpretation.starred_horizon_bottom.name
     )
 
@@ -158,24 +158,25 @@ def get_horizons_and_landing_md(well: Well,
     if not landing_md:
         raise Exception(f'Landing point not found for the well "{well.name}".')
 
-    assembled_segments = interpretation.get_assembled_segments_data()['segments']
+    assembled_segments = interpretation.assembled_segments['segments']
     interpretation_start_md = assembled_segments[0]['md']
     landing_md = max(landing_md, interpretation_start_md)
 
     return interpretation, top_horizon, base_horizon, landing_md
 
 
-def in_polygon(point_x: float,
-               point_y: float,
-               top_horizon_start_x: float,
-               top_horizon_start_y: float,
-               top_horizon_end_x: float,
-               top_horizon_end_y: float,
-               base_horizon_start_x: float,
-               base_horizon_start_y: float,
-               base_horizon_end_x: float,
-               base_horizon_end_y: float,
-               ) -> bool:
+def in_polygon(
+    point_x: float,
+    point_y: float,
+    top_horizon_start_x: float,
+    top_horizon_start_y: float,
+    top_horizon_end_x: float,
+    top_horizon_end_y: float,
+    base_horizon_start_x: float,
+    base_horizon_start_y: float,
+    base_horizon_end_x: float,
+    base_horizon_end_y: float,
+) -> bool:
     xp = []
     yp = []
     xp.append(top_horizon_start_x)
@@ -189,19 +190,17 @@ def in_polygon(point_x: float,
     result = 0
 
     for i in range(len(xp)):
-        if (
-            ((yp[i] <= point_y < yp[i - 1]) or (yp[i - 1] <= point_y < yp[i])) and
-            (point_x > (xp[i - 1] - xp[i]) * (point_y - yp[i]) / (yp[i - 1] - yp[i]) + xp[i])
+        if ((yp[i] <= point_y < yp[i - 1]) or (yp[i - 1] <= point_y < yp[i])) and (
+            point_x > (xp[i - 1] - xp[i]) * (point_y - yp[i]) / (yp[i - 1] - yp[i]) + xp[i]
         ):
             result = 1 - result
 
     return bool(result)
 
 
-def is_point_inside_horizons_shifts(point: TrajectoryPoint,
-                                    top_horizon_shift: Dict[str, Any],
-                                    base_horizon_shift: Dict[str, Any]
-                                    ) -> bool:
+def is_point_inside_horizons_shifts(
+    point: TrajectoryPoint, top_horizon_shift: Dict[str, Any], base_horizon_shift: Dict[str, Any]
+) -> bool:
     return in_polygon(
         point_x=point['vs'],
         point_y=point['tvd'],
@@ -216,16 +215,17 @@ def is_point_inside_horizons_shifts(point: TrajectoryPoint,
     )
 
 
-def calculate_lines_intersection(x1: float,
-                                 y1: float,
-                                 x2: float,
-                                 y2: float,
-                                 x3: float,
-                                 y3: float,
-                                 x4: float,
-                                 y4: float,
-                                 find_outside_segment: bool = False,
-                                 ) -> Tuple[Optional[float], Optional[float]]:
+def calculate_lines_intersection(
+    x1: float,
+    y1: float,
+    x2: float,
+    y2: float,
+    x3: float,
+    y3: float,
+    x4: float,
+    y4: float,
+    find_outside_segment: bool = False,
+) -> Tuple[Optional[float], Optional[float]]:
     # Check if none of the lines are of length 0
     if (x1 == x2 and y1 == y2) or (x3 == x4 and y3 == y4):
         return None, None
@@ -250,10 +250,9 @@ def calculate_lines_intersection(x1: float,
     return x, y
 
 
-def calculate_intersection_points_with_horizon(point: TrajectoryPoint,
-                                               right_point: TrajectoryPoint,
-                                               top_horizon: Dict[str, Any]
-                                               ):
+def calculate_intersection_points_with_horizon(
+    point: TrajectoryPoint, right_point: TrajectoryPoint, top_horizon: Dict[str, Any]
+):
     vs, tvd = calculate_lines_intersection(
         point['vs'],
         point['tvd'],
@@ -265,37 +264,30 @@ def calculate_intersection_points_with_horizon(point: TrajectoryPoint,
         top_horizon['end_tvd'],
     )
 
-    return {
-        'vs': vs,
-        'tvd': tvd
-    }
+    return {'vs': vs, 'tvd': tvd}
 
 
 def is_in_segment(segment: Dict[str, Any], left_point: TrajectoryPoint, right_point: TrajectoryPoint) -> bool:
     return (
-            segment['md'] <= left_point['md'] <= segment['end_md']
-            and segment['md'] <= right_point['md'] <= segment['end_md']
+        segment['md'] <= left_point['md'] <= segment['end_md']
+        and segment['md'] <= right_point['md'] <= segment['end_md']
     )
 
 
 def get_length_in_piece(
-                left_point: TrajectoryPoint,
-                right_point: TrajectoryPoint,
-                segment: Dict[str, Any],
-                top_horizon_uuid: str,
-                base_horizon_uuid: str
-            ):
+    left_point: TrajectoryPoint,
+    right_point: TrajectoryPoint,
+    segment: Dict[str, Any],
+    top_horizon_uuid: str,
+    base_horizon_uuid: str,
+):
     top_horizon = segment['horizon_shifts'][top_horizon_uuid]
     base_horizon = segment['horizon_shifts'][base_horizon_uuid]
     left_point_inside = is_point_inside_horizons_shifts(
-        point=left_point,
-        top_horizon_shift=top_horizon,
-        base_horizon_shift=base_horizon
+        point=left_point, top_horizon_shift=top_horizon, base_horizon_shift=base_horizon
     )
     right_point_inside = is_point_inside_horizons_shifts(
-        point=right_point,
-        top_horizon_shift=top_horizon,
-        base_horizon_shift=base_horizon
+        point=right_point, top_horizon_shift=top_horizon, base_horizon_shift=base_horizon
     )
 
     if not left_point_inside and not right_point_inside:
@@ -310,23 +302,11 @@ def get_length_in_piece(
     base_point = calculate_intersection_points_with_horizon(left_point, right_point, base_horizon)
 
     if left_point_inside and not right_point_inside:
-        start_point = (
-            top_point if top_point['vs'] is not None
-            else base_point
-        )
-        end_point = {
-            'vs': left_point['vs'],
-            'tvd': left_point['tvd']
-        }
+        start_point = top_point if top_point['vs'] is not None else base_point
+        end_point = {'vs': left_point['vs'], 'tvd': left_point['tvd']}
     elif not left_point_inside and right_point_inside:
-        start_point = (
-            top_point if top_point['vs'] is not None
-            else base_point
-        )
-        end_point = {
-            'vs': right_point['vs'],
-            'tvd': right_point['tvd']
-        }
+        start_point = top_point if top_point['vs'] is not None else base_point
+        end_point = {'vs': right_point['vs'], 'tvd': right_point['tvd']}
     else:
         start_point = top_point
         end_point = base_point
@@ -334,21 +314,22 @@ def get_length_in_piece(
     return calc_hypotenuse_length(end_point['vs'] - start_point['vs'], end_point['tvd'] - start_point['tvd'])
 
 
-def calc_zone_statistics(well: Well,
-                         calculated_trajectory: Any,
-                         top_horizon_name: str,
-                         base_horizon_name: str,
-                         landing_point_topset: str,
-                         landing_point_top: str,
-                         measure_units: EMeasureUnits
-                         ) -> Dict[str, float]:
+def calc_zone_statistics(
+    well: Well,
+    calculated_trajectory: Any,
+    top_horizon_name: str,
+    base_horizon_name: str,
+    landing_point_topset: str,
+    landing_point_top: str,
+    measure_units: EMeasureUnits,
+) -> Dict[str, float]:
     interpretation, top_horizon, base_horizon, landing_md = get_horizons_and_landing_md(
         well=well,
         calculated_trajectory=calculated_trajectory,
         top_horizon_name=top_horizon_name,
         base_horizon_name=base_horizon_name,
         landing_point_topset_name=landing_point_topset,
-        landing_point_top_name=landing_point_top
+        landing_point_top_name=landing_point_top,
     )
 
     well_data = well.to_dict(get_converted=False)
@@ -358,25 +339,20 @@ def calc_zone_statistics(well: Well,
         well=well_data,
         assembled_segments=assembled_segments_data['segments'],
         calculated_trajectory=calculated_trajectory,
-        measure_units=measure_units
+        measure_units=measure_units,
     )
     tvds_segments = calculate_segment_vs_tvds(segments, assembled_segments_data)
 
     zone_start_md = max(landing_md, tvds_segments[0]['md'])
 
     interpolated_trajectory = interpolate_trajectory(
-        well_data=well_data,
-        trajectory=calculated_trajectory,
-        measure_units=measure_units
+        well_data=well_data, trajectory=calculated_trajectory, measure_units=measure_units
     )
 
     point_mds = [segment['md'] for segment in tvds_segments]
     point_mds.append(zone_start_md)
     insert_points_in_trajectory(
-        well_data=well_data,
-        trajectory=interpolated_trajectory,
-        point_mds=point_mds,
-        measure_units=measure_units
+        well_data=well_data, trajectory=interpolated_trajectory, point_mds=point_mds, measure_units=measure_units
     )
 
     restricted_trajectory = restrict_trajectory(trajectory=calculated_trajectory, start_md=zone_start_md - DELTA)
@@ -387,11 +363,12 @@ def calc_zone_statistics(well: Well,
     for point_index, point in enumerate(restricted_trajectory):
         if point_index < len(restricted_trajectory) - 1:
             segment_index = next(
-                (index for index, segment in enumerate(tvds_segments) if is_in_segment(
-                    segment,
-                    point,
-                    restricted_trajectory[point_index + 1])),
-                None
+                (
+                    index
+                    for index, segment in enumerate(tvds_segments)
+                    if is_in_segment(segment, point, restricted_trajectory[point_index + 1])
+                ),
+                None,
             )
 
             if segment_index is None:
@@ -402,26 +379,24 @@ def calc_zone_statistics(well: Well,
                 right_point=restricted_trajectory[point_index + 1],
                 segment=tvds_segments[segment_index],
                 top_horizon_uuid=top_horizon.uuid,
-                base_horizon_uuid=base_horizon.uuid
+                base_horizon_uuid=base_horizon.uuid,
             )
 
-    return {
-        'in_zone': in_zone_length,
-        'in_zone_percent': in_zone_length / total_length * 100
-    }
+    return {'in_zone': in_zone_length, 'in_zone_percent': in_zone_length / total_length * 100}
 
 
-def bulk_calc_zone_statistics(project_name: str,
-                              well_names: str,
-                              top_horizon: str,
-                              base_horizon: str,
-                              landing_point_topset: str,
-                              landing_point_top: str
-                              ) -> Dict[str, Dict[str, Any]]:
+def bulk_calc_zone_statistics(
+    project_name: str,
+    well_names: str,
+    top_horizon: str,
+    base_horizon: str,
+    landing_point_topset: str,
+    landing_point_top: str,
+) -> Dict[str, Dict[str, Any]]:
     solo_client = SoloClient(
         client_id=environ.get('ROGII_SOLO_CLIENT_ID'),
         client_secret=environ.get('ROGII_SOLO_CLIENT_SECRET'),
-        papi_domain_name=environ.get('ROGII_SOLO_PAPI_DOMAIN_NAME')
+        papi_domain_name=environ.get('ROGII_SOLO_PAPI_DOMAIN_NAME'),
     )
     solo_client.set_project_by_name(project_name)
 
@@ -438,7 +413,7 @@ def bulk_calc_zone_statistics(project_name: str,
         calculated_trajectory = calculate_trajectory(
             raw_trajectory=well.trajectory.to_dict(get_converted=False),
             well=well_data,
-            measure_units=solo_client.project.measure_unit
+            measure_units=solo_client.project.measure_unit,
         )
 
         try:
@@ -449,7 +424,7 @@ def bulk_calc_zone_statistics(project_name: str,
                 base_horizon_name=base_horizon,
                 landing_point_topset=landing_point_topset,
                 landing_point_top=landing_point_top,
-                measure_units=solo_client.project.measure_unit
+                measure_units=solo_client.project.measure_unit,
             )
         except Exception as exception:
             print(f'Warning! Statistics for well "{well.name}" is not calculated.', exception)
@@ -465,12 +440,11 @@ if __name__ == '__main__':
         'top_horizon': '',
         'base_horizon': '',
         'landing_point_topset': '',
-        'landing_point_top': ''
+        'landing_point_top': '',
     }
 
-    if (
-            (not script_settings['landing_point_topset'] and script_settings['landing_point_top']) or
-            (script_settings['landing_point_topset'] and not script_settings['landing_point_top'])
+    if (not script_settings['landing_point_topset'] and script_settings['landing_point_top']) or (
+        script_settings['landing_point_topset'] and not script_settings['landing_point_top']
     ):
         raise Exception('Set correct data for both topset and top, please.')
 

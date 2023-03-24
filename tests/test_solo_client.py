@@ -4,38 +4,38 @@ from math import fabs
 import pytest
 
 from rogii_solo.calculations.interpretation import get_last_segment_dip
-from rogii_solo.exceptions import ProjectNotFoundException, InvalidProjectException
+from rogii_solo.exceptions import InvalidProjectException, ProjectNotFoundException
 from tests.papi_data import (
-    METER_PROJECT_NAME,
-    WELL_NAME,
-    TYPEWELL_NAME,
-    INTERPRETATION_NAME,
-    STARRED_INTERPRETATION_NAME,
-    STARRED_HORIZON_TOP_NAME,
-    STARRED_HORIZON_CENTER_NAME,
-    STARRED_HORIZON_BOTTOM_NAME,
-    HORIZON_NAME,
-    TARGET_LINE_NAME,
-    STARRED_TARGET_LINE_NAME,
-    NESTED_WELL_NAME,
-    STARRED_TOPSET_NAME,
-    STARRED_NESTED_WELL_NAME,
-    LOG_NAME,
-    STARRED_TOP_TOP_NAME,
-    STARRED_TOP_CENTER_NAME,
-    STARRED_TOP_BOTTOM_NAME,
-    MUDLOG_NAME,
-    TYPEWELL_XSRF,
-    TYPEWELL_YSRF,
-    TYPEWELL_KB,
-    TRACE_NAME,
-    START_DATETIME,
-    END_DATETIME,
+    EI_ABSENT_HORIZONS_LAST_SEGMENT_OUT_ID,
+    EI_ALL_SEGMENTS_OUT_ID,
     EI_LAST_SEGMENT_EXTENDED_ID,
     EI_LAST_SEGMENT_OUT_ID,
-    EI_ALL_SEGMENTS_OUT_ID,
-    EI_ABSENT_HORIZONS_LAST_SEGMENT_OUT_ID,
+    END_DATETIME,
+    HORIZON_NAME,
     INTERPRETATION_ABSENT_HORIZONS_ID,
+    INTERPRETATION_NAME,
+    LOG_NAME,
+    METER_PROJECT_NAME,
+    MUDLOG_NAME,
+    NESTED_WELL_NAME,
+    STARRED_HORIZON_BOTTOM_NAME,
+    STARRED_HORIZON_CENTER_NAME,
+    STARRED_HORIZON_TOP_NAME,
+    STARRED_INTERPRETATION_NAME,
+    STARRED_NESTED_WELL_NAME,
+    STARRED_TARGET_LINE_NAME,
+    STARRED_TOP_BOTTOM_NAME,
+    STARRED_TOP_CENTER_NAME,
+    STARRED_TOP_TOP_NAME,
+    STARRED_TOPSET_NAME,
+    START_DATETIME,
+    TARGET_LINE_NAME,
+    TRACE_NAME,
+    TYPEWELL_KB,
+    TYPEWELL_NAME,
+    TYPEWELL_XSRF,
+    TYPEWELL_YSRF,
+    WELL_NAME,
 )
 
 DELTA_EI_DIP = 0.001
@@ -115,9 +115,7 @@ def test_get_well_interpretations(project):
 
 
 def test_get_well_interpretation(project):
-    interpretation = project.wells.find_by_name(WELL_NAME).interpretations.find_by_name(
-        INTERPRETATION_NAME
-    )
+    interpretation = project.wells.find_by_name(WELL_NAME).interpretations.find_by_name(INTERPRETATION_NAME)
 
     assert interpretation is not None
 
@@ -439,7 +437,7 @@ def test_ei_last_segment_extended(project):
         well=well,
         interpretation=interpretation,
         endless_interpretation=endless_interpretation,
-        measure_units=project.measure_unit
+        measure_units=project.measure_unit,
     )
 
 
@@ -458,7 +456,7 @@ def test_ei_last_segment_out(project):
         well=well,
         interpretation=interpretation,
         endless_interpretation=endless_interpretation,
-        measure_units=project.measure_unit
+        measure_units=project.measure_unit,
     )
 
 
@@ -477,7 +475,7 @@ def test_ei_absent_horizons_last_segment_out(project):
         well=well,
         interpretation=absent_horizons_interpretation,
         endless_interpretation=endless_interpretation,
-        measure_units=project.measure_unit
+        measure_units=project.measure_unit,
     )
 
 
@@ -508,14 +506,10 @@ def _test_ei_case(well, interpretation, endless_interpretation, measure_units):
     assert last_segment['md'] == ei_last_segment['md']
 
     last_segment_dip = get_last_segment_dip(
-        well=well,
-        assembled_segments=interpretation.assembled_segments,
-        measure_units=measure_units
+        well=well, assembled_segments=interpretation.assembled_segments, measure_units=measure_units
     )
     ei_last_segment_dip = get_last_segment_dip(
-        well=well,
-        assembled_segments=endless_interpretation.assembled_segments,
-        measure_units=measure_units
+        well=well, assembled_segments=endless_interpretation.assembled_segments, measure_units=measure_units
     )
 
     assert fabs(last_segment_dip - ei_last_segment_dip) < DELTA_EI_DIP

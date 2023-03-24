@@ -7,10 +7,7 @@ from rogii_solo.base import ComplexObject
 from rogii_solo.papi.client import PapiClient
 from rogii_solo.types import Log as LogType
 
-WellType = Union[
-    'rogii_solo.well.Well',
-    'rogii_solo.well.Typewell'
-]
+WellType = Union['rogii_solo.well.Well', 'rogii_solo.well.Typewell']
 
 
 class Log(ComplexObject):

@@ -1,41 +1,42 @@
+import random
 from datetime import datetime
 from math import fabs
-import pytest
-import random
 from typing import Any
+
+import pytest
 
 from rogii_solo.calculations.constants import DELTA
 from rogii_solo.calculations.converters import radians_to_degrees
 from rogii_solo.calculations.interpretation import get_segments, get_segments_with_dip
 from rogii_solo.calculations.trajectory import calculate_trajectory
-from rogii_solo.exceptions import ProjectNotFoundException, InvalidProjectException
+from rogii_solo.exceptions import InvalidProjectException, ProjectNotFoundException
 from tests.papi_data import (
-    METER_PROJECT_NAME,
-    WELL_NAME,
-    TYPEWELL_NAME,
-    INTERPRETATION_NAME,
-    STARRED_INTERPRETATION_NAME,
-    STARRED_HORIZON_TOP_NAME,
-    STARRED_HORIZON_CENTER_NAME,
-    STARRED_HORIZON_BOTTOM_NAME,
+    EI_LAST_SEGMENT_EXTENDED_NAME,
+    END_DATETIME,
     HORIZON_NAME,
-    TARGET_LINE_NAME,
-    STARRED_TARGET_LINE_NAME,
-    NESTED_WELL_NAME,
-    STARRED_TOPSET_NAME,
-    STARRED_NESTED_WELL_NAME,
+    INTERPRETATION_NAME,
     LOG_NAME,
-    STARRED_TOP_TOP_NAME,
-    STARRED_TOP_CENTER_NAME,
-    STARRED_TOP_BOTTOM_NAME,
+    METER_PROJECT_NAME,
     MUDLOG_NAME,
+    NESTED_WELL_NAME,
+    STARRED_HORIZON_BOTTOM_NAME,
+    STARRED_HORIZON_CENTER_NAME,
+    STARRED_HORIZON_TOP_NAME,
+    STARRED_INTERPRETATION_NAME,
+    STARRED_NESTED_WELL_NAME,
+    STARRED_TARGET_LINE_NAME,
+    STARRED_TOP_BOTTOM_NAME,
+    STARRED_TOP_CENTER_NAME,
+    STARRED_TOP_TOP_NAME,
+    STARRED_TOPSET_NAME,
+    START_DATETIME,
+    TARGET_LINE_NAME,
+    TRACE_NAME,
+    TYPEWELL_KB,
+    TYPEWELL_NAME,
     TYPEWELL_XSRF,
     TYPEWELL_YSRF,
-    TYPEWELL_KB,
-    TRACE_NAME,
-    START_DATETIME,
-    END_DATETIME,
-    EI_LAST_SEGMENT_EXTENDED_NAME
+    WELL_NAME,
 )
 
 
@@ -117,9 +118,7 @@ def test_get_well_interpretations(project_papi):
 
 
 def test_get_well_interpretation(project_papi):
-    interpretation = project_papi.wells.find_by_name(WELL_NAME).interpretations.find_by_name(
-        INTERPRETATION_NAME
-    )
+    interpretation = project_papi.wells.find_by_name(WELL_NAME).interpretations.find_by_name(INTERPRETATION_NAME)
 
     assert interpretation is not None
 
@@ -266,7 +265,7 @@ def test_create_nested_well(project_papi):
         kb=0.0,
         tie_in_tvd=0.0,
         tie_in_ns=0.0,
-        tie_in_ew=0.0
+        tie_in_ew=0.0,
     )
     assert well.nested_wells.find_by_name(nested_well_name) is not None
 
@@ -289,7 +288,7 @@ def test_new_nested_well_header_same_as_parent_well(project_papi):
         kb=0.0,
         tie_in_tvd=0.0,
         tie_in_ns=0.0,
-        tie_in_ew=0.0
+        tie_in_ew=0.0,
     )
     new_nested_well = well.nested_wells.find_by_name(nested_well_name)
 
@@ -414,7 +413,7 @@ def test_create_target_line(project_papi):
         origin_z=300.5,
         target_x=400.5,
         target_y=500.5,
-        target_z=600.5
+        target_z=600.5,
     )
 
     assert well.target_lines.find_by_name(target_line_name) is not None
@@ -694,17 +693,16 @@ def test_endless_interpretation_dips(project_papi):
         calculated_trajectory = calculate_trajectory(
             raw_trajectory=well.trajectory.to_dict(get_converted=False),
             well=well_data,
-            measure_units=project_papi.measure_unit
+            measure_units=project_papi.measure_unit,
         )
         segments = get_segments(
             well=well_data,
             assembled_segments=interpretation.assembled_segments['segments'],
             calculated_trajectory=calculated_trajectory,
-            measure_units=project_papi.measure_unit
+            measure_units=project_papi.measure_unit,
         )
         segments_with_dip = get_segments_with_dip(
-            segments=segments,
-            assembled_horizons=interpretation.assembled_segments['horizons']
+            segments=segments, assembled_horizons=interpretation.assembled_segments['horizons']
         )
 
         return segments_with_dip[-1]['dip']

@@ -8,11 +8,7 @@ from rogii_solo.papi.client import PapiClient
 from rogii_solo.papi.types import PapiStarredTops
 from rogii_solo.types import DataList
 
-WellType = Union[
-    'rogii_solo.well.Well',
-    'rogii_solo.well.Typewell',
-    'rogii_solo.well.NestedWell'
-]
+WellType = Union['rogii_solo.well.Well', 'rogii_solo.well.Typewell', 'rogii_solo.well.NestedWell']
 
 
 class Topset(ComplexObject):
@@ -35,10 +31,7 @@ class Topset(ComplexObject):
         self._starred_top_bottom: Optional[Top] = None
 
     def to_dict(self, get_converted: bool = True) -> Dict[str, Any]:
-        return {
-            'uuid': self.uuid,
-            'name': self.name
-        }
+        return {'uuid': self.uuid, 'name': self.name}
 
     def to_df(self, get_converted: bool = True) -> DataFrame:
         return DataFrame([self.to_dict()])
@@ -46,12 +39,7 @@ class Topset(ComplexObject):
     @property
     def tops(self) -> ObjectRepository['Top']:
         if self._tops is None:
-            self._tops = ObjectRepository(
-                objects=[
-                    Top(topset=self, **item)
-                    for item in self._get_tops_data()
-                ]
-            )
+            self._tops = ObjectRepository(objects=[Top(topset=self, **item) for item in self._get_tops_data()])
 
         return self._tops
 
@@ -81,9 +69,7 @@ class Topset(ComplexObject):
 
     def create_top(self, top_name: str, md: float):
         self._papi_client.create_topset_top(
-            topset_id=self.uuid,
-            top_name=top_name,
-            md=self._papi_client.prepare_papi_var(md)
+            topset_id=self.uuid, top_name=top_name, md=self._papi_client.prepare_papi_var(md)
         )
 
         self._tops_data = None

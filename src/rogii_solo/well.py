@@ -62,7 +62,7 @@ class Well(ComplexObject):
 
         self._topsets_data: Optional[DataList] = None
         self._topsets: Optional[ObjectRepository[Topset]] = None
-        self._starred_topset:  Optional[Topset] = None
+        self._starred_topset: Optional[Topset] = None
 
         self._mudlogs_data: Optional[DataList] = None
         self._mudlogs: Optional[ObjectRepository[Mudlog]] = None
@@ -79,33 +79,26 @@ class Well(ComplexObject):
         return {
             'uuid': self.uuid,
             'name': self.name,
-            'xsrf': self.convert_xy(
-                value=self.xsrf,
-                measure_units=measure_units,
-                force_to_meters=True
-            ) if get_converted else self.xsrf,
-            'ysrf': self.convert_xy(
-                value=self.ysrf,
-                measure_units=measure_units,
-                force_to_meters=True
-            ) if get_converted else self.ysrf,
+            'xsrf': self.convert_xy(value=self.xsrf, measure_units=measure_units, force_to_meters=True)
+            if get_converted
+            else self.xsrf,
+            'ysrf': self.convert_xy(value=self.ysrf, measure_units=measure_units, force_to_meters=True)
+            if get_converted
+            else self.ysrf,
             'kb': self.convert_z(value=self.kb, measure_units=measure_units) if get_converted else self.kb,
             'api': self.api,
             'operator': self.operator,
             'azimuth': self.convert_angle(self.azimuth) if get_converted else self.azimuth,
             'convergence': self.convert_angle(self.convergence) if get_converted else self.convergence,
-            'tie_in_tvd': self.convert_z(
-                value=self.tie_in_tvd,
-                measure_units=measure_units
-            ) if get_converted else self.tie_in_tvd,
-            'tie_in_ns': self.convert_xy(
-                value=self.tie_in_ns,
-                measure_units=measure_units
-            ) if get_converted else self.tie_in_ns,
-            'tie_in_ew': self.convert_xy(
-                value=self.tie_in_ew,
-                measure_units=measure_units
-            ) if get_converted else self.tie_in_ew,
+            'tie_in_tvd': self.convert_z(value=self.tie_in_tvd, measure_units=measure_units)
+            if get_converted
+            else self.tie_in_tvd,
+            'tie_in_ns': self.convert_xy(value=self.tie_in_ns, measure_units=measure_units)
+            if get_converted
+            else self.tie_in_ns,
+            'tie_in_ew': self.convert_xy(value=self.tie_in_ew, measure_units=measure_units)
+            if get_converted
+            else self.tie_in_ew,
             'starred': self.starred,
         }
 
@@ -224,12 +217,7 @@ class Well(ComplexObject):
                 shift = get_shift(typewell_id=typewell_data['uuid'], typewells_data=linked_typewells_data)
 
                 if shift is not None:
-                    self._linked_typewells_data.append(
-                        {
-                            **typewell_data,
-                            'shift': shift
-                        }
-                    )
+                    self._linked_typewells_data.append({**typewell_data, 'shift': shift})
 
         return self._linked_typewells_data
 
@@ -260,9 +248,7 @@ class Well(ComplexObject):
     def topsets(self) -> ObjectRepository[Topset]:
         if self._topsets is None:
             self._topsets = ObjectRepository(
-                objects=[
-                    Topset(papi_client=self._papi_client, well=self, **item) for item in self._get_topsets_data()
-                ]
+                objects=[Topset(papi_client=self._papi_client, well=self, **item) for item in self._get_topsets_data()]
             )
 
         return self._topsets
@@ -285,9 +271,7 @@ class Well(ComplexObject):
     def mudlogs(self) -> ObjectRepository[Mudlog]:
         if self._mudlogs is None:
             self._mudlogs = ObjectRepository(
-                objects=[
-                    Mudlog(papi_client=self._papi_client, well=self, **item) for item in self._get_mudlogs_data()
-                ]
+                objects=[Mudlog(papi_client=self._papi_client, well=self, **item) for item in self._get_mudlogs_data()]
             )
 
         return self._mudlogs
@@ -304,10 +288,7 @@ class Well(ComplexObject):
             mapped_traces = self._get_time_traces_data()
 
             self._time_traces = ObjectRepository(
-                objects=[
-                    TimeTrace(papi_client=self._papi_client, well=self, **item)
-                    for item in mapped_traces
-                ]
+                objects=[TimeTrace(papi_client=self._papi_client, well=self, **item) for item in mapped_traces]
             )
 
         return self._time_traces
@@ -318,17 +299,18 @@ class Well(ComplexObject):
 
         return self._time_traces_data
 
-    def create_nested_well(self,
-                           nested_well_name: str,
-                           operator: str,
-                           api: str,
-                           xsrf: float,
-                           ysrf: float,
-                           kb: float,
-                           tie_in_tvd: float,
-                           tie_in_ns: float,
-                           tie_in_ew: float
-                           ):
+    def create_nested_well(
+        self,
+        nested_well_name: str,
+        operator: str,
+        api: str,
+        xsrf: float,
+        ysrf: float,
+        kb: float,
+        tie_in_tvd: float,
+        tie_in_ns: float,
+        tie_in_ew: float,
+    ):
         self._papi_client.create_well_nested_well(
             well_id=self.uuid,
             nested_well_name=nested_well_name,
@@ -339,54 +321,44 @@ class Well(ComplexObject):
             kb=self._papi_client.prepare_papi_var(kb),
             tie_in_tvd=self._papi_client.prepare_papi_var(tie_in_tvd),
             tie_in_ns=self._papi_client.prepare_papi_var(tie_in_ns),
-            tie_in_ew=self._papi_client.prepare_papi_var(tie_in_ew)
+            tie_in_ew=self._papi_client.prepare_papi_var(tie_in_ew),
         )
 
         self._nested_wells_data = None
         self._nested_wells = None
 
     def create_topset(self, topset_name: str):
-        self._papi_client.create_well_topset(
-            well_id=self.uuid,
-            topset_name=topset_name
-        )
+        self._papi_client.create_well_topset(well_id=self.uuid, topset_name=topset_name)
 
         self._topsets = None
         self._topsets_data = None
 
     def create_log(self, log_name: str, log_points: DataList):
-        log_id = self._papi_client.create_well_log(
-            well_id=self.uuid,
-            log_name=log_name
-        )
+        log_id = self._papi_client.create_well_log(well_id=self.uuid, log_name=log_name)
 
         if log_id.get('uuid') is None:
             return
 
         prepared_log_points = [
-            {key: self._papi_client.prepare_papi_var(value) for key, value in point.items()}
-            for point in log_points
+            {key: self._papi_client.prepare_papi_var(value) for key, value in point.items()} for point in log_points
         ]
 
         units = ELogMeasureUnits.convert_from_measure_units(self.project.measure_unit)
-        self._papi_client.replace_log(
-            log_id=log_id['uuid'],
-            index_unit=units,
-            log_points=prepared_log_points
-        )
+        self._papi_client.replace_log(log_id=log_id['uuid'], index_unit=units, log_points=prepared_log_points)
 
         self._logs = None
         self._logs_data = None
 
-    def create_target_line(self,
-                           target_line_name: str,
-                           origin_x: float,
-                           origin_y: float,
-                           origin_z: float,
-                           target_x: float,
-                           target_y: float,
-                           target_z: float
-                           ):
+    def create_target_line(
+        self,
+        target_line_name: str,
+        origin_x: float,
+        origin_y: float,
+        origin_z: float,
+        target_x: float,
+        target_y: float,
+        target_z: float,
+    ):
         self._papi_client.create_well_target_line(
             well_id=self.uuid,
             target_line_name=target_line_name,
@@ -395,39 +367,34 @@ class Well(ComplexObject):
             origin_z=self._papi_client.prepare_papi_var(origin_z),
             target_x=self._papi_client.prepare_papi_var(target_x),
             target_y=self._papi_client.prepare_papi_var(target_y),
-            target_z=self._papi_client.prepare_papi_var(target_z)
+            target_z=self._papi_client.prepare_papi_var(target_z),
         )
 
         self._target_lines_data = None
         self._target_lines = None
 
-    def update_meta(self,
-                    name: Optional[str] = None,
-                    operator: Optional[str] = None,
-                    api: Optional[str] = None,
-                    xsrf: Optional[float] = None,
-                    ysrf: Optional[float] = None,
-                    kb: Optional[float] = None,
-                    azimuth: Optional[float] = None,
-                    convergence: Optional[float] = None,
-                    tie_in_tvd: Optional[float] = None,
-                    tie_in_ns: Optional[float] = None,
-                    tie_in_ew: Optional[float] = None
-                    ):
+    def update_meta(
+        self,
+        name: Optional[str] = None,
+        operator: Optional[str] = None,
+        api: Optional[str] = None,
+        xsrf: Optional[float] = None,
+        ysrf: Optional[float] = None,
+        kb: Optional[float] = None,
+        azimuth: Optional[float] = None,
+        convergence: Optional[float] = None,
+        tie_in_tvd: Optional[float] = None,
+        tie_in_ns: Optional[float] = None,
+        tie_in_ew: Optional[float] = None,
+    ):
         func_data = {
             func_param: func_arg
             for func_param, func_arg in locals().items()
             if func_arg is not None and func_param != 'self'
         }
-        request_data = {
-            key: self._papi_client.prepare_papi_var(value)
-            for key, value in func_data.items()
-        }
+        request_data = {key: self._papi_client.prepare_papi_var(value) for key, value in func_data.items()}
 
-        is_updated = self._papi_client.update_well_meta(
-            well_id=self.uuid,
-            **request_data
-        )
+        is_updated = self._papi_client.update_well_meta(well_id=self.uuid, **request_data)
 
         if is_updated:
             self.__dict__.update(func_data)
@@ -467,7 +434,7 @@ class NestedWell(ComplexObject):
 
         self._topsets_data: Optional[DataList] = None
         self._topsets: Optional[ObjectRepository[Topset]] = None
-        self._starred_topset:  Optional[Topset] = None
+        self._starred_topset: Optional[Topset] = None
 
     def to_dict(self, get_converted: bool = True) -> Dict[str, Any]:
         measure_units = self.well.project.measure_unit
@@ -475,33 +442,26 @@ class NestedWell(ComplexObject):
         return {
             'uuid': self.uuid,
             'name': self.name,
-            'xsrf': self.convert_xy(
-                value=self.xsrf,
-                measure_units=measure_units,
-                force_to_meters=True
-            ) if get_converted else self.xsrf,
-            'ysrf': self.convert_xy(
-                value=self.ysrf,
-                measure_units=measure_units,
-                force_to_meters=True
-            ) if get_converted else self.ysrf,
+            'xsrf': self.convert_xy(value=self.xsrf, measure_units=measure_units, force_to_meters=True)
+            if get_converted
+            else self.xsrf,
+            'ysrf': self.convert_xy(value=self.ysrf, measure_units=measure_units, force_to_meters=True)
+            if get_converted
+            else self.ysrf,
             'kb': self.convert_z(value=self.kb, measure_units=measure_units) if get_converted else self.kb,
             'api': self.api,
             'operator': self.operator,
             'azimuth': self.convert_angle(self.azimuth) if get_converted else self.azimuth,
             'convergence': self.convert_angle(self.convergence) if get_converted else self.convergence,
-            'tie_in_tvd': self.convert_z(
-                value=self.tie_in_tvd,
-                measure_units=measure_units
-            ) if get_converted else self.tie_in_tvd,
-            'tie_in_ns': self.convert_xy(
-                value=self.tie_in_ns,
-                measure_units=measure_units
-            ) if get_converted else self.tie_in_ns,
-            'tie_in_ew': self.convert_xy(
-                value=self.tie_in_ew,
-                measure_units=measure_units
-            ) if get_converted else self.tie_in_ew,
+            'tie_in_tvd': self.convert_z(value=self.tie_in_tvd, measure_units=measure_units)
+            if get_converted
+            else self.tie_in_tvd,
+            'tie_in_ns': self.convert_xy(value=self.tie_in_ns, measure_units=measure_units)
+            if get_converted
+            else self.tie_in_ns,
+            'tie_in_ew': self.convert_xy(value=self.tie_in_ew, measure_units=measure_units)
+            if get_converted
+            else self.tie_in_ew,
         }
 
     def to_df(self, get_converted: bool = True) -> DataFrame:
@@ -529,9 +489,7 @@ class NestedWell(ComplexObject):
     def topsets(self) -> ObjectRepository[Topset]:
         if self._topsets is None:
             self._topsets = ObjectRepository(
-                objects=[
-                    Topset(papi_client=self._papi_client, well=self, **item) for item in self._get_topsets_data()
-                ]
+                objects=[Topset(papi_client=self._papi_client, well=self, **item) for item in self._get_topsets_data()]
             )
 
         return self._topsets
@@ -551,39 +509,31 @@ class NestedWell(ComplexObject):
         return self._starred_topset
 
     def create_topset(self, topset_name: str):
-        self._papi_client.create_nested_well_topset(
-            nested_well_id=self.uuid,
-            topset_name=topset_name
-        )
+        self._papi_client.create_nested_well_topset(nested_well_id=self.uuid, topset_name=topset_name)
 
         self._topsets = None
         self._topsets_data = None
 
-    def update_meta(self,
-                    name: Optional[str] = None,
-                    operator: Optional[str] = None,
-                    api: Optional[str] = None,
-                    xsrf: Optional[float] = None,
-                    ysrf: Optional[float] = None,
-                    kb: Optional[float] = None,
-                    tie_in_tvd: Optional[float] = None,
-                    tie_in_ns: Optional[float] = None,
-                    tie_in_ew: Optional[float] = None
-                    ):
+    def update_meta(
+        self,
+        name: Optional[str] = None,
+        operator: Optional[str] = None,
+        api: Optional[str] = None,
+        xsrf: Optional[float] = None,
+        ysrf: Optional[float] = None,
+        kb: Optional[float] = None,
+        tie_in_tvd: Optional[float] = None,
+        tie_in_ns: Optional[float] = None,
+        tie_in_ew: Optional[float] = None,
+    ):
         func_data = {
             func_param: func_arg
             for func_param, func_arg in locals().items()
             if func_arg is not None and func_param != 'self'
         }
-        request_data = {
-            key: self._papi_client.prepare_papi_var(value)
-            for key, value in func_data.items()
-        }
+        request_data = {key: self._papi_client.prepare_papi_var(value) for key, value in func_data.items()}
 
-        is_updated = self._papi_client.update_nested_well_meta(
-            well_id=self.uuid,
-            **request_data
-        )
+        is_updated = self._papi_client.update_nested_well_meta(well_id=self.uuid, **request_data)
 
         if is_updated:
             self.__dict__.update(func_data)
@@ -625,7 +575,7 @@ class Typewell(ComplexObject):
 
         self._topsets_data: Optional[DataList] = None
         self._topsets: Optional[ObjectRepository[Topset]] = None
-        self._starred_topset:  Optional[Topset] = None
+        self._starred_topset: Optional[Topset] = None
 
         self._mudlogs_data: Optional[DataList] = None
         self._mudlogs: Optional[ObjectRepository[Mudlog]] = None
@@ -637,35 +587,25 @@ class Typewell(ComplexObject):
             'uuid': self.uuid,
             'name': self.name,
             'api': self.api,
-            'xsrf': self.convert_xy(
-                value=self.xsrf,
-                measure_units=measure_units,
-                force_to_meters=True
-            ) if get_converted else self.xsrf,
-            'ysrf': self.convert_xy(
-                value=self.ysrf,
-                measure_units=measure_units,
-                force_to_meters=True
-            ) if get_converted else self.ysrf,
+            'xsrf': self.convert_xy(value=self.xsrf, measure_units=measure_units, force_to_meters=True)
+            if get_converted
+            else self.xsrf,
+            'ysrf': self.convert_xy(value=self.ysrf, measure_units=measure_units, force_to_meters=True)
+            if get_converted
+            else self.ysrf,
             'kb': self.convert_z(value=self.kb, measure_units=measure_units) if get_converted else self.kb,
             'operator': self.operator,
             'convergence': self.convert_angle(self.convergence) if get_converted else self.convergence,
-            'tie_in_tvd': self.convert_z(
-                value=self.tie_in_tvd,
-                measure_units=measure_units
-            ) if get_converted else self.tie_in_tvd,
-            'tie_in_ns': self.convert_xy(
-                value=self.tie_in_ns,
-                measure_units=measure_units
-            ) if get_converted else self.tie_in_ns,
-            'tie_in_ew': self.convert_xy(
-                value=self.tie_in_ew,
-                measure_units=measure_units
-            ) if get_converted else self.tie_in_ew,
-            'shift': self.convert_z(
-                value=self.shift,
-                measure_units=measure_units
-            ) if get_converted else self.shift,
+            'tie_in_tvd': self.convert_z(value=self.tie_in_tvd, measure_units=measure_units)
+            if get_converted
+            else self.tie_in_tvd,
+            'tie_in_ns': self.convert_xy(value=self.tie_in_ns, measure_units=measure_units)
+            if get_converted
+            else self.tie_in_ns,
+            'tie_in_ew': self.convert_xy(value=self.tie_in_ew, measure_units=measure_units)
+            if get_converted
+            else self.tie_in_ew,
+            'shift': self.convert_z(value=self.shift, measure_units=measure_units) if get_converted else self.shift,
         }
 
     def to_df(self, get_converted: bool = True) -> DataFrame:
@@ -708,9 +648,7 @@ class Typewell(ComplexObject):
     def topsets(self) -> ObjectRepository[Topset]:
         if self._topsets is None:
             self._topsets = ObjectRepository(
-                objects=[
-                    Topset(papi_client=self._papi_client, well=self, **item) for item in self._get_topsets_data()
-                ]
+                objects=[Topset(papi_client=self._papi_client, well=self, **item) for item in self._get_topsets_data()]
             )
 
         return self._topsets
@@ -730,34 +668,23 @@ class Typewell(ComplexObject):
         return self._starred_topset
 
     def create_topset(self, topset_name: str):
-        self._papi_client.create_typewell_topset(
-            typewell_id=self.uuid,
-            topset_name=topset_name
-        )
+        self._papi_client.create_typewell_topset(typewell_id=self.uuid, topset_name=topset_name)
 
         self._topsets = None
         self._topsets_data = None
 
     def create_log(self, log_name: str, log_points: DataList):
-        log_id = self._papi_client.create_typewell_log(
-            typewell_id=self.uuid,
-            log_name=log_name
-        )
+        log_id = self._papi_client.create_typewell_log(typewell_id=self.uuid, log_name=log_name)
 
         if log_id.get('uuid') is None:
             return
 
         prepared_log_points = [
-            {key: self._papi_client.prepare_papi_var(value) for key, value in point.items()}
-            for point in log_points
+            {key: self._papi_client.prepare_papi_var(value) for key, value in point.items()} for point in log_points
         ]
 
         units = ELogMeasureUnits.convert_from_measure_units(self.project.measure_unit)
-        self._papi_client.replace_log(
-            log_id=log_id['uuid'],
-            index_unit=units,
-            log_points=prepared_log_points
-        )
+        self._papi_client.replace_log(log_id=log_id['uuid'], index_unit=units, log_points=prepared_log_points)
 
         self._logs = None
         self._logs_data = None
@@ -777,32 +704,27 @@ class Typewell(ComplexObject):
 
         return self._mudlogs_data
 
-    def update_meta(self,
-                    name: Optional[str] = None,
-                    operator: Optional[str] = None,
-                    api: Optional[str] = None,
-                    xsrf: Optional[float] = None,
-                    ysrf: Optional[float] = None,
-                    kb: Optional[float] = None,
-                    convergence: Optional[float] = None,
-                    tie_in_tvd: Optional[float] = None,
-                    tie_in_ns: Optional[float] = None,
-                    tie_in_ew: Optional[float] = None
-                    ):
+    def update_meta(
+        self,
+        name: Optional[str] = None,
+        operator: Optional[str] = None,
+        api: Optional[str] = None,
+        xsrf: Optional[float] = None,
+        ysrf: Optional[float] = None,
+        kb: Optional[float] = None,
+        convergence: Optional[float] = None,
+        tie_in_tvd: Optional[float] = None,
+        tie_in_ns: Optional[float] = None,
+        tie_in_ew: Optional[float] = None,
+    ):
         func_data = {
             func_param: func_arg
             for func_param, func_arg in locals().items()
             if func_arg is not None and func_param != 'self'
         }
-        request_data = {
-            key: self._papi_client.prepare_papi_var(value)
-            for key, value in func_data.items()
-        }
+        request_data = {key: self._papi_client.prepare_papi_var(value) for key, value in func_data.items()}
 
-        is_updated = self._papi_client.update_typewell_meta(
-            well_id=self.uuid,
-            **request_data
-        )
+        is_updated = self._papi_client.update_typewell_meta(well_id=self.uuid, **request_data)
 
         if is_updated:
             self.__dict__.update(func_data)

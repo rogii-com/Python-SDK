@@ -4,7 +4,11 @@ from pandas import DataFrame
 
 import rogii_solo.interpretation
 from rogii_solo.base import BaseObject
-from rogii_solo.calculations.interpretation import get_segments, get_segments_boundaries, interpolate_horizon
+from rogii_solo.calculations.interpretation import (
+    get_segments,
+    get_segments_boundaries,
+    interpolate_horizon,
+)
 from rogii_solo.calculations.trajectory import calculate_trajectory
 from rogii_solo.types import Horizon as HorizonType
 
@@ -48,27 +52,24 @@ class Horizon(BaseObject):
         measure_units = self.interpretation.well.project.measure_unit
 
         calculated_trajectory = calculate_trajectory(
-            well=well_data,
-            raw_trajectory=trajectory_data,
-            measure_units=measure_units
+            well=well_data, raw_trajectory=trajectory_data, measure_units=measure_units
         )
 
         segments = get_segments(
             well=well_data,
             assembled_segments=assembled_segments_data['segments'],
             calculated_trajectory=calculated_trajectory,
-            measure_units=measure_units
+            measure_units=measure_units,
         )
 
         segments_boundaries = get_segments_boundaries(
-            assembled_segments=segments,
-            calculated_trajectory=calculated_trajectory
+            assembled_segments=segments, calculated_trajectory=calculated_trajectory
         )
 
         interpolated_horizon = interpolate_horizon(
             segments_boundaries=segments_boundaries,
             horizon_uuid=self.uuid,
-            horizon_tvd=assembled_segments_data['horizons'][self.uuid]['tvd']
+            horizon_tvd=assembled_segments_data['horizons'][self.uuid]['tvd'],
         )
 
         if get_converted:
