@@ -60,16 +60,15 @@ class Mudlog(ComplexObject):
             {
                 'uuid': log['uuid'],
                 'name': log['name'],
-                'points': log['log_points'] if not get_converted else [
+                'points': log['log_points']
+                if not get_converted
+                else [
                     {
-                        'md': self.convert_z(
-                            value=log_point['md'],
-                            measure_units=self.well.project.measure_unit
-                        ),
-                        'data': log_point['data']
+                        'md': self.convert_z(value=log_point['md'], measure_units=self.well.project.measure_unit),
+                        'data': log_point['data'],
                     }
                     for log_point in log['log_points']
-                ]
+                ],
             }
             for log in logs_data
         ]

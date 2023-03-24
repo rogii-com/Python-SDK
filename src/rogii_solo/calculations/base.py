@@ -13,10 +13,7 @@ def calc_hypotenuse_length(cathetus1: float, cathetus2: float) -> Optional[float
     if cathetus1 is None or cathetus2 is None:
         return
 
-    return math.sqrt(
-        math.pow(cathetus1, 2) +
-        math.pow(cathetus2, 2)
-    )
+    return math.sqrt(math.pow(cathetus1, 2) + math.pow(cathetus2, 2))
 
 
 def calc_atan2(y: float, x: float) -> Optional[float]:
@@ -37,10 +34,7 @@ def calc_shape_factor(dog_leg: float) -> Optional[float]:
     if dog_leg is None:
         return
 
-    if (
-        math.fabs(dog_leg) > DELTA and
-        math.fabs(dog_leg - math.pi) > DELTA
-    ):
+    if math.fabs(dog_leg) > DELTA and math.fabs(dog_leg - math.pi) > DELTA:
         return 2.0 * math.tan(0.5 * dog_leg) / dog_leg
 
     return 1.0
@@ -72,10 +66,7 @@ def get_nearest_values(value: Any, input_list: List[Any], key: Optional[Callable
     elif pos == len(input_list):
         values = [input_list[-1]]
     else:
-        values = [
-            input_list[pos - 1],
-            input_list[pos]
-        ]
+        values = [input_list[pos - 1], input_list[pos]]
 
     return values
 
@@ -91,11 +82,7 @@ def interpolate_linear(x0: float, y0: float, x1: float, y1: float, x: float) -> 
 
 
 def calc_segment_dip(delta_x: float, delta_y: float) -> Optional[float]:
-    if (
-            delta_x is None or
-            delta_y is None or
-            delta_x < DELTA
-    ):
+    if delta_x is None or delta_y is None or delta_x < DELTA:
         return
 
     angle = math.atan2(delta_y, delta_x)
@@ -138,4 +125,4 @@ def calc_segment_vs_length(x1: float, y1: float, x2: float, y2: float, azimuth_v
     x = vs_line_param * math.sin(azimuth_vs)
     y = vs_line_param * math.cos(azimuth_vs)
 
-    return math.sqrt(x ** 2 + y ** 2)
+    return math.sqrt(x**2 + y**2)

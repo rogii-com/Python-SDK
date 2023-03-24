@@ -47,14 +47,15 @@ class BaseObject(ABC, Convertible):
         """
         pass
 
-    def _find_by_path(self,
-                      obj: Dict or Iterable[Dict],
-                      path: str or Iterable[str],
-                      default: Any = None,
-                      divider: str = None,
-                      check_none: bool = False,
-                      to_list: bool = False,
-                      ) -> Any:
+    def _find_by_path(
+        self,
+        obj: Dict or Iterable[Dict],
+        path: str or Iterable[str],
+        default: Any = None,
+        divider: str = None,
+        check_none: bool = False,
+        to_list: bool = False,
+    ) -> Any:
         """
         Find nested key value in dict
         :param obj:
@@ -93,14 +94,15 @@ class BaseObject(ABC, Convertible):
 
         return result
 
-    def __find_by_path(self,
-                       obj: Dict,
-                       path: str,
-                       default: Any = None,
-                       divider: str = None,
-                       check_none: bool = False,
-                       to_list: bool = False,
-                       ) -> Any:
+    def __find_by_path(
+        self,
+        obj: Dict,
+        path: str,
+        default: Any = None,
+        divider: str = None,
+        check_none: bool = False,
+        to_list: bool = False,
+    ) -> Any:
         if not obj:
             return None if not to_list else []
 
@@ -120,6 +122,7 @@ class ComplexObject(BaseObject):
     """
     Object with access to PAPI
     """
+
     def __init__(self, papi_client: PapiClient):
         super().__init__()
 
@@ -139,6 +142,7 @@ class ObjectRepository(list[T]):
     """
     List of objects with utility methods
     """
+
     def __init__(self, objects: List[T] = None):
         if objects is None:
             objects = []

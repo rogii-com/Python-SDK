@@ -42,7 +42,7 @@ class Trace(ComplexObject):
 
 class TimeTrace(Trace):
     def __init__(self, papi_client: PapiClient, well: 'rogii_solo.well.Well', **kwargs):
-        super().__init__(papi_client,  well=well, **kwargs)
+        super().__init__(papi_client, well=well, **kwargs)
 
         self.well = well
         self.hash = None
@@ -76,7 +76,7 @@ class TimeTrace(Trace):
             'hash': self.hash,
             'unit': self.unit,
             'start_date_time_index': self.start_date_time_index,
-            'last_date_time_index': self.last_date_time_index
+            'last_date_time_index': self.last_date_time_index,
         }
         points = self._get_points(time_from=time_from, time_to=time_to)
 
@@ -87,8 +87,5 @@ class TimeTrace(Trace):
 
     def _get_points(self, time_from: str, time_to: str):
         return self._papi_client.get_well_time_trace_data(
-            well_id=self.well.uuid,
-            trace_id=self.uuid,
-            time_from=time_from,
-            time_to=time_to
+            well_id=self.well.uuid, trace_id=self.uuid, time_from=time_from, time_to=time_to
         )

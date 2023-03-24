@@ -18,7 +18,7 @@ def calc_interpretation_dip():
     solo_client = SoloClient(
         client_id=environ.get('ROGII_SOLO_CLIENT_ID'),
         client_secret=environ.get('ROGII_SOLO_CLIENT_SECRET'),
-        papi_domain_name=environ.get('ROGII_SOLO_PAPI_DOMAIN_NAME')
+        papi_domain_name=environ.get('ROGII_SOLO_PAPI_DOMAIN_NAME'),
     )
     solo_client.set_project_by_name(PROJECT_NAME)
 
@@ -30,9 +30,7 @@ def calc_interpretation_dip():
 
     well_data = well.to_dict(get_converted=False)
     calculated_trajectory = calculate_trajectory(
-        raw_trajectory=well.trajectory.to_dict(get_converted=False),
-        well=well_data,
-        measure_units=MEASURE_UNITS
+        raw_trajectory=well.trajectory.to_dict(get_converted=False), well=well_data, measure_units=MEASURE_UNITS
     )
     interpretation = well.starred_interpretation or well.interpretations.find_by_name(INTERPRETATION_NAME)
 
@@ -44,21 +42,17 @@ def calc_interpretation_dip():
         well=well_data,
         assembled_segments=interpretation.assembled_segments['segments'],
         calculated_trajectory=calculated_trajectory,
-        measure_units=MEASURE_UNITS
+        measure_units=MEASURE_UNITS,
     )
     segments_with_dip = get_segments_with_dip(
-        segments=segments,
-        assembled_horizons=interpretation.assembled_segments['horizons']
+        segments=segments, assembled_horizons=interpretation.assembled_segments['horizons']
     )
 
     calculated_dips = DataFrame(segments_with_dip, columns=['md', 'dip'])
     np_calculated_dips = calculated_dips.to_numpy()
     interpolated_md = sorted(
         np.unique(
-            np.append(
-                np.arange(np_calculated_dips[0, 0], np_calculated_dips[-1, 0], 50.0),
-                np_calculated_dips[:, 0]
-            )
+            np.append(np.arange(np_calculated_dips[0, 0], np_calculated_dips[-1, 0], 50.0), np_calculated_dips[:, 0])
         )
     )
     np_interpolated_dips = np.interp(interpolated_md, np_calculated_dips[:, 0], np_calculated_dips[:, 1])

@@ -14,9 +14,13 @@ from rogii_solo.papi.types import (
     PapiStarredTops,
     PapiVar,
     ProxyData,
-    SettingsAuth
+    SettingsAuth,
 )
-from rogii_solo.utils.constants import PYTHON_SDK_APP_ID, SOLO_OPEN_AUTH_SERVICE_URL, SOLO_PAPI_URL
+from rogii_solo.utils.constants import (
+    PYTHON_SDK_APP_ID,
+    SOLO_OPEN_AUTH_SERVICE_URL,
+    SOLO_PAPI_URL,
+)
 
 
 class PapiClient(SdkPapiClient):
@@ -38,7 +42,7 @@ class PapiClient(SdkPapiClient):
             papi_client_id=settings_auth.client_id,
             papi_client_secret=settings_auth.client_secret,
             headers=headers,
-            proxies=self._get_proxies(settings_auth.proxies)
+            proxies=self._get_proxies(settings_auth.proxies),
         )
 
     def _get_proxies(self, proxies_data: ProxyData) -> ProxyData:
@@ -94,59 +98,35 @@ class PapiClient(SdkPapiClient):
             return data
 
     def get_global_projects_data(self, **kwargs) -> PapiDataList:
-        return list(self._gen_data_page(
-            func=self.fetch_projects,
-            **kwargs
-        ))
+        return list(self._gen_data_page(func=self.fetch_projects, **kwargs))
 
     def get_virtual_projects_data(self, **kwargs) -> PapiDataList:
-        return list(self._gen_data_page(
-            func=self.fetch_virtual_projects,
-            **kwargs
-        ))
+        return list(self._gen_data_page(func=self.fetch_virtual_projects, **kwargs))
 
     def get_project_wells_data(self, project_id: str, **kwargs) -> PapiDataList:
-        return list(self._gen_data_page(
-            func=self.fetch_project_wells,
-            project_id=project_id,
-            **kwargs
-        ))
+        return list(self._gen_data_page(func=self.fetch_project_wells, project_id=project_id, **kwargs))
 
     def get_well_trajectory_data(self, well_id: str, **kwargs) -> PapiDataList:
         return [
-            self.parse_papi_data(data_item) for data_item in self.fetch_well_raw_trajectory(
-                well_id=well_id,
-                **kwargs
-            )
+            self.parse_papi_data(data_item) for data_item in self.fetch_well_raw_trajectory(well_id=well_id, **kwargs)
         ]
 
     def get_well_interpretations_data(self, well_id: str, **kwargs) -> PapiDataList:
-        return list(self._gen_data_page(
-            func=self.fetch_well_raw_interpretations,
-            well_id=well_id,
-            **kwargs
-        ))
+        return list(self._gen_data_page(func=self.fetch_well_raw_interpretations, well_id=well_id, **kwargs))
 
     def get_interpretation_horizons_data(self, interpretation_id: str, **kwargs) -> PapiDataList:
-        return list(self._gen_data_page(
-            func=self.fetch_interpretation_horizons,
-            interpretation_id=interpretation_id,
-            **kwargs
-        ))
+        return list(
+            self._gen_data_page(func=self.fetch_interpretation_horizons, interpretation_id=interpretation_id, **kwargs)
+        )
 
     def get_interpretation_tvt_data(self, interpretation_id: str, **kwargs) -> PapiDataList:
         return [
-            self.parse_papi_data(tvt_data) for tvt_data in self.fetch_interpretation_horizons_data(
-                interpretation_id=interpretation_id,
-                **kwargs
-            )
+            self.parse_papi_data(tvt_data)
+            for tvt_data in self.fetch_interpretation_horizons_data(interpretation_id=interpretation_id, **kwargs)
         ]
 
     def get_interpretation_assembled_segments_data(self, interpretation_id: str, **kwargs) -> PapiData:
-        assembled_segments = self.fetch_interpretation_assembled_segments(
-            interpretation_id=interpretation_id,
-            **kwargs
-        )
+        assembled_segments = self.fetch_interpretation_assembled_segments(interpretation_id=interpretation_id, **kwargs)
 
         return {
             'horizons': self.parse_papi_data(assembled_segments['horizons']),
@@ -157,122 +137,64 @@ class PapiClient(SdkPapiClient):
         starred_horizons = self.fetch_interpretation_starred_horizons(interpretation_id=interpretation_id, **kwargs)
 
         return PapiStarredHorizons(
-            top=starred_horizons['top'],
-            center=starred_horizons['center'],
-            bottom=starred_horizons['bottom']
+            top=starred_horizons['top'], center=starred_horizons['center'], bottom=starred_horizons['bottom']
         )
 
     def get_well_target_lines_data(self, well_id: str, **kwargs) -> PapiDataList:
-        return list(self._gen_data_page(
-            func=self.fetch_well_target_lines,
-            well_id=well_id,
-            **kwargs
-        ))
+        return list(self._gen_data_page(func=self.fetch_well_target_lines, well_id=well_id, **kwargs))
 
     def get_well_nested_wells_data(self, well_id: str, **kwargs) -> PapiDataList:
-        return list(self._gen_data_page(
-            func=self.fetch_well_nested_wells,
-            well_id=well_id,
-            **kwargs
-        ))
+        return list(self._gen_data_page(func=self.fetch_well_nested_wells, well_id=well_id, **kwargs))
 
     def get_nested_well_trajectory_data(self, nested_well_id: str, **kwargs) -> PapiDataList:
         return [
-            self.parse_papi_data(data_item) for data_item in self.fetch_nested_well_raw_trajectory(
-                nested_well_id=nested_well_id,
-                **kwargs
-            )
+            self.parse_papi_data(data_item)
+            for data_item in self.fetch_nested_well_raw_trajectory(nested_well_id=nested_well_id, **kwargs)
         ]
 
     def get_well_logs_data(self, well_id: str, **kwargs) -> PapiDataList:
-        return list(self._gen_data_page(
-            func=self.fetch_well_logs,
-            well_id=well_id,
-            **kwargs
-        ))
+        return list(self._gen_data_page(func=self.fetch_well_logs, well_id=well_id, **kwargs))
 
     def get_typewell_logs_data(self, typewell_id: str, **kwargs) -> PapiDataList:
-        return list(self._gen_data_page(
-            func=self.fetch_typewell_logs,
-            typewell_id=typewell_id,
-            **kwargs
-        ))
+        return list(self._gen_data_page(func=self.fetch_typewell_logs, typewell_id=typewell_id, **kwargs))
 
     def get_log_data(self, log_id: str) -> PapiDataList:
-        return [
-            self.parse_papi_data(data_item) for data_item in self.fetch_log_points(log_id=log_id)
-        ]
+        return [self.parse_papi_data(data_item) for data_item in self.fetch_log_points(log_id=log_id)]
 
     def get_project_typewells_data(self, project_id: str, **kwargs) -> PapiDataList:
-        return list(self._gen_data_page(
-            func=self.fetch_project_typewells,
-            project_id=project_id,
-            **kwargs
-        ))
+        return list(self._gen_data_page(func=self.fetch_project_typewells, project_id=project_id, **kwargs))
 
     def get_typewell_trajectory_data(self, typewell_id: str, **kwargs) -> PapiDataList:
         return [
-            self.parse_papi_data(data_item) for data_item in self.fetch_typewell_raw_trajectory(
-                typewell_id=typewell_id,
-                **kwargs
-            )
+            self.parse_papi_data(data_item)
+            for data_item in self.fetch_typewell_raw_trajectory(typewell_id=typewell_id, **kwargs)
         ]
 
     def get_well_topsets_data(self, well_id: str, **kwargs) -> PapiDataList:
-        return list(self._gen_data_page(
-            func=self.fetch_well_topsets,
-            well_id=well_id,
-            **kwargs
-        ))
+        return list(self._gen_data_page(func=self.fetch_well_topsets, well_id=well_id, **kwargs))
 
     def get_typewell_topsets_data(self, typewell_id: str, **kwargs) -> PapiDataList:
-        return list(self._gen_data_page(
-            func=self.fetch_typewell_topsets,
-            typewell_id=typewell_id,
-            **kwargs
-        ))
+        return list(self._gen_data_page(func=self.fetch_typewell_topsets, typewell_id=typewell_id, **kwargs))
 
     def get_nested_well_topsets_data(self, nested_well_id: str, **kwargs) -> PapiDataList:
-        return list(self._gen_data_page(
-            func=self.fetch_nested_well_topsets,
-            nested_well_id=nested_well_id,
-            **kwargs
-        ))
+        return list(self._gen_data_page(func=self.fetch_nested_well_topsets, nested_well_id=nested_well_id, **kwargs))
 
     def get_topset_tops_data(self, topset_id: str, **kwargs) -> PapiDataList:
-        return list(self._gen_data_page(
-            func=self.fetch_topset_tops,
-            topset_id=topset_id,
-            **kwargs
-        ))
+        return list(self._gen_data_page(func=self.fetch_topset_tops, topset_id=topset_id, **kwargs))
 
     def get_topset_starred_tops(self, topset_id: str, **kwargs) -> PapiStarredTops:
         starred_tops = self.fetch_topset_starred_tops(topset_id=topset_id, **kwargs)
 
-        return PapiStarredTops(
-            top=starred_tops['top'],
-            center=starred_tops['center'],
-            bottom=starred_tops['bottom']
-        )
+        return PapiStarredTops(top=starred_tops['top'], center=starred_tops['center'], bottom=starred_tops['bottom'])
 
     def get_well_mudlogs_data(self, well_id: str, **kwargs) -> PapiDataList:
-        return list(self._gen_data_page(
-            func=self.fetch_well_mudlogs,
-            well_id=well_id,
-            **kwargs
-        ))
+        return list(self._gen_data_page(func=self.fetch_well_mudlogs, well_id=well_id, **kwargs))
 
     def get_typewell_mudlogs_data(self, typewell_id: str, **kwargs) -> PapiDataList:
-        return list(self._gen_data_page(
-            func=self.fetch_typewell_mudlogs,
-            typewell_id=typewell_id,
-            **kwargs
-        ))
+        return list(self._gen_data_page(func=self.fetch_typewell_mudlogs, typewell_id=typewell_id, **kwargs))
 
     def get_mudlog_data(self, mudlog_id: str) -> PapiDataList:
-        return [
-            self.parse_papi_data(data_item) for data_item in self.fetch_mudlog_logs(mudlog_id)
-        ]
+        return [self.parse_papi_data(data_item) for data_item in self.fetch_mudlog_logs(mudlog_id)]
 
     def get_traces(self, **kwargs) -> PapiDataList:
         return self.fetch_traces(**kwargs)
@@ -280,21 +202,11 @@ class PapiClient(SdkPapiClient):
     def get_well_mapped_time_traces_data(self, well_id: str, **kwargs) -> PapiDataList:
         return self.fetch_well_mapped_traces(well_id=well_id, trace_type='TIME', **kwargs)
 
-    def get_well_time_trace_data(self,
-                                 well_id: str,
-                                 trace_id: str,
-                                 **kwargs) -> PapiDataList:
-        return self.fetch_well_time_trace(
-            well_id=well_id,
-            trace_id=trace_id,
-            **kwargs
-        )
+    def get_well_time_trace_data(self, well_id: str, trace_id: str, **kwargs) -> PapiDataList:
+        return self.fetch_well_time_trace(well_id=well_id, trace_id=trace_id, **kwargs)
 
     def get_well_linked_typewells_data(self, **kwargs) -> PapiDataList:
-        return list(self._gen_data_page(
-            func=self.fetch_well_linked_typewells,
-            **kwargs
-        ))
+        return list(self._gen_data_page(func=self.fetch_well_linked_typewells, **kwargs))
 
     def _gen_data_page(self, func: Callable, **kwargs) -> PapiDataIterator:
         offset = kwargs.pop('offset', None) or self.DEFAULT_OFFSET

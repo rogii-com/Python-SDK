@@ -2,7 +2,11 @@ import copy
 from math import acos, cos, degrees, fabs, pi, sin
 from typing import Any, Dict, Optional
 
-from rogii_solo.calculations.base import calc_atan2, calc_hypotenuse_length, calc_shape_factor
+from rogii_solo.calculations.base import (
+    calc_atan2,
+    calc_hypotenuse_length,
+    calc_shape_factor,
+)
 from rogii_solo.calculations.base import calc_vs as base_calc_vs
 from rogii_solo.calculations.base import normalize_angle
 from rogii_solo.calculations.constants import DELTA, FEET_TO_METERS
@@ -11,9 +15,9 @@ from rogii_solo.calculations.types import RawTrajectory, Trajectory, TrajectoryP
 
 
 def calculate_trajectory(
-        raw_trajectory: RawTrajectory,
-        well: Dict[str, Any],
-        measure_units: EMeasureUnits,
+    raw_trajectory: RawTrajectory,
+    well: Dict[str, Any],
+    measure_units: EMeasureUnits,
 ) -> Trajectory:
     if not raw_trajectory or not well:
         return []
@@ -35,10 +39,10 @@ def calculate_trajectory(
 
 
 def calculate_trajectory_point(
-        prev_point: Dict[str, Any],
-        curr_point: Dict[str, Any],
-        well: Dict[str, Any],
-        measure_units: EMeasureUnits,
+    prev_point: Dict[str, Any],
+    curr_point: Dict[str, Any],
+    well: Dict[str, Any],
+    measure_units: EMeasureUnits,
 ) -> TrajectoryPoint:
     if not prev_point:
         return calculate_initial_trajectory_point(curr_point, well)
@@ -55,8 +59,7 @@ def calculate_trajectory_point(
 
     dog_leg = acos(
         cos(prev_point['incl'] - curr_point['incl'])
-        - curr_incl_sin * prev_incl_sin
-        * (1.0 - cos(curr_azim - prev_point['azim']))
+        - curr_incl_sin * prev_incl_sin * (1.0 - cos(curr_azim - prev_point['azim']))
     )
 
     dls = calc_dls(dog_leg, course_length, measure_units=measure_units)
@@ -79,16 +82,16 @@ def calculate_trajectory_point(
         y=calc_y(ns, well['ysrf']),
         vs=calc_vs(ns, ew, well['azimuth']),
         dls=dls,
-        dog_leg=dog_leg
+        dog_leg=dog_leg,
     )
 
 
 def interpolate_trajectory_point(
-        left_point: Dict[str, Any],
-        right_point: Dict[str, Any],
-        md: float,
-        well: Dict[str, Any],
-        measure_units: EMeasureUnits,
+    left_point: Dict[str, Any],
+    right_point: Dict[str, Any],
+    md: float,
+    well: Dict[str, Any],
+    measure_units: EMeasureUnits,
 ) -> TrajectoryPoint:
     if fabs(md - left_point['md']) < DELTA:
         return left_point
@@ -114,27 +117,19 @@ def interpolate_trajectory_point(
     right_dog_leg_sin = sin(right_point['dog_leg'])
 
     left_dog_legged_sin = (
-        left_incl_sin / right_dog_leg_sin
-        if right_dog_leg_sin < -DELTA or right_dog_leg_sin > DELTA
-        else 1.0
+        left_incl_sin / right_dog_leg_sin if right_dog_leg_sin < -DELTA or right_dog_leg_sin > DELTA else 1.0
     )
 
     left_dog_legged_cos = (
-        left_incl_cos / right_dog_leg_sin
-        if right_dog_leg_sin < -DELTA or right_dog_leg_sin > DELTA
-        else 1.0
+        left_incl_cos / right_dog_leg_sin if right_dog_leg_sin < -DELTA or right_dog_leg_sin > DELTA else 1.0
     )
 
     right_dog_legged_sin = (
-        sin(right_point['incl']) / right_dog_leg_sin
-        if right_dog_leg_sin < -DELTA or right_dog_leg_sin > DELTA
-        else 1.0
+        sin(right_point['incl']) / right_dog_leg_sin if right_dog_leg_sin < -DELTA or right_dog_leg_sin > DELTA else 1.0
     )
 
     right_dog_legged_cos = (
-        cos(right_point['incl']) / right_dog_leg_sin
-        if right_dog_leg_sin < -DELTA or right_dog_leg_sin > DELTA
-        else 1.0
+        cos(right_point['incl']) / right_dog_leg_sin if right_dog_leg_sin < -DELTA or right_dog_leg_sin > DELTA else 1.0
     )
 
     ext_delta_tvd = (
@@ -188,13 +183,13 @@ def interpolate_trajectory_point(
         tvdss=calc_tvdss(kb=well['kb'], tvd=tvd),
         vs=vs,
         dls=dls,
-        dog_leg=dog_leg
+        dog_leg=dog_leg,
     )
 
 
 def calculate_initial_trajectory_point(
-        point: Dict[str, Any],
-        well: Dict[str, Any],
+    point: Dict[str, Any],
+    well: Dict[str, Any],
 ) -> TrajectoryPoint:
     tvd = well['tie_in_tvd'] if well['tie_in_tvd'] is not None else point['md']
 
@@ -210,7 +205,7 @@ def calculate_initial_trajectory_point(
         y=calc_y(well['tie_in_ns'], well['ysrf']),
         vs=calc_vs(well['tie_in_ns'], well['tie_in_ew'], well['azimuth']),
         dls=0,
-        dog_leg=0
+        dog_leg=0,
     )
 
 
@@ -241,7 +236,7 @@ def calc_tvdss(kb: Optional[float], tvd: float) -> Optional[float]:
 DLS_RADIANS_MAP = {
     EMeasureUnits.METER: 30,
     EMeasureUnits.FOOT: 100 * FEET_TO_METERS,
-    EMeasureUnits.METER_FOOT: 100 * FEET_TO_METERS
+    EMeasureUnits.METER_FOOT: 100 * FEET_TO_METERS,
 }
 
 

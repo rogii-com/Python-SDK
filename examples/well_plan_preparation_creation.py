@@ -11,7 +11,7 @@ def prepare_well_plan():
     solo_client = SoloClient(
         client_id=environ.get('ROGII_SOLO_CLIENT_ID'),
         client_secret=environ.get('ROGII_SOLO_CLIENT_SECRET'),
-        papi_domain_name=environ.get('ROGII_SOLO_PAPI_DOMAIN_NAME')
+        papi_domain_name=environ.get('ROGII_SOLO_PAPI_DOMAIN_NAME'),
     )
 
     solo_client.set_project_by_name(PROJECT_NAME)
@@ -34,8 +34,10 @@ def prepare_well_plan():
     print('\nWell trajectory (in the pandas format):\n', well_trajectory)
 
     starred_interpretation = well.starred_interpretation.to_df()
-    print('\nStarred interpretation (python dictionary of three items (one python dict and two pandas dataframes)):\n',
-          starred_interpretation)
+    print(
+        '\nStarred interpretation (python dictionary of three items (one python dict and two pandas dataframes)):\n',
+        starred_interpretation,
+    )
 
     starred_target_line = well.starred_target_line.to_dict()
     print('\nStarred target line (in the python dictionary format)):\n', starred_target_line)
@@ -50,7 +52,7 @@ def prepare_well_plan():
         kb=0.0,
         tie_in_tvd=0.0,
         tie_in_ns=0.0,
-        tie_in_ew=0.0
+        tie_in_ew=0.0,
     )
     print(f'\nCreated nested well "{nested_well_name}"')
     print(well.nested_wells.find_by_name(nested_well_name).to_dict())

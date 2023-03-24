@@ -36,7 +36,7 @@ def degrees_to_radians(value: float) -> float:
 METERS_MAP = {
     EMeasureUnits.METER: lambda value: value,
     EMeasureUnits.FOOT: lambda value: feet_to_meters(value),
-    EMeasureUnits.METER_FOOT: lambda value: feet_to_meters(value)
+    EMeasureUnits.METER_FOOT: lambda value: feet_to_meters(value),
 }
 
 

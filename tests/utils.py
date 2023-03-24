@@ -1,5 +1,6 @@
 from typing import Any, Iterable
-from numpy import isclose, ndarray, nan
+
+from numpy import isclose, nan, ndarray
 
 from rogii_solo.calculations.constants import DELTA
 
