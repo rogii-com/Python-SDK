@@ -192,9 +192,9 @@ class Interpretation(ComplexObject):
             except IndexError:
                 right_segment = None
 
-            if left_segment['md'] < min_trajectory_md or left_segment['md'] >= max_trajectory_md:
+            if left_segment['md'] < min_trajectory_md or left_segment['md'] > max_trajectory_md:
                 continue
-            elif right_segment and (left_segment['md'] <= max_trajectory_md <= right_segment['md']):
+            elif right_segment and (left_segment['md'] <= max_trajectory_md < right_segment['md']):
                 fitted_segments.append(
                     self._get_truncated_segment(
                         left=left_segment,

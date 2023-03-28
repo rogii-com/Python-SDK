@@ -12,7 +12,8 @@ from tests.papi_data import (
     EI_LAST_SEGMENT_OUT_ID,
     END_DATETIME,
     HORIZON_NAME,
-    INTERPRETATION_ABSENT_HORIZONS_ID,
+    INTERPRETATION_LAST_SEGMENT_ONE_POINT_ABSENT_HORIZONS_ID,
+    INTERPRETATION_LAST_SEGMENT_ONE_POINT_ID,
     INTERPRETATION_NAME,
     LOG_NAME,
     METER_PROJECT_NAME,
@@ -445,8 +446,7 @@ def test_ei_last_segment_out(project):
     well = project.wells.find_by_name(WELL_NAME)
 
     assert well is not None
-
-    interpretation = well.starred_interpretation
+    interpretation = well.interpretations.find_by_id(INTERPRETATION_LAST_SEGMENT_ONE_POINT_ID)
     endless_interpretation = well.interpretations.find_by_id(EI_LAST_SEGMENT_OUT_ID)
 
     assert interpretation is not None
@@ -465,7 +465,9 @@ def test_ei_absent_horizons_last_segment_out(project):
 
     assert well is not None
 
-    absent_horizons_interpretation = well.interpretations.find_by_id(INTERPRETATION_ABSENT_HORIZONS_ID)
+    absent_horizons_interpretation = well.interpretations.find_by_id(
+        INTERPRETATION_LAST_SEGMENT_ONE_POINT_ABSENT_HORIZONS_ID
+    )
     endless_interpretation = well.interpretations.find_by_id(EI_ABSENT_HORIZONS_LAST_SEGMENT_OUT_ID)
 
     assert absent_horizons_interpretation is not None
