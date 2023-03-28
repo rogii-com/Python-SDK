@@ -37,8 +37,13 @@ INTERPRETATION_NAME = 'Interpretation'
 STARRED_INTERPRETATION_NAME = 'Starred Interpretation'
 STARRED_INTERPRETATION_ID = uuid4()
 
-INTERPRETATION_ABSENT_HORIZONS_NAME = 'Interpretation Without Horizons'
-INTERPRETATION_ABSENT_HORIZONS_ID = uuid4()
+INTERPRETATION_LAST_SEGMENT_ONE_POINT_NAME = 'Interpretation with last segment of one point'
+INTERPRETATION_LAST_SEGMENT_ONE_POINT_ID = uuid4()
+
+INTERPRETATION_LAST_SEGMENT_ONE_POINT_ABSENT_HORIZONS_NAME = (
+    'Interpretation with last segment of one point without horizons'
+)
+INTERPRETATION_LAST_SEGMENT_ONE_POINT_ABSENT_HORIZONS_ID = uuid4()
 
 HORIZON_NAME = 'Horizon'
 HORIZON_ID = uuid4()
@@ -327,29 +332,6 @@ INTERPRETATIONS_DATA_RESPONSE = {
             'format': 'v2',
         },
         {
-            'uuid': INTERPRETATION_ABSENT_HORIZONS_ID,
-            'name': INTERPRETATION_ABSENT_HORIZONS_NAME,
-            'properties': {
-                'cutoff': {'val': 0},
-                'palette': 10,
-                'lightness': 0,
-                'transparency': 0,
-                'typelogFillUuid': '19389162-0b8b-4df3-a373-90a2ba12a307',
-                'extensionGridUuid': '00000000-0000-0000-0000-000000000000',
-                'faultLabelVisible': True,
-                'reverse_extension': False,
-                'zero_horizon_uuid': '00000000-0000-0000-0000-000000000000',
-                'coloredLogsVisible': True,
-                'boundaryPointsColor': '#ffa5a5a5',
-                'interpretationExtend': {'val': 0},
-                'boundaryPointsVisible': True,
-                'display_hidden_segment': True,
-            },
-            'owner': 3,
-            'mode': 'PUBLIC',
-            'format': None,
-        },
-        {
             'uuid': EI_LAST_SEGMENT_OUT_ID,
             'name': EI_LAST_SEGMENT_OUT_NAME,
             'properties': {
@@ -375,6 +357,52 @@ INTERPRETATIONS_DATA_RESPONSE = {
         {
             'uuid': EI_ALL_SEGMENTS_OUT_ID,
             'name': EI_ALL_SEGMENTS_OUT_NAME,
+            'properties': {
+                'cutoff': {'val': 0},
+                'palette': 10,
+                'lightness': 0,
+                'transparency': 0,
+                'typelogFillUuid': '39980ce2-2961-4a35-8baf-8941e9b0169a',
+                'extensionGridUuid': '00000000-0000-0000-0000-000000000000',
+                'faultLabelVisible': True,
+                'reverse_extension': False,
+                'zero_horizon_uuid': '00000000-0000-0000-0000-000000000000',
+                'coloredLogsVisible': True,
+                'boundaryPointsColor': '#ffa5a5a5',
+                'interpretationExtend': {'val': 0},
+                'boundaryPointsVisible': True,
+                'display_hidden_segment': True,
+            },
+            'owner': 4,
+            'mode': 'PUBLIC',
+            'format': 'v2',
+        },
+        {
+            'uuid': INTERPRETATION_LAST_SEGMENT_ONE_POINT_ID,
+            'name': INTERPRETATION_LAST_SEGMENT_ONE_POINT_NAME,
+            'properties': {
+                'cutoff': {'val': 0},
+                'palette': 10,
+                'lightness': 0,
+                'transparency': 0,
+                'typelogFillUuid': '39980ce2-2961-4a35-8baf-8941e9b0169a',
+                'extensionGridUuid': '00000000-0000-0000-0000-000000000000',
+                'faultLabelVisible': True,
+                'reverse_extension': False,
+                'zero_horizon_uuid': '00000000-0000-0000-0000-000000000000',
+                'coloredLogsVisible': True,
+                'boundaryPointsColor': '#ffa5a5a5',
+                'interpretationExtend': {'val': 0},
+                'boundaryPointsVisible': True,
+                'display_hidden_segment': True,
+            },
+            'owner': 4,
+            'mode': 'PUBLIC',
+            'format': 'v2',
+        },
+        {
+            'uuid': INTERPRETATION_LAST_SEGMENT_ONE_POINT_ABSENT_HORIZONS_ID,
+            'name': INTERPRETATION_LAST_SEGMENT_ONE_POINT_ABSENT_HORIZONS_NAME,
             'properties': {
                 'cutoff': {'val': 0},
                 'palette': 10,
@@ -1079,13 +1107,107 @@ ASSEMBLED_SEGMENTS_DATA_RESPONSE = {
     }
 }
 
-ASSEMBLED_SEGMENTS_ABSENT_HORIZONS_DATA_RESPONSE = {
+ASSEMBLED_SEGMENTS_LAST_SEGMENT_ONE_POINT_DATA_RESPONSE = {
+    'assembled_segments': {
+        'horizons': {
+            HORIZON_ID: {'tvd': {'val': 4875.37313679709}, 'uuid': HORIZON_ID},
+            HORIZON_2_ID: {'tvd': {'val': 4329.045990215498}, 'uuid': HORIZON_2_ID},
+            HORIZON_3_ID: {'tvd': {'val': 4029.045990215498}, 'uuid': HORIZON_3_ID},
+        },
+        'interp_end_md': {'val': 10741.239115452869},
+        'interp_end_x': {'val': 2328.0135891272166},
+        'interp_end_y': {'val': -1914.927616987544},
+        'linked_to_trj_end': False,
+        'segments': [
+            {
+                'boundary_type': 1,
+                'end': {'val': 0},
+                'horizon_shifts': {
+                    HORIZON_ID: {
+                        'end': {'val': 1685.1139500714344},
+                        'start': {'val': 1632.956791751696},
+                        'uuid': HORIZON_ID,
+                    },
+                    HORIZON_2_ID: {
+                        'end': {'val': 1685.1139500714344},
+                        'start': {'val': 1632.956791751696},
+                        'uuid': HORIZON_2_ID,
+                    },
+                    HORIZON_3_ID: {
+                        'end': {'val': 1685.1139500714344},
+                        'start': {'val': 1632.956791751696},
+                        'uuid': HORIZON_3_ID,
+                    },
+                },
+                'md': {'val': 7627.5},
+                'start': {'val': 0},
+                'uuid': 'a0cbc76d-b524-4061-ad69-2751353209d0',
+                'x': {'val': 0},
+                'y': {'val': 0},
+            },
+            {
+                'boundary_type': 1,
+                'end': {'val': 0},
+                'horizon_shifts': {
+                    HORIZON_ID: {
+                        'end': {'val': 1654.0526934167056},
+                        'start': {'val': 1685.1139500714344},
+                        'uuid': HORIZON_ID,
+                    },
+                    HORIZON_2_ID: {
+                        'end': {'val': 1654.0526934167056},
+                        'start': {'val': 1685.1139500714344},
+                        'uuid': HORIZON_2_ID,
+                    },
+                    HORIZON_3_ID: {
+                        'end': {'val': 1654.0526934167056},
+                        'start': {'val': 1685.1139500714344},
+                        'uuid': HORIZON_3_ID,
+                    },
+                },
+                'md': {'val': 8756.1},
+                'start': {'val': 0},
+                'uuid': '5841ccb7-5f38-4209-87d1-3830b98ab86f',
+                'x': {'val': 936.0090093403047},
+                'y': {'val': -512.7027100919538},
+            },
+            {
+                'boundary_type': 1,
+                'end': {'val': 0},
+                'horizon_shifts': {
+                    HORIZON_ID: {
+                        'end': {'val': 1607.4987997150938},
+                        'start': {'val': 1654.0526934167056},
+                        'uuid': HORIZON_ID,
+                    },
+                    HORIZON_2_ID: {
+                        'end': {'val': 1607.4987997150938},
+                        'start': {'val': 1654.0526934167056},
+                        'uuid': HORIZON_2_ID,
+                    },
+                    HORIZON_3_ID: {
+                        'end': {'val': 1607.4987997150938},
+                        'start': {'val': 1654.0526934167056},
+                        'uuid': HORIZON_3_ID,
+                    },
+                },
+                'md': {'val': 9553.16627586735},
+                'start': {'val': 0},
+                'uuid': '84848ad6-c533-4399-a180-2c96928e1fc3',
+                'x': {'val': 1506.8463116346054},
+                'y': {'val': -1064.5840083926553},
+            },
+        ],
+    }
+}
+
+ASSEMBLED_SEGMENTS_LAST_SEGMENT_ONE_POINT_ABSENT_HORIZONS_DATA_RESPONSE = {
     'assembled_segments': {
         'horizons': {},
-        'interp_end_md': {'val': 9553.16627586735},
-        'interp_end_x': {'val': 1506.8463116346054},
-        'interp_end_y': {'val': -1064.5840083926553},
-        'linked_to_trj_end': True,
+        'interp_end_md': {'val': 10741.239115452869},
+        'interp_end_x': {'val': 2328.0135891272166},
+        'interp_end_y': {'val': -1914.927616987544},
+        'linked_to_trj_end': False,
         'segments': [
             {
                 'boundary_type': 1,
@@ -1093,7 +1215,7 @@ ASSEMBLED_SEGMENTS_ABSENT_HORIZONS_DATA_RESPONSE = {
                 'horizon_shifts': {},
                 'md': {'val': 7627.5},
                 'start': {'val': 0},
-                'uuid': '021eac1c-fa18-479d-a1fe-ceec4446e86f',
+                'uuid': '975a8cee-ac1c-4ce1-9aa6-b7c51131a49a',
                 'x': {'val': 0},
                 'y': {'val': 0},
             },
@@ -1103,9 +1225,19 @@ ASSEMBLED_SEGMENTS_ABSENT_HORIZONS_DATA_RESPONSE = {
                 'horizon_shifts': {},
                 'md': {'val': 8756.1},
                 'start': {'val': 0},
-                'uuid': 'd77b1874-a4d6-468b-8102-17086350b634',
+                'uuid': 'b7089fc1-6973-46a5-b1f5-559b219eadd7',
                 'x': {'val': 936.0090093403047},
                 'y': {'val': -512.7027100919538},
+            },
+            {
+                'boundary_type': 1,
+                'end': {'val': 0},
+                'horizon_shifts': {},
+                'md': {'val': 9553.16627586735},
+                'start': {'val': 0},
+                'uuid': '9a29ef17-5c48-4d7c-a610-974730472e2f',
+                'x': {'val': 1506.8463116346054},
+                'y': {'val': -1064.5840083926553},
             },
         ],
     }

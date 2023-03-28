@@ -75,19 +75,21 @@ def get_segments(
         )
 
     last_trajectory_point = calculated_trajectory[-1]
-    segments.append(
-        Segment(
-            uuid=None,
-            md=last_trajectory_point['md'],
-            vs=last_trajectory_point['vs'],
-            start=None,
-            end=None,
-            x=last_trajectory_point['x'],
-            y=last_trajectory_point['y'],
-            horizon_shifts=segments[-1]['horizon_shifts'],
-            boundary_type=segments[-1]['boundary_type'],
+
+    if segments[-1]['md'] != last_trajectory_point['md']:
+        segments.append(
+            Segment(
+                uuid=None,
+                md=last_trajectory_point['md'],
+                vs=last_trajectory_point['vs'],
+                start=None,
+                end=None,
+                x=last_trajectory_point['x'],
+                y=last_trajectory_point['y'],
+                horizon_shifts=segments[-1]['horizon_shifts'],
+                boundary_type=segments[-1]['boundary_type'],
+            )
         )
-    )
 
     return segments
 
