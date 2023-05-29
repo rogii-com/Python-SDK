@@ -1146,3 +1146,26 @@ class PapiClient(BasePapiClient):
             },
             headers=headers,
         )
+
+    def fetch_well_comments(
+        self,
+        well_id: str,
+        offset: int = BasePapiClient.DEFAULT_OFFSET,
+        limit: int = BasePapiClient.DEFAULT_LIMIT,
+        headers: Optional[Dict] = None,
+    ):
+        """
+        :param well_id:
+        :param offset:
+        :param limit:
+        :param headers:
+        :return:
+        """
+        return self._send_request(
+            url=f'laterals/{well_id}/comments',
+            params={
+                'offset': offset,
+                'limit': limit,
+            },
+            headers=headers,
+        )

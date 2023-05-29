@@ -8,6 +8,7 @@ from tests.papi_data import (
     ASSEMBLED_SEGMENTS_DATA_RESPONSE,
     ASSEMBLED_SEGMENTS_LAST_SEGMENT_ONE_POINT_ABSENT_HORIZONS_DATA_RESPONSE,
     ASSEMBLED_SEGMENTS_LAST_SEGMENT_ONE_POINT_DATA_RESPONSE,
+    COMMENTS_DATA_RESPONSE,
     EI_ABSENT_HORIZONS_LAST_SEGMENT_OUT_ASSEMBLED_SEGMENTS_DATA_RESPONSE,
     EI_ABSENT_HORIZONS_LAST_SEGMENT_OUT_ID,
     EI_ALL_SEGMENTS_OUT_ASSEMBLED_SEGMENTS_DATA_RESPONSE,
@@ -164,6 +165,10 @@ def fetch_well_linked_typewells(**kwargs):
     return WELL_LINKED_TYPEWELLS_DATA_RESPONSE
 
 
+def fetch_well_comments(**kwargs):
+    return COMMENTS_DATA_RESPONSE
+
+
 @pytest.fixture(scope='function')
 def solo_client():
     solo_client = SoloClient(client_id='client_id', client_secret='client_secret')
@@ -193,6 +198,7 @@ def solo_client():
     solo_client._papi_client.fetch_well_mapped_traces = fetch_well_mapped_traces
     solo_client._papi_client.fetch_well_time_trace = fetch_well_time_trace
     solo_client._papi_client.fetch_well_linked_typewells = fetch_well_linked_typewells
+    solo_client._papi_client.fetch_well_comments = fetch_well_comments
 
     return solo_client
 

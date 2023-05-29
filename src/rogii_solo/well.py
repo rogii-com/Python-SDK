@@ -5,6 +5,7 @@ from pandas import DataFrame
 import rogii_solo.project
 from rogii_solo.base import ComplexObject, ObjectRepository
 from rogii_solo.calculations.enums import ELogMeasureUnits
+from rogii_solo.comment import Comment
 from rogii_solo.interpretation import Interpretation
 from rogii_solo.log import Log
 from rogii_solo.mudlog import Mudlog
@@ -72,6 +73,9 @@ class Well(ComplexObject):
 
         self._linked_typewells_data: Optional[DataList] = None
         self._linked_typewells: Optional[ObjectRepository[Typewell]] = None
+
+        self._comments_data: Optional[DataList] = None
+        self._comments: Optional[DataList] = None
 
     def to_dict(self, get_converted: bool = True) -> Dict[str, Any]:
         measure_units = self.project.measure_unit
@@ -298,6 +302,29 @@ class Well(ComplexObject):
             self._time_traces_data = self._papi_client.get_well_mapped_time_traces_data(self.uuid)
 
         return self._time_traces_data
+
+    @property
+    def comments(self) -> ObjectRepository[Comment]:
+        if self._comments is None:
+            self._comments = ObjectRepository(
+                objects=[
+                    Comment(
+                        well=self,
+                        comment_id=item['comment_id'],
+                        name=item['name'],
+                        _comment_boxes_data=item['comment_boxes'],
+                    )
+                    for item in self._get_comments_data()
+                ]
+            )
+
+        return self._comments
+
+    def _get_comments_data(self) -> DataList:
+        if self._comments_data is None:
+            self._comments_data = self._papi_client.get_well_comments_data(well_id=self.uuid)
+
+        return self._comments_data
 
     def create_nested_well(
         self,
