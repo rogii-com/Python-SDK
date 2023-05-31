@@ -1577,10 +1577,38 @@ EI_ALL_SEGMENTS_OUT_ASSEMBLED_SEGMENTS_DATA_RESPONSE = {
 }
 
 WELL_LINKED_TYPEWELLS_DATA_RESPONSE = {
-    'content': [{"shift": {"val": 123.0}, "typewell_id": TYPEWELL_ID}],
+    'content': [{'shift': {'val': 123.0}, 'typewell_id': TYPEWELL_ID}],
     'offset': 0,
     'limit': 100,
     'total': 1,
+    'first': True,
+    'last': True,
+}
+
+
+COMMENTS_DATA_RESPONSE = {
+    'content': [
+        {
+            'comment_id': '34664bbc-e560-4e82-8925-7f8268f579be',
+            'name': 'Comment 1',
+            'comment_boxes': [
+                {
+                    'commentbox_id': '3e277460-4156-496d-850c-48e64ab8b273',
+                    'text': 'Comment Text 1',
+                    'anchor_md': {"val": 2375.2755905511813},
+                },
+                {
+                    'commentbox_id': '7a31617e-393e-4cda-9fd5-bdeec1a08222',
+                    'text': 'Comment Text 2',
+                    'anchor_md': {"val": 2375.2755905511813},
+                },
+            ],
+        },
+        {'comment_id': '400a0f63-5064-4939-a2c7-05e7b5ddb920', 'name': 'Comment 2', 'comment_boxes': []},
+    ],
+    'offset': 0,
+    'limit': 10,
+    'total': 2,
     'first': True,
     'last': True,
 }

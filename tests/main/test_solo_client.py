@@ -515,3 +515,51 @@ def _test_ei_case(well, interpretation, endless_interpretation, measure_units):
     )
 
     assert fabs(last_segment_dip - ei_last_segment_dip) < DELTA_EI_DIP
+
+
+def test_get_well_comments(project):
+    well = project.wells.find_by_name(WELL_NAME)
+
+    assert well is not None
+
+    comments = well.comments
+
+    assert comments is not None
+
+    comments_data = comments.to_dict()
+    comments_df = comments.to_df()
+
+    assert comments_data
+    assert not comments_df.empty
+
+
+def test_get_comment_boxes(project):
+    well = project.wells.find_by_name(WELL_NAME)
+
+    assert well is not None
+
+    comments = well.comments
+
+    assert comments is not None
+
+    first_comment = comments[0]
+    comment_boxes = first_comment.comment_boxes
+
+    assert comment_boxes is not None
+
+    comment_boxes_data = comment_boxes.to_dict()
+    comment_boxes_df = comment_boxes.to_df()
+
+    assert comment_boxes_data
+    assert not comment_boxes_df.empty
+
+    second_comment = comments[1]
+    comment_boxes = second_comment.comment_boxes
+
+    assert comment_boxes is not None
+
+    comment_boxes_data = comment_boxes.to_dict()
+    comment_boxes_df = comment_boxes.to_df()
+
+    assert not comment_boxes_data
+    assert comment_boxes_df.empty

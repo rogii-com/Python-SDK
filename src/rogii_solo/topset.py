@@ -34,7 +34,7 @@ class Topset(ComplexObject):
         return {'uuid': self.uuid, 'name': self.name}
 
     def to_df(self, get_converted: bool = True) -> DataFrame:
-        return DataFrame([self.to_dict()])
+        return DataFrame([self.to_dict(get_converted)])
 
     @property
     def tops(self) -> ObjectRepository['Top']:
@@ -107,4 +107,4 @@ class Top(BaseObject):
         }
 
     def to_df(self, get_converted: bool = True) -> DataFrame:
-        return DataFrame([self.to_dict()])
+        return DataFrame([self.to_dict(get_converted)])
