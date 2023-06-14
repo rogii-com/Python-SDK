@@ -28,9 +28,8 @@ EI_ABSENT_HORIZONS_LAST_SEGMENT_OUT_ID = uuid4()
 EI_ALL_SEGMENTS_OUT_NAME = 'EI All Segments Out Of Trajectory'
 EI_ALL_SEGMENTS_OUT_ID = uuid4()
 
-TRACE_NAME = 'Bit depth'
-START_DATETIME = '2020-09-06 10:00:00.0'
-END_DATETIME = '2020-09-06 10:00:10.0'
+TIME_TRACE_NAME = 'Bit depth'
+CALC_TRACE_NAME = 'Rig Activity'
 
 INTERPRETATION_NAME = 'Interpretation'
 
@@ -987,7 +986,7 @@ TRACES_DATA_RESPONSE = {
 }
 
 
-MAPPED_TRACES_DATA_RESPONSE = {
+MAPPED_TIME_TRACES_DATA_RESPONSE = {
     'content': [
         {
             'uuid': '793b06f6-d494-45e0-9ed8-b5e8e916a2a8',
@@ -1026,19 +1025,53 @@ MAPPED_TRACES_DATA_RESPONSE = {
 
 TIME_TRACE_DATA_RESPONSE = {
     'content': [
-        {'index': '2020-09-06T10:00:00.000Z', 'value': '661.08'},
-        {'index': '2020-09-06T10:00:01.000Z', 'value': '661.16'},
-        {'index': '2020-09-06T10:00:02.000Z', 'value': '661.24'},
-        {'index': '2020-09-06T10:00:03.000Z', 'value': '661.32'},
-        {'index': '2020-09-06T10:00:04.000Z', 'value': '661.41'},
-        {'index': '2020-09-06T10:00:05.000Z', 'value': '661.49'},
-        {'index': '2020-09-06T10:00:06.000Z', 'value': '661.57'},
-        {'index': '2020-09-06T10:00:07.000Z', 'value': '661.66'},
-        {'index': '2020-09-06T10:00:08.000Z', 'value': '661.74'},
-        {'index': '2020-09-06T10:00:09.000Z', 'value': '661.82'},
-        {'index': '2020-09-06T10:00:10.000Z', 'value': '661.91'},
+        {'index': '2022-06-10T12:17:41.000Z', 'value': '1.0'},
+        {'index': '2022-06-10T12:17:42.000Z', 'value': '2.0'},
+        {'index': '2022-06-10T12:17:43.000Z', 'value': '3.0'},
+        {'index': '2022-06-10T12:17:44.000Z', 'value': '4.0'},
+        {'index': '2022-06-10T12:17:45.000Z', 'value': '5.0'},
     ]
 }
+
+MAPPED_CALC_TRACES_DATA_RESPONSE = {
+    'content': [
+        {
+            'uuid': 'e3c996b6-9cdb-4876-ac99-0aab694b801a',
+            'name': 'Rig Activity',
+            'hash': '2e4ae0788e59ca3508cb29088c36e95c',
+            'start_date_time_index': '2022-06-10T12:17:41Z',
+            'last_date_time_index': '2022-07-03T12:57:11Z',
+        },
+        {
+            'uuid': 'fed6681e-1f21-466c-bf91-55fed528a07d',
+            'name': 'KPI: Trip In: Running',
+            'hash': '137b912122af693d25cca00e5569d055',
+            'start_date_time_index': '2022-06-10T12:17:41Z',
+            'last_date_time_index': '2022-06-21T23:21:31Z',
+        },
+        {
+            'uuid': '5fe2a454-86ad-4fdc-abbf-686e4f67a4fa',
+            'name': 'KPI: Trip Out: Connection',
+            'hash': '13f2ddf5eca16303369a3eb3629223f3',
+            'start_date_time_index': '2022-06-10T12:17:41Z',
+            'last_date_time_index': '2022-06-21T23:21:33Z',
+        },
+    ]
+}
+
+CALC_TRACE_DATA_RESPONSE = {
+    'content': [
+        {'start': '2022-06-10T12:17:41Z', 'end': '2022-06-10T13:08:21Z', 'value': '54'},
+        {'start': '2022-06-10T13:08:21Z', 'end': '2022-06-10T13:40:19Z', 'value': '21'},
+        {'start': '2022-06-10T13:40:19Z', 'end': '2022-06-10T13:51:59Z', 'value': '54'},
+        {'start': '2022-06-10T13:51:59Z', 'end': '2022-06-10T14:38:04Z', 'value': '21'},
+        {'start': '2022-06-10T14:38:04Z', 'end': '2022-06-10T14:38:07Z', 'value': '32'},
+        {'start': '2022-06-10T14:38:07Z', 'end': '2022-06-10T14:38:11Z', 'value': '51'},
+        {'start': '2022-06-10T14:38:11Z', 'end': '2022-06-10T14:38:16Z', 'value': '52'},
+    ]
+}
+
+
 ASSEMBLED_SEGMENTS_DATA_RESPONSE = {
     'assembled_segments': {
         'horizons': {

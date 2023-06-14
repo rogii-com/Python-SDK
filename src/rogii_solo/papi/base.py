@@ -868,12 +868,18 @@ class PapiClient(BasePapiClient):
         :return:
         """
         data = self._send_request(
-            url=f'laterals/{well_id}/traces/mapped/',
+            url=f'wells/{well_id}/traces/mapped/',
             params={'type': trace_type},
             headers=headers,
         )
 
         return data['content']
+
+    def fetch_well_mapped_time_traces(self, well_id: str, headers: Optional[Dict] = None):
+        return self.fetch_well_mapped_traces(well_id=well_id, trace_type='TIME', headers=headers)
+
+    def fetch_well_mapped_calc_traces(self, well_id: str, headers: Optional[Dict] = None):
+        return self.fetch_well_mapped_traces(well_id=well_id, trace_type='CALC', headers=headers)
 
     def fetch_well_time_trace(
         self,
@@ -895,7 +901,34 @@ class PapiClient(BasePapiClient):
         :return:
         """
         data = self._send_request(
-            url=f'laterals/{well_id}/traces/{trace_id}/data/time/',
+            url=f'wells/{well_id}/traces/{trace_id}/data/time/',
+            params={'from': time_from, 'to': time_to, 'hash': trace_hash},
+            headers=headers,
+        )
+
+        return data['content']
+
+    def fetch_well_calc_trace(
+        self,
+        well_id: str,
+        trace_id: str,
+        time_from: Optional[str] = None,
+        time_to: Optional[str] = None,
+        trace_hash: Optional[str] = None,
+        headers: Optional[Dict] = None,
+    ):
+        """
+        Fetches well calculated trace
+        :param well_id:
+        :param trace_id:
+        :param trace_hash:
+        :param time_from:
+        :param time_to:
+        :param headers:
+        :return:
+        """
+        data = self._send_request(
+            url=f'wells/{well_id}/traces/{trace_id}/data/calculated/',
             params={'from': time_from, 'to': time_to, 'hash': trace_hash},
             headers=headers,
         )
@@ -1059,7 +1092,7 @@ class PapiClient(BasePapiClient):
         :param headers:
         :return:
         """
-        url = f'projects/{project_id}/laterals'
+        url = f'projects/{project_id}/wells'
         request_data = {
             'name': well_name,
             'operator': operator,
@@ -1139,7 +1172,7 @@ class PapiClient(BasePapiClient):
         :return:
         """
         return self._send_request(
-            url=f'laterals/{well_id}/linked',
+            url=f'wells/{well_id}/linked',
             params={
                 'offset': offset,
                 'limit': limit,
@@ -1162,7 +1195,7 @@ class PapiClient(BasePapiClient):
         :return:
         """
         return self._send_request(
-            url=f'laterals/{well_id}/comments',
+            url=f'wells/{well_id}/comments',
             params={
                 'offset': offset,
                 'limit': limit,

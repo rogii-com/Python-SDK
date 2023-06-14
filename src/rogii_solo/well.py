@@ -12,7 +12,7 @@ from rogii_solo.mudlog import Mudlog
 from rogii_solo.papi.client import PapiClient
 from rogii_solo.target_line import TargetLine
 from rogii_solo.topset import Topset
-from rogii_solo.trace import TimeTrace
+from rogii_solo.trace import CalcTrace, TimeTrace
 from rogii_solo.trajectory import TrajectoryPoint, TrajectoryPointRepository
 from rogii_solo.types import DataList
 
@@ -70,6 +70,9 @@ class Well(ComplexObject):
 
         self._time_traces_data: Optional[DataList] = None
         self._time_traces: Optional[ObjectRepository[TimeTrace]] = None
+
+        self._calc_traces_data: Optional[DataList] = None
+        self._calc_traces: Optional[ObjectRepository[CalcTrace]] = None
 
         self._linked_typewells_data: Optional[DataList] = None
         self._linked_typewells: Optional[ObjectRepository[Typewell]] = None
@@ -289,10 +292,10 @@ class Well(ComplexObject):
     @property
     def time_traces(self) -> ObjectRepository[TimeTrace]:
         if self._time_traces is None:
-            mapped_traces = self._get_time_traces_data()
-
             self._time_traces = ObjectRepository(
-                objects=[TimeTrace(papi_client=self._papi_client, well=self, **item) for item in mapped_traces]
+                objects=[
+                    TimeTrace(papi_client=self._papi_client, well=self, **item) for item in self._get_time_traces_data()
+                ]
             )
 
         return self._time_traces
@@ -302,6 +305,23 @@ class Well(ComplexObject):
             self._time_traces_data = self._papi_client.get_well_mapped_time_traces_data(self.uuid)
 
         return self._time_traces_data
+
+    @property
+    def calc_traces(self) -> ObjectRepository[CalcTrace]:
+        if self._calc_traces is None:
+            self._calc_traces = ObjectRepository(
+                objects=[
+                    CalcTrace(papi_client=self._papi_client, well=self, **item) for item in self._get_calc_traces_data()
+                ]
+            )
+
+        return self._calc_traces
+
+    def _get_calc_traces_data(self) -> DataList:
+        if self._calc_traces_data is None:
+            self._calc_traces_data = self._papi_client.get_well_mapped_calc_traces_data(self.uuid)
+
+        return self._calc_traces_data
 
     @property
     def comments(self) -> ObjectRepository[Comment]:

@@ -200,10 +200,16 @@ class PapiClient(SdkPapiClient):
         return self.fetch_traces(**kwargs)
 
     def get_well_mapped_time_traces_data(self, well_id: str, **kwargs) -> PapiDataList:
-        return self.fetch_well_mapped_traces(well_id=well_id, trace_type='TIME', **kwargs)
+        return self.fetch_well_mapped_time_traces(well_id=well_id, **kwargs)
 
     def get_well_time_trace_data(self, well_id: str, trace_id: str, **kwargs) -> PapiDataList:
         return self.fetch_well_time_trace(well_id=well_id, trace_id=trace_id, **kwargs)
+
+    def get_well_mapped_calc_traces_data(self, well_id: str, **kwargs) -> PapiDataList:
+        return self.fetch_well_mapped_calc_traces(well_id=well_id, **kwargs)
+
+    def get_well_calc_trace_data(self, well_id: str, trace_id: str, **kwargs) -> PapiDataList:
+        return self.fetch_well_calc_trace(well_id=well_id, trace_id=trace_id, **kwargs)
 
     def get_well_linked_typewells_data(self, **kwargs) -> PapiDataList:
         return list(self._gen_data_page(func=self.fetch_well_linked_typewells, **kwargs))

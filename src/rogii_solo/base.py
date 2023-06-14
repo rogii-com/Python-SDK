@@ -149,19 +149,19 @@ class ObjectRepository(list[T]):
 
         super().__init__(objects)
 
-    def to_dict(self, get_converted: bool = True) -> DataList:
+    def to_dict(self, *args, **kwargs) -> DataList:
         """
         Return list of dicts
         :return:
         """
-        return [object_.to_dict(get_converted) for object_ in self]
+        return [object_.to_dict(*args, **kwargs) for object_ in self]
 
-    def to_df(self, get_converted: bool = True) -> DataFrame:
+    def to_df(self, *args, **kwargs) -> DataFrame:
         """
         Convert list to Pandas DataFrame
         :return:
         """
-        return DataFrame(self.to_dict(get_converted))
+        return DataFrame(self.to_dict(*args, **kwargs))
 
     def find_by_id(self, value) -> Optional[T]:
         """
