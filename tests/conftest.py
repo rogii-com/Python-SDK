@@ -8,6 +8,7 @@ from tests.papi_data import (
     ASSEMBLED_SEGMENTS_DATA_RESPONSE,
     ASSEMBLED_SEGMENTS_LAST_SEGMENT_ONE_POINT_ABSENT_HORIZONS_DATA_RESPONSE,
     ASSEMBLED_SEGMENTS_LAST_SEGMENT_ONE_POINT_DATA_RESPONSE,
+    CALC_TRACE_DATA_RESPONSE,
     COMMENTS_DATA_RESPONSE,
     EI_ABSENT_HORIZONS_LAST_SEGMENT_OUT_ASSEMBLED_SEGMENTS_DATA_RESPONSE,
     EI_ABSENT_HORIZONS_LAST_SEGMENT_OUT_ID,
@@ -26,7 +27,8 @@ from tests.papi_data import (
     INTERPRETATIONS_DATA_RESPONSE,
     LOG_POINTS_DATA_RESPONSE,
     LOGS_DATA_RESPONSE,
-    MAPPED_TRACES_DATA_RESPONSE,
+    MAPPED_CALC_TRACES_DATA_RESPONSE,
+    MAPPED_TIME_TRACES_DATA_RESPONSE,
     METER_PROJECT_NAME,
     MUDLOG_DATA_RESPONSE,
     MUDLOGS_DATA_RESPONSE,
@@ -153,12 +155,20 @@ def fetch_traces(**kwargs):
     return TRACES_DATA_RESPONSE['content']
 
 
-def fetch_well_mapped_traces(**kwargs):
-    return MAPPED_TRACES_DATA_RESPONSE['content']
+def fetch_well_mapped_time_traces(**kwargs):
+    return MAPPED_TIME_TRACES_DATA_RESPONSE['content']
 
 
 def fetch_well_time_trace(**kwargs):
     return TIME_TRACE_DATA_RESPONSE['content']
+
+
+def fetch_well_mapped_calc_traces(**kwargs):
+    return MAPPED_CALC_TRACES_DATA_RESPONSE['content']
+
+
+def fetch_well_calc_trace(**kwargs):
+    return CALC_TRACE_DATA_RESPONSE['content']
 
 
 def fetch_well_linked_typewells(**kwargs):
@@ -195,8 +205,10 @@ def solo_client():
     solo_client._papi_client.fetch_well_mudlogs = fetch_well_mudlogs
     solo_client._papi_client.fetch_mudlog_logs = fetch_mudlog_logs
     solo_client._papi_client.fetch_traces = fetch_traces
-    solo_client._papi_client.fetch_well_mapped_traces = fetch_well_mapped_traces
+    solo_client._papi_client.fetch_well_mapped_time_traces = fetch_well_mapped_time_traces
+    solo_client._papi_client.fetch_well_mapped_calc_traces = fetch_well_mapped_calc_traces
     solo_client._papi_client.fetch_well_time_trace = fetch_well_time_trace
+    solo_client._papi_client.fetch_well_calc_trace = fetch_well_calc_trace
     solo_client._papi_client.fetch_well_linked_typewells = fetch_well_linked_typewells
     solo_client._papi_client.fetch_well_comments = fetch_well_comments
 
@@ -237,6 +249,6 @@ def solo_client_papi():
 
 @pytest.fixture(scope='module')
 def project_papi(solo_client_papi):
-    solo_client_papi.set_project_by_name(METER_PROJECT_NAME)
+    solo_client_papi.set_project_by_name(environ.get('ROGII_SOLO_PROJECT_NAME'))
 
     return solo_client_papi.project

@@ -1,4 +1,3 @@
-from datetime import datetime
 from math import fabs
 
 import pytest
@@ -6,11 +5,12 @@ import pytest
 from rogii_solo.calculations.interpretation import get_last_segment_dip
 from rogii_solo.exceptions import InvalidProjectException, ProjectNotFoundException
 from tests.papi_data import (
+    CALC_TRACE_DATA_RESPONSE,
+    CALC_TRACE_NAME,
     EI_ABSENT_HORIZONS_LAST_SEGMENT_OUT_ID,
     EI_ALL_SEGMENTS_OUT_ID,
     EI_LAST_SEGMENT_EXTENDED_ID,
     EI_LAST_SEGMENT_OUT_ID,
-    END_DATETIME,
     HORIZON_NAME,
     INTERPRETATION_LAST_SEGMENT_ONE_POINT_ABSENT_HORIZONS_ID,
     INTERPRETATION_LAST_SEGMENT_ONE_POINT_ID,
@@ -29,9 +29,9 @@ from tests.papi_data import (
     STARRED_TOP_CENTER_NAME,
     STARRED_TOP_TOP_NAME,
     STARRED_TOPSET_NAME,
-    START_DATETIME,
     TARGET_LINE_NAME,
-    TRACE_NAME,
+    TIME_TRACE_DATA_RESPONSE,
+    TIME_TRACE_NAME,
     TYPEWELL_KB,
     TYPEWELL_NAME,
     TYPEWELL_XSRF,
@@ -382,33 +382,80 @@ def test_get_mudlog(project):
 
 
 def test_get_time_trace(project):
-    tz_datetime_template = '%Y-%m-%dT%H:%M:%S.%fZ'
-    usual_datetime_template = '%Y-%m-%d %H:%M:%S.%f'
+    start_datetime = '2022-06-10T12:00:00Z'
+    end_datetime = '2022-06-10T12:17:43.000Z'
 
     well = project.wells.find_by_name(WELL_NAME)
-
     assert well is not None
 
-    time_trace = well.time_traces.find_by_name(TRACE_NAME)
+    time_traces = well.time_traces
+    assert time_traces is not None
 
+    traces_data = time_traces.to_dict()
+    traces_df = time_traces.to_df()
+    assert traces_data
+    assert not traces_df.empty
+
+    time_trace = time_traces.find_by_name(TIME_TRACE_NAME)
     assert time_trace is not None
 
-    def convert_to_datetime_tz(time_string: str):
-        dt = datetime.strptime(time_string, usual_datetime_template)
+    trace_points = time_trace.points
+    assert trace_points is not None
 
-        return dt.strftime(tz_datetime_template)
+    trace_points_data = trace_points.to_dict(time_from=start_datetime, time_to=end_datetime)
+    trace_points_df = trace_points.to_df(time_from=start_datetime, time_to=end_datetime)
 
-    start_datetime_tz = convert_to_datetime_tz(START_DATETIME)
-    end_datetime_tz = convert_to_datetime_tz(END_DATETIME)
-    time_trace_data = time_trace.to_dict(time_from=start_datetime_tz, time_to=end_datetime_tz)
-    time_trace_df = time_trace.to_df(time_from=start_datetime_tz, time_to=end_datetime_tz)
+    assert trace_points_data
+    assert not trace_points_df.empty
 
-    assert time_trace_data['meta']['name'] == TRACE_NAME
+    point_index = 2
+    point = TIME_TRACE_DATA_RESPONSE['content'][point_index]
 
-    test_datetime = datetime.strptime(time_trace_data['points'][0]['index'], tz_datetime_template)
+    assert trace_points_data[point_index]['value'] == point['value']
+    assert trace_points_data[point_index]['index'] == point['index']
 
-    assert test_datetime == datetime.strptime(start_datetime_tz, tz_datetime_template)
-    assert time_trace_df['meta'].at[0, 'name'] == TRACE_NAME
+    assert trace_points_df.at[point_index, 'value'] == point['value']
+    assert trace_points_df.at[point_index, 'index'] == point['index']
+
+
+def test_get_calc_trace(project):
+    start_datetime = '2022-06-10T12:00:00Z'
+    end_datetime = '2022-06-10T13:50:00Z'
+
+    well = project.wells.find_by_name(WELL_NAME)
+    assert well is not None
+
+    calc_traces = well.calc_traces
+    assert calc_traces is not None
+
+    traces_data = calc_traces.to_dict()
+    traces_df = calc_traces.to_df()
+    assert traces_data
+    assert not traces_df.empty
+
+    calc_trace = calc_traces.find_by_name(CALC_TRACE_NAME)
+    assert calc_trace is not None
+    assert calc_trace.rac_codes
+
+    trace_points = calc_trace.points
+    assert trace_points is not None
+
+    trace_points_data = trace_points.to_dict(time_from=start_datetime, time_to=end_datetime)
+    trace_points_df = trace_points.to_df(time_from=start_datetime, time_to=end_datetime)
+
+    assert trace_points_data
+    assert not trace_points_df.empty
+
+    point_index = 2
+    point = CALC_TRACE_DATA_RESPONSE['content'][point_index]
+
+    assert trace_points_data[point_index]['start'] == point['start']
+    assert trace_points_data[point_index]['end'] == point['end']
+    assert trace_points_data[point_index]['value'] == point['value']
+
+    assert trace_points_df.at[point_index, 'start'] == point['start']
+    assert trace_points_df.at[point_index, 'end'] == point['end']
+    assert trace_points_df.at[point_index, 'value'] == point['value']
 
 
 def test_get_well_linked_typewells(project):
