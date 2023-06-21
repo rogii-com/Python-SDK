@@ -435,7 +435,14 @@ def test_get_calc_trace(project):
 
     calc_trace = calc_traces.find_by_name(CALC_TRACE_NAME)
     assert calc_trace is not None
-    assert calc_trace.rac_codes
+
+    rac_codes = calc_trace.rac_codes
+    assert rac_codes
+
+    rac_codes_data = rac_codes.to_dict()
+    rac_codes_df = rac_codes.to_df()
+    assert rac_codes_data
+    assert not rac_codes_df.empty
 
     trace_points = calc_trace.points
     assert trace_points is not None
@@ -610,3 +617,16 @@ def test_get_comment_boxes(project):
 
     assert not comment_boxes_data
     assert comment_boxes_df.empty
+
+
+def test_get_well_attributes(project):
+    well = project.wells.find_by_name(WELL_NAME)
+    assert well is not None
+
+    attributes = well.attributes
+    assert attributes is not None
+
+    attributes_data = attributes.to_dict()
+    attributes_df = attributes.to_df()
+    assert attributes_data
+    assert not attributes_df.empty

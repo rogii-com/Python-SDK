@@ -44,6 +44,7 @@ from tests.papi_data import (
     TRAJECTORY_DATA_RESPONSE,
     TYPEWELLS_DATA_RESPONSE,
     VIRTUAL_PROJECTS_DATA_RESPONSE,
+    WELL_ATTRIBUTES_DATA_RESPONSE,
     WELL_LINKED_TYPEWELLS_DATA_RESPONSE,
     WELLS_DATA_RESPONSE,
 )
@@ -179,6 +180,10 @@ def fetch_well_comments(**kwargs):
     return COMMENTS_DATA_RESPONSE
 
 
+def fetch_well_attributes(**kwargs):
+    return WELL_ATTRIBUTES_DATA_RESPONSE
+
+
 @pytest.fixture(scope='function')
 def solo_client():
     solo_client = SoloClient(client_id='client_id', client_secret='client_secret')
@@ -211,6 +216,7 @@ def solo_client():
     solo_client._papi_client.fetch_well_calc_trace = fetch_well_calc_trace
     solo_client._papi_client.fetch_well_linked_typewells = fetch_well_linked_typewells
     solo_client._papi_client.fetch_well_comments = fetch_well_comments
+    solo_client._papi_client.fetch_well_attributes = fetch_well_attributes
 
     return solo_client
 

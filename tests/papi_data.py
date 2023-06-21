@@ -1645,3 +1645,21 @@ COMMENTS_DATA_RESPONSE = {
     'first': True,
     'last': True,
 }
+
+WELL_ATTRIBUTES_DATA_RESPONSE = {
+    'Name': {'value': 'nameWell', 'attribute_id': 1},
+    'API': {'value': 'api', 'attribute_id': 2},
+    'Well Type': {'value': 'Deviated', 'attribute_id': 3},
+    'Operator': {'value': 'operator', 'attribute_id': 4},
+    'KB': {'value': {'val': 1.0}, 'attribute_id': 7},
+    'Azimuth VS': {'value': {'val': 2.0}, 'attribute_id': 8},
+    'Convergence': {'value': {'val': 3.0}, 'attribute_id': 9},
+    'X-srf': {'value': {'val': 13.123359580052492}, 'attribute_id': 12},
+    'Y-srf': {'value': {'val': 16.404199475065617}, 'attribute_id': 13},
+    'Spud date': {'value': '2022-11-17T13:15:31.000+00:00', 'attribute_id': 17},
+    '# of Stages': {'value': 43, 'attribute_id': 43},
+    'Final TVD': {'value': {'val': 0.49}, 'attribute_id': 49},
+    'Final TVDSS': {'value': {'val': -0.5}, 'attribute_id': 50},
+    'Formation': {'value': 'test51', 'attribute_id': 51},
+    'Net pay': {'value': {'val': 52.0}, 'attribute_id': 52},
+}

@@ -4,7 +4,7 @@ from typing import Dict, List, Optional
 from pandas import DataFrame
 
 import rogii_solo.well
-from rogii_solo.base import BaseObject, ComplexObject
+from rogii_solo.base import BaseObject, ComplexObject, ObjectRepository
 from rogii_solo.papi.client import PapiClient
 from rogii_solo.types import DataList
 
@@ -127,29 +127,34 @@ class CalcTrace(Trace):
         return self._points_data
 
     @property
-    def rac_codes(self):
-        return [
-            {'code': 0, 'status': 'In Slips'},
-            {'code': 11, 'status': 'In Slips-Pump'},
-            {'code': 21, 'status': 'Drilling'},
-            {'code': 22, 'status': 'Slide Drilling'},
-            {'code': 23, 'status': 'Slide Oscilate Drilling'},
-            {'code': 31, 'status': 'Reaming'},
-            {'code': 32, 'status': 'Back Reaming'},
-            {'code': 50, 'status': 'Static'},
-            {'code': 51, 'status': 'Static-Rotate & Pump'},
-            {'code': 52, 'status': 'Static-Pump'},
-            {'code': 53, 'status': 'Static-Rotate'},
-            {'code': 54, 'status': 'Surface Operations'},
-            {'code': 61, 'status': 'Run In-Trip In'},
-            {'code': 62, 'status': 'Run In-Pump'},
-            {'code': 63, 'status': 'Run In-Rotate'},
-            {'code': 64, 'status': 'Pull Up-Pump'},
-            {'code': 65, 'status': 'Pull Up-Rotate'},
-            {'code': 66, 'status': 'Pull Up-Trip Out'},
-            {'code': 98, 'status': 'Unknown'},
-            {'code': 99, 'status': 'Missing Input'},
-        ]
+    def rac_codes(self) -> ObjectRepository['RacCode']:
+        return ObjectRepository(
+            objects=[
+                RacCode(code=code, status=status)
+                for code, status in [
+                    (0, 'In Slips'),
+                    (11, 'In Slips-Pump'),
+                    (21, 'Drilling'),
+                    (22, 'Slide Drilling'),
+                    (23, 'Slide Oscilate Drilling'),
+                    (31, 'Reaming'),
+                    (32, 'Back Reaming'),
+                    (50, 'Static'),
+                    (51, 'Static-Rotate & Pump'),
+                    (52, 'Static-Pump'),
+                    (53, 'Static-Rotate'),
+                    (54, 'Surface Operations'),
+                    (61, 'Run In-Trip In'),
+                    (62, 'Run In-Pump'),
+                    (63, 'Run In-Rotate'),
+                    (64, 'Pull Up-Pump'),
+                    (65, 'Pull Up-Rotate'),
+                    (66, 'Pull Up-Trip Out'),
+                    (98, 'Unknown'),
+                    (99, 'Missing Input'),
+                ]
+            ]
+        )
 
 
 class CalcTracePoint(BaseObject):
@@ -162,6 +167,20 @@ class CalcTracePoint(BaseObject):
 
     def to_dict(self) -> Dict:
         return {'start': self.start, 'end': self.end, 'value': self.value}
+
+    def to_df(self) -> DataFrame:
+        return DataFrame([self.to_dict()])
+
+
+class RacCode(BaseObject):
+    def __init__(self, **kwargs):
+        self.code = None
+        self.status = None
+
+        self.__dict__.update(kwargs)
+
+    def to_dict(self) -> Dict:
+        return {'code': self.code, 'status': self.status}
 
     def to_df(self) -> DataFrame:
         return DataFrame([self.to_dict()])

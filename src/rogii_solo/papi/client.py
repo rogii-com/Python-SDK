@@ -217,6 +217,9 @@ class PapiClient(SdkPapiClient):
     def get_well_comments_data(self, well_id: str, **kwargs) -> PapiDataList:
         return list(self._gen_data_page(func=self.fetch_well_comments, well_id=well_id, **kwargs))
 
+    def get_well_attributes(self, well_id: str, **kwargs) -> PapiData:
+        return self.parse_papi_data(self.fetch_well_attributes(well_id=well_id, **kwargs))
+
     def _gen_data_page(self, func: Callable, **kwargs) -> PapiDataIterator:
         offset = kwargs.pop('offset', None) or self.DEFAULT_OFFSET
         limit = kwargs.pop('limit', None) or self.DEFAULT_LIMIT

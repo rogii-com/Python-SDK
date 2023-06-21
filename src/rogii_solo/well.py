@@ -3,7 +3,7 @@ from typing import Any, Dict, Optional
 from pandas import DataFrame
 
 import rogii_solo.project
-from rogii_solo.base import ComplexObject, ObjectRepository
+from rogii_solo.base import BaseObject, ComplexObject, ObjectRepository
 from rogii_solo.calculations.enums import ELogMeasureUnits
 from rogii_solo.comment import Comment
 from rogii_solo.interpretation import Interpretation
@@ -79,6 +79,9 @@ class Well(ComplexObject):
 
         self._comments_data: Optional[DataList] = None
         self._comments: Optional[DataList] = None
+
+        self._attributes_data: Optional[Dict] = None
+        self._attributes: Optional[Dict] = None
 
     def to_dict(self, get_converted: bool = True) -> Dict[str, Any]:
         measure_units = self.project.measure_unit
@@ -346,6 +349,22 @@ class Well(ComplexObject):
 
         return self._comments_data
 
+    @property
+    def attributes(self) -> 'WellAttributes':
+        if self._attributes is None:
+            self._attributes = WellAttributes(**self._get_attributes_data())
+
+        return self._attributes
+
+    def _get_attributes_data(self) -> Dict:
+        if self._attributes_data is None:
+            self._attributes_data = {
+                attribute_name: attribute['value']
+                for attribute_name, attribute in self._papi_client.get_well_attributes(well_id=self.uuid).items()
+            }
+
+        return self._attributes_data
+
     def create_nested_well(
         self,
         nested_well_name: str,
@@ -447,6 +466,17 @@ class Well(ComplexObject):
             self.__dict__.update(func_data)
 
         return self
+
+
+class WellAttributes(BaseObject):
+    def __init__(self, **kwargs):
+        self.__dict__.update(kwargs)
+
+    def to_dict(self) -> Dict:
+        return self.__dict__
+
+    def to_df(self) -> DataFrame:
+        return DataFrame(self.to_dict(), index=[0])
 
 
 class NestedWell(ComplexObject):
