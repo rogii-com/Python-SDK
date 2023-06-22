@@ -1202,3 +1202,14 @@ class PapiClient(BasePapiClient):
             },
             headers=headers,
         )
+
+    def fetch_well_attributes(self, well_id: str, headers: Optional[Dict] = None):
+        """
+        :param well_id:
+        :param headers:
+        :return:
+        """
+        return self._send_request(
+            url=f'wells/{well_id}/attributevalues',
+            headers=headers,
+        )

@@ -836,3 +836,16 @@ def test_get_well_linked_typewells(project_papi):
     linked_typewells = well.linked_typewells.to_dict()
 
     assert linked_typewells[0]['uuid'] == typewell.uuid
+
+
+def test_get_well_attributes(project_papi):
+    well = project_papi.wells.find_by_name(WELL_NAME)
+    assert well is not None
+
+    attributes = well.attributes
+    assert attributes
+
+    attributes_data = attributes.to_dict()
+    attributes_df = attributes.to_df()
+    assert attributes_data
+    assert not attributes_df.empty
