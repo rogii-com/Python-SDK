@@ -1213,3 +1213,22 @@ class PapiClient(BasePapiClient):
             url=f'wells/{well_id}/attributevalues',
             headers=headers,
         )
+
+    def replace_well_trajectory(
+        self,
+        well_id: str,
+        md_uom: str,
+        incl_uom: str,
+        azi_uom: str,
+        trajectory_stations: PapiTrajectory,
+        headers: Optional[Dict] = None,
+    ):
+        url = f'wells/{well_id}/trajectory'
+        request_data = {
+            'md_uom': md_uom,
+            'incl_uom': incl_uom,
+            'azi_uom': azi_uom,
+            'trajectory_stations': trajectory_stations,
+        }
+
+        return self._send_put_request(url=url, request_data=request_data, headers=headers)

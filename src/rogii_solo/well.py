@@ -133,6 +133,23 @@ class Well(ComplexObject):
 
         return self._trajectory_data
 
+    def replace_trajectory(self, md_uom: str, incl_uom: str, azi_uom: str, trajectory_stations: DataList):
+        prepared_trajectory_stations = [
+            {key: self._papi_client.prepare_papi_var(value) for key, value in point.items()}
+            for point in trajectory_stations
+        ]
+
+        self._papi_client.replace_well_trajectory(
+            well_id=self.uuid,
+            md_uom=md_uom,
+            incl_uom=incl_uom,
+            azi_uom=azi_uom,
+            trajectory_stations=prepared_trajectory_stations,
+        )
+
+        self._trajectory = None
+        self._trajectory_data = None
+
     @property
     def interpretations(self) -> ObjectRepository[Interpretation]:
         if self._interpretations is None:
@@ -561,6 +578,23 @@ class NestedWell(ComplexObject):
             self._trajectory_data = self._papi_client.get_nested_well_trajectory_data(nested_well_id=self.uuid)
 
         return self._trajectory_data
+
+    def replace_trajectory(self, md_uom: str, incl_uom: str, azi_uom: str, trajectory_stations: DataList):
+        prepared_trajectory_stations = [
+            {key: self._papi_client.prepare_papi_var(value) for key, value in point.items()}
+            for point in trajectory_stations
+        ]
+
+        self._papi_client.replace_nested_well_trajectory(
+            nested_well_id=self.uuid,
+            md_uom=md_uom,
+            incl_uom=incl_uom,
+            azi_uom=azi_uom,
+            trajectory_stations=prepared_trajectory_stations,
+        )
+
+        self._trajectory = None
+        self._trajectory_data = None
 
     @property
     def topsets(self) -> ObjectRepository[Topset]:
