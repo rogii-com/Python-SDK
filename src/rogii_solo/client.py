@@ -72,19 +72,3 @@ class SoloClient:
         self.project = project
 
         return self.project
-
-    def replace_nested_well_trajectory(
-        self, nested_well_id: str, md_uom: str, incl_uom: str, azi_uom: str, trajectory_stations: DataList
-    ):
-        prepared_trajectory_stations = [
-            {key: self._papi_client.prepare_papi_var(value) for key, value in point.items()}
-            for point in trajectory_stations
-        ]
-
-        return self._papi_client.replace_nested_well_trajectory(
-            nested_well_id=nested_well_id,
-            md_uom=md_uom,
-            incl_uom=incl_uom,
-            azi_uom=azi_uom,
-            trajectory_stations=prepared_trajectory_stations,
-        )
