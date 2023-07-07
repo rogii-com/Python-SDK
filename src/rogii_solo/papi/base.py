@@ -1,4 +1,4 @@
-from typing import Any, Dict, Optional
+from typing import Any, Dict, List, Optional
 
 from oauthlib.oauth2 import BackendApplicationClient, LegacyApplicationClient
 from requests import codes as status_codes
@@ -808,8 +808,8 @@ class PapiClient(BasePapiClient):
     def replace_log(
         self,
         log_id: str,
-        index_unit: str,
-        log_points: PapiLogPoint,
+        log_points: List[PapiLogPoint],
+        index_unit: Optional[str] = None,
         value_unit: Optional[str] = None,
         headers: Optional[Dict] = None,
     ):
@@ -830,6 +830,23 @@ class PapiClient(BasePapiClient):
         }
 
         return self._send_put_request(url=url, request_data=request_data, headers=headers)
+
+    def update_log_meta(
+        self, log_id: str, name: Optional[str] = None, unit: Optional[str] = None, headers: Optional[Dict] = None
+    ) -> bool:
+        """
+        Update log meta
+        :param log_id:
+        :param name:
+        :param unit:
+        :param headers:
+        :return:
+        """
+        url = f'logs/{log_id}'
+        request_data = {'name': name, 'unit': unit}
+        response = self._send_patch_request(url=url, request_data=request_data, headers=headers)
+
+        return response.status_code == status_codes.ok
 
     def create_typewell_log(self, typewell_id: str, log_name: str, headers: Optional[Dict] = None):
         """
