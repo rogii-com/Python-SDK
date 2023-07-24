@@ -158,11 +158,12 @@ def test_get_horizon(project_papi):
     horizon_data = horizon.to_dict()
     horizon_df = horizon.to_df()
 
-    assert 'meta' in horizon_data
-    assert 'points' in horizon_data
+    assert 'uuid' in horizon_data
+    assert 'name' in horizon_data
+    assert horizon_data['uuid'] == horizon_df.at[0, 'uuid']
+    assert horizon_data['name'] == horizon_df.at[0, 'name']
 
-    assert horizon_data['meta']['name'] == HORIZON_NAME
-    assert horizon_df['meta'].at[0, 'name'] == HORIZON_NAME
+    assert horizon_data['name'] == HORIZON_NAME
 
 
 def test_get_well_target_lines(project_papi):
@@ -306,11 +307,13 @@ def test_get_log(project_papi):
     log_data = log.to_dict()
     log_df = log.to_df()
 
-    assert 'meta' in log_data
-    assert 'points' in log_data
+    assert 'uuid' in log_data
+    assert 'name' in log_data
+    assert log_data['uuid'] == log_df.at[0, 'uuid']
+    assert log_data['name'] == log_df.at[0, 'name']
 
-    assert log_data['meta']['name'] == LOG_NAME
-    assert log_df['meta'].at[0, 'name'] == LOG_NAME
+    assert log_data['name'] == LOG_NAME
+    assert log_df.at[0, 'name'] == LOG_NAME
 
 
 def test_get_project_typewells(project_papi):
@@ -470,14 +473,14 @@ def test_get_interpretation_starred_horizons(project_papi):
     starred_horizon_bottom_data = starred_interpretation.starred_horizon_bottom.to_dict()
     starred_horizon_bottom_df = starred_interpretation.starred_horizon_bottom.to_df()
 
-    assert starred_horizon_top_data['meta']['name'] == STARRED_HORIZON_TOP_NAME
-    assert starred_horizon_top_df['meta'].at[0, 'name'] == STARRED_HORIZON_TOP_NAME
+    assert starred_horizon_top_data['name'] == STARRED_HORIZON_TOP_NAME
+    assert starred_horizon_top_df.at[0, 'name'] == STARRED_HORIZON_TOP_NAME
 
-    assert starred_horizon_center_data['meta']['name'] == STARRED_HORIZON_CENTER_NAME
-    assert starred_horizon_center_df['meta'].at[0, 'name'] == STARRED_HORIZON_CENTER_NAME
+    assert starred_horizon_center_data['name'] == STARRED_HORIZON_CENTER_NAME
+    assert starred_horizon_center_df.at[0, 'name'] == STARRED_HORIZON_CENTER_NAME
 
-    assert starred_horizon_bottom_data['meta']['name'] == STARRED_HORIZON_BOTTOM_NAME
-    assert starred_horizon_bottom_df['meta'].at[0, 'name'] == STARRED_HORIZON_BOTTOM_NAME
+    assert starred_horizon_bottom_data['name'] == STARRED_HORIZON_BOTTOM_NAME
+    assert starred_horizon_bottom_df.at[0, 'name'] == STARRED_HORIZON_BOTTOM_NAME
 
 
 def test_get_topset_starred_tops(project_papi):
@@ -513,11 +516,13 @@ def test_get_mudlog(project_papi):
     mudlog_data = mudlog.to_dict()
     mudlog_df = mudlog.to_df()
 
-    assert 'meta' in mudlog_data
-    assert 'logs' in mudlog_data
+    assert 'uuid' in mudlog_data
+    assert 'name' in mudlog_data
+    assert mudlog_data['uuid'] == mudlog_df.at[0, 'uuid']
+    assert mudlog_data['name'] == mudlog_df.at[0, 'name']
 
-    assert mudlog_data['meta']['name'] == MUDLOG_NAME
-    assert mudlog_df.at[0, 'MD'] == mudlog_data['logs'][0]['points'][0]['md']
+    assert mudlog_data['name'] == MUDLOG_NAME
+    assert mudlog.logs.to_df().at[0, 'MD'] == mudlog.logs[0].points[0].md
 
 
 def test_update_typewell_meta(project_papi):

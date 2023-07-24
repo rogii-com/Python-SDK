@@ -112,10 +112,10 @@ def get_trajectory_tvt_by_md(trajectory: List[Dict[str, float]], md: float) -> f
 
 
 def filter_log(log: List[Dict[str, Any]], filter_window: int, idx: int) -> float:
-    filtered_value = log[idx]['data']
+    filtered_value = log[idx]['value']
 
     for j in range(-1 * filter_window, filter_window):
-        filtered_value = filtered_value + log[idx + j]['data']
+        filtered_value = filtered_value + log[idx + j]['value']
 
     return filtered_value / (filter_window * 2 + 1)
 
@@ -212,7 +212,7 @@ def get_last_rop_point_scatter(last_x: float, last_y: float) -> go.Scatter:
 
 
 def refine_log_points(log_points: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
-    return [point for point in log_points if point['data'] is not None]
+    return [point for point in log_points if point['value'] is not None]
 
 
 def build_tvt_rop_heatmap(script_settings: Dict[str, Any]):
@@ -259,7 +259,7 @@ def build_tvt_rop_heatmap(script_settings: Dict[str, Any]):
     histogram2d, xedges2, yedges2, last_x, last_y = get_heatmap_data(
         trajectory=trajectory,
         filter_window=filter_window,
-        x_log=refine_log_points(x_log.to_dict()['points']),
+        x_log=refine_log_points(x_log.points.to_dict()),
         tvt_min=tvt_min,
         tvt_max=tvt_max,
         bins=bins,

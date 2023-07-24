@@ -334,7 +334,7 @@ def calc_zone_statistics(
 
     well_data = well.to_dict(get_converted=False)
 
-    assembled_segments_data = interpretation.get_assembled_segments_data()
+    assembled_segments_data = interpretation.assembled_segments
     segments = get_segments(
         well=well_data,
         assembled_segments=assembled_segments_data['segments'],
