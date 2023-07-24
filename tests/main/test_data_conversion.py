@@ -462,14 +462,16 @@ def test_get_converted_meter_horizon(project):
 
     assert horizon is not None
 
-    horizon_data = horizon.to_dict(get_converted=False)
+    horizon_data = horizon.to_dict()
     horizon_df = horizon.to_df()
 
-    assert 'meta' in horizon_df
-    assert 'points' in horizon_df
+    assert 'uuid' in horizon_data
+    assert 'name' in horizon_data
+    assert horizon_data['uuid'] == horizon_df.at[0, 'uuid']
+    assert horizon_data['name'] == horizon_df.at[0, 'name']
 
-    points = horizon_data['points']
-    points_df = horizon_df['points']
+    points = horizon.points
+    points_df = points.to_df()
 
     assert len(points) == len(points_df.index)
 
@@ -478,11 +480,11 @@ def test_get_converted_meter_horizon(project):
     for idx, horizon_trajectory_point in enumerate(points):
         assert np_is_close(
             points_df.at[idx, 'md'],
-            Convertible.convert_z(value=horizon_trajectory_point['md'], measure_units=measure_units),
+            Convertible.convert_z(value=horizon_trajectory_point.md, measure_units=measure_units),
         )
         assert np_is_close(
             points_df.at[idx, 'tvd'],
-            Convertible.convert_z(value=horizon_trajectory_point['tvd'], measure_units=measure_units),
+            Convertible.convert_z(value=horizon_trajectory_point.tvd, measure_units=measure_units),
         )
 
 
@@ -492,20 +494,22 @@ def test_get_not_converted_meter_horizon(project):
 
     assert horizon is not None
 
-    horizon_data = horizon.to_dict(get_converted=False)
-    horizon_df = horizon.to_df(get_converted=False)
+    horizon_data = horizon.to_dict()
+    horizon_df = horizon.to_df()
 
-    assert 'meta' in horizon_df
-    assert 'points' in horizon_df
+    assert 'uuid' in horizon_data
+    assert 'name' in horizon_data
+    assert horizon_data['uuid'] == horizon_df.at[0, 'uuid']
+    assert horizon_data['name'] == horizon_df.at[0, 'name']
 
-    points = horizon_data['points']
-    points_df = horizon_df['points']
+    points = horizon.points
+    points_df = points.to_df(get_converted=False)
 
     assert len(points) == len(points_df.index)
 
     for idx, horizon_trajectory_point in enumerate(points):
-        assert np_is_close(points_df.at[idx, 'md'], horizon_trajectory_point['md'])
-        assert np_is_close(points_df.at[idx, 'tvd'], horizon_trajectory_point['tvd'])
+        assert np_is_close(points_df.at[idx, 'md'], horizon_trajectory_point.md)
+        assert np_is_close(points_df.at[idx, 'tvd'], horizon_trajectory_point.tvd)
 
 
 def test_get_converted_foot_horizon(ft_project):
@@ -514,14 +518,16 @@ def test_get_converted_foot_horizon(ft_project):
 
     assert horizon is not None
 
-    horizon_data = horizon.to_dict(get_converted=False)
+    horizon_data = horizon.to_dict()
     horizon_df = horizon.to_df()
 
-    assert 'meta' in horizon_df
-    assert 'points' in horizon_df
+    assert 'uuid' in horizon_data
+    assert 'name' in horizon_data
+    assert horizon_data['uuid'] == horizon_df.at[0, 'uuid']
+    assert horizon_data['name'] == horizon_df.at[0, 'name']
 
-    points = horizon_data['points']
-    points_df = horizon_df['points']
+    points = horizon.points
+    points_df = points.to_df()
 
     assert len(points) == len(points_df.index)
 
@@ -530,11 +536,11 @@ def test_get_converted_foot_horizon(ft_project):
     for idx, horizon_trajectory_point in enumerate(points):
         assert np_is_close(
             points_df.at[idx, 'md'],
-            Convertible.convert_z(value=horizon_trajectory_point['md'], measure_units=measure_units),
+            Convertible.convert_z(value=horizon_trajectory_point.md, measure_units=measure_units),
         )
         assert np_is_close(
             points_df.at[idx, 'tvd'],
-            Convertible.convert_z(value=horizon_trajectory_point['tvd'], measure_units=measure_units),
+            Convertible.convert_z(value=horizon_trajectory_point.tvd, measure_units=measure_units),
         )
 
 
@@ -544,20 +550,22 @@ def test_get_not_converted_foot_horizon(ft_project):
 
     assert horizon is not None
 
-    horizon_data = horizon.to_dict(get_converted=False)
-    horizon_df = horizon.to_df(get_converted=False)
+    horizon_data = horizon.to_dict()
+    horizon_df = horizon.to_df()
 
-    assert 'meta' in horizon_df
-    assert 'points' in horizon_df
+    assert 'uuid' in horizon_data
+    assert 'name' in horizon_data
+    assert horizon_data['uuid'] == horizon_df.at[0, 'uuid']
+    assert horizon_data['name'] == horizon_df.at[0, 'name']
 
-    points = horizon_data['points']
-    points_df = horizon_df['points']
+    points = horizon.points
+    points_df = points.to_df(get_converted=False)
 
     assert len(points) == len(points_df.index)
 
     for idx, horizon_trajectory_point in enumerate(points):
-        assert np_is_close(points_df.at[idx, 'md'], horizon_trajectory_point['md'])
-        assert np_is_close(points_df.at[idx, 'tvd'], horizon_trajectory_point['tvd'])
+        assert np_is_close(points_df.at[idx, 'md'], horizon_trajectory_point.md)
+        assert np_is_close(points_df.at[idx, 'tvd'], horizon_trajectory_point.tvd)
 
 
 def test_get_converted_ftm_horizon(ftm_project):
@@ -566,14 +574,16 @@ def test_get_converted_ftm_horizon(ftm_project):
 
     assert horizon is not None
 
-    horizon_data = horizon.to_dict(get_converted=False)
+    horizon_data = horizon.to_dict()
     horizon_df = horizon.to_df()
 
-    assert 'meta' in horizon_df
-    assert 'points' in horizon_df
+    assert 'uuid' in horizon_data
+    assert 'name' in horizon_data
+    assert horizon_data['uuid'] == horizon_df.at[0, 'uuid']
+    assert horizon_data['name'] == horizon_df.at[0, 'name']
 
-    points = horizon_data['points']
-    points_df = horizon_df['points']
+    points = horizon.points
+    points_df = points.to_df()
 
     assert len(points) == len(points_df.index)
 
@@ -582,11 +592,11 @@ def test_get_converted_ftm_horizon(ftm_project):
     for idx, horizon_trajectory_point in enumerate(points):
         assert np_is_close(
             points_df.at[idx, 'md'],
-            Convertible.convert_z(value=horizon_trajectory_point['md'], measure_units=measure_units),
+            Convertible.convert_z(value=horizon_trajectory_point.md, measure_units=measure_units),
         )
         assert np_is_close(
             points_df.at[idx, 'tvd'],
-            Convertible.convert_z(value=horizon_trajectory_point['tvd'], measure_units=measure_units),
+            Convertible.convert_z(value=horizon_trajectory_point.tvd, measure_units=measure_units),
         )
 
 
@@ -596,20 +606,22 @@ def test_get_not_converted_ftm_horizon(ftm_project):
 
     assert horizon is not None
 
-    horizon_data = horizon.to_dict(get_converted=False)
-    horizon_df = horizon.to_df(get_converted=False)
+    horizon_data = horizon.to_dict()
+    horizon_df = horizon.to_df()
 
-    assert 'meta' in horizon_df
-    assert 'points' in horizon_df
+    assert 'uuid' in horizon_data
+    assert 'name' in horizon_data
+    assert horizon_data['uuid'] == horizon_df.at[0, 'uuid']
+    assert horizon_data['name'] == horizon_df.at[0, 'name']
 
-    points = horizon_data['points']
-    points_df = horizon_df['points']
+    points = horizon.points
+    points_df = points.to_df(get_converted=False)
 
     assert len(points) == len(points_df.index)
 
     for idx, horizon_trajectory_point in enumerate(points):
-        assert np_is_close(points_df.at[idx, 'md'], horizon_trajectory_point['md'])
-        assert np_is_close(points_df.at[idx, 'tvd'], horizon_trajectory_point['tvd'])
+        assert np_is_close(points_df.at[idx, 'md'], horizon_trajectory_point.md)
+        assert np_is_close(points_df.at[idx, 'tvd'], horizon_trajectory_point.tvd)
 
 
 def test_get_converted_meter_nested_well_trajectory(project):
@@ -741,14 +753,16 @@ def test_get_converted_meter_log(project):
 
     assert log is not None
 
-    log_data = log.to_dict(get_converted=False)
+    log_data = log.to_dict()
     log_df = log.to_df()
 
-    assert 'meta' in log_data
-    assert 'points' in log_data
+    assert 'uuid' in log_data
+    assert 'name' in log_data
+    assert log_data['uuid'] == log_df.at[0, 'uuid']
+    assert log_data['name'] == log_df.at[0, 'name']
 
-    points = log_data['points']
-    points_df = log_df['points']
+    points = log.points
+    points_df = points.to_df()
 
     assert len(points) == len(points_df.index)
 
@@ -756,7 +770,7 @@ def test_get_converted_meter_log(project):
 
     for idx, log_point in enumerate(points):
         assert np_is_close(
-            points_df.at[idx, 'md'], Convertible.convert_z(value=log_point['md'], measure_units=measure_units)
+            points_df.at[idx, 'md'], Convertible.convert_z(value=log_point.md, measure_units=measure_units)
         )
 
 
@@ -766,19 +780,21 @@ def test_get_not_converted_meter_log(project):
 
     assert log is not None
 
-    log_data = log.to_dict(get_converted=False)
-    log_df = log.to_df(get_converted=False)
+    log_data = log.to_dict()
+    log_df = log.to_df()
 
-    assert 'meta' in log_data
-    assert 'points' in log_data
+    assert 'uuid' in log_data
+    assert 'name' in log_data
+    assert log_data['uuid'] == log_df.at[0, 'uuid']
+    assert log_data['name'] == log_df.at[0, 'name']
 
-    points = log_data['points']
-    points_df = log_df['points']
+    points = log.points
+    points_df = points.to_df(get_converted=False)
 
     assert len(points) == len(points_df.index)
 
     for idx, log_point in enumerate(points):
-        assert np_is_close(points_df.at[idx, 'md'], log_point['md'])
+        assert np_is_close(points_df.at[idx, 'md'], log_point.md)
 
 
 def test_get_converted_foot_log(ft_project):
@@ -787,14 +803,16 @@ def test_get_converted_foot_log(ft_project):
 
     assert log is not None
 
-    log_data = log.to_dict(get_converted=False)
+    log_data = log.to_dict()
     log_df = log.to_df()
 
-    assert 'meta' in log_data
-    assert 'points' in log_data
+    assert 'uuid' in log_data
+    assert 'name' in log_data
+    assert log_data['uuid'] == log_df.at[0, 'uuid']
+    assert log_data['name'] == log_df.at[0, 'name']
 
-    points = log_data['points']
-    points_df = log_df['points']
+    points = log.points
+    points_df = points.to_df()
 
     assert len(points) == len(points_df.index)
 
@@ -802,7 +820,7 @@ def test_get_converted_foot_log(ft_project):
 
     for idx, log_point in enumerate(points):
         assert np_is_close(
-            points_df.at[idx, 'md'], Convertible.convert_z(value=log_point['md'], measure_units=measure_units)
+            points_df.at[idx, 'md'], Convertible.convert_z(value=log_point.md, measure_units=measure_units)
         )
 
 
@@ -812,19 +830,21 @@ def test_get_not_converted_foot_log(ft_project):
 
     assert log is not None
 
-    log_data = log.to_dict(get_converted=False)
-    log_df = log.to_df(get_converted=False)
+    log_data = log.to_dict()
+    log_df = log.to_df()
 
-    assert 'meta' in log_data
-    assert 'points' in log_data
+    assert 'uuid' in log_data
+    assert 'name' in log_data
+    assert log_data['uuid'] == log_df.at[0, 'uuid']
+    assert log_data['name'] == log_df.at[0, 'name']
 
-    points = log_data['points']
-    points_df = log_df['points']
+    points = log.points
+    points_df = points.to_df(get_converted=False)
 
     assert len(points) == len(points_df.index)
 
     for idx, log_point in enumerate(points):
-        assert np_is_close(points_df.at[idx, 'md'], log_point['md'])
+        assert np_is_close(points_df.at[idx, 'md'], log_point.md)
 
 
 def test_get_converted_ftm_log(ftm_project):
@@ -833,14 +853,16 @@ def test_get_converted_ftm_log(ftm_project):
 
     assert log is not None
 
-    log_data = log.to_dict(get_converted=False)
+    log_data = log.to_dict()
     log_df = log.to_df()
 
-    assert 'meta' in log_data
-    assert 'points' in log_data
+    assert 'uuid' in log_data
+    assert 'name' in log_data
+    assert log_data['uuid'] == log_df.at[0, 'uuid']
+    assert log_data['name'] == log_df.at[0, 'name']
 
-    points = log_data['points']
-    points_df = log_df['points']
+    points = log.points
+    points_df = points.to_df()
 
     assert len(points) == len(points_df.index)
 
@@ -848,7 +870,7 @@ def test_get_converted_ftm_log(ftm_project):
 
     for idx, log_point in enumerate(points):
         assert np_is_close(
-            points_df.at[idx, 'md'], Convertible.convert_z(value=log_point['md'], measure_units=measure_units)
+            points_df.at[idx, 'md'], Convertible.convert_z(value=log_point.md, measure_units=measure_units)
         )
 
 
@@ -858,19 +880,21 @@ def test_get_not_converted_ftm_log(ftm_project):
 
     assert log is not None
 
-    log_data = log.to_dict(get_converted=False)
-    log_df = log.to_df(get_converted=False)
+    log_data = log.to_dict()
+    log_df = log.to_df()
 
-    assert 'meta' in log_data
-    assert 'points' in log_data
+    assert 'uuid' in log_data
+    assert 'name' in log_data
+    assert log_data['uuid'] == log_df.at[0, 'uuid']
+    assert log_data['name'] == log_df.at[0, 'name']
 
-    points = log_data['points']
-    points_df = log_df['points']
+    points = log.points
+    points_df = points.to_df(get_converted=False)
 
     assert len(points) == len(points_df.index)
 
     for idx, log_point in enumerate(points):
-        assert np_is_close(points_df.at[idx, 'md'], log_point['md'])
+        assert np_is_close(points_df.at[idx, 'md'], log_point.md)
 
 
 def test_get_converted_meter_typewell(project):

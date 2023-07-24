@@ -1,13 +1,12 @@
-from typing import Any, Dict, Optional, Union
+from typing import Dict, List, Optional, Union
 
 from pandas import DataFrame
 
 import rogii_solo.well
-from rogii_solo.base import ComplexObject
-from rogii_solo.calculations.enums import ELogMeasureUnits
+from rogii_solo.base import BaseObject, ComplexObject
+from rogii_solo.calculations.enums import ELogMeasureUnits, EMeasureUnits
 from rogii_solo.papi.client import PapiClient
 from rogii_solo.types import DataList
-from rogii_solo.types import Log as LogType
 
 WellType = Union['rogii_solo.well.Well', 'rogii_solo.well.Typewell']
 
@@ -23,42 +22,32 @@ class Log(ComplexObject):
 
         self.__dict__.update(kwargs)
 
-    def to_dict(self, get_converted: bool = True) -> Dict[str, Any]:
-        return self._get_data(get_converted)
+        self._points: Optional[LogPointRepository] = None
+        self._points_data: Optional[DataList] = None
 
-    def to_df(self, get_converted: bool = True) -> LogType:
-        data = self._get_data(get_converted)
+    def to_dict(self) -> Dict:
+        return {'uuid': self.uuid, 'name': self.name}
 
-        return {
-            'meta': DataFrame([data['meta']]),
-            'points': DataFrame(data['points']),
-        }
+    def to_df(self) -> DataFrame:
+        return DataFrame([self.to_dict()])
 
-    def _get_data(self, get_converted: bool):
-        meta = {
-            'uuid': self.uuid,
-            'name': self.name,
-        }
-        points = self._get_points(get_converted)
+    @property
+    def points(self) -> 'LogPointRepository':
+        if self._points is None:
+            self._points = LogPointRepository(
+                [
+                    LogPoint(measure_units=self.well.project.measure_unit, md=point['md'], value=point['data'])
+                    for point in self._get_points_data()
+                ]
+            )
 
-        return {
-            'meta': meta,
-            'points': points,
-        }
+        return self._points
 
-    def _get_points(self, get_converted: bool):
-        points_data = self._papi_client.get_log_data(self.uuid)
+    def _get_points_data(self) -> DataList:
+        if self._points_data is None:
+            self._points_data = self._papi_client.get_log_points(self.uuid)
 
-        if get_converted:
-            return [
-                {
-                    'md': self.convert_z(value=point['md'], measure_units=self.well.project.measure_unit),
-                    'data': point['data'],
-                }
-                for point in points_data
-            ]
-
-        return points_data
+        return self._points_data
 
     def replace_points(self, points: DataList):
         prepared_log_points = [
@@ -82,3 +71,34 @@ class Log(ComplexObject):
             self.__dict__.update(func_data)
 
         return self
+
+
+class LogPoint(BaseObject):
+    def __init__(self, measure_units: EMeasureUnits, md: float, value: float):
+        self.measure_units = measure_units
+
+        self.md = md
+        self.value = value
+
+    def to_dict(self, get_converted: bool = True) -> Dict:
+        return {
+            'md': self.convert_z(value=self.md, measure_units=self.measure_units) if get_converted else self.md,
+            'value': self.value,
+        }
+
+    def to_df(self, get_converted: bool = True) -> DataFrame:
+        return DataFrame([self.to_dict(get_converted)])
+
+
+class LogPointRepository(list):
+    def __init__(self, objects: List[LogPoint] = None):
+        if objects is None:
+            objects = []
+
+        super().__init__(objects)
+
+    def to_dict(self, get_converted: bool = True) -> DataList:
+        return [object_.to_dict(get_converted) for object_ in self]
+
+    def to_df(self, get_converted: bool = True) -> DataFrame:
+        return DataFrame(self.to_dict(get_converted))
