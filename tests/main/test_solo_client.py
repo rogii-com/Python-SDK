@@ -7,6 +7,7 @@ from rogii_solo.exceptions import InvalidProjectException, ProjectNotFoundExcept
 from tests.papi_data import (
     CALC_TRACE_DATA_RESPONSE,
     CALC_TRACE_NAME,
+    EARTH_MODEL_NAME,
     EI_ABSENT_HORIZONS_LAST_SEGMENT_OUT_ID,
     EI_ALL_SEGMENTS_OUT_ID,
     EI_LAST_SEGMENT_EXTENDED_ID,
@@ -635,3 +636,20 @@ def test_get_well_attributes(project):
     attributes_df = attributes.to_df()
     assert attributes_data
     assert not attributes_df.empty
+
+
+def test_get_earth_model(project):
+    starred_interpretation = project.wells.find_by_name(WELL_NAME).starred_interpretation
+    earth_model = starred_interpretation.earth_models.find_by_name(EARTH_MODEL_NAME)
+
+    assert earth_model is not None
+
+    earth_model_data = earth_model.to_dict()
+    earth_model_df = earth_model.to_df()
+
+    assert 'uuid' in earth_model_data
+    assert 'name' in earth_model_data
+    assert earth_model_data['uuid'] == earth_model_df.at[0, 'uuid']
+    assert earth_model_data['name'] == earth_model_df.at[0, 'name']
+
+    assert earth_model_data['name'] == EARTH_MODEL_NAME

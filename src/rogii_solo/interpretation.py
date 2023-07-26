@@ -13,6 +13,7 @@ from rogii_solo.calculations.trajectory import (
     interpolate_trajectory_point,
 )
 from rogii_solo.calculations.types import HorizonShift, Segment
+from rogii_solo.earth_model import EarthModel
 from rogii_solo.exceptions import InterpretationOutOfTrajectoryException
 from rogii_solo.horizon import Horizon
 from rogii_solo.papi.client import PapiClient
@@ -48,6 +49,9 @@ class Interpretation(ComplexObject):
         self._horizons_data: Optional[DataList] = None
         self._horizons: Optional[ObjectRepository[Horizon]] = None
 
+        self._earth_models_data: Optional[DataList] = None
+        self._earth_models: Optional[ObjectRepository[EarthModel]] = None
+
         self._starred_horizons_data: Optional[PapiStarredHorizons] = None
         self._starred_horizon_top: Optional[Horizon] = None
         self._starred_horizon_center: Optional[Horizon] = None
@@ -63,6 +67,7 @@ class Interpretation(ComplexObject):
             'meta': DataFrame([data['meta']]),
             'horizons': DataFrame(data['horizons']).transpose(),
             'segments': DataFrame(data['segments']),
+            'earth_models': DataFrame(data['earth_models']),
         }
 
     @property
@@ -124,6 +129,26 @@ class Interpretation(ComplexObject):
         return self._horizons_data
 
     @property
+    def earth_models(self) -> ObjectRepository[EarthModel]:
+        if self._earth_models is None:
+            self._earth_models = ObjectRepository(
+                objects=[
+                    EarthModel(papi_client=self._papi_client, interpretation=self, **item)
+                    for item in self._get_earth_models_data()
+                ]
+            )
+
+        return self._earth_models
+
+    def _get_earth_models_data(self) -> DataList:
+        if self._earth_models_data is None:
+            self._earth_models_data = self._papi_client.get_interpretation_earth_models_data(
+                interpretation_id=self.uuid
+            )
+
+        return self._earth_models_data
+
+    @property
     def starred_horizon_top(self):
         if self._starred_horizon_top is None:
             starred_horizons_data = self._get_starred_horizons_data()
@@ -161,6 +186,7 @@ class Interpretation(ComplexObject):
             'meta': meta,
             'horizons': self.assembled_segments['horizons'],
             'segments': self.assembled_segments['segments'],
+            'earth_models': self.earth_models,
         }
 
     def _get_starred_horizons_data(self):

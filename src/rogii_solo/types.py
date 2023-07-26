@@ -9,3 +9,4 @@ class Interpretation(TypedDict):
     meta: DataFrame
     horizons: DataFrame
     segments: DataFrame
+    earth_models: DataFrame

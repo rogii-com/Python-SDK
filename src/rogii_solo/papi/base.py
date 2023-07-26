@@ -345,6 +345,47 @@ class PapiClient(BasePapiClient):
             bottom=starred_horizons.get('bottom'),
         )
 
+    def fetch_interpretation_earth_models(
+        self,
+        interpretation_id: str,
+        offset: int = BasePapiClient.DEFAULT_OFFSET,
+        limit: int = BasePapiClient.DEFAULT_LIMIT,
+        headers: Optional[Dict] = None,
+    ):
+        """
+        Fetches interpretation earth models
+        :param interpretation_id:
+        :param offset:
+        :param limit:
+        :param headers:
+        :return:
+        """
+        return self._send_request(
+            url=f'interpretations/{interpretation_id}/earthmodels',
+            params={'offset': offset, 'limit': limit},
+            headers=headers,
+        )
+
+    def fetch_earth_model_sections(
+        self,
+        earth_model_id: str,
+        offset: int = BasePapiClient.DEFAULT_OFFSET,
+        limit: int = BasePapiClient.DEFAULT_LIMIT,
+        headers: Optional[Dict] = None,
+    ):
+        """
+        Fetches earth model sections
+        :param earth_model_id:
+        :param offset:
+        :param limit:
+        :param headers:
+        :return:
+        """
+        url = f'earthmodels/{earth_model_id}/data/raw'
+        params = {'offset': offset, 'limit': limit}
+
+        return self._send_request(url=url, params=params, headers=headers)['sections']
+
     def fetch_well_nested_wells(
         self,
         well_id: str,

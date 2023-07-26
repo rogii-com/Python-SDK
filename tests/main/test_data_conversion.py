@@ -1,5 +1,11 @@
 from rogii_solo.base import Convertible
-from tests.papi_data import HORIZON_NAME, LOG_NAME, TYPEWELL_NAME, WELL_NAME
+from tests.papi_data import (
+    EARTH_MODEL_NAME,
+    HORIZON_NAME,
+    LOG_NAME,
+    TYPEWELL_NAME,
+    WELL_NAME,
+)
 from tests.utils import np_is_close
 
 
@@ -1049,3 +1055,234 @@ def test_get_not_converted_ftm_typewell(ftm_project):
     assert np_is_close(typewell_df['tie_in_tvd'], typewell.tie_in_tvd)
     assert np_is_close(typewell_df['tie_in_ns'], typewell.tie_in_ns)
     assert np_is_close(typewell_df['tie_in_ew'], typewell.tie_in_ew)
+
+
+def test_get_converted_meter_earth_model(project):
+    starred_interpretation = project.wells.find_by_name(WELL_NAME).starred_interpretation
+    earth_model = starred_interpretation.earth_models.find_by_name(EARTH_MODEL_NAME)
+
+    assert earth_model is not None
+
+    earth_model_data = earth_model.to_dict()
+    earth_model_df = earth_model.to_df()
+
+    assert 'uuid' in earth_model_data
+    assert 'name' in earth_model_data
+    assert 'uuid' in earth_model_df
+    assert 'name' in earth_model_df
+    assert earth_model_data['uuid'] == earth_model_df.at[0, 'uuid']
+
+    sections = earth_model.sections
+    sections_df = sections.to_df()
+
+    assert len(sections) == len(sections_df.index)
+    assert sections[0].uuid == sections_df.at[0, 'uuid']
+
+    measure_units = earth_model.interpretation.well.project.measure_unit
+
+    for idx, section in enumerate(sections):
+        assert np_is_close(
+            sections_df.at[idx, 'md'],
+            Convertible.convert_z(value=section.md, measure_units=measure_units),
+        )
+
+    layers = sections[0].layers
+    layers_df = layers.to_df()
+
+    assert len(layers) == len(layers_df.index)
+    assert layers[0].thickness == layers_df.at[0, 'thickness']
+
+    for idx, layer in enumerate(layers):
+        # Must be changed when public method with layer tvd is available
+        assert np_is_close(
+            layers_df.at[idx, 'tvt'], Convertible.convert_z(value=layer.tvd, measure_units=measure_units)
+        )
+
+
+def test_get_not_converted_meter_earth_model(project):
+    starred_interpretation = project.wells.find_by_name(WELL_NAME).starred_interpretation
+    earth_model = starred_interpretation.earth_models.find_by_name(EARTH_MODEL_NAME)
+
+    assert earth_model is not None
+
+    earth_model_data = earth_model.to_dict()
+    earth_model_df = earth_model.to_df()
+
+    assert 'uuid' in earth_model_data
+    assert 'name' in earth_model_data
+    assert 'uuid' in earth_model_df
+    assert 'name' in earth_model_df
+    assert earth_model_data['uuid'] == earth_model_df.at[0, 'uuid']
+
+    sections = earth_model.sections
+    sections_df = sections.to_df(get_converted=False)
+
+    assert len(sections) == len(sections_df.index)
+    assert sections[0].uuid == sections_df.at[0, 'uuid']
+
+    for idx, section in enumerate(sections):
+        assert np_is_close(sections_df.at[idx, 'md'], section.md)
+
+    layers = sections[0].layers
+    layers_df = layers.to_df(get_converted=False)
+
+    assert len(layers) == len(layers_df.index)
+    assert layers[0].thickness == layers_df.at[0, 'thickness']
+
+    for idx, layer in enumerate(layers):
+        # Must be changed when public method with layer tvd is available
+        assert np_is_close(layers_df.at[idx, 'tvt'], layer.tvd)
+
+
+def test_get_converted_foot_earth_model(ft_project):
+    starred_interpretation = ft_project.wells.find_by_name(WELL_NAME).starred_interpretation
+    earth_model = starred_interpretation.earth_models.find_by_name(EARTH_MODEL_NAME)
+
+    assert earth_model is not None
+
+    earth_model_data = earth_model.to_dict()
+    earth_model_df = earth_model.to_df()
+
+    assert 'uuid' in earth_model_data
+    assert 'name' in earth_model_data
+    assert 'uuid' in earth_model_df
+    assert 'name' in earth_model_df
+    assert earth_model_data['uuid'] == earth_model_df.at[0, 'uuid']
+
+    sections = earth_model.sections
+    sections_df = sections.to_df()
+
+    assert len(sections) == len(sections_df.index)
+    assert sections[0].uuid == sections_df.at[0, 'uuid']
+
+    measure_units = earth_model.interpretation.well.project.measure_unit
+
+    for idx, section in enumerate(sections):
+        assert np_is_close(
+            sections_df.at[idx, 'md'],
+            Convertible.convert_z(value=section.md, measure_units=measure_units),
+        )
+
+    layers = sections[0].layers
+    layers_df = layers.to_df()
+
+    assert len(layers) == len(layers_df.index)
+    assert layers[0].thickness == layers_df.at[0, 'thickness']
+
+    for idx, layer in enumerate(layers):
+        # Must be changed when public method with layer tvd is available
+        assert np_is_close(
+            layers_df.at[idx, 'tvt'], Convertible.convert_z(value=layer.tvd, measure_units=measure_units)
+        )
+
+
+def test_get_not_converted_foot_earth_model(ft_project):
+    starred_interpretation = ft_project.wells.find_by_name(WELL_NAME).starred_interpretation
+    earth_model = starred_interpretation.earth_models.find_by_name(EARTH_MODEL_NAME)
+
+    assert earth_model is not None
+
+    earth_model_data = earth_model.to_dict()
+    earth_model_df = earth_model.to_df()
+
+    assert 'uuid' in earth_model_data
+    assert 'name' in earth_model_data
+    assert 'uuid' in earth_model_df
+    assert 'name' in earth_model_df
+    assert earth_model_data['uuid'] == earth_model_df.at[0, 'uuid']
+
+    sections = earth_model.sections
+    sections_df = sections.to_df(get_converted=False)
+
+    assert len(sections) == len(sections_df.index)
+    assert sections[0].uuid == sections_df.at[0, 'uuid']
+
+    for idx, section in enumerate(sections):
+        assert np_is_close(sections_df.at[idx, 'md'], section.md)
+
+    layers = sections[0].layers
+    layers_df = layers.to_df(get_converted=False)
+
+    assert len(layers) == len(layers_df.index)
+    assert layers[0].thickness == layers_df.at[0, 'thickness']
+
+    for idx, layer in enumerate(layers):
+        # Must be changed when public method with layer tvd is available
+        assert np_is_close(layers_df.at[idx, 'tvt'], layer.tvd)
+
+
+def test_get_converted_ftm_earth_model(ftm_project):
+    starred_interpretation = ftm_project.wells.find_by_name(WELL_NAME).starred_interpretation
+    earth_model = starred_interpretation.earth_models.find_by_name(EARTH_MODEL_NAME)
+
+    assert earth_model is not None
+
+    earth_model_data = earth_model.to_dict()
+    earth_model_df = earth_model.to_df()
+
+    assert 'uuid' in earth_model_data
+    assert 'name' in earth_model_data
+    assert 'uuid' in earth_model_df
+    assert 'name' in earth_model_df
+    assert earth_model_data['uuid'] == earth_model_df.at[0, 'uuid']
+
+    sections = earth_model.sections
+    sections_df = sections.to_df()
+
+    assert len(sections) == len(sections_df.index)
+    assert sections[0].uuid == sections_df.at[0, 'uuid']
+
+    measure_units = earth_model.interpretation.well.project.measure_unit
+
+    for idx, section in enumerate(sections):
+        assert np_is_close(
+            sections_df.at[idx, 'md'],
+            Convertible.convert_z(value=section.md, measure_units=measure_units),
+        )
+
+    layers = sections[0].layers
+    layers_df = layers.to_df()
+
+    assert len(layers) == len(layers_df.index)
+    assert layers[0].thickness == layers_df.at[0, 'thickness']
+
+    for idx, layer in enumerate(layers):
+        # Must be changed when public method with layer tvd is available
+        assert np_is_close(
+            layers_df.at[idx, 'tvt'], Convertible.convert_z(value=layer.tvd, measure_units=measure_units)
+        )
+
+
+def test_get_not_converted_ftm_earth_model(ftm_project):
+    starred_interpretation = ftm_project.wells.find_by_name(WELL_NAME).starred_interpretation
+    earth_model = starred_interpretation.earth_models.find_by_name(EARTH_MODEL_NAME)
+
+    assert earth_model is not None
+
+    earth_model_data = earth_model.to_dict()
+    earth_model_df = earth_model.to_df()
+
+    assert 'uuid' in earth_model_data
+    assert 'name' in earth_model_data
+    assert 'uuid' in earth_model_df
+    assert 'name' in earth_model_df
+    assert earth_model_data['uuid'] == earth_model_df.at[0, 'uuid']
+
+    sections = earth_model.sections
+    sections_df = sections.to_df(get_converted=False)
+
+    assert len(sections) == len(sections_df.index)
+    assert sections[0].uuid == sections_df.at[0, 'uuid']
+
+    for idx, section in enumerate(sections):
+        assert np_is_close(sections_df.at[idx, 'md'], section.md)
+
+    layers = sections[0].layers
+    layers_df = layers.to_df(get_converted=False)
+
+    assert len(layers) == len(layers_df.index)
+    assert layers[0].thickness == layers_df.at[0, 'thickness']
+
+    for idx, layer in enumerate(layers):
+        # Must be changed when public method with layer tvd is available
+        assert np_is_close(layers_df.at[idx, 'tvt'], layer.tvd)
