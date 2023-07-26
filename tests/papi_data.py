@@ -83,6 +83,8 @@ STARRED_TOP_BOTTOM_NAME = 'Top 3'
 
 MUDLOG_NAME = 'Mudlog'
 
+EARTH_MODEL_NAME = 'EarthModel1'
+
 PROJECTS_DATA_RESPONSE = {
     'content': [
         {
@@ -1628,12 +1630,12 @@ COMMENTS_DATA_RESPONSE = {
                 {
                     'commentbox_id': '3e277460-4156-496d-850c-48e64ab8b273',
                     'text': 'Comment Text 1',
-                    'anchor_md': {"val": 2375.2755905511813},
+                    'anchor_md': {'val': 2375.2755905511813},
                 },
                 {
                     'commentbox_id': '7a31617e-393e-4cda-9fd5-bdeec1a08222',
                     'text': 'Comment Text 2',
-                    'anchor_md': {"val": 2375.2755905511813},
+                    'anchor_md': {'val': 2375.2755905511813},
                 },
             ],
         },
@@ -1662,4 +1664,163 @@ WELL_ATTRIBUTES_DATA_RESPONSE = {
     'Final TVDSS': {'value': {'val': -0.5}, 'attribute_id': 50},
     'Formation': {'value': 'test51', 'attribute_id': 51},
     'Net pay': {'value': {'val': 52.0}, 'attribute_id': 52},
+}
+
+EARTH_MODELS_DATA_RESPONSE = {
+    'content': [{'name': 'EarthModel1', 'uuid': 'fb8b686b-7be4-428b-a420-1d131667680f'}],
+    'offset': 0,
+    'limit': 100,
+    'total': 1,
+    'first': True,
+    'last': True,
+}
+
+EARTH_MODEL_SECTIONS_DATA_RESPONSE = {
+    '39691ce4-14fd-46b8-9fbb-e142ff61949f': {
+        'dip': {'val': 1.570796326795},
+        'layers': [
+            {
+                'resistivity_horizontal': {'val': 10},
+                'resistivity_vertical': {'val': 10},
+                'tvd': {'val': -100000},
+                'uuid': 'd410849e-6868-4322-beec-381fed103bdb',
+            },
+            {
+                'resistivity_horizontal': {'val': 119.282},
+                'resistivity_vertical': {'val': 119.282},
+                'tvd': {'val': 1905.66},
+                'uuid': 'e5941785-139a-4f67-afbc-44a7a5eafb92',
+            },
+            {
+                'resistivity_horizontal': {'val': 119.253},
+                'resistivity_vertical': {'val': 119.253},
+                'tvd': {'val': 1905.7},
+                'uuid': 'da6b9ec8-2f87-4bdc-ba9d-e4bb3c291dda',
+            },
+            {
+                'resistivity_horizontal': {'val': 130.576},
+                'resistivity_vertical': {'val': 130.576},
+                'tvd': {'val': 1905.76},
+                'uuid': '99621e3e-2d31-4a78-8dd5-e19830cd9997',
+            },
+            {
+                'resistivity_horizontal': {'val': 137.125},
+                'resistivity_vertical': {'val': 137.125},
+                'tvd': {'val': 1905.78},
+                'uuid': '0c3bba7b-0b00-4686-bc80-bd52cc0e5f91',
+            },
+            {
+                'resistivity_horizontal': {'val': 137.129},
+                'resistivity_vertical': {'val': 137.129},
+                'tvd': {'val': 1905.8},
+                'uuid': '3f8a26f7-c20c-441e-9f1b-270362172ed5',
+            },
+            {
+                'resistivity_horizontal': {'val': 137.114},
+                'resistivity_vertical': {'val': 137.114},
+                'tvd': {'val': 1905.88},
+                'uuid': '0216eec3-3638-42c9-a747-81aef5c26ae0',
+            },
+        ],
+        'md': {'val': 2126},
+        'uuid': '3a5771d3-1770-4685-87d3-16075f6da92f',
+    },
+    '3fd0a985-a77a-411e-a108-1fbac6238913': {
+        'dip': {'val': 1.570796326795},
+        'layers': [
+            {
+                'resistivity_horizontal': {'val': 10},
+                'resistivity_vertical': {'val': 10},
+                'tvd': {'val': -100000},
+                'uuid': '3315f216-bcd3-46dc-8361-233e4ae6476b',
+            },
+            {
+                'resistivity_horizontal': {'val': 215.009},
+                'resistivity_vertical': {'val': 215.009},
+                'tvd': {'val': 1903.13},
+                'uuid': 'efec41ad-5f2a-4a5b-aa23-495b757feedb',
+            },
+            {
+                'resistivity_horizontal': {'val': 214.994},
+                'resistivity_vertical': {'val': 214.994},
+                'tvd': {'val': 1903.32},
+                'uuid': '587131a6-4759-4fc4-857b-2a776c375e89',
+            },
+            {
+                'resistivity_horizontal': {'val': 198.325},
+                'resistivity_vertical': {'val': 198.325},
+                'tvd': {'val': 1903.39},
+                'uuid': '77f9f980-9ece-463b-9e84-6ff38b9b7bf2',
+            },
+            {
+                'resistivity_horizontal': {'val': 198.336},
+                'resistivity_vertical': {'val': 198.336},
+                'tvd': {'val': 1903.6000000000001},
+                'uuid': '5213f83e-ae15-448b-9002-83962e1c5a83',
+            },
+            {
+                'resistivity_horizontal': {'val': 198.234},
+                'resistivity_vertical': {'val': 198.234},
+                'tvd': {'val': 1903.79},
+                'uuid': '2b55c8ed-85f2-4392-a3fd-a651f2922b7d',
+            },
+            {
+                'resistivity_horizontal': {'val': 197.855},
+                'resistivity_vertical': {'val': 197.855},
+                'tvd': {'val': 1904.16},
+                'uuid': 'edefa44b-c2be-4abe-9c77-ca314ae33171',
+            },
+        ],
+        'md': {'val': 2118},
+        'uuid': '3fd0a985-a77a-411e-a108-1fbac6238913',
+    },
+    '461ac4d4-3e2a-433b-8708-961ce9806375': {
+        'dip': {'val': 1.570796326795},
+        'layers': [
+            {
+                'resistivity_horizontal': {'val': 10},
+                'resistivity_vertical': {'val': 10},
+                'tvd': {'val': -100000},
+                'uuid': 'ada80dc2-f62f-4bb2-a281-99ab2ec8d7e0',
+            },
+            {
+                'resistivity_horizontal': {'val': 23.7215},
+                'resistivity_vertical': {'val': 23.7215},
+                'tvd': {'val': 1905.38},
+                'uuid': 'f172dd02-f6de-49ba-9587-a6965b6f46e5',
+            },
+            {
+                'resistivity_horizontal': {'val': 24.1746},
+                'resistivity_vertical': {'val': 24.1746},
+                'tvd': {'val': 1905.4},
+                'uuid': '402173b7-c21d-498e-80a7-2a33588962c9',
+            },
+            {
+                'resistivity_horizontal': {'val': 24.2001},
+                'resistivity_vertical': {'val': 24.2001},
+                'tvd': {'val': 1905.44},
+                'uuid': 'c5d9950c-39bb-44b3-b554-5868596b5b79',
+            },
+            {
+                'resistivity_horizontal': {'val': 25.0165},
+                'resistivity_vertical': {'val': 25.0165},
+                'tvd': {'val': 1905.45},
+                'uuid': '348d8bf2-ea5b-45f2-8aad-c7bb06fe2f2b',
+            },
+            {
+                'resistivity_horizontal': {'val': 25.5327},
+                'resistivity_vertical': {'val': 25.5327},
+                'tvd': {'val': 1905.47},
+                'uuid': '4e077ad4-efae-4821-a37f-595c7081b752',
+            },
+            {
+                'resistivity_horizontal': {'val': 27.0291},
+                'resistivity_vertical': {'val': 27.0291},
+                'tvd': {'val': 1905.49},
+                'uuid': '91c24db1-c2d8-4565-bada-7f2e9e060bff',
+            },
+        ],
+        'md': {'val': 2125.5},
+        'uuid': '461ac4d4-3e2a-433b-8708-961ce9806375',
+    },
 }

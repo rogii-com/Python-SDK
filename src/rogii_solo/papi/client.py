@@ -119,6 +119,13 @@ class PapiClient(SdkPapiClient):
             self._gen_data_page(func=self.fetch_interpretation_horizons, interpretation_id=interpretation_id, **kwargs)
         )
 
+    def get_interpretation_earth_models_data(self, interpretation_id: str, **kwargs) -> PapiDataList:
+        return list(
+            self._gen_data_page(
+                func=self.fetch_interpretation_earth_models, interpretation_id=interpretation_id, **kwargs
+            )
+        )
+
     def get_interpretation_tvt_data(self, interpretation_id: str, **kwargs) -> PapiDataList:
         return [
             self.parse_papi_data(tvt_data)
