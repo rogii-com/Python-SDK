@@ -3,6 +3,7 @@ from typing import Any, Dict, Iterable, List, Optional, Set, Tuple, TypeVar
 
 from pandas import DataFrame
 
+from rogii_solo.calculations.constants import ROUNDING_PRECISION
 from rogii_solo.calculations.converters import convert_value, radians_to_degrees
 from rogii_solo.calculations.enums import EMeasureUnits
 from rogii_solo.papi.client import PapiClient
@@ -24,6 +25,11 @@ class Convertible:
     def convert_angle(value: float) -> Optional[float]:
         if value is not None:
             return radians_to_degrees(value)
+
+    @staticmethod
+    def safe_round(value, precision: int = ROUNDING_PRECISION):
+        if value is not None:
+            return round(value, ndigits=precision) + 0  # Convert negative zero to positive
 
 
 class BaseObject(ABC, Convertible):

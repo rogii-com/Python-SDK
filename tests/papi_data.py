@@ -10,11 +10,16 @@ FOOT_METER_PROJECT_NAME = 'Global project (ft-m)'
 FOOT_METER_PROJECT_ID = uuid4()
 
 WELL_NAME = 'Lateral'
-WELL_XSRF = 1000000.0
-WELL_YSRF = 2000000.0
-WELL_KB = 100.0
+WELL_XSRF = 33.8328
+WELL_YSRF = 67.6656
+WELL_XSRF_REAL = 111.0
+WELL_YSRF_REAL = 222.0
+WELL_KB = 10.058399999999999
 WELL_AZIMUTH = 5.672320068981945
 WELL_CONVERGENCE = 0.17453292519944444
+WELL_TIE_IN_TVD = 169.164
+WELL_TIE_IN_NS = 304.79999999999995
+WELL_TIE_IN_EW = -609.5999999999999
 
 EI_LAST_SEGMENT_EXTENDED_NAME = 'EI Last Segment Extended'
 EI_LAST_SEGMENT_EXTENDED_ID = uuid4()
@@ -69,10 +74,16 @@ LOG_NAME = 'GR'
 
 TYPEWELL_ID = uuid4()
 TYPEWELL_NAME = 'Typewell'
-TYPEWELL_XSRF = 500000.0
-TYPEWELL_YSRF = 600000.0
-TYPEWELL_KB = 100.0
-TYPEWELL_CONVERGENCE = 0.17453292519944444
+TYPEWELL_XSRF = 33.8328
+TYPEWELL_YSRF = 67.6656
+TYPEWELL_XSRF_REAL = 111.0
+TYPEWELL_YSRF_REAL = 222.0
+TYPEWELL_KB = 10.058399999999999
+TYPEWELL_CONVERGENCE = 0.6108652381980555
+TYPEWELL_TIE_IN_TVD = 169.164
+TYPEWELL_TIE_IN_NS = 304.79999999999995
+TYPEWELL_TIE_IN_EW = -609.5999999999999
+
 
 STARRED_TOPSET_NAME = 'Starred Topset'
 STARRED_TOPSET_ID = uuid4()
@@ -170,13 +181,13 @@ WELLS_DATA_RESPONSE = {
             'operator': 'Lateral Operator',
             'xsrf': {'val': WELL_XSRF},
             'ysrf': {'val': WELL_YSRF},
-            'xsrf_real': {'val': WELL_XSRF},
-            'ysrf_real': {'val': WELL_YSRF},
+            'xsrf_real': {'val': WELL_XSRF_REAL},
+            'ysrf_real': {'val': WELL_YSRF_REAL},
             'kb': {'val': WELL_KB},
             'convergence': {'val': WELL_CONVERGENCE},
-            'tie_in_tvd': {'val': 0.0},
-            'tie_in_ns': {'val': 49.0},
-            'tie_in_ew': {'val': 69.0},
+            'tie_in_tvd': {'val': WELL_TIE_IN_TVD},
+            'tie_in_ns': {'val': WELL_TIE_IN_NS},
+            'tie_in_ew': {'val': WELL_TIE_IN_EW},
             'azimuth': {'val': WELL_AZIMUTH},
             'starred': {
                 'target_line': STARRED_TARGET_LINE_ID,
@@ -192,14 +203,14 @@ WELLS_DATA_RESPONSE = {
             'operator': 'Lateral 2 Operator',
             'xsrf': {'val': WELL_XSRF},
             'ysrf': {'val': WELL_YSRF},
-            'xsrf_real': {'val': 3000000.0},
-            'ysrf_real': {'val': 4000000.0},
-            'kb': {'val': 494.0},
-            'convergence': {'val': 0.027453292519944444},
-            'tie_in_tvd': {'val': 125.0},
-            'tie_in_ns': {'val': 150.5},
-            'tie_in_ew': {'val': 250.5},
-            'azimuth': {'val': 5.372320068981945},
+            'xsrf_real': {'val': WELL_XSRF_REAL},
+            'ysrf_real': {'val': WELL_YSRF_REAL},
+            'kb': {'val': WELL_KB},
+            'convergence': {'val': WELL_CONVERGENCE},
+            'tie_in_tvd': {'val': WELL_TIE_IN_TVD},
+            'tie_in_ns': {'val': WELL_TIE_IN_NS},
+            'tie_in_ew': {'val': WELL_TIE_IN_EW},
+            'azimuth': {'val': WELL_AZIMUTH},
             'starred': {
                 'target_line': STARRED_TARGET_LINE_ID,
                 'nested_well': STARRED_NESTED_WELL_ID,
@@ -544,13 +555,13 @@ NESTED_WELLS_DATA_RESPONSE = {
             'operator': 'Operator',
             'xsrf': {'val': WELL_XSRF},
             'ysrf': {'val': WELL_YSRF},
-            'xsrf_real': {'val': 3000000.0},
-            'ysrf_real': {'val': 4000000.0},
+            'xsrf_real': {'val': WELL_XSRF_REAL},
+            'ysrf_real': {'val': WELL_YSRF_REAL},
             'kb': {'val': WELL_KB},
             'convergence': {'val': WELL_CONVERGENCE},
-            'tie_in_tvd': {'val': 125.0},
-            'tie_in_ns': {'val': 150.5},
-            'tie_in_ew': {'val': 250.5},
+            'tie_in_tvd': {'val': WELL_TIE_IN_TVD},
+            'tie_in_ns': {'val': WELL_TIE_IN_NS},
+            'tie_in_ew': {'val': WELL_TIE_IN_EW},
             'azimuth': {'val': WELL_AZIMUTH},
         },
         {
@@ -560,14 +571,14 @@ NESTED_WELLS_DATA_RESPONSE = {
             'operator': 'Nested Well Operator',
             'xsrf': {'val': WELL_XSRF},
             'ysrf': {'val': WELL_YSRF},
-            'xsrf_real': {'val': 3000000.0},
-            'ysrf_real': {'val': 4000000.0},
+            'xsrf_real': {'val': WELL_XSRF_REAL},
+            'ysrf_real': {'val': WELL_YSRF_REAL},
             'kb': {'undefined': True},
-            'convergence': {'val': 0.017453292519944444},
-            'tie_in_tvd': {'val': 125.0},
-            'tie_in_ns': {'val': 150.5},
-            'tie_in_ew': {'val': 250.5},
-            'azimuth': {'val': 5.672320068981945},
+            'convergence': {'val': WELL_CONVERGENCE},
+            'tie_in_tvd': {'val': WELL_TIE_IN_TVD},
+            'tie_in_ns': {'val': WELL_TIE_IN_NS},
+            'tie_in_ew': {'val': WELL_TIE_IN_EW},
+            'azimuth': {'val': WELL_AZIMUTH},
         },
         {
             'uuid': 'bfbbe18b-511d-4ef2-b65c-b70eddc49731',
@@ -576,14 +587,14 @@ NESTED_WELLS_DATA_RESPONSE = {
             'operator': 'Nested Well 2 Operator',
             'xsrf': {'val': WELL_XSRF},
             'ysrf': {'val': WELL_YSRF},
-            'xsrf_real': {'val': 3000000.0},
-            'ysrf_real': {'val': 4000000.0},
+            'xsrf_real': {'val': WELL_XSRF_REAL},
+            'ysrf_real': {'val': WELL_YSRF_REAL},
             'kb': {'undefined': True},
-            'convergence': {'val': 0.027453292519944444},
+            'convergence': {'val': WELL_CONVERGENCE},
             'tie_in_tvd': {'undefined': True},
             'tie_in_ns': {'undefined': True},
             'tie_in_ew': {'undefined': True},
-            'azimuth': {'val': 4.672320068981945},
+            'azimuth': {'val': WELL_AZIMUTH},
         },
     ],
     'offset': 0,
@@ -798,13 +809,13 @@ TYPEWELLS_DATA_RESPONSE = {
             'api': 'Typewell API',
             'xsrf': {'val': TYPEWELL_XSRF},
             'ysrf': {'val': TYPEWELL_YSRF},
-            'xsrf_real': {'val': 500000.0},
-            'ysrf_real': {'val': 600000.0},
+            'xsrf_real': {'val': TYPEWELL_XSRF_REAL},
+            'ysrf_real': {'val': TYPEWELL_YSRF_REAL},
             'kb': {'val': TYPEWELL_KB},
             'convergence': {'val': TYPEWELL_CONVERGENCE},
-            'tie_in_tvd': {'val': 125.0},
-            'tie_in_ns': {'val': 150.5},
-            'tie_in_ew': {'val': 250.5},
+            'tie_in_tvd': {'val': TYPEWELL_TIE_IN_TVD},
+            'tie_in_ns': {'val': TYPEWELL_TIE_IN_NS},
+            'tie_in_ew': {'val': TYPEWELL_TIE_IN_EW},
         },
         {
             'name': 'Typewell 2',
@@ -812,13 +823,13 @@ TYPEWELLS_DATA_RESPONSE = {
             'api': 'Typewell 2 API',
             'xsrf': {'val': TYPEWELL_XSRF},
             'ysrf': {'val': TYPEWELL_YSRF},
-            'xsrf_real': {'val': 500000.0},
-            'ysrf_real': {'val': 600000.0},
+            'xsrf_real': {'val': TYPEWELL_XSRF_REAL},
+            'ysrf_real': {'val': TYPEWELL_YSRF_REAL},
             'kb': {'val': TYPEWELL_KB},
             'convergence': {'val': TYPEWELL_CONVERGENCE},
-            'tie_in_tvd': {'val': 125.0},
-            'tie_in_ns': {'val': 150.5},
-            'tie_in_ew': {'val': 250.5},
+            'tie_in_tvd': {'val': TYPEWELL_TIE_IN_TVD},
+            'tie_in_ns': {'val': TYPEWELL_TIE_IN_NS},
+            'tie_in_ew': {'val': TYPEWELL_TIE_IN_EW},
         },
     ],
     'offset': 0,
@@ -1612,7 +1623,7 @@ EI_ALL_SEGMENTS_OUT_ASSEMBLED_SEGMENTS_DATA_RESPONSE = {
 }
 
 WELL_LINKED_TYPEWELLS_DATA_RESPONSE = {
-    'content': [{'shift': {'val': 123.0}, 'typewell_id': TYPEWELL_ID}],
+    'content': [{'shift': {'val': 100.0}, 'typewell_id': TYPEWELL_ID}],
     'offset': 0,
     'limit': 100,
     'total': 1,

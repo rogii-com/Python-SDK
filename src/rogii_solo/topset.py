@@ -4,6 +4,7 @@ from pandas import DataFrame
 
 import rogii_solo.well
 from rogii_solo.base import BaseObject, ComplexObject, ObjectRepository
+from rogii_solo.calculations.converters import feet_to_meters
 from rogii_solo.papi.client import PapiClient
 from rogii_solo.papi.types import PapiStarredTops
 from rogii_solo.types import DataList
@@ -103,7 +104,8 @@ class Top(BaseObject):
         return {
             'uuid': self.uuid,
             'name': self.name,
-            'md': self.convert_z(self.md, measure_units=self.measure_units) if get_converted else self.md,
+            # MD is returned in project units
+            'md': self.md if get_converted else feet_to_meters(self.md),
         }
 
     def to_df(self, get_converted: bool = True) -> DataFrame:
