@@ -82,7 +82,9 @@ class LogPoint(BaseObject):
 
     def to_dict(self, get_converted: bool = True) -> Dict:
         return {
-            'md': self.convert_z(value=self.md, measure_units=self.measure_units) if get_converted else self.md,
+            'md': self.safe_round(
+                self.convert_z(value=self.md, measure_units=self.measure_units) if get_converted else self.md
+            ),
             'value': self.value,
         }
 

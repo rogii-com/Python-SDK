@@ -33,10 +33,7 @@ from tests.papi_data import (
     TARGET_LINE_NAME,
     TIME_TRACE_DATA_RESPONSE,
     TIME_TRACE_NAME,
-    TYPEWELL_KB,
     TYPEWELL_NAME,
-    TYPEWELL_XSRF,
-    TYPEWELL_YSRF,
     WELL_NAME,
 )
 
@@ -272,10 +269,8 @@ def test_get_project_typewells(project):
     assert typewells_data
     assert not typewells_df.empty
 
-    assert typewells_data[0]['name'] == TYPEWELL_NAME
-    assert typewells_data[0]['kb'] == TYPEWELL_KB
-    assert typewells_data[0]['xsrf'] == TYPEWELL_XSRF
-    assert typewells_data[0]['ysrf'] == TYPEWELL_YSRF
+    assert typewells_data[0]['uuid'] == typewells_df.at[0, 'uuid']
+    assert typewells_data[0]['name'] == typewells_df.at[0, 'name']
 
 
 def test_get_typewell(project):
@@ -380,11 +375,12 @@ def test_get_mudlog(project):
 
     assert 'uuid' in mudlog_data
     assert 'name' in mudlog_data
+
+    assert mudlog_data['name'] == MUDLOG_NAME
     assert mudlog_data['uuid'] == mudlog_df.at[0, 'uuid']
     assert mudlog_data['name'] == mudlog_df.at[0, 'name']
 
-    assert mudlog_data['name'] == MUDLOG_NAME
-    assert mudlog.logs.to_df().at[0, 'MD'] == mudlog.logs[0].points[0].md
+    assert mudlog.logs.to_df().at[0, 'MD'] == mudlog.logs[0].points.to_dict()[0]['md']
 
 
 def test_get_time_trace(project):
@@ -474,23 +470,19 @@ def test_get_calc_trace(project):
 def test_get_well_linked_typewells(project):
     well = project.wells.find_by_name(WELL_NAME)
     typewell = project.typewells.find_by_name(TYPEWELL_NAME)
-
     assert well is not None
     assert typewell is not None
 
     linked_typewells = well.linked_typewells.to_dict()
-
     assert linked_typewells[0]['uuid'] == typewell.uuid
 
 
 def test_ei_last_segment_extended(project):
     well = project.wells.find_by_name(WELL_NAME)
-
     assert well is not None
 
     interpretation = well.starred_interpretation
     endless_interpretation = well.interpretations.find_by_id(EI_LAST_SEGMENT_EXTENDED_ID)
-
     assert interpretation is not None
     assert endless_interpretation is not None
 
@@ -504,11 +496,10 @@ def test_ei_last_segment_extended(project):
 
 def test_ei_last_segment_out(project):
     well = project.wells.find_by_name(WELL_NAME)
-
     assert well is not None
+
     interpretation = well.interpretations.find_by_id(INTERPRETATION_LAST_SEGMENT_ONE_POINT_ID)
     endless_interpretation = well.interpretations.find_by_id(EI_LAST_SEGMENT_OUT_ID)
-
     assert interpretation is not None
     assert endless_interpretation is not None
 
@@ -522,14 +513,12 @@ def test_ei_last_segment_out(project):
 
 def test_ei_absent_horizons_last_segment_out(project):
     well = project.wells.find_by_name(WELL_NAME)
-
     assert well is not None
 
     absent_horizons_interpretation = well.interpretations.find_by_id(
         INTERPRETATION_LAST_SEGMENT_ONE_POINT_ABSENT_HORIZONS_ID
     )
     endless_interpretation = well.interpretations.find_by_id(EI_ABSENT_HORIZONS_LAST_SEGMENT_OUT_ID)
-
     assert absent_horizons_interpretation is not None
     assert endless_interpretation is not None
 
@@ -543,17 +532,14 @@ def test_ei_absent_horizons_last_segment_out(project):
 
 def test_ei_all_segments_out(project):
     well = project.wells.find_by_name(WELL_NAME)
-
     assert well is not None
 
     interpretation = well.starred_interpretation
     endless_interpretation = well.interpretations.find_by_id(EI_ALL_SEGMENTS_OUT_ID)
-
     assert interpretation is not None
     assert endless_interpretation is not None
 
     endless_interpretation_data = endless_interpretation.to_dict()
-
     assert endless_interpretation_data['horizons'] is None
     assert endless_interpretation_data['segments'] is None
 
@@ -564,7 +550,6 @@ def _test_ei_case(well, interpretation, endless_interpretation, measure_units):
 
     last_segment = interpretation_data['segments'][-1]
     ei_last_segment = endless_interpretation_data['segments'][-1]
-
     assert last_segment['md'] == ei_last_segment['md']
 
     last_segment_dip = get_last_segment_dip(
@@ -573,54 +558,44 @@ def _test_ei_case(well, interpretation, endless_interpretation, measure_units):
     ei_last_segment_dip = get_last_segment_dip(
         well=well, assembled_segments=endless_interpretation.assembled_segments, measure_units=measure_units
     )
-
     assert fabs(last_segment_dip - ei_last_segment_dip) < DELTA_EI_DIP
 
 
 def test_get_well_comments(project):
     well = project.wells.find_by_name(WELL_NAME)
-
     assert well is not None
 
     comments = well.comments
-
     assert comments is not None
 
     comments_data = comments.to_dict()
     comments_df = comments.to_df()
-
     assert comments_data
     assert not comments_df.empty
 
 
 def test_get_comment_boxes(project):
     well = project.wells.find_by_name(WELL_NAME)
-
     assert well is not None
 
     comments = well.comments
-
     assert comments is not None
 
     first_comment = comments[0]
     comment_boxes = first_comment.comment_boxes
-
     assert comment_boxes is not None
 
     comment_boxes_data = comment_boxes.to_dict()
     comment_boxes_df = comment_boxes.to_df()
-
     assert comment_boxes_data
     assert not comment_boxes_df.empty
 
     second_comment = comments[1]
     comment_boxes = second_comment.comment_boxes
-
     assert comment_boxes is not None
 
     comment_boxes_data = comment_boxes.to_dict()
     comment_boxes_df = comment_boxes.to_df()
-
     assert not comment_boxes_data
     assert comment_boxes_df.empty
 

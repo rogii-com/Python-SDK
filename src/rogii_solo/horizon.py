@@ -83,8 +83,12 @@ class HorizonPoint(BaseObject):
 
     def to_dict(self, get_converted: bool = True) -> Dict:
         return {
-            'md': self.convert_z(self.md, measure_units=self.measure_units) if get_converted else self.md,
-            'tvd': self.convert_z(self.tvd, measure_units=self.measure_units) if get_converted else self.tvd,
+            'md': self.safe_round(
+                self.convert_z(self.md, measure_units=self.measure_units) if get_converted else self.md
+            ),
+            'tvd': self.safe_round(
+                self.convert_z(self.tvd, measure_units=self.measure_units) if get_converted else self.tvd
+            ),
         }
 
     def to_df(self, get_converted: bool = True) -> DataFrame:
