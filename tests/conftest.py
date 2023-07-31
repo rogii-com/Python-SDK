@@ -60,7 +60,7 @@ def fetch_virtual_projects(**kwargs):
     return VIRTUAL_PROJECTS_DATA_RESPONSE
 
 
-def fetch_project_wells(**kwargs):
+def fetch_project_raw_wells(**kwargs):
     return WELLS_DATA_RESPONSE
 
 
@@ -200,7 +200,7 @@ def solo_client():
 
     solo_client._papi_client.fetch_projects = fetch_projects
     solo_client._papi_client.fetch_virtual_projects = fetch_virtual_projects
-    solo_client._papi_client.fetch_project_wells = fetch_project_wells
+    solo_client._papi_client.fetch_project_raw_wells = fetch_project_raw_wells
     solo_client._papi_client.fetch_well_raw_trajectory = fetch_well_raw_trajectory
     solo_client._papi_client.fetch_well_raw_interpretations = fetch_well_raw_interpretations
     solo_client._papi_client.fetch_interpretation_horizons = fetch_interpretation_horizons
@@ -267,6 +267,6 @@ def solo_client_papi():
 
 @pytest.fixture(scope='module')
 def project_papi(solo_client_papi):
-    solo_client_papi.set_project_by_name('tmz global ft')
+    solo_client_papi.set_project_by_name(environ.get('ROGII_SOLO_PROJECT_NAME'))
 
     return solo_client_papi.project

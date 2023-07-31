@@ -344,7 +344,8 @@ class Well(ComplexObject):
 
         # No raw method for nested well
         nested_well_data = find_by_uuid(
-            value=nested_well_id['uuid'], input_list=self._papi_client.get_well_nested_wells_data(well_id=self.uuid)
+            value=nested_well_id['uuid'],
+            input_list=self._papi_client.get_well_nested_wells_data(well_id=self.uuid, query=name),
         )
         self._nested_wells.append(NestedWell(papi_client=self._papi_client, well=self, **nested_well_data))
 
@@ -403,17 +404,24 @@ class Well(ComplexObject):
         tie_in_ns: Optional[float] = None,
         tie_in_ew: Optional[float] = None,
     ):
-        func_data = {
-            func_param: func_arg
-            for func_param, func_arg in locals().items()
-            if func_arg is not None and func_param != 'self'
-        }
-        request_data = {key: self._papi_client.prepare_papi_var(value) for key, value in func_data.items()}
-
-        is_updated = self._papi_client.update_well_meta(well_id=self.uuid, **request_data)
+        is_updated = self._papi_client.update_well_meta(
+            well_id=self.uuid,
+            name=name,
+            api=api,
+            operator=operator,
+            xsrf=self._papi_client.prepare_papi_var(xsrf),
+            ysrf=self._papi_client.prepare_papi_var(ysrf),
+            kb=self._papi_client.prepare_papi_var(kb),
+            azimuth=self._papi_client.prepare_papi_var(azimuth),
+            convergence=self._papi_client.prepare_papi_var(convergence),
+            tie_in_tvd=self._papi_client.prepare_papi_var(tie_in_tvd),
+            tie_in_ns=self._papi_client.prepare_papi_var(tie_in_ns),
+            tie_in_ew=self._papi_client.prepare_papi_var(tie_in_ew),
+        )
 
         if is_updated:
-            self.__dict__.update(func_data)
+            well_data = self._papi_client.get_project_well_data(well_id=self.uuid)
+            self.__dict__.update(**well_data)
 
         return self
 
@@ -565,17 +573,26 @@ class NestedWell(ComplexObject):
         tie_in_ns: Optional[float] = None,
         tie_in_ew: Optional[float] = None,
     ):
-        func_data = {
-            func_param: func_arg
-            for func_param, func_arg in locals().items()
-            if func_arg is not None and func_param != 'self'
-        }
-        request_data = {key: self._papi_client.prepare_papi_var(value) for key, value in func_data.items()}
-
-        is_updated = self._papi_client.update_nested_well_meta(well_id=self.uuid, **request_data)
+        is_updated = self._papi_client.update_nested_well_meta(
+            well_id=self.uuid,
+            name=name,
+            api=api,
+            operator=operator,
+            xsrf=self._papi_client.prepare_papi_var(xsrf),
+            ysrf=self._papi_client.prepare_papi_var(ysrf),
+            kb=self._papi_client.prepare_papi_var(kb),
+            tie_in_tvd=self._papi_client.prepare_papi_var(tie_in_tvd),
+            tie_in_ns=self._papi_client.prepare_papi_var(tie_in_ns),
+            tie_in_ew=self._papi_client.prepare_papi_var(tie_in_ew),
+        )
 
         if is_updated:
-            self.__dict__.update(func_data)
+            # No raw method for nested well
+            nested_well_data = find_by_uuid(
+                value=self.uuid,
+                input_list=self._papi_client.get_well_nested_wells_data(well_id=self.well.uuid, query=name),
+            )
+            self.__dict__.update(**nested_well_data)
 
         return self
 
@@ -723,17 +740,27 @@ class Typewell(ComplexObject):
         tie_in_ns: Optional[float] = None,
         tie_in_ew: Optional[float] = None,
     ):
-        func_data = {
-            func_param: func_arg
-            for func_param, func_arg in locals().items()
-            if func_arg is not None and func_param != 'self'
-        }
-        request_data = {key: self._papi_client.prepare_papi_var(value) for key, value in func_data.items()}
-
-        is_updated = self._papi_client.update_typewell_meta(well_id=self.uuid, **request_data)
+        is_updated = self._papi_client.update_typewell_meta(
+            well_id=self.uuid,
+            name=name,
+            api=api,
+            operator=operator,
+            xsrf=self._papi_client.prepare_papi_var(xsrf),
+            ysrf=self._papi_client.prepare_papi_var(ysrf),
+            kb=self._papi_client.prepare_papi_var(kb),
+            convergence=self._papi_client.prepare_papi_var(convergence),
+            tie_in_tvd=self._papi_client.prepare_papi_var(tie_in_tvd),
+            tie_in_ns=self._papi_client.prepare_papi_var(tie_in_ns),
+            tie_in_ew=self._papi_client.prepare_papi_var(tie_in_ew),
+        )
 
         if is_updated:
-            self.__dict__.update(func_data)
+            # No raw method for typewell
+            typewell_data = find_by_uuid(
+                value=self.uuid,
+                input_list=self._papi_client.get_project_typewells_data(project_id=self.project.uuid, query=name),
+            )
+            self.__dict__.update(**typewell_data)
 
         return self
 
