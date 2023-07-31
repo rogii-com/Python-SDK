@@ -267,6 +267,6 @@ def solo_client_papi():
 
 @pytest.fixture(scope='module')
 def project_papi(solo_client_papi):
-    solo_client_papi.set_project_by_name(environ.get('ROGII_SOLO_PROJECT_NAME'))
+    solo_client_papi.set_project_by_name('tmz global ft')
 
     return solo_client_papi.project

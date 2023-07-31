@@ -26,7 +26,6 @@ class Mudlog(ComplexObject):
         self.__dict__.update(kwargs)
 
         self._logs: Optional['LithologyLogRepository'] = None
-        self._logs_data: Optional[DataList] = None
 
     def to_dict(self) -> Dict:
         return {'uuid': self.uuid, 'name': self.name}
@@ -38,16 +37,13 @@ class Mudlog(ComplexObject):
     def logs(self) -> 'LithologyLogRepository':
         if self._logs is None:
             self._logs = LithologyLogRepository(
-                [LithologyLog(mudlog=self, _points_data=item['log_points'], **item) for item in self._get_logs_data()]
+                [
+                    LithologyLog(mudlog=self, _points_data=item['log_points'], **item)
+                    for item in self._papi_client.get_mudlog_data(self.uuid)
+                ]
             )
 
         return self._logs
-
-    def _get_logs_data(self) -> DataList:
-        if self._logs_data is None:
-            self._logs_data = self._papi_client.get_mudlog_data(self.uuid)
-
-        return self._logs_data
 
 
 class LithologyLog(BaseObject):

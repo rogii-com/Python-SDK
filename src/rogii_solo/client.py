@@ -27,7 +27,6 @@ class SoloClient:
             )
         )
 
-        self._projects_data: Optional[DataList] = None
         self._projects: Optional[ObjectRepository[Project]] = None
         self.project: Optional[Project] = None
 
@@ -41,13 +40,10 @@ class SoloClient:
         return self._projects
 
     def _get_projects_data(self) -> DataList:
-        if self._projects_data is None:
-            global_projects_data = self._papi_client.get_global_projects_data()
-            virtual_projects_data = self._papi_client.get_virtual_projects_data()
+        global_projects_data = self._papi_client.get_global_projects_data()
+        virtual_projects_data = self._papi_client.get_virtual_projects_data()
 
-            self._projects_data = global_projects_data + virtual_projects_data
-
-        return self._projects_data
+        return global_projects_data + virtual_projects_data
 
     def set_project_by_id(self, project_id: str) -> Optional[Project]:
         project = self.projects.find_by_id(project_id)

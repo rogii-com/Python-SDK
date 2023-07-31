@@ -106,6 +106,9 @@ class PapiClient(SdkPapiClient):
     def get_project_wells_data(self, project_id: str, **kwargs) -> PapiDataList:
         return list(self._gen_data_page(func=self.fetch_project_wells, project_id=project_id, **kwargs))
 
+    def get_project_well_data(self, well_id: str, **kwargs) -> PapiData:
+        return self.parse_papi_data(self.fetch_raw_well(well_id=well_id, **kwargs))
+
     def get_well_trajectory_data(self, well_id: str, **kwargs) -> PapiDataList:
         return [
             self.parse_papi_data(data_item) for data_item in self.fetch_well_raw_trajectory(well_id=well_id, **kwargs)

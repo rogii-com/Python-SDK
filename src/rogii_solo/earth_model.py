@@ -20,7 +20,6 @@ class EarthModel(ComplexObject):
         self.__dict__.update(kwargs)
 
         self._sections: Optional[ObjectRepository[EarthModelSection]] = None
-        self._sections_data: Optional[DataList] = None
 
     def to_dict(self) -> Dict:
         return {'uuid': self.uuid, 'name': self.name}
@@ -38,25 +37,22 @@ class EarthModel(ComplexObject):
         return self._sections
 
     def _get_sections_data(self) -> DataList:
-        if self._sections_data is None:
-            sections = []
-            segments_in_opposite_order = list(enumerate(self.interpretation.assembled_segments['segments'], 1))[::-1]
+        sections = []
+        segments_reversed = list(enumerate(self.interpretation.assembled_segments['segments'], 1))[::-1]
 
-            for uuid, section_data in self._papi_client.fetch_earth_model_sections(earth_model_id=self.uuid).items():
-                section_data = self._papi_client.parse_papi_data(section_data)
-                section_data['uuid'] = uuid
-                section_data['_raw_layers'] = section_data.pop('layers')
+        for uuid, section_data in self._papi_client.fetch_earth_model_sections(earth_model_id=self.uuid).items():
+            section_data = self._papi_client.parse_papi_data(section_data)
+            section_data['uuid'] = uuid
+            section_data['_raw_layers'] = section_data.pop('layers')
 
-                for i, segment in segments_in_opposite_order:
-                    if segment['md'] <= section_data['md']:
-                        section_data['interpretation_segment'] = i
-                        break
+            for i, segment in segments_reversed:
+                if segment['md'] <= section_data['md']:
+                    section_data['interpretation_segment'] = i
+                    break
 
-                sections.append(section_data)
+            sections.append(section_data)
 
-            self._sections_data = sorted(sections, key=lambda section: section['md'])
-
-        return self._sections_data
+        return sorted(sections, key=lambda section: section['md'])
 
 
 class EarthModelSection(BaseObject):
@@ -72,7 +68,6 @@ class EarthModelSection(BaseObject):
         self.__dict__.update(kwargs)
 
         self._layers: Optional[ObjectRepository[EarthModelLayer]] = None
-        self._layers_data: Optional[DataList] = None
 
     def to_dict(self, get_converted: bool = True) -> Dict:
         return {
@@ -103,16 +98,15 @@ class EarthModelSection(BaseObject):
         return self._layers
 
     def _get_layers_data(self) -> DataList:
-        if self._layers_data is None:
-            self._layers_data = [self._raw_layers[0]]
+        layers_data = [self._raw_layers[0]]
 
-            for i, raw_layer in enumerate(self._raw_layers[1:-1], 1):
-                raw_layer['thickness'] = self._raw_layers[i + 1]['tvd'] - raw_layer['tvd']
-                self._layers_data.append(raw_layer)
+        for i, raw_layer in enumerate(self._raw_layers[1:-1], 1):
+            raw_layer['thickness'] = self._raw_layers[i + 1]['tvd'] - raw_layer['tvd']
+            layers_data.append(raw_layer)
 
-            self._layers_data.append(self._raw_layers[-1])
+        layers_data.append(self._raw_layers[-1])
 
-        return self._layers_data
+        return layers_data
 
 
 class EarthModelLayer(BaseObject):

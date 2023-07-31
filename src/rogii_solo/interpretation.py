@@ -45,13 +45,8 @@ class Interpretation(ComplexObject):
         self.__dict__.update(kwargs)
 
         self._assembled_segments_data: Optional[PapiAssembledSegments] = None
-
-        self._horizons_data: Optional[DataList] = None
         self._horizons: Optional[ObjectRepository[Horizon]] = None
-
-        self._earth_models_data: Optional[DataList] = None
         self._earth_models: Optional[ObjectRepository[EarthModel]] = None
-
         self._starred_horizons_data: Optional[PapiStarredHorizons] = None
         self._starred_horizon_top: Optional[Horizon] = None
         self._starred_horizon_center: Optional[Horizon] = None
@@ -100,7 +95,7 @@ class Interpretation(ComplexObject):
         assembled_horizons_data = self._assembled_segments_data['horizons']
         measure_units = self.well.project.measure_unit
 
-        for horizon in self._get_horizons_data():
+        for horizon in self.horizons.to_dict():
             assembled_horizons_data[horizon['uuid']]['name'] = horizon['name']
 
             if measure_units != EMeasureUnits.METER:
@@ -117,16 +112,13 @@ class Interpretation(ComplexObject):
     def horizons(self) -> ObjectRepository[Horizon]:
         if self._horizons is None:
             self._horizons = ObjectRepository(
-                objects=[Horizon(interpretation=self, **item) for item in self._get_horizons_data()]
+                objects=[
+                    Horizon(interpretation=self, **item)
+                    for item in self._papi_client.get_interpretation_horizons_data(interpretation_id=self.uuid)
+                ]
             )
 
         return self._horizons
-
-    def _get_horizons_data(self) -> DataList:
-        if self._horizons_data is None:
-            self._horizons_data = self._papi_client.get_interpretation_horizons_data(interpretation_id=self.uuid)
-
-        return self._horizons_data
 
     @property
     def earth_models(self) -> ObjectRepository[EarthModel]:
@@ -134,19 +126,11 @@ class Interpretation(ComplexObject):
             self._earth_models = ObjectRepository(
                 objects=[
                     EarthModel(papi_client=self._papi_client, interpretation=self, **item)
-                    for item in self._get_earth_models_data()
+                    for item in self._papi_client.get_interpretation_earth_models_data(interpretation_id=self.uuid)
                 ]
             )
 
         return self._earth_models
-
-    def _get_earth_models_data(self) -> DataList:
-        if self._earth_models_data is None:
-            self._earth_models_data = self._papi_client.get_interpretation_earth_models_data(
-                interpretation_id=self.uuid
-            )
-
-        return self._earth_models_data
 
     @property
     def starred_horizon_top(self):

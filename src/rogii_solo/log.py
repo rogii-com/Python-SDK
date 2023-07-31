@@ -23,7 +23,6 @@ class Log(ComplexObject):
         self.__dict__.update(kwargs)
 
         self._points: Optional[LogPointRepository] = None
-        self._points_data: Optional[DataList] = None
 
     def to_dict(self) -> Dict:
         return {'uuid': self.uuid, 'name': self.name}
@@ -37,17 +36,11 @@ class Log(ComplexObject):
             self._points = LogPointRepository(
                 [
                     LogPoint(measure_units=self.well.project.measure_unit, md=point['md'], value=point['data'])
-                    for point in self._get_points_data()
+                    for point in self._papi_client.get_log_points(self.uuid)
                 ]
             )
 
         return self._points
-
-    def _get_points_data(self) -> DataList:
-        if self._points_data is None:
-            self._points_data = self._papi_client.get_log_points(self.uuid)
-
-        return self._points_data
 
     def replace_points(self, points: DataList):
         prepared_log_points = [
