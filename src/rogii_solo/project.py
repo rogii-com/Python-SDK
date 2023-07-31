@@ -128,6 +128,7 @@ class Project(ComplexObject):
         )
         # No raw method for typewell
         typewell_data = find_by_uuid(
-            value=typewell_id['uuid'], input_list=self._papi_client.get_project_typewells_data(project_id=self.uuid)
+            value=typewell_id['uuid'],
+            input_list=self._papi_client.get_project_typewells_data(project_id=self.uuid, query=name),
         )
         self._typewells.append(Typewell(papi_client=self._papi_client, project=self, **typewell_data))

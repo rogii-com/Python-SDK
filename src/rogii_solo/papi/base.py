@@ -190,46 +190,46 @@ class PapiClient(BasePapiClient):
         self,
         offset: int = BasePapiClient.DEFAULT_OFFSET,
         limit: int = BasePapiClient.DEFAULT_LIMIT,
-        project_filter: str = None,
+        query: str = None,
         headers: Optional[Dict] = None,
     ):
         """
         Fetches projects
         :param offset:
         :param limit:
-        :param project_filter:
+        :param query:
         :param headers:
         :return:
         """
         return self._send_request(
-            url='projects', params={'offset': offset, 'limit': limit, 'filter': project_filter}, headers=headers
+            url='projects', params={'offset': offset, 'limit': limit, 'filter': query}, headers=headers
         )
 
     def fetch_virtual_projects(
         self,
         offset: int = BasePapiClient.DEFAULT_OFFSET,
         limit: int = BasePapiClient.DEFAULT_LIMIT,
-        project_filter: str = None,
+        query: str = None,
         headers: Optional[Dict] = None,
     ):
         """
         Fetches virtual projects
         :param offset:
         :param limit:
-        :param project_filter:
+        :param query:
         :param headers:
         :return:
         """
         return self._send_request(
-            url='projects/virtual', params={'offset': offset, 'limit': limit, 'filter': project_filter}, headers=headers
+            url='projects/virtual', params={'offset': offset, 'limit': limit, 'filter': query}, headers=headers
         )
 
-    def fetch_project_wells(
+    def fetch_project_raw_wells(
         self,
         project_id: str,
         offset: int = BasePapiClient.DEFAULT_OFFSET,
         limit: int = BasePapiClient.DEFAULT_LIMIT,
-        well_filter: str = None,
+        query: str = None,
         headers: Optional[Dict] = None,
     ):
         """
@@ -237,13 +237,13 @@ class PapiClient(BasePapiClient):
         :param project_id:
         :param offset:
         :param limit:
-        :param well_filter:
+        :param query:
         :param headers:
         :return:
         """
         return self._send_request(
             url=f'projects/{project_id}/wells/raw',
-            params={'offset': offset, 'limit': limit, 'filter': well_filter},
+            params={'offset': offset, 'limit': limit, 'filter': query},
             headers=headers,
         )
 
@@ -273,7 +273,7 @@ class PapiClient(BasePapiClient):
         well_id: str,
         offset: int = BasePapiClient.DEFAULT_OFFSET,
         limit: int = BasePapiClient.DEFAULT_LIMIT,
-        interpretation_filter: str = None,
+        query: str = None,
         headers: Optional[Dict] = None,
     ):
         """
@@ -281,13 +281,13 @@ class PapiClient(BasePapiClient):
         :param well_id:
         :param offset:
         :param limit:
-        :param interpretation_filter:
+        :param query:
         :param headers:
         :return:
         """
         return self._send_request(
             url=f'wells/{well_id}/interpretations/raw',
-            params={'offset': offset, 'limit': limit, 'filter': interpretation_filter},
+            params={'offset': offset, 'limit': limit, 'filter': query},
             headers=headers,
         )
 
@@ -296,7 +296,7 @@ class PapiClient(BasePapiClient):
         interpretation_id: str,
         offset: int = BasePapiClient.DEFAULT_OFFSET,
         limit: int = BasePapiClient.DEFAULT_LIMIT,
-        horizon_filter: str = None,
+        query: str = None,
         headers: Optional[Dict] = None,
     ):
         """
@@ -304,13 +304,13 @@ class PapiClient(BasePapiClient):
         :param interpretation_id:
         :param offset:
         :param limit:
-        :param horizon_filter:
+        :param query:
         :param headers:
         :return:
         """
         return self._send_request(
             url=f'interpretations/{interpretation_id}/horizons',
-            params={'offset': offset, 'limit': limit, 'filter': horizon_filter},
+            params={'offset': offset, 'limit': limit, 'filter': query},
             headers=headers,
         )
 
@@ -402,6 +402,7 @@ class PapiClient(BasePapiClient):
         well_id: str,
         offset: int = BasePapiClient.DEFAULT_OFFSET,
         limit: int = BasePapiClient.DEFAULT_LIMIT,
+        query: str = None,
         headers: Optional[Dict] = None,
     ):
         """
@@ -409,11 +410,14 @@ class PapiClient(BasePapiClient):
         :param well_id:
         :param offset:
         :param limit:
+        :param query:
         :param headers:
         :return:
         """
         return self._send_request(
-            url=f'wells/{well_id}/nestedwells/raw', params={'offset': offset, 'limit': limit}, headers=headers
+            url=f'wells/{well_id}/nestedwells/raw',
+            params={'offset': offset, 'limit': limit, 'filter': query},
+            headers=headers,
         )
 
     def fetch_well_target_lines(
@@ -504,7 +508,7 @@ class PapiClient(BasePapiClient):
         well_id: str,
         offset: int = BasePapiClient.DEFAULT_OFFSET,
         limit: int = BasePapiClient.DEFAULT_LIMIT,
-        log_filter: str = None,
+        query: str = None,
         headers: Optional[Dict] = None,
     ):
         """
@@ -512,13 +516,13 @@ class PapiClient(BasePapiClient):
         :param well_id:
         :param offset:
         :param limit:
-        :param log_filter:
+        :param query:
         :param headers:
         :return:
         """
         return self._send_request(
             url=f'wells/{well_id}/logs',
-            params={'offset': offset, 'limit': limit, 'filter': log_filter},
+            params={'offset': offset, 'limit': limit, 'filter': query},
             headers=headers,
         )
 
@@ -562,7 +566,7 @@ class PapiClient(BasePapiClient):
         well_id: str,
         offset: int = BasePapiClient.DEFAULT_OFFSET,
         limit: int = BasePapiClient.DEFAULT_LIMIT,
-        mudlog_filter: str = None,
+        query: str = None,
         headers: Optional[Dict] = None,
     ):
         """
@@ -570,13 +574,13 @@ class PapiClient(BasePapiClient):
         :param well_id:
         :param offset:
         :param limit:
-        :param mudlog_filter:
+        :param query:
         :param headers:
         :return:
         """
         return self._send_request(
             url=f'wells/{well_id}/mudlogs',
-            params={'offset': offset, 'limit': limit, 'filter': mudlog_filter},
+            params={'offset': offset, 'limit': limit, 'filter': query},
             headers=headers,
         )
 
@@ -585,7 +589,7 @@ class PapiClient(BasePapiClient):
         typewell_id: str,
         offset: int = BasePapiClient.DEFAULT_OFFSET,
         limit: int = BasePapiClient.DEFAULT_LIMIT,
-        mudlog_filter: str = None,
+        query: str = None,
         headers: Optional[Dict] = None,
     ):
         """
@@ -593,13 +597,13 @@ class PapiClient(BasePapiClient):
         :param typewell_id:
         :param offset:
         :param limit:
-        :param mudlog_filter:
+        :param query:
         :param headers:
         :return:
         """
         return self._send_request(
             url=f'typewells/{typewell_id}/mudlogs',
-            params={'offset': offset, 'limit': limit, 'filter': mudlog_filter},
+            params={'offset': offset, 'limit': limit, 'filter': query},
             headers=headers,
         )
 
@@ -619,7 +623,7 @@ class PapiClient(BasePapiClient):
         project_id: str,
         offset: int = BasePapiClient.DEFAULT_OFFSET,
         limit: int = BasePapiClient.DEFAULT_LIMIT,
-        typewell_filter: str = None,
+        query: str = None,
         headers: Optional[Dict] = None,
     ):
         """
@@ -627,7 +631,7 @@ class PapiClient(BasePapiClient):
         :param project_id:
         :param offset:
         :param limit:
-        :param typewell_filter:
+        :param query:
         :param headers:
         :return:
         """
@@ -636,7 +640,7 @@ class PapiClient(BasePapiClient):
             params={
                 'offset': offset,
                 'limit': limit,
-                'filter': typewell_filter,
+                'filter': query,
             },
             headers=headers,
         )
