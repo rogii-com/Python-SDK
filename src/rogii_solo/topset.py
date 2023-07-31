@@ -7,7 +7,7 @@ from rogii_solo.base import BaseObject, ComplexObject, ObjectRepository
 from rogii_solo.calculations.converters import feet_to_meters
 from rogii_solo.papi.client import PapiClient
 from rogii_solo.papi.types import PapiStarredTops
-from rogii_solo.types import DataList
+from rogii_solo.utils.objects import find_by_uuid
 
 WellType = Union['rogii_solo.well.Well', 'rogii_solo.well.Typewell', 'rogii_solo.well.NestedWell']
 
@@ -23,9 +23,7 @@ class Topset(ComplexObject):
 
         self.__dict__.update(kwargs)
 
-        self._tops_data: Optional[DataList] = None
         self._tops: Optional[ObjectRepository[Top]] = None
-
         self._starred_tops_data: Optional[PapiStarredTops] = None
         self._starred_top_top: Optional[Top] = None
         self._starred_top_center: Optional[Top] = None
@@ -40,7 +38,11 @@ class Topset(ComplexObject):
     @property
     def tops(self) -> ObjectRepository['Top']:
         if self._tops is None:
-            self._tops = ObjectRepository(objects=[Top(topset=self, **item) for item in self._get_tops_data()])
+            self._tops = ObjectRepository(
+                objects=[
+                    Top(topset=self, **item) for item in self._papi_client.get_topset_tops_data(topset_id=self.uuid)
+                ]
+            )
 
         return self._tops
 
@@ -68,19 +70,16 @@ class Topset(ComplexObject):
 
         return self._starred_top_bottom
 
-    def create_top(self, top_name: str, md: float):
-        self._papi_client.create_topset_top(
-            topset_id=self.uuid, top_name=top_name, md=self._papi_client.prepare_papi_var(md)
+    def create_top(self, name: str, md: float):
+        top_id = self._papi_client.create_topset_top(
+            topset_id=self.uuid, name=name, md=self._papi_client.prepare_papi_var(md)
         )
 
-        self._tops_data = None
-        self._tops = None
-
-    def _get_tops_data(self) -> Optional[DataList]:
-        if self._tops_data is None:
-            self._tops_data = self._papi_client.get_topset_tops_data(topset_id=self.uuid)
-
-        return self._tops_data
+        # No raw method for top
+        top_data = find_by_uuid(
+            value=top_id['uuid'], input_list=self._papi_client.get_topset_tops_data(topset_id=self.uuid)
+        )
+        self._tops.append(Top(topset=self, **top_data))
 
     def _get_starred_tops_data(self):
         if self._starred_tops_data is None:

@@ -16,7 +16,6 @@ class Trace(ComplexObject):
         self.uuid = None
         self.name = None
 
-        self._points_data: Optional[DataList] = None
         self._points: Optional[TracePointRepository] = None
 
         self.__dict__.update(kwargs)
@@ -60,18 +59,15 @@ class TimeTrace(Trace):
     def points(self) -> 'TimeTracePointRepository':
         if self._points is None:
             self._points = TimeTracePointRepository(
-                objects=[TimeTracePoint(**item) for item in self._get_points_data()],
+                objects=[
+                    TimeTracePoint(**item)
+                    for item in self._papi_client.get_well_time_trace_data(well_id=self.well.uuid, trace_id=self.uuid)
+                ],
                 start_date_time_index=self.start_date_time_index,
                 last_date_time_index=self.last_date_time_index,
             )
 
         return self._points
-
-    def _get_points_data(self) -> DataList:
-        if self._points_data is None:
-            self._points_data = self._papi_client.get_well_time_trace_data(well_id=self.well.uuid, trace_id=self.uuid)
-
-        return self._points_data
 
 
 class TimeTracePoint(BaseObject):
@@ -113,18 +109,15 @@ class CalcTrace(Trace):
     def points(self) -> 'CalcTracePointRepository':
         if self._points is None:
             self._points = CalcTracePointRepository(
-                objects=[CalcTracePoint(**item) for item in self._get_points_data()],
+                objects=[
+                    CalcTracePoint(**item)
+                    for item in self._papi_client.get_well_calc_trace_data(well_id=self.well.uuid, trace_id=self.uuid)
+                ],
                 start_date_time_index=self.start_date_time_index,
                 last_date_time_index=self.last_date_time_index,
             )
 
         return self._points
-
-    def _get_points_data(self) -> DataList:
-        if self._points_data is None:
-            self._points_data = self._papi_client.get_well_calc_trace_data(well_id=self.well.uuid, trace_id=self.uuid)
-
-        return self._points_data
 
     @property
     def rac_codes(self) -> ObjectRepository['RacCode']:

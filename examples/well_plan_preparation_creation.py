@@ -44,9 +44,9 @@ def prepare_well_plan():
 
     nested_well_name = 'Nested Well ' + str(random.randint(0, 10000))
     well.create_nested_well(
-        nested_well_name=nested_well_name,
+        name=nested_well_name,
         operator='Operator',
-        api=nested_well_name,
+        api='API',
         xsrf=100000.0,
         ysrf=100000.0,
         kb=0.0,

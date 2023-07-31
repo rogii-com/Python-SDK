@@ -41,8 +41,11 @@ class PapiLogPoint(TypedDict):
     value: PapiVar
 
 
-PapiTrajectory = List[PapiTrajectoryPoint]
+class PapiObjectCreationResult(TypedDict):
+    uuid: str
 
+
+PapiTrajectory = List[PapiTrajectoryPoint]
 PapiData = Dict[str, Any]
 PapiDataList = List[Dict[str, Any]]
 PapiDataIterator = Iterator[Dict[str, Any]]
