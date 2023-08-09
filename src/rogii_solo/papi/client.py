@@ -4,6 +4,8 @@ import uuid
 from typing import Any, Callable
 from urllib.parse import urljoin, urlparse
 
+import pandas as pd
+
 from rogii_solo import __version__
 from rogii_solo.papi.base import PapiClient as SdkPapiClient
 from rogii_solo.papi.types import (
@@ -212,8 +214,27 @@ class PapiClient(SdkPapiClient):
     def get_well_mapped_time_traces_data(self, well_id: str, **kwargs) -> PapiDataList:
         return self.fetch_well_mapped_time_traces(well_id=well_id, **kwargs)
 
+    # TODO Change to default _gen_data_page when offset will be added to the endpoint
     def get_well_time_trace_data(self, well_id: str, trace_id: str, **kwargs) -> PapiDataList:
-        return self.fetch_well_time_trace(well_id=well_id, trace_id=trace_id, **kwargs)
+        def _gen_data_page() -> PapiDataIterator:
+            time_from = None
+            limit = 500_000
+
+            while True:
+                data_page = self.fetch_well_time_trace(
+                    well_id=well_id, trace_id=trace_id, time_from=time_from, limit=limit, **kwargs
+                )
+
+                for data_item in data_page:
+                    yield self.parse_papi_data(data_item)
+
+                if len(data_page) == 1:
+                    break
+
+                time_from = data_page[-1]['index']
+
+        # Last data item on a page equals the first one on the next page, so we need to remove duplicates
+        return pd.DataFrame(list(_gen_data_page())).drop_duplicates().to_dict('records')
 
     def get_well_mapped_calc_traces_data(self, well_id: str, **kwargs) -> PapiDataList:
         return self.fetch_well_mapped_calc_traces(well_id=well_id, **kwargs)

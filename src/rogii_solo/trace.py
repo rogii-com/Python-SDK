@@ -7,11 +7,14 @@ import rogii_solo.well
 from rogii_solo.base import BaseObject, ComplexObject, ObjectRepository
 from rogii_solo.papi.client import PapiClient
 from rogii_solo.types import DataList
+from rogii_solo.utils.objects import get_datetime
 
 
 class Trace(ComplexObject):
-    def __init__(self, papi_client: PapiClient, **kwargs):
+    def __init__(self, papi_client: PapiClient, well: 'rogii_solo.well.Well', **kwargs):
         super().__init__(papi_client)
+
+        self.well = well
 
         self.uuid = None
         self.name = None
@@ -34,9 +37,7 @@ class Trace(ComplexObject):
 
 class TimeTrace(Trace):
     def __init__(self, papi_client: PapiClient, well: 'rogii_solo.well.Well', **kwargs):
-        super().__init__(papi_client, well=well, **kwargs)
-
-        self.well = well
+        super().__init__(papi_client=papi_client, well=well, **kwargs)
 
         self.hash = None
         self.unit = None
@@ -86,9 +87,7 @@ class TimeTracePoint(BaseObject):
 
 class CalcTrace(Trace):
     def __init__(self, papi_client: PapiClient, well: 'rogii_solo.well.Well', **kwargs):
-        super().__init__(papi_client, well=well, **kwargs)
-
-        self.well = well
+        super().__init__(papi_client=papi_client, well=well, **kwargs)
 
         self.hash = None
         self.start_date_time_index = None
@@ -204,29 +203,26 @@ class TracePointRepository(list):
 
 class TimeTracePointRepository(TracePointRepository):
     def to_dict(self, time_from: str = None, time_to: str = None):
-        if time_from is None:
-            time_from = self.start_date_time_index
+        time_from_dt = get_datetime(time_from if time_from else self.start_date_time_index)
+        time_to_dt = get_datetime(time_to if time_to else self.last_date_time_index)
 
-        if time_to is None:
-            time_to = self.last_date_time_index
-
-        return [object_.to_dict() for object_ in self if time_from <= object_.index <= time_to]
+        return [point.to_dict() for point in self if time_from_dt <= get_datetime(point.index) <= time_to_dt]
 
 
 class CalcTracePointRepository(TracePointRepository):
     def to_dict(self, time_from: str = None, time_to: str = None):
-        if time_from is None:
-            time_from = self.start_date_time_index
+        time_from_dt = get_datetime(time_from if time_from else self.start_date_time_index)
+        time_to_dt = get_datetime(time_to if time_to else self.last_date_time_index)
 
-        if time_to is None:
-            time_to = self.last_date_time_index
+        points_data = []
 
-        points = []
+        for point in self:
+            point_start_dt = get_datetime(point.start)
+            point_end_dt = get_datetime(point.end)
 
-        for object_ in self:
-            points.append(object_.to_dict())
+            if (time_to_dt >= point_start_dt or time_to_dt > point_end_dt) and (
+                time_from_dt <= point_start_dt or time_from_dt < point_end_dt
+            ):
+                points_data.append(point.to_dict())
 
-            if object_.start >= time_from and object_.end >= time_to:
-                break
-
-        return points
+        return points_data

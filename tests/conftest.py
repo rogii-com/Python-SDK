@@ -174,6 +174,10 @@ def fetch_well_calc_trace(**kwargs):
     return CALC_TRACE_DATA_RESPONSE['content']
 
 
+def get_well_time_trace_data(**kwargs):
+    return TIME_TRACE_DATA_RESPONSE['content']
+
+
 def fetch_well_linked_typewells(**kwargs):
     return WELL_LINKED_TYPEWELLS_DATA_RESPONSE
 
@@ -224,6 +228,7 @@ def solo_client():
     solo_client._papi_client.fetch_well_mapped_calc_traces = fetch_well_mapped_calc_traces
     solo_client._papi_client.fetch_well_time_trace = fetch_well_time_trace
     solo_client._papi_client.fetch_well_calc_trace = fetch_well_calc_trace
+    solo_client._papi_client.get_well_time_trace_data = get_well_time_trace_data
     solo_client._papi_client.fetch_well_linked_typewells = fetch_well_linked_typewells
     solo_client._papi_client.fetch_well_comments = fetch_well_comments
     solo_client._papi_client.fetch_well_attributes = fetch_well_attributes
