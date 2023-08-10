@@ -384,7 +384,7 @@ def test_get_mudlog(project):
 
 
 def test_get_time_trace(project):
-    start_datetime = '2022-06-10T12:00:00Z'
+    start_datetime = '2020-08-31T12:00:00Z'
     end_datetime = '2022-06-10T12:17:43.000Z'
 
     well = project.wells.find_by_name(WELL_NAME)
@@ -403,6 +403,10 @@ def test_get_time_trace(project):
 
     trace_points = time_trace.points
     assert trace_points is not None
+
+    trace_points_data = trace_points.to_dict()
+    assert trace_points_data
+    assert len(trace_points_data) == len(trace_points)
 
     trace_points_data = trace_points.to_dict(time_from=start_datetime, time_to=end_datetime)
     trace_points_df = trace_points.to_df(time_from=start_datetime, time_to=end_datetime)
@@ -448,6 +452,10 @@ def test_get_calc_trace(project):
 
     trace_points = calc_trace.points
     assert trace_points is not None
+
+    trace_points_data = trace_points.to_dict()
+    assert trace_points_data
+    assert len(trace_points_data) == len(trace_points)
 
     trace_points_data = trace_points.to_dict(time_from=start_datetime, time_to=end_datetime)
     trace_points_df = trace_points.to_df(time_from=start_datetime, time_to=end_datetime)

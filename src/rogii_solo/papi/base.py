@@ -962,21 +962,23 @@ class PapiClient(BasePapiClient):
         time_from: Optional[str] = None,
         time_to: Optional[str] = None,
         trace_hash: Optional[str] = None,
+        limit: Optional[int] = None,
         headers: Optional[Dict] = None,
     ):
         """
         Fetches well time trace
         :param well_id:
         :param trace_id:
-        :param trace_hash:
         :param time_from:
         :param time_to:
+        :param trace_hash:
+        :param limit:
         :param headers:
         :return:
         """
         data = self._send_request(
             url=f'wells/{well_id}/traces/{trace_id}/data/time/',
-            params={'from': time_from, 'to': time_to, 'hash': trace_hash},
+            params={'from': time_from, 'to': time_to, 'hash': trace_hash, 'limit': limit},
             headers=headers,
         )
 

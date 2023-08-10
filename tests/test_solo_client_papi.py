@@ -401,3 +401,51 @@ def test_endless_interpretation_dips(project_papi):
     ei_last_segment_dip = get_last_segment_dip(well=well, interpretation=endless_interpretation)
 
     assert fabs(last_segment_dip - ei_last_segment_dip) < DELTA
+
+
+def test_get_time_trace(project_papi):
+    start_datetime = '2020-09-13T10:53:17Z'
+
+    well = project_papi.wells.find_by_name('wellbore timelog')
+    assert well is not None
+
+    time_traces = well.time_traces
+    assert time_traces is not None
+
+    time_trace = time_traces.find_by_name('Bit depth')
+    assert time_trace is not None
+
+    trace_points = time_trace.points
+    assert trace_points is not None
+
+    trace_points_data = trace_points.to_dict()
+    assert trace_points_data
+    assert len(trace_points_data) == len(trace_points)
+
+    trace_points_data = trace_points.to_dict(time_from=start_datetime)
+    assert trace_points_data
+    assert len(trace_points_data) == 3
+
+
+def test_get_calc_trace(project_papi):
+    start_datetime = '2020-09-13T10:53:01Z'
+
+    well = project_papi.wells.find_by_name('wellbore timelog')
+    assert well is not None
+
+    calc_traces = well.calc_traces
+    assert calc_traces is not None
+
+    calc_trace = calc_traces.find_by_name('Rig Activity')
+    assert calc_trace is not None
+
+    trace_points = calc_trace.points
+    assert trace_points is not None
+
+    trace_points_data = trace_points.to_dict()
+    assert trace_points_data
+    assert len(trace_points_data) == len(trace_points)
+
+    trace_points_data = trace_points.to_dict(time_from=start_datetime)
+    assert trace_points_data
+    assert len(trace_points_data) == 3
