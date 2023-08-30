@@ -1032,7 +1032,7 @@ def test_get_converted_meter_earth_model(project):
 
     for idx, layer in enumerate(layers):
         # Must be changed when public method with layer tvd is available
-        assert np_is_close(layers_data[idx]['tvt'], Convertible.convert_z(value=layer.tvd, measure_units=measure_units))
+        assert np_is_close(layers_data[idx]['tvt'], Convertible.convert_z(value=layer.tvt, measure_units=measure_units))
 
 
 def test_get_not_converted_meter_earth_model(project):
@@ -1055,7 +1055,7 @@ def test_get_not_converted_meter_earth_model(project):
 
     for idx, layer in enumerate(layers):
         # Must be changed when public method with layer tvd is available
-        assert np_is_close(layers_data[idx]['tvt'], layer.tvd)
+        assert np_is_close(layers_data[idx]['tvt'], layer.tvt)
 
 
 def test_get_converted_foot_earth_model(ft_project):
@@ -1083,7 +1083,7 @@ def test_get_converted_foot_earth_model(ft_project):
 
     for idx, layer in enumerate(layers):
         # Must be changed when public method with layer tvd is available
-        assert np_is_close(layers_data[idx]['tvt'], Convertible.convert_z(value=layer.tvd, measure_units=measure_units))
+        assert np_is_close(layers_data[idx]['tvt'], Convertible.convert_z(value=layer.tvt, measure_units=measure_units))
 
 
 def test_get_not_converted_foot_earth_model(ft_project):
@@ -1106,7 +1106,7 @@ def test_get_not_converted_foot_earth_model(ft_project):
 
     for idx, layer in enumerate(layers):
         # Must be changed when public method with layer tvd is available
-        assert np_is_close(layers_data[idx]['tvt'], layer.tvd)
+        assert np_is_close(layers_data[idx]['tvt'], layer.tvt)
 
 
 def test_get_converted_ftm_earth_model(ftm_project):
@@ -1134,7 +1134,7 @@ def test_get_converted_ftm_earth_model(ftm_project):
 
     for idx, layer in enumerate(layers):
         # Must be changed when public method with layer tvd is available
-        assert np_is_close(layers_data[idx]['tvt'], Convertible.convert_z(value=layer.tvd, measure_units=measure_units))
+        assert np_is_close(layers_data[idx]['tvt'], Convertible.convert_z(value=layer.tvt, measure_units=measure_units))
 
 
 def test_get_not_converted_ftm_earth_model(ftm_project):
@@ -1157,4 +1157,4 @@ def test_get_not_converted_ftm_earth_model(ftm_project):
 
     for idx, layer in enumerate(layers):
         # Must be changed when public method with layer tvd is available
-        assert np_is_close(layers_data[idx]['tvt'], layer.tvd)
+        assert np_is_close(layers_data[idx]['tvt'], layer.tvt)
