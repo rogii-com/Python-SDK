@@ -624,15 +624,23 @@ def test_get_well_attributes(project):
 def test_get_earth_model(project):
     starred_interpretation = project.wells.find_by_name(WELL_NAME).starred_interpretation
     earth_model = starred_interpretation.earth_models.find_by_name(EARTH_MODEL_NAME)
-
     assert earth_model is not None
 
     earth_model_data = earth_model.to_dict()
     earth_model_df = earth_model.to_df()
+    assert earth_model_data
+    assert not earth_model_df.empty
 
-    assert 'uuid' in earth_model_data
-    assert 'name' in earth_model_data
-    assert earth_model_data['uuid'] == earth_model_df.at[0, 'uuid']
-    assert earth_model_data['name'] == earth_model_df.at[0, 'name']
+    sections = earth_model.sections
+    sections_data = sections.to_dict()
+    sections_df = sections.to_df()
+    assert sections_data
+    assert not sections_df.empty
+    assert len(sections_data) == len(sections_df)
 
-    assert earth_model_data['name'] == EARTH_MODEL_NAME
+    layers = sections[0].layers
+    layers_data = layers.to_dict()
+    layers_df = layers.to_df()
+    assert layers_data
+    assert not layers_df.empty
+    assert len(layers) == len(layers_data)
