@@ -117,23 +117,22 @@ class EarthModelLayer(BaseObject):
         self.uuid = None
         self.resistivity_vertical = None
         self.resistivity_horizontal = None
-        self.tvd = None
+        self.tvt = None  # TODO Replace with TVD when PAPI method is available
         self.thickness = float('inf')
         self.anisotropy = None
 
         self.__dict__.update(kwargs)
 
-        if self.tvd is None or self.tvd == -100000:
-            self.tvd = float('nan')
+        if self.tvt is None or self.tvt == -100000:
+            self.tvt = float('nan')
 
         if self.resistivity_vertical is not None and self.resistivity_horizontal is not None:
             self.anisotropy = self.resistivity_vertical / self.resistivity_horizontal
 
     def to_dict(self, get_converted: bool = True) -> Dict:
         return {
-            # Must be changed when public method with layer tvd is available
             'tvt': self.safe_round(
-                self.convert_z(self.tvd, measure_units=self.measure_units) if get_converted else self.tvd
+                self.convert_z(self.tvt, measure_units=self.measure_units) if get_converted else self.tvt
             ),
             'thickness': self.thickness,
             'resistivity_horizontal': self.resistivity_horizontal,

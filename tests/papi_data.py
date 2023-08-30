@@ -1782,7 +1782,7 @@ EARTH_MODEL_SECTIONS_DATA_RESPONSE = {
                 'uuid': 'edefa44b-c2be-4abe-9c77-ca314ae33171',
             },
         ],
-        'md': {'val': 2118},
+        'md': {'val': 7630.1},
         'uuid': '3fd0a985-a77a-411e-a108-1fbac6238913',
     },
     '461ac4d4-3e2a-433b-8708-961ce9806375': {
@@ -1831,7 +1831,7 @@ EARTH_MODEL_SECTIONS_DATA_RESPONSE = {
                 'uuid': '91c24db1-c2d8-4565-bada-7f2e9e060bff',
             },
         ],
-        'md': {'val': 2125.5},
+        'md': {'val': 8780.1},
         'uuid': '461ac4d4-3e2a-433b-8708-961ce9806375',
     },
 }
