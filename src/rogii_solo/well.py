@@ -347,11 +347,15 @@ class Well(ComplexObject):
             value=nested_well_id['uuid'],
             input_list=self._papi_client.get_well_nested_wells_data(well_id=self.uuid, query=name),
         )
-        self._nested_wells.append(NestedWell(papi_client=self._papi_client, well=self, **nested_well_data))
+
+        if self._nested_wells is not None:
+            self._nested_wells.append(NestedWell(papi_client=self._papi_client, well=self, **nested_well_data))
 
     def create_topset(self, name: str):
         topset_id = self._papi_client.create_well_topset(well_id=self.uuid, name=name)
-        self._topsets.append(Topset(papi_client=self._papi_client, well=self, uuid=topset_id, name=name))
+
+        if self._topsets is not None:
+            self._topsets.append(Topset(papi_client=self._papi_client, well=self, uuid=topset_id, name=name))
 
     def create_log(self, name: str, points: DataList):
         log_id = self._papi_client.create_well_log(well_id=self.uuid, name=name)
@@ -361,7 +365,9 @@ class Well(ComplexObject):
         units = ELogMeasureUnits.convert_from_measure_units(self.project.measure_unit)
 
         self._papi_client.replace_log(log_id=log_id['uuid'], index_unit=units, log_points=prepared_points)
-        self._logs.append(Log(papi_client=self._papi_client, well=self, uuid=log_id['uuid'], name=name))
+
+        if self._logs is not None:
+            self._logs.append(Log(papi_client=self._papi_client, well=self, uuid=log_id['uuid'], name=name))
 
     def create_target_line(
         self,
@@ -388,7 +394,9 @@ class Well(ComplexObject):
         target_line_data = find_by_uuid(
             value=target_line_id['uuid'], input_list=self._papi_client.get_well_target_lines_data(well_id=self.uuid)
         )
-        self._target_lines.append(TargetLine(**target_line_data))
+
+        if self._target_lines is not None:
+            self._target_lines.append(TargetLine(**target_line_data))
 
     def update_meta(
         self,
@@ -559,7 +567,9 @@ class NestedWell(ComplexObject):
 
     def create_topset(self, name: str):
         topset_id = self._papi_client.create_nested_well_topset(nested_well_id=self.uuid, name=name)
-        self._topsets.append(Topset(papi_client=self._papi_client, well=self, uuid=topset_id['uuid'], name=name))
+
+        if self._topsets is not None:
+            self._topsets.append(Topset(papi_client=self._papi_client, well=self, uuid=topset_id['uuid'], name=name))
 
     def update_meta(
         self,
@@ -766,7 +776,9 @@ class Typewell(ComplexObject):
 
     def create_topset(self, name: str):
         topset_id = self._papi_client.create_typewell_topset(typewell_id=self.uuid, name=name)
-        self._topsets.append(Topset(papi_client=self._papi_client, well=self, uuid=topset_id['uuid'], name=name))
+
+        if self._topsets is not None:
+            self._topsets.append(Topset(papi_client=self._papi_client, well=self, uuid=topset_id['uuid'], name=name))
 
     def create_log(self, name: str, points: DataList):
         log_id = self._papi_client.create_typewell_log(typewell_id=self.uuid, name=name)
@@ -776,4 +788,6 @@ class Typewell(ComplexObject):
         units = ELogMeasureUnits.convert_from_measure_units(self.project.measure_unit)
 
         self._papi_client.replace_log(log_id=log_id['uuid'], index_unit=units, log_points=prepared_points)
-        self._logs.append(Log(papi_client=self._papi_client, well=self, uuid=log_id['uuid'], name=name))
+
+        if self._logs is not None:
+            self._logs.append(Log(papi_client=self._papi_client, well=self, uuid=log_id['uuid'], name=name))

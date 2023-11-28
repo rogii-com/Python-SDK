@@ -98,7 +98,9 @@ class Project(ComplexObject):
             ysrf_real=self._papi_client.prepare_papi_var(ysrf_real),
         )
         well_data = self._papi_client.get_project_well_data(well_id=well_id['uuid'])
-        self._wells.append(Well(papi_client=self._papi_client, project=self, **well_data))
+
+        if self._wells is not None:
+            self._wells.append(Well(papi_client=self._papi_client, project=self, **well_data))
 
     def create_typewell(
         self,
@@ -131,4 +133,6 @@ class Project(ComplexObject):
             value=typewell_id['uuid'],
             input_list=self._papi_client.get_project_typewells_data(project_id=self.uuid, query=name),
         )
-        self._typewells.append(Typewell(papi_client=self._papi_client, project=self, **typewell_data))
+
+        if self._typewells is not None:
+            self._typewells.append(Typewell(papi_client=self._papi_client, project=self, **typewell_data))
