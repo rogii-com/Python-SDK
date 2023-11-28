@@ -79,7 +79,9 @@ class Topset(ComplexObject):
         top_data = find_by_uuid(
             value=top_id['uuid'], input_list=self._papi_client.get_topset_tops_data(topset_id=self.uuid)
         )
-        self._tops.append(Top(topset=self, **top_data))
+
+        if self._tops is not None:
+            self._tops.append(Top(topset=self, **top_data))
 
     def _get_starred_tops_data(self):
         if self._starred_tops_data is None:

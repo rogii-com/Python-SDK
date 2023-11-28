@@ -30,7 +30,6 @@ def test_get_projects(solo_client_papi):
 
 def test_create_project_well(project_papi):
     # Angles in degrees, depth values in project units
-    wells = project_papi.wells
     input_data = {
         'name': f'Well {random.randint(0, 10000)}',
         'api': f'Well API {random.randint(0, 10000)}',
@@ -46,7 +45,7 @@ def test_create_project_well(project_papi):
     }
     project_papi.create_well(**input_data)
 
-    well = wells.find_by_name(input_data['name'])
+    well = project_papi.wells.find_by_name(input_data['name'])
     assert well is not None
 
     well_data = well.to_dict()
@@ -66,7 +65,6 @@ def test_create_project_well(project_papi):
 
 def test_create_project_typewell(project_papi):
     # Angles in degrees, depth values in project units
-    typewells = project_papi.typewells
     input_data = {
         'name': f'Typewell {random.randint(0, 10000)}',
         'api': 'Typewell API',
@@ -81,7 +79,7 @@ def test_create_project_typewell(project_papi):
     }
     project_papi.create_typewell(**input_data)
 
-    typewell = typewells.find_by_name(input_data['name'])
+    typewell = project_papi.typewells.find_by_name(input_data['name'])
     assert typewell is not None
 
     typewell_data = typewell.to_dict()
@@ -102,7 +100,6 @@ def test_create_well_nested_well(project_papi):
     well = project_papi.wells.find_by_name(WELL_NAME)
     assert well is not None
 
-    nested_wells = well.nested_wells
     input_data = {
         'name': f'Nested Well {random.randint(0, 10000)}',
         'api': 'Nested Well API',
@@ -116,7 +113,7 @@ def test_create_well_nested_well(project_papi):
     }
     well.create_nested_well(**input_data)
 
-    nested_well = nested_wells.find_by_name(input_data['name'])
+    nested_well = well.nested_wells.find_by_name(input_data['name'])
     assert nested_well is not None
 
     well_data = well.to_dict()
@@ -141,7 +138,6 @@ def test_create_well_target_line(project_papi):
     well = project_papi.wells.find_by_name(WELL_NAME)
     assert well is not None
 
-    target_lines = well.target_lines
     input_data = {
         'name': f'Target Line {random.randint(0, 10000)}',
         'origin_x': 100.5,
@@ -152,7 +148,7 @@ def test_create_well_target_line(project_papi):
         'target_z': 600.5,
     }
     well.create_target_line(**input_data)
-    target_line = target_lines.find_by_name(input_data['name'])
+    target_line = well.target_lines.find_by_name(input_data['name'])
     assert target_line is not None
 
     target_line_data = target_line.to_dict()
@@ -169,11 +165,10 @@ def test_create_well_topset(project_papi):
     well = project_papi.wells.find_by_name(WELL_NAME)
     assert well is not None
 
-    topsets = well.topsets
     topset_name = f'Topset {random.randint(0, 10000)}'
 
     well.create_topset(topset_name)
-    topset = topsets.find_by_name(topset_name)
+    topset = well.topsets.find_by_name(topset_name)
     assert topset is not None
 
     topset_data = topset.to_dict()
@@ -184,11 +179,10 @@ def test_create_typewell_topset(project_papi):
     typewell = project_papi.typewells.find_by_name(TYPEWELL_NAME)
     assert typewell is not None
 
-    topsets = typewell.topsets
     topset_name = f'Topset {random.randint(0, 10000)}'
 
     typewell.create_topset(topset_name)
-    topset = topsets.find_by_name(topset_name)
+    topset = typewell.topsets.find_by_name(topset_name)
     assert topset is not None
 
     topset_data = topset.to_dict()
@@ -202,11 +196,10 @@ def test_create_nested_well_topset(project_papi):
     nested_well = well.nested_wells.find_by_name(STARRED_NESTED_WELL_NAME)
     assert nested_well is not None
 
-    topsets = nested_well.topsets
     topset_name = f'Topset {random.randint(0, 10000)}'
 
     nested_well.create_topset(topset_name)
-    topset = topsets.find_by_name(topset_name)
+    topset = nested_well.topsets.find_by_name(topset_name)
     assert topset is not None
 
     topset_data = topset.to_dict()
@@ -217,24 +210,22 @@ def test_create_well_log(project_papi):
     well = project_papi.wells.find_by_name(WELL_NAME)
     assert well is not None
 
-    logs = well.logs
     log_name = 'Log ' + str(random.randint(0, 10000))
     log_points = [{'index': 0, 'value': 1}]
 
     well.create_log(name=log_name, points=log_points)
-    assert logs.find_by_name(log_name) is not None
+    assert well.logs.find_by_name(log_name) is not None
 
 
 def test_create_typewell_log(project_papi):
     typewell = project_papi.typewells.find_by_name(TYPEWELL_NAME)
     assert typewell is not None
 
-    logs = typewell.logs
     log_name = f'Log {random.randint(0, 10000)}'
     log_points = [{'index': 0, 'value': 1}]
 
     typewell.create_log(name=log_name, points=log_points)
-    assert logs.find_by_name(log_name) is not None
+    assert typewell.logs.find_by_name(log_name) is not None
 
 
 def test_create_topset_top(project_papi):
@@ -244,14 +235,13 @@ def test_create_topset_top(project_papi):
     topset = well.topsets.find_by_name(STARRED_TOPSET_NAME)
     assert topset is not None
 
-    tops = topset.tops
     input_data = {
         'name': f'Top {random.randint(0, 10000)}',
         'md': random.randint(11400, 11500),
     }
     topset.create_top(**input_data)
 
-    top = tops.find_by_name(input_data['name'])
+    top = topset.tops.find_by_name(input_data['name'])
     assert top is not None
 
     top_data = top.to_dict()
