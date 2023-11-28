@@ -1641,12 +1641,12 @@ COMMENTS_DATA_RESPONSE = {
                 {
                     'commentbox_id': '3e277460-4156-496d-850c-48e64ab8b273',
                     'text': 'Comment Text 1',
-                    'anchor_md': {'val': 2375.2755905511813},
+                    'anchor_md': {'val': 9999.999999998},
                 },
                 {
                     'commentbox_id': '7a31617e-393e-4cda-9fd5-bdeec1a08222',
                     'text': 'Comment Text 2',
-                    'anchor_md': {'val': 2375.2755905511813},
+                    'anchor_md': {'val': 9999.999999998},
                 },
             ],
         },
@@ -1660,15 +1660,15 @@ COMMENTS_DATA_RESPONSE = {
 }
 
 WELL_ATTRIBUTES_DATA_RESPONSE = {
-    'Name': {'value': 'nameWell', 'attribute_id': 1},
+    'Name': {'value': WELL_NAME, 'attribute_id': 1},
     'API': {'value': 'api', 'attribute_id': 2},
     'Well Type': {'value': 'Deviated', 'attribute_id': 3},
     'Operator': {'value': 'operator', 'attribute_id': 4},
-    'KB': {'value': {'val': 1.0}, 'attribute_id': 7},
-    'Azimuth VS': {'value': {'val': 2.0}, 'attribute_id': 8},
-    'Convergence': {'value': {'val': 3.0}, 'attribute_id': 9},
-    'X-srf': {'value': {'val': 13.123359580052492}, 'attribute_id': 12},
-    'Y-srf': {'value': {'val': 16.404199475065617}, 'attribute_id': 13},
+    'KB': {'value': {'val': WELL_KB}, 'attribute_id': 7},
+    'Azimuth VS': {'value': {'val': WELL_AZIMUTH}, 'attribute_id': 8},
+    'Convergence': {'value': {'val': WELL_CONVERGENCE}, 'attribute_id': 9},
+    'X-srf': {'value': {'val': WELL_XSRF_REAL}, 'attribute_id': 12},
+    'Y-srf': {'value': {'val': WELL_YSRF_REAL}, 'attribute_id': 13},
     'Spud date': {'value': '2022-11-17T13:15:31.000+00:00', 'attribute_id': 17},
     '# of Stages': {'value': 43, 'attribute_id': 43},
     'Final TVD': {'value': {'val': 0.49}, 'attribute_id': 49},

@@ -1158,3 +1158,228 @@ def test_get_not_converted_ftm_earth_model(ftm_project):
     for idx, layer in enumerate(layers):
         # Must be changed when public method with layer tvd is available
         assert np_is_close(layers_data[idx]['tvt'], layer.tvt)
+
+
+def test_get_converted_meter_well_attributes(project):
+    well = project.wells.find_by_name(WELL_NAME)
+    assert well is not None
+
+    well_data = well.to_dict()
+    assert well_data
+
+    attributes = well.attributes
+    assert attributes is not None
+
+    attributes_data = attributes.to_dict()
+    assert attributes_data
+
+    assert np_is_close(well_data['kb'], attributes_data['KB'])
+    assert np_is_close(well_data['azimuth'], attributes_data['Azimuth VS'])
+    assert np_is_close(well_data['convergence'], attributes_data['Convergence'])
+    assert np_is_close(well_data['xsrf_real'], attributes_data['X-srf'])
+    assert np_is_close(well_data['ysrf_real'], attributes_data['Y-srf'])
+
+
+def test_get_not_converted_meter_well_attributes(project):
+    well = project.wells.find_by_name(WELL_NAME)
+    assert well is not None
+
+    well_data = well.to_dict(get_converted=False)
+    assert well_data
+
+    attributes = well.attributes
+    assert attributes is not None
+
+    attributes_data = attributes.to_dict(get_converted=False)
+    assert attributes_data
+
+    assert np_is_close(well_data['kb'], attributes_data['KB'])
+    assert np_is_close(well_data['azimuth'], attributes_data['Azimuth VS'])
+    assert np_is_close(well_data['convergence'], attributes_data['Convergence'])
+    assert np_is_close(well_data['xsrf_real'], attributes_data['X-srf'])
+    assert np_is_close(well_data['ysrf_real'], attributes_data['Y-srf'])
+
+
+def test_get_converted_foot_well_attributes(ft_project):
+    well = ft_project.wells.find_by_name(WELL_NAME)
+    assert well is not None
+
+    well_data = well.to_dict()
+    assert well_data
+
+    attributes = well.attributes
+    assert attributes is not None
+
+    attributes_data = attributes.to_dict()
+    assert attributes_data
+
+    assert np_is_close(well_data['kb'], attributes_data['KB'])
+    assert np_is_close(well_data['azimuth'], attributes_data['Azimuth VS'])
+    assert np_is_close(well_data['convergence'], attributes_data['Convergence'])
+    assert np_is_close(well_data['xsrf_real'], attributes_data['X-srf'])
+    assert np_is_close(well_data['ysrf_real'], attributes_data['Y-srf'])
+
+
+def test_get_not_converted_foot_well_attributes(ft_project):
+    well = ft_project.wells.find_by_name(WELL_NAME)
+    assert well is not None
+
+    well_data = well.to_dict(get_converted=False)
+    assert well_data
+
+    attributes = well.attributes
+    assert attributes is not None
+
+    attributes_data = attributes.to_dict(get_converted=False)
+    assert attributes_data
+
+    assert np_is_close(well_data['kb'], attributes_data['KB'])
+    assert np_is_close(well_data['azimuth'], attributes_data['Azimuth VS'])
+    assert np_is_close(well_data['convergence'], attributes_data['Convergence'])
+    assert np_is_close(well_data['xsrf_real'], attributes_data['X-srf'])
+    assert np_is_close(well_data['ysrf_real'], attributes_data['Y-srf'])
+
+
+def test_get_converted_ftm_well_attributes(ftm_project):
+    well = ftm_project.wells.find_by_name(WELL_NAME)
+    assert well is not None
+
+    well_data = well.to_dict()
+    assert well_data
+
+    attributes = well.attributes
+    assert attributes is not None
+
+    attributes_data = attributes.to_dict()
+    assert attributes_data
+
+    assert np_is_close(well_data['kb'], attributes_data['KB'])
+    assert np_is_close(well_data['azimuth'], attributes_data['Azimuth VS'])
+    assert np_is_close(well_data['convergence'], attributes_data['Convergence'])
+    assert np_is_close(well_data['xsrf_real'], attributes_data['X-srf'])
+    assert np_is_close(well_data['ysrf_real'], attributes_data['Y-srf'])
+
+
+def test_get_not_converted_ftm_well_attributes(ftm_project):
+    well = ftm_project.wells.find_by_name(WELL_NAME)
+    assert well is not None
+
+    well_data = well.to_dict(get_converted=False)
+    assert well_data
+
+    attributes = well.attributes
+    assert attributes is not None
+
+    attributes_data = attributes.to_dict(get_converted=False)
+    assert attributes_data
+
+    assert np_is_close(well_data['kb'], attributes_data['KB'])
+    assert np_is_close(well_data['azimuth'], attributes_data['Azimuth VS'])
+    assert np_is_close(well_data['convergence'], attributes_data['Convergence'])
+    assert np_is_close(well_data['xsrf_real'], attributes_data['X-srf'])
+    assert np_is_close(well_data['ysrf_real'], attributes_data['Y-srf'])
+
+
+def test_get_converted_meter_comment_box(project):
+    well = project.wells.find_by_name(WELL_NAME)
+    assert well is not None
+
+    comments = well.comments
+    assert comments is not None
+
+    comment_box = comments[0].comment_boxes[0]
+    assert comment_box is not None
+
+    comment_box_data = comment_box.to_dict()
+    assert comment_box_data
+
+    assert np_is_close(
+        comment_box_data['anchor_md'],
+        Convertible.convert_z(value=comment_box.anchor_md, measure_units=project.measure_unit),
+    )
+
+
+def test_get_not_converted_meter_comment_box(project):
+    well = project.wells.find_by_name(WELL_NAME)
+    assert well is not None
+
+    comments = well.comments
+    assert comments is not None
+
+    comment_box = comments[0].comment_boxes[0]
+    assert comment_box is not None
+
+    comment_box_data = comment_box.to_dict(get_converted=False)
+    assert comment_box_data
+
+    assert np_is_close(comment_box_data['anchor_md'], comment_box.anchor_md)
+
+
+def test_get_converted_ft_comment_box(ft_project):
+    well = ft_project.wells.find_by_name(WELL_NAME)
+    assert well is not None
+
+    comments = well.comments
+    assert comments is not None
+
+    comment_box = comments[0].comment_boxes[0]
+    assert comment_box is not None
+
+    comment_box_data = comment_box.to_dict()
+    assert comment_box_data
+
+    assert np_is_close(
+        comment_box_data['anchor_md'],
+        Convertible.convert_z(value=comment_box.anchor_md, measure_units=ft_project.measure_unit),
+    )
+
+
+def test_get_not_converted_ft_comment_box(ft_project):
+    well = ft_project.wells.find_by_name(WELL_NAME)
+    assert well is not None
+
+    comments = well.comments
+    assert comments is not None
+
+    comment_box = comments[0].comment_boxes[0]
+    assert comment_box is not None
+
+    comment_box_data = comment_box.to_dict(get_converted=False)
+    assert comment_box_data
+
+    assert np_is_close(comment_box_data['anchor_md'], comment_box.anchor_md)
+
+
+def test_get_converted_ftm_comment_box(ftm_project):
+    well = ftm_project.wells.find_by_name(WELL_NAME)
+    assert well is not None
+
+    comments = well.comments
+    assert comments is not None
+
+    comment_box = comments[0].comment_boxes[0]
+    assert comment_box is not None
+
+    comment_box_data = comment_box.to_dict()
+    assert comment_box_data
+
+    assert np_is_close(
+        comment_box_data['anchor_md'],
+        Convertible.convert_z(value=comment_box.anchor_md, measure_units=ftm_project.measure_unit),
+    )
+
+
+def test_get_not_converted_ftm_comment_box(ftm_project):
+    well = ftm_project.wells.find_by_name(WELL_NAME)
+    assert well is not None
+
+    comments = well.comments
+    assert comments is not None
+
+    comment_box = comments[0].comment_boxes[0]
+    assert comment_box is not None
+
+    comment_box_data = comment_box.to_dict(get_converted=False)
+    assert comment_box_data
+
+    assert np_is_close(comment_box_data['anchor_md'], comment_box.anchor_md)

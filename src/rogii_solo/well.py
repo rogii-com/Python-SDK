@@ -307,7 +307,7 @@ class Well(ComplexObject):
     @property
     def attributes(self) -> 'WellAttributes':
         if self._attributes is None:
-            self._attributes = WellAttributes(**self._get_attributes_data())
+            self._attributes = WellAttributes(well=self, **self._get_attributes_data())
 
         return self._attributes
 
@@ -435,14 +435,34 @@ class Well(ComplexObject):
 
 
 class WellAttributes(BaseObject):
-    def __init__(self, **kwargs):
+    def __init__(self, well: Well, **kwargs):
+        self.well = well
+
         self.__dict__.update(kwargs)
 
-    def to_dict(self) -> Dict:
-        return self.__dict__
+    def to_dict(self, get_converted: bool = True) -> Dict:
+        measure_units = self.well.project.measure_unit
+        data = self.__dict__
 
-    def to_df(self) -> DataFrame:
-        return DataFrame(self.to_dict(), index=[0])
+        return {
+            'Name': data['Name'],
+            'API': data['API'],
+            'Operator': data['Operator'],
+            'KB': self.safe_round(
+                self.convert_z(value=data['KB'], measure_units=measure_units) if get_converted else data['KB']
+            ),
+            'Azimuth VS': self.safe_round(
+                self.convert_angle(data['Azimuth VS']) if get_converted else data['Azimuth VS']
+            ),
+            'Convergence': self.safe_round(
+                self.convert_angle(data['Convergence']) if get_converted else data['Convergence']
+            ),
+            'X-srf': self.safe_round(data['X-srf'] if get_converted else feet_to_meters(data['X-srf'])),
+            'Y-srf': self.safe_round(data['Y-srf'] if get_converted else feet_to_meters(data['Y-srf'])),
+        }
+
+    def to_df(self, get_converted: bool = True) -> DataFrame:
+        return DataFrame(self.to_dict(get_converted), index=[0])
 
 
 class NestedWell(ComplexObject):
