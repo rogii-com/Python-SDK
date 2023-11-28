@@ -620,6 +620,15 @@ def test_get_well_attributes(project):
     assert attributes_data
     assert not attributes_df.empty
 
+    assert attributes_data['Name']
+    assert attributes_data['API']
+    assert attributes_data['Operator']
+    assert attributes_data['KB']
+    assert attributes_data['Azimuth VS']
+    assert attributes_data['Convergence']
+    assert attributes_data['X-srf']
+    assert attributes_data['Y-srf']
+
 
 def test_get_earth_model(project):
     starred_interpretation = project.wells.find_by_name(WELL_NAME).starred_interpretation
