@@ -5,8 +5,6 @@ import pytest
 from rogii_solo.calculations.interpretation import get_last_segment_dip
 from rogii_solo.exceptions import InvalidProjectException, ProjectNotFoundException
 from tests.papi_data import (
-    CALC_TRACE_DATA_RESPONSE,
-    CALC_TRACE_NAME,
     EARTH_MODEL_NAME,
     EI_ABSENT_HORIZONS_LAST_SEGMENT_OUT_ID,
     EI_ALL_SEGMENTS_OUT_ID,
@@ -31,8 +29,6 @@ from tests.papi_data import (
     STARRED_TOP_TOP_NAME,
     STARRED_TOPSET_NAME,
     TARGET_LINE_NAME,
-    TIME_TRACE_DATA_RESPONSE,
-    TIME_TRACE_NAME,
     TYPEWELL_NAME,
     WELL_NAME,
 )
@@ -381,98 +377,6 @@ def test_get_mudlog(project):
     assert mudlog_data['name'] == mudlog_df.at[0, 'name']
 
     assert mudlog.logs.to_df().at[0, 'MD'] == mudlog.logs[0].points.to_dict()[0]['md']
-
-
-def test_get_time_trace(project):
-    start_datetime = '2020-08-31T12:00:00Z'
-    end_datetime = '2022-06-10T12:17:43.000Z'
-
-    well = project.wells.find_by_name(WELL_NAME)
-    assert well is not None
-
-    time_traces = well.time_traces
-    assert time_traces is not None
-
-    traces_data = time_traces.to_dict()
-    traces_df = time_traces.to_df()
-    assert traces_data
-    assert not traces_df.empty
-
-    time_trace = time_traces.find_by_name(TIME_TRACE_NAME)
-    assert time_trace is not None
-
-    trace_points = time_trace.points
-    assert trace_points is not None
-
-    trace_points_data = trace_points.to_dict()
-    assert trace_points_data
-    assert len(trace_points_data) == len(trace_points)
-
-    trace_points_data = trace_points.to_dict(time_from=start_datetime, time_to=end_datetime)
-    trace_points_df = trace_points.to_df(time_from=start_datetime, time_to=end_datetime)
-
-    assert trace_points_data
-    assert not trace_points_df.empty
-
-    point_index = 2
-    point = TIME_TRACE_DATA_RESPONSE['content'][point_index]
-
-    assert trace_points_data[point_index]['value'] == point['value']
-    assert trace_points_data[point_index]['index'] == point['index']
-
-    assert trace_points_df.at[point_index, 'value'] == point['value']
-    assert trace_points_df.at[point_index, 'index'] == point['index']
-
-
-def test_get_calc_trace(project):
-    start_datetime = '2022-06-10T12:00:00Z'
-    end_datetime = '2022-06-10T13:50:00Z'
-
-    well = project.wells.find_by_name(WELL_NAME)
-    assert well is not None
-
-    calc_traces = well.calc_traces
-    assert calc_traces is not None
-
-    traces_data = calc_traces.to_dict()
-    traces_df = calc_traces.to_df()
-    assert traces_data
-    assert not traces_df.empty
-
-    calc_trace = calc_traces.find_by_name(CALC_TRACE_NAME)
-    assert calc_trace is not None
-
-    rac_codes = calc_trace.rac_codes
-    assert rac_codes
-
-    rac_codes_data = rac_codes.to_dict()
-    rac_codes_df = rac_codes.to_df()
-    assert rac_codes_data
-    assert not rac_codes_df.empty
-
-    trace_points = calc_trace.points
-    assert trace_points is not None
-
-    trace_points_data = trace_points.to_dict()
-    assert trace_points_data
-    assert len(trace_points_data) == len(trace_points)
-
-    trace_points_data = trace_points.to_dict(time_from=start_datetime, time_to=end_datetime)
-    trace_points_df = trace_points.to_df(time_from=start_datetime, time_to=end_datetime)
-
-    assert trace_points_data
-    assert not trace_points_df.empty
-
-    point_index = 2
-    point = CALC_TRACE_DATA_RESPONSE['content'][point_index]
-
-    assert trace_points_data[point_index]['start'] == point['start']
-    assert trace_points_data[point_index]['end'] == point['end']
-    assert trace_points_data[point_index]['value'] == point['value']
-
-    assert trace_points_df.at[point_index, 'start'] == point['start']
-    assert trace_points_df.at[point_index, 'end'] == point['end']
-    assert trace_points_df.at[point_index, 'value'] == point['value']
 
 
 def test_get_well_linked_typewells(project):

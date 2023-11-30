@@ -211,8 +211,11 @@ class TimeTracePointRepository(TracePointRepository):
 
 class CalcTracePointRepository(TracePointRepository):
     def to_dict(self, time_from: str = None, time_to: str = None):
-        time_from_dt = get_datetime(time_from if time_from else self.start_date_time_index)
-        time_to_dt = get_datetime(time_to if time_to else self.last_date_time_index)
+        time_from_dt = max(
+            get_datetime(time_from or self.start_date_time_index),
+            get_datetime(self.start_date_time_index),
+        )
+        time_to_dt = min(get_datetime(time_to or self.last_date_time_index), get_datetime(self.last_date_time_index))
 
         points_data = []
 
@@ -220,8 +223,10 @@ class CalcTracePointRepository(TracePointRepository):
             point_start_dt = get_datetime(point.start)
             point_end_dt = get_datetime(point.end)
 
-            if (time_to_dt >= point_start_dt or time_to_dt > point_end_dt) and (
-                time_from_dt <= point_start_dt or time_from_dt < point_end_dt
+            if (
+                (point_start_dt >= time_from_dt and point_end_dt <= time_to_dt)
+                or (time_from_dt < point_end_dt <= time_to_dt)
+                or (time_from_dt <= point_start_dt < time_to_dt)
             ):
                 points_data.append(point.to_dict())
 
