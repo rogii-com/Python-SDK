@@ -72,32 +72,28 @@ class Well(ComplexObject):
             'name': self.name,
             'api': self.api,
             'operator': self.operator,
-            'xsrf': self.safe_round(
-                self.convert_xy(value=self.xsrf, measure_units=measure_units, force_to_meters=True)
-                if get_converted
-                else self.xsrf
-            ),
-            'ysrf': self.safe_round(
-                self.convert_xy(value=self.ysrf, measure_units=measure_units, force_to_meters=True)
-                if get_converted
-                else self.ysrf
-            ),
-            'xsrf_real': self.safe_round(self.xsrf_real if get_converted else feet_to_meters(self.xsrf_real)),
-            'ysrf_real': self.safe_round(self.ysrf_real if get_converted else feet_to_meters(self.ysrf_real)),
-            'kb': self.safe_round(
-                self.convert_z(value=self.kb, measure_units=measure_units) if get_converted else self.kb
-            ),
-            'azimuth': self.safe_round(self.convert_angle(self.azimuth) if get_converted else self.azimuth),
-            'convergence': self.safe_round(self.convert_angle(self.convergence) if get_converted else self.convergence),
-            'tie_in_tvd': self.safe_round(
-                self.convert_z(value=self.tie_in_tvd, measure_units=measure_units) if get_converted else self.tie_in_tvd
-            ),
-            'tie_in_ns': self.safe_round(
-                self.convert_xy(value=self.tie_in_ns, measure_units=measure_units) if get_converted else self.tie_in_ns
-            ),
-            'tie_in_ew': self.safe_round(
-                self.convert_xy(value=self.tie_in_ew, measure_units=measure_units) if get_converted else self.tie_in_ew
-            ),
+            'xsrf': self.safe_round(self.convert_xy(value=self.xsrf, measure_units=measure_units, force_to_meters=True))
+            if get_converted
+            else self.xsrf,
+            'ysrf': self.safe_round(self.convert_xy(value=self.ysrf, measure_units=measure_units, force_to_meters=True))
+            if get_converted
+            else self.ysrf,
+            'xsrf_real': self.safe_round(self.xsrf_real) if get_converted else feet_to_meters(self.xsrf_real),
+            'ysrf_real': self.safe_round(self.ysrf_real) if get_converted else feet_to_meters(self.ysrf_real),
+            'kb': self.safe_round(self.convert_z(value=self.kb, measure_units=measure_units))
+            if get_converted
+            else self.kb,
+            'azimuth': self.safe_round(self.convert_angle(self.azimuth)) if get_converted else self.azimuth,
+            'convergence': self.safe_round(self.convert_angle(self.convergence)) if get_converted else self.convergence,
+            'tie_in_tvd': self.safe_round(self.convert_z(value=self.tie_in_tvd, measure_units=measure_units))
+            if get_converted
+            else self.tie_in_tvd,
+            'tie_in_ns': self.safe_round(self.convert_xy(value=self.tie_in_ns, measure_units=measure_units))
+            if get_converted
+            else self.tie_in_ns,
+            'tie_in_ew': self.safe_round(self.convert_xy(value=self.tie_in_ew, measure_units=measure_units))
+            if get_converted
+            else self.tie_in_ew,
             'starred': self.starred,
         }
 
@@ -448,17 +444,17 @@ class WellAttributes(BaseObject):
             'Name': data['Name'],
             'API': data['API'],
             'Operator': data['Operator'],
-            'KB': self.safe_round(
-                self.convert_z(value=data['KB'], measure_units=measure_units) if get_converted else data['KB']
-            ),
-            'Azimuth VS': self.safe_round(
-                self.convert_angle(data['Azimuth VS']) if get_converted else data['Azimuth VS']
-            ),
-            'Convergence': self.safe_round(
-                self.convert_angle(data['Convergence']) if get_converted else data['Convergence']
-            ),
-            'X-srf': self.safe_round(data['X-srf'] if get_converted else feet_to_meters(data['X-srf'])),
-            'Y-srf': self.safe_round(data['Y-srf'] if get_converted else feet_to_meters(data['Y-srf'])),
+            'KB': self.safe_round(self.convert_z(value=data['KB'], measure_units=measure_units))
+            if get_converted
+            else data['KB'],
+            'Azimuth VS': self.safe_round(self.convert_angle(data['Azimuth VS']))
+            if get_converted
+            else data['Azimuth VS'],
+            'Convergence': self.safe_round(self.convert_angle(data['Convergence']))
+            if get_converted
+            else data['Convergence'],
+            'X-srf': self.safe_round(data['X-srf']) if get_converted else feet_to_meters(data['X-srf']),
+            'Y-srf': self.safe_round(data['Y-srf']) if get_converted else feet_to_meters(data['Y-srf']),
         }
 
     def to_df(self, get_converted: bool = True) -> DataFrame:
@@ -506,32 +502,28 @@ class NestedWell(ComplexObject):
             'name': self.name,
             'api': self.api,
             'operator': self.operator,
-            'xsrf': self.safe_round(
-                self.convert_xy(value=self.xsrf, measure_units=measure_units, force_to_meters=True)
-                if get_converted
-                else self.xsrf
-            ),
-            'ysrf': self.safe_round(
-                self.convert_xy(value=self.ysrf, measure_units=measure_units, force_to_meters=True)
-                if get_converted
-                else self.ysrf
-            ),
-            'xsrf_real': self.safe_round(self.xsrf_real if get_converted else feet_to_meters(self.xsrf_real)),
-            'ysrf_real': self.safe_round(self.ysrf_real if get_converted else feet_to_meters(self.ysrf_real)),
-            'kb': self.safe_round(
-                self.convert_z(value=self.kb, measure_units=measure_units) if get_converted else self.kb
-            ),
-            'azimuth': self.safe_round(self.convert_angle(self.azimuth) if get_converted else self.azimuth),
-            'convergence': self.safe_round(self.convert_angle(self.convergence) if get_converted else self.convergence),
-            'tie_in_tvd': self.safe_round(
-                self.convert_z(value=self.tie_in_tvd, measure_units=measure_units) if get_converted else self.tie_in_tvd
-            ),
-            'tie_in_ns': (
-                self.convert_xy(value=self.tie_in_ns, measure_units=measure_units) if get_converted else self.tie_in_ns
-            ),
-            'tie_in_ew': self.safe_round(
-                self.convert_xy(value=self.tie_in_ew, measure_units=measure_units) if get_converted else self.tie_in_ew
-            ),
+            'xsrf': self.safe_round(self.convert_xy(value=self.xsrf, measure_units=measure_units, force_to_meters=True))
+            if get_converted
+            else self.xsrf,
+            'ysrf': self.safe_round(self.convert_xy(value=self.ysrf, measure_units=measure_units, force_to_meters=True))
+            if get_converted
+            else self.ysrf,
+            'xsrf_real': self.safe_round(self.xsrf_real) if get_converted else feet_to_meters(self.xsrf_real),
+            'ysrf_real': self.safe_round(self.ysrf_real) if get_converted else feet_to_meters(self.ysrf_real),
+            'kb': self.safe_round(self.convert_z(value=self.kb, measure_units=measure_units))
+            if get_converted
+            else self.kb,
+            'azimuth': self.safe_round(self.convert_angle(self.azimuth)) if get_converted else self.azimuth,
+            'convergence': self.safe_round(self.convert_angle(self.convergence)) if get_converted else self.convergence,
+            'tie_in_tvd': self.safe_round(self.convert_z(value=self.tie_in_tvd, measure_units=measure_units))
+            if get_converted
+            else self.tie_in_tvd,
+            'tie_in_ns': self.safe_round(self.convert_xy(value=self.tie_in_ns, measure_units=measure_units))
+            if get_converted
+            else self.tie_in_ns,
+            'tie_in_ew': self.safe_round(self.convert_xy(value=self.tie_in_ew, measure_units=measure_units))
+            if get_converted
+            else self.tie_in_ew,
         }
 
     def to_df(self, get_converted: bool = True) -> DataFrame:
@@ -669,33 +661,29 @@ class Typewell(ComplexObject):
             'name': self.name,
             'api': self.api,
             'operator': self.operator,
-            'xsrf': self.safe_round(
-                self.convert_xy(value=self.xsrf, measure_units=measure_units, force_to_meters=True)
-                if get_converted
-                else self.xsrf
-            ),
-            'ysrf': self.safe_round(
-                self.convert_xy(value=self.ysrf, measure_units=measure_units, force_to_meters=True)
-                if get_converted
-                else self.ysrf
-            ),
-            'xsrf_real': self.safe_round(self.xsrf_real if get_converted else feet_to_meters(self.xsrf_real)),
-            'ysrf_real': self.safe_round(self.ysrf_real if get_converted else feet_to_meters(self.ysrf_real)),
-            'kb': self.safe_round(
-                self.convert_z(value=self.kb, measure_units=measure_units) if get_converted else self.kb
-            ),
-            'convergence': self.safe_round(self.convert_angle(self.convergence) if get_converted else self.convergence),
-            'tie_in_tvd': self.safe_round(
-                self.convert_z(value=self.tie_in_tvd, measure_units=measure_units) if get_converted else self.tie_in_tvd
-            ),
-            'tie_in_ns': self.safe_round(
-                self.convert_xy(value=self.tie_in_ns, measure_units=measure_units) if get_converted else self.tie_in_ns
-            ),
-            'tie_in_ew': self.safe_round(
-                self.convert_xy(value=self.tie_in_ew, measure_units=measure_units) if get_converted else self.tie_in_ew
-            ),
+            'xsrf': self.safe_round(self.convert_xy(value=self.xsrf, measure_units=measure_units, force_to_meters=True))
+            if get_converted
+            else self.xsrf,
+            'ysrf': self.safe_round(self.convert_xy(value=self.ysrf, measure_units=measure_units, force_to_meters=True))
+            if get_converted
+            else self.ysrf,
+            'xsrf_real': self.safe_round(self.xsrf_real) if get_converted else feet_to_meters(self.xsrf_real),
+            'ysrf_real': self.safe_round(self.ysrf_real) if get_converted else feet_to_meters(self.ysrf_real),
+            'kb': self.safe_round(self.convert_z(value=self.kb, measure_units=measure_units))
+            if get_converted
+            else self.kb,
+            'convergence': self.safe_round(self.convert_angle(self.convergence)) if get_converted else self.convergence,
+            'tie_in_tvd': self.safe_round(self.convert_z(value=self.tie_in_tvd, measure_units=measure_units))
+            if get_converted
+            else self.tie_in_tvd,
+            'tie_in_ns': self.safe_round(self.convert_xy(value=self.tie_in_ns, measure_units=measure_units))
+            if get_converted
+            else self.tie_in_ns,
+            'tie_in_ew': self.safe_round(self.convert_xy(value=self.tie_in_ew, measure_units=measure_units))
+            if get_converted
+            else self.tie_in_ew,
             # Shift is returned in project units
-            'shift': self.safe_round(self.shift if get_converted else feet_to_meters(value=self.shift)),
+            'shift': self.safe_round(self.shift) if get_converted else feet_to_meters(value=self.shift),
         }
 
     def to_df(self, get_converted: bool = True) -> DataFrame:
