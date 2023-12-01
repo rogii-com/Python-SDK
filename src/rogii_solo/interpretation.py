@@ -24,7 +24,6 @@ from rogii_solo.papi.types import (
 )
 from rogii_solo.types import DataList
 from rogii_solo.types import Interpretation as InterpretationType
-from rogii_solo.utils.constants import ENDLESS_INTERPRETATION_VERSION
 
 TVT_DATA_MAX_MD_STEP = 100000
 
@@ -74,23 +73,22 @@ class Interpretation(ComplexObject):
             interpretation_id=self.uuid
         )
 
-        if self.format == ENDLESS_INTERPRETATION_VERSION:
-            try:
-                well_data = self.well.to_dict(get_converted=False)
-                calculated_trajectory = calculate_trajectory(
-                    raw_trajectory=self.well.trajectory.to_dict(get_converted=False),
-                    well=well_data,
-                    measure_units=self.well.project.measure_unit,
-                )
-                self._assembled_segments_data['segments'] = self._get_fitted_segments(
-                    calculated_trajectory=calculated_trajectory,
-                    well=well_data,
-                    measure_units=self.well.project.measure_unit,
-                )
-            except InterpretationOutOfTrajectoryException:
-                self._assembled_segments_data = None
+        try:
+            well_data = self.well.to_dict(get_converted=False)
+            calculated_trajectory = calculate_trajectory(
+                raw_trajectory=self.well.trajectory.to_dict(get_converted=False),
+                well=well_data,
+                measure_units=self.well.project.measure_unit,
+            )
+            self._assembled_segments_data['segments'] = self._get_fitted_segments(
+                calculated_trajectory=calculated_trajectory,
+                well=well_data,
+                measure_units=self.well.project.measure_unit,
+            )
+        except InterpretationOutOfTrajectoryException:
+            self._assembled_segments_data = None
 
-                return {'horizons': None, 'segments': None}
+            return {'horizons': None, 'segments': None}
 
         assembled_horizons_data = self._assembled_segments_data['horizons']
         measure_units = self.well.project.measure_unit
@@ -215,6 +213,17 @@ class Interpretation(ComplexObject):
                     )
                 )
             else:
+                nearest_left_point, nearest_right_point = get_nearest_values(
+                    value=left_segment['md'], input_list=calculated_trajectory, key=lambda it: it['md']
+                )
+                interpolated_point = interpolate_trajectory_point(
+                    left_point=nearest_left_point,
+                    right_point=nearest_right_point,
+                    md=left_segment['md'],
+                    well=well,
+                    measure_units=measure_units,
+                )
+                left_segment['vs'] = interpolated_point['vs']
                 fitted_segments.append(left_segment)
 
         return fitted_segments

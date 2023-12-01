@@ -51,9 +51,9 @@ class CommentBox(BaseObject):
         return {
             'commentbox_id': self.commentbox_id,
             'text': self.text,
-            'anchor_md': self.safe_round(
-                self.convert_z(value=self.anchor_md, measure_units=measure_units) if get_converted else self.anchor_md
-            ),
+            'anchor_md': self.safe_round(self.convert_z(value=self.anchor_md, measure_units=measure_units))
+            if get_converted
+            else self.anchor_md,
         }
 
     def to_df(self, get_converted: bool = True) -> DataFrame:

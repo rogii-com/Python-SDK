@@ -9,7 +9,11 @@ from rogii_solo.calculations.base import (
 )
 from rogii_solo.calculations.base import calc_vs as base_calc_vs
 from rogii_solo.calculations.base import normalize_angle
-from rogii_solo.calculations.constants import DELTA, FEET_TO_METERS
+from rogii_solo.calculations.constants import (
+    ANGLE_EQUALITY_PRECISION,
+    DELTA,
+    FEET_TO_METERS,
+)
 from rogii_solo.calculations.enums import EMeasureUnits
 from rogii_solo.calculations.types import RawTrajectory, Trajectory, TrajectoryPoint
 
@@ -63,12 +67,31 @@ def calculate_trajectory_point(
     )
 
     dls = calc_dls(dog_leg, course_length, measure_units=measure_units)
-    shape = calc_shape(dog_leg, course_length)
 
-    tvd = prev_point['tvd'] + shape * (curr_incl_cos + prev_incl_cos)
+    # extracted from source/geomath/TrajectoryReconstruction.cpp:128
+    if abs(dog_leg - pi) < ANGLE_EQUALITY_PRECISION:  # vectors are opposite
+        half_pi = pi / 2
+        k = course_length / half_pi
+        incl = normalize_angle(prev_point['incl'] + half_pi)
 
-    ns = (prev_point['ns'] or 0) + shape * (prev_incl_sin * cos(prev_point['azim']) + curr_incl_sin * cos(curr_azim))
-    ew = (prev_point['ew'] or 0) + shape * (prev_incl_sin * sin(prev_point['azim']) + curr_incl_sin * sin(curr_azim))
+        xd = sin(prev_point['azim']) * sin(incl)
+        yd = cos(prev_point['azim']) * sin(incl)
+        zd = cos(incl)
+
+        tvd = prev_point['tvd'] + k * zd
+        ew = (prev_point['ew'] or 0) + k * xd
+        ns = (prev_point['ns'] or 0) + k * yd
+    else:
+        shape = calc_shape(dog_leg, course_length)
+
+        tvd = prev_point['tvd'] + shape * (curr_incl_cos + prev_incl_cos)
+
+        ns = (prev_point['ns'] or 0) + shape * (
+            prev_incl_sin * cos(prev_point['azim']) + curr_incl_sin * cos(curr_azim)
+        )
+        ew = (prev_point['ew'] or 0) + shape * (
+            prev_incl_sin * sin(prev_point['azim']) + curr_incl_sin * sin(curr_azim)
+        )
 
     return TrajectoryPoint(
         md=curr_point['md'],

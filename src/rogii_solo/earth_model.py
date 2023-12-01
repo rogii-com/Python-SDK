@@ -72,9 +72,9 @@ class EarthModelSection(BaseObject):
     def to_dict(self, get_converted: bool = True) -> Dict:
         return {
             'uuid': self.uuid,
-            'md': self.safe_round(
-                self.convert_z(self.md, measure_units=self.measure_units) if get_converted else self.md
-            ),
+            'md': self.safe_round(self.convert_z(self.md, measure_units=self.measure_units))
+            if get_converted
+            else self.md,
             'interpretation_segment': self.interpretation_segment,
         }
 
@@ -131,9 +131,9 @@ class EarthModelLayer(BaseObject):
 
     def to_dict(self, get_converted: bool = True) -> Dict:
         return {
-            'tvt': self.safe_round(
-                self.convert_z(self.tvt, measure_units=self.measure_units) if get_converted else self.tvt
-            ),
+            'tvt': self.safe_round(self.convert_z(self.tvt, measure_units=self.measure_units))
+            if get_converted
+            else self.tvt,
             'thickness': self.thickness,
             'resistivity_horizontal': self.resistivity_horizontal,
             'anisotropy': self.anisotropy,

@@ -473,6 +473,19 @@ def _test_ei_case(well, interpretation, endless_interpretation, measure_units):
     assert fabs(last_segment_dip - ei_last_segment_dip) < DELTA_EI_DIP
 
 
+def test_interpretation_segments_vs(project):
+    well = project.wells.find_by_name(WELL_NAME)
+    assert well is not None
+
+    interpretation = well.starred_interpretation
+    assert interpretation is not None
+
+    interpretation_data = interpretation.to_dict()
+
+    for segment in interpretation_data['segments']:
+        assert segment['vs'] is not None
+
+
 def test_get_well_comments(project):
     well = project.wells.find_by_name(WELL_NAME)
     assert well is not None
