@@ -7,6 +7,7 @@ from rogii_solo.calculations.interpretation import get_segments, get_segments_wi
 from rogii_solo.calculations.trajectory import calculate_trajectory
 from tests.papi_data import (
     EI_LAST_SEGMENT_EXTENDED_NAME,
+    LOG_NAME,
     NESTED_WELL_NAME,
     STARRED_NESTED_WELL_NAME,
     STARRED_TOPSET_NAME,
@@ -439,3 +440,20 @@ def test_get_calc_trace(project_papi):
     trace_points_data = trace_points.to_dict(time_from=start_datetime)
     assert trace_points_data
     assert len(trace_points_data) == 3
+
+
+def test_replace_log_points(project_papi):
+    well = project_papi.wells.find_by_name(WELL_NAME)
+    assert well is not None
+
+    log = well.logs.find_by_name(LOG_NAME)
+    assert log is not None
+
+    log_data = log.points.to_dict()
+    assert log_data
+
+    new_log_data = [{'index': 1, 'value': 100}, {'index': 2, 'value': 200}]
+
+    log.replace_points(new_log_data)
+    log_data = [{'index': point['md'], 'value': point['value']} for point in log.points.to_dict()]
+    assert log_data == new_log_data

@@ -125,7 +125,6 @@ class Well(ComplexObject):
             azi_uom=azi_uom,
             trajectory_stations=prepared_trajectory_stations,
         )
-
         self._trajectory = None
 
     @property

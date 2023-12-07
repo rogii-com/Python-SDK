@@ -46,9 +46,10 @@ class Log(ComplexObject):
         prepared_log_points = [
             {key: self._papi_client.prepare_papi_var(value) for key, value in point.items()} for point in points
         ]
-
         units = ELogMeasureUnits.convert_from_measure_units(self.well.project.measure_unit)
+
         self._papi_client.replace_log(log_id=self.uuid, index_unit=units, log_points=prepared_log_points)
+        self._points = None
 
     def update_meta(self, name: Optional[str] = None):
         func_data = {
