@@ -2,15 +2,17 @@ import random
 from math import fabs
 from typing import Any
 
+import pytest
+
 from rogii_solo.calculations.constants import DELTA
 from rogii_solo.calculations.interpretation import get_segments, get_segments_with_dip
 from rogii_solo.calculations.trajectory import calculate_trajectory
+from rogii_solo.exceptions import InvalidTopDataException
 from tests.papi_data import (
     EI_LAST_SEGMENT_EXTENDED_NAME,
     LOG_NAME,
     NESTED_WELL_NAME,
     STARRED_NESTED_WELL_NAME,
-    STARRED_TOPSET_NAME,
     TYPEWELL_NAME,
     WELL_NAME,
 )
@@ -229,11 +231,27 @@ def test_create_typewell_log(project_papi):
     assert typewell.logs.find_by_name(log_name) is not None
 
 
+def test_update_log_meta(project_papi):
+    well = project_papi.wells.find_by_name(WELL_NAME)
+    assert well is not None
+
+    log = well.logs.find_by_name(LOG_NAME)
+    assert log is not None
+
+    input_data = {
+        'name': f'Log {random.randint(0, 10000)}',
+    }
+    log.update_meta(**input_data)
+
+    log_data = log.to_dict()
+    assert log_data['name'] == input_data['name']
+
+
 def test_create_topset_top(project_papi):
     well = project_papi.wells.find_by_name(WELL_NAME)
     assert well is not None
 
-    topset = well.topsets.find_by_name(STARRED_TOPSET_NAME)
+    topset = well.starred_topset
     assert topset is not None
 
     input_data = {
@@ -249,6 +267,68 @@ def test_create_topset_top(project_papi):
 
     assert top_data['name'] == input_data['name']
     assert np_is_close(top_data['md'], input_data['md'])
+
+
+def test_create_topset_top_with_invalid_md(project_papi):
+    well = project_papi.wells.find_by_name(WELL_NAME)
+    assert well is not None
+
+    topset = well.starred_topset
+    assert topset is not None
+
+    input_data = {
+        'name': f'Top {random.randint(0, 10000)}',
+        'md': -1,
+    }
+    with pytest.raises(InvalidTopDataException):
+        topset.create_top(**input_data)
+
+    input_data = {
+        'name': f'Top {random.randint(0, 10000)}',
+        'md': 1000001,
+    }
+    with pytest.raises(InvalidTopDataException):
+        topset.create_top(**input_data)
+
+
+def test_update_topset_top_meta(project_papi):
+    well = project_papi.wells.find_by_name(WELL_NAME)
+    assert well is not None
+
+    top = well.starred_topset.starred_top_center
+    assert top is not None
+
+    input_data = {
+        'name': f'Top {random.randint(0, 10000)}',
+        'md': random.randint(11400, 11500),
+    }
+    top.update_meta(**input_data)
+
+    top_data = top.to_dict()
+    assert top_data['name'] == input_data['name']
+    assert np_is_close(top_data['md'], input_data['md'])
+
+
+def test_update_topset_top_with_incorrect_md(project_papi):
+    well = project_papi.wells.find_by_name(WELL_NAME)
+    assert well is not None
+
+    top = well.starred_topset.starred_top_center
+    assert top is not None
+
+    input_data = {
+        'name': f'Top {random.randint(0, 10000)}',
+        'md': -1,
+    }
+    with pytest.raises(InvalidTopDataException):
+        top.update_meta(**input_data)
+
+    input_data = {
+        'name': f'Top {random.randint(0, 10000)}',
+        'md': 1000001,
+    }
+    with pytest.raises(InvalidTopDataException):
+        top.update_meta(**input_data)
 
 
 def test_update_well_meta(project_papi):
