@@ -1308,3 +1308,10 @@ class PapiClient(BasePapiClient):
         }
 
         return self._send_put_request(url=url, request_data=request_data, headers=headers)
+
+    def update_top_meta(self, top_id: str, name: str, md: PapiVar, headers: Optional[Dict] = None) -> bool:
+        url = f'tops/{top_id}'
+        request_data = {'name': name, 'md': md}
+        response = self._send_patch_request(url=url, request_data=request_data, headers=headers)
+
+        return response.status_code == status_codes.ok

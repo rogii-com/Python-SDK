@@ -1,5 +1,14 @@
+from typing import Optional
+
+
 class BaseRogiiSoloException(Exception):
-    pass
+    default_message = 'Error occurred.'
+
+    def __init__(self, message: Optional[str] = None):
+        self.message = message or self.default_message
+
+    def __str__(self):
+        return str(self.message)
 
 
 class ProjectNotFoundException(BaseRogiiSoloException):
@@ -16,3 +25,7 @@ class TraceNotFoundException(BaseRogiiSoloException):
 
 class InterpretationOutOfTrajectoryException(BaseRogiiSoloException):
     pass
+
+
+class InvalidTopDataException(BaseRogiiSoloException):
+    default_message = 'Measured depth value in project units must be in [0; 100000] range.'
