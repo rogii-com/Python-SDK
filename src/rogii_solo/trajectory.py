@@ -19,9 +19,11 @@ class TrajectoryPoint(BaseObject):
 
     def to_dict(self, get_converted: bool = True) -> Dict[str, Any]:
         return {
-            'md': self.convert_z(self.md, measure_units=self.measure_units) if get_converted else self.md,
-            'incl': self.convert_angle(self.incl) if get_converted else self.incl,
-            'azim': self.convert_angle(self.azim) if get_converted else self.azim,
+            'md': self.safe_round(self.convert_z(self.md, measure_units=self.measure_units))
+            if get_converted
+            else self.md,
+            'incl': self.safe_round(self.convert_angle(self.incl)) if get_converted else self.incl,
+            'azim': self.safe_round(self.convert_angle(self.azim)) if get_converted else self.azim,
         }
 
     def to_df(self, get_converted: bool = True) -> DataFrame:

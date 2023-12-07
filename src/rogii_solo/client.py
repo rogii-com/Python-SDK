@@ -13,22 +13,20 @@ class SoloClient:
     """
     Main object for retrieving Solo PAPI data
     """
-    def __init__(self,
-                 client_id: str,
-                 client_secret: str,
-                 papi_domain_name: str = SOLO_PAPI_DEFAULT_DOMAIN_NAME,
-                 proxies: Optional[ProxyData] = None
-                 ):
+
+    def __init__(
+        self,
+        client_id: str,
+        client_secret: str,
+        papi_domain_name: str = SOLO_PAPI_DEFAULT_DOMAIN_NAME,
+        proxies: Optional[ProxyData] = None,
+    ):
         self._papi_client = PapiClient(
             SettingsAuth(
-                client_id=client_id,
-                client_secret=client_secret,
-                papi_domain_name=papi_domain_name,
-                proxies=proxies
+                client_id=client_id, client_secret=client_secret, papi_domain_name=papi_domain_name, proxies=proxies
             )
         )
 
-        self._projects_data: Optional[DataList] = None
         self._projects: Optional[ObjectRepository[Project]] = None
         self.project: Optional[Project] = None
 
@@ -42,13 +40,10 @@ class SoloClient:
         return self._projects
 
     def _get_projects_data(self) -> DataList:
-        if self._projects_data is None:
-            global_projects_data = self._papi_client.get_global_projects_data()
-            virtual_projects_data = self._papi_client.get_virtual_projects_data()
+        global_projects_data = self._papi_client.get_global_projects_data()
+        virtual_projects_data = self._papi_client.get_virtual_projects_data()
 
-            self._projects_data = global_projects_data + virtual_projects_data
-
-        return self._projects_data
+        return global_projects_data + virtual_projects_data
 
     def set_project_by_id(self, project_id: str) -> Optional[Project]:
         project = self.projects.find_by_id(project_id)
@@ -73,23 +68,3 @@ class SoloClient:
         self.project = project
 
         return self.project
-
-    def replace_nested_well_trajectory(self,
-                                       nested_well_id: str,
-                                       md_uom: str,
-                                       incl_uom: str,
-                                       azi_uom: str,
-                                       trajectory_stations: DataList
-                                       ):
-        prepared_trajectory_stations = [
-            {key: self._papi_client.prepare_papi_var(value) for key, value in point.items()}
-            for point in trajectory_stations
-        ]
-
-        return self._papi_client.replace_nested_well_trajectory(
-            nested_well_id=nested_well_id,
-            md_uom=md_uom,
-            incl_uom=incl_uom,
-            azi_uom=azi_uom,
-            trajectory_stations=prepared_trajectory_stations
-        )

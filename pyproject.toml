@@ -1,6 +1,6 @@
 [build-system]
 requires = [
-    "setuptools==63.1.0",
+    "setuptools==67.6.1",
     "wheel==0.37.1"
 ]
 build-backend = "setuptools.build_meta"
@@ -24,11 +24,12 @@ keywords = [
     "drilling",
     "geosteering"
 ]
-requires-python = "==3.10.*"
+requires-python = ">=3.10"
 
 classifiers = [
     "Programming Language :: Python :: 3 :: Only",
     "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
     "License :: Other/Proprietary License",
     "Operating System :: OS Independent",
     "Development Status :: 4 - Beta",
@@ -52,15 +53,16 @@ dynamic = ["version"]
 
 [project.optional-dependencies]
 dev = [
-    "setuptools==63.1.0",
+    "setuptools==67.6.1",
     "wheel==0.37.1",
     "build==0.8.0",
     "twine==4.0.1",
     "importlib-metadata==4.2.0",
     "virtualenv==20.16.2",
-    "flake8==5.0.4",
-    "isort==5.12.0",
     "pre-commit==2.20.0",
+    "black==23.1.0",
+    "isort==5.12.0",
+    "flake8==5.0.4",
     "pytest==7.1.2"
 ]
 
@@ -73,3 +75,11 @@ dev = [
 
 [tool.setuptools.dynamic]
 version = {attr = "rogii_solo.__version__"}
+
+[tool.black]
+line-length = 120
+skip-string-normalization = 1
+target-version = ['py310']
+
+[tool.isort]
+profile = "black"

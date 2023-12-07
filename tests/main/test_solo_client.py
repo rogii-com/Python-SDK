@@ -1,39 +1,36 @@
-from datetime import datetime
 from math import fabs
 
 import pytest
 
 from rogii_solo.calculations.interpretation import get_last_segment_dip
-from rogii_solo.exceptions import ProjectNotFoundException, InvalidProjectException
+from rogii_solo.exceptions import InvalidProjectException, ProjectNotFoundException
 from tests.papi_data import (
-    METER_PROJECT_NAME,
-    WELL_NAME,
-    TYPEWELL_NAME,
-    INTERPRETATION_NAME,
-    STARRED_INTERPRETATION_NAME,
-    STARRED_HORIZON_TOP_NAME,
-    STARRED_HORIZON_CENTER_NAME,
-    STARRED_HORIZON_BOTTOM_NAME,
-    HORIZON_NAME,
-    TARGET_LINE_NAME,
-    STARRED_TARGET_LINE_NAME,
-    NESTED_WELL_NAME,
-    STARRED_TOPSET_NAME,
-    STARRED_NESTED_WELL_NAME,
-    LOG_NAME,
-    STARRED_TOP_TOP_NAME,
-    STARRED_TOP_CENTER_NAME,
-    STARRED_TOP_BOTTOM_NAME,
-    MUDLOG_NAME,
-    TYPEWELL_XSRF,
-    TYPEWELL_YSRF,
-    TYPEWELL_KB,
-    TRACE_NAME,
-    START_DATETIME,
-    END_DATETIME,
+    EARTH_MODEL_NAME,
+    EI_ABSENT_HORIZONS_LAST_SEGMENT_OUT_ID,
+    EI_ALL_SEGMENTS_OUT_ID,
     EI_LAST_SEGMENT_EXTENDED_ID,
     EI_LAST_SEGMENT_OUT_ID,
-    EI_ALL_SEGMENTS_OUT_ID
+    HORIZON_NAME,
+    INTERPRETATION_LAST_SEGMENT_ONE_POINT_ABSENT_HORIZONS_ID,
+    INTERPRETATION_LAST_SEGMENT_ONE_POINT_ID,
+    INTERPRETATION_NAME,
+    LOG_NAME,
+    METER_PROJECT_NAME,
+    MUDLOG_NAME,
+    NESTED_WELL_NAME,
+    STARRED_HORIZON_BOTTOM_NAME,
+    STARRED_HORIZON_CENTER_NAME,
+    STARRED_HORIZON_TOP_NAME,
+    STARRED_INTERPRETATION_NAME,
+    STARRED_NESTED_WELL_NAME,
+    STARRED_TARGET_LINE_NAME,
+    STARRED_TOP_BOTTOM_NAME,
+    STARRED_TOP_CENTER_NAME,
+    STARRED_TOP_TOP_NAME,
+    STARRED_TOPSET_NAME,
+    TARGET_LINE_NAME,
+    TYPEWELL_NAME,
+    WELL_NAME,
 )
 
 DELTA_EI_DIP = 0.001
@@ -113,9 +110,7 @@ def test_get_well_interpretations(project):
 
 
 def test_get_well_interpretation(project):
-    interpretation = project.wells.find_by_name(WELL_NAME).interpretations.find_by_name(
-        INTERPRETATION_NAME
-    )
+    interpretation = project.wells.find_by_name(WELL_NAME).interpretations.find_by_name(INTERPRETATION_NAME)
 
     assert interpretation is not None
 
@@ -155,11 +150,12 @@ def test_get_horizon(project):
     horizon_data = horizon.to_dict()
     horizon_df = horizon.to_df()
 
-    assert 'meta' in horizon_data
-    assert 'points' in horizon_data
+    assert 'uuid' in horizon_data
+    assert 'name' in horizon_data
+    assert horizon_data['uuid'] == horizon_df.at[0, 'uuid']
+    assert horizon_data['name'] == horizon_df.at[0, 'name']
 
-    assert horizon_data['meta']['name'] == HORIZON_NAME
-    assert horizon_df['meta'].at[0, 'name'] == HORIZON_NAME
+    assert horizon_data['name'] == HORIZON_NAME
 
 
 def test_get_well_target_lines(project):
@@ -253,11 +249,13 @@ def test_get_log(project):
     log_data = log.to_dict()
     log_df = log.to_df()
 
-    assert 'meta' in log_data
-    assert 'points' in log_data
+    assert 'uuid' in log_data
+    assert 'name' in log_data
+    assert log_data['uuid'] == log_df.at[0, 'uuid']
+    assert log_data['name'] == log_df.at[0, 'name']
 
-    assert log_data['meta']['name'] == LOG_NAME
-    assert log_df['meta'].at[0, 'name'] == LOG_NAME
+    assert log_data['name'] == LOG_NAME
+    assert log_df.at[0, 'name'] == LOG_NAME
 
 
 def test_get_project_typewells(project):
@@ -267,10 +265,8 @@ def test_get_project_typewells(project):
     assert typewells_data
     assert not typewells_df.empty
 
-    assert typewells_data[0]['name'] == TYPEWELL_NAME
-    assert typewells_data[0]['kb'] == TYPEWELL_KB
-    assert typewells_data[0]['xsrf'] == TYPEWELL_XSRF
-    assert typewells_data[0]['ysrf'] == TYPEWELL_YSRF
+    assert typewells_data[0]['uuid'] == typewells_df.at[0, 'uuid']
+    assert typewells_data[0]['name'] == typewells_df.at[0, 'name']
 
 
 def test_get_typewell(project):
@@ -330,14 +326,14 @@ def test_get_interpretation_starred_horizons(project):
     starred_horizon_bottom_data = starred_interpretation.starred_horizon_bottom.to_dict()
     starred_horizon_bottom_df = starred_interpretation.starred_horizon_bottom.to_df()
 
-    assert starred_horizon_top_data['meta']['name'] == STARRED_HORIZON_TOP_NAME
-    assert starred_horizon_top_df['meta'].at[0, 'name'] == STARRED_HORIZON_TOP_NAME
+    assert starred_horizon_top_data['name'] == STARRED_HORIZON_TOP_NAME
+    assert starred_horizon_top_df.at[0, 'name'] == STARRED_HORIZON_TOP_NAME
 
-    assert starred_horizon_center_data['meta']['name'] == STARRED_HORIZON_CENTER_NAME
-    assert starred_horizon_center_df['meta'].at[0, 'name'] == STARRED_HORIZON_CENTER_NAME
+    assert starred_horizon_center_data['name'] == STARRED_HORIZON_CENTER_NAME
+    assert starred_horizon_center_df.at[0, 'name'] == STARRED_HORIZON_CENTER_NAME
 
-    assert starred_horizon_bottom_data['meta']['name'] == STARRED_HORIZON_BOTTOM_NAME
-    assert starred_horizon_bottom_df['meta'].at[0, 'name'] == STARRED_HORIZON_BOTTOM_NAME
+    assert starred_horizon_bottom_data['name'] == STARRED_HORIZON_BOTTOM_NAME
+    assert starred_horizon_bottom_df.at[0, 'name'] == STARRED_HORIZON_BOTTOM_NAME
 
 
 def test_get_topset_starred_tops(project):
@@ -373,63 +369,32 @@ def test_get_mudlog(project):
     mudlog_data = mudlog.to_dict()
     mudlog_df = mudlog.to_df()
 
-    assert 'meta' in mudlog_data
-    assert 'logs' in mudlog_data
+    assert 'uuid' in mudlog_data
+    assert 'name' in mudlog_data
 
-    assert mudlog_data['meta']['name'] == MUDLOG_NAME
-    assert mudlog_df.at[0, 'MD'] == mudlog_data['logs'][0]['points'][0]['md']
+    assert mudlog_data['name'] == MUDLOG_NAME
+    assert mudlog_data['uuid'] == mudlog_df.at[0, 'uuid']
+    assert mudlog_data['name'] == mudlog_df.at[0, 'name']
 
-
-def test_get_time_trace(project):
-    tz_datetime_template = '%Y-%m-%dT%H:%M:%S.%fZ'
-    usual_datetime_template = '%Y-%m-%d %H:%M:%S.%f'
-
-    well = project.wells.find_by_name(WELL_NAME)
-
-    assert well is not None
-
-    time_trace = well.time_traces.find_by_name(TRACE_NAME)
-
-    assert time_trace is not None
-
-    def convert_to_datetime_tz(time_string: str):
-        dt = datetime.strptime(time_string, usual_datetime_template)
-
-        return dt.strftime(tz_datetime_template)
-
-    start_datetime_tz = convert_to_datetime_tz(START_DATETIME)
-    end_datetime_tz = convert_to_datetime_tz(END_DATETIME)
-    time_trace_data = time_trace.to_dict(time_from=start_datetime_tz, time_to=end_datetime_tz)
-    time_trace_df = time_trace.to_df(time_from=start_datetime_tz, time_to=end_datetime_tz)
-
-    assert time_trace_data['meta']['name'] == TRACE_NAME
-
-    test_datetime = datetime.strptime(time_trace_data['points'][0]['index'], tz_datetime_template)
-
-    assert test_datetime == datetime.strptime(start_datetime_tz, tz_datetime_template)
-    assert time_trace_df['meta'].at[0, 'name'] == TRACE_NAME
+    assert mudlog.logs.to_df().at[0, 'MD'] == mudlog.logs[0].points.to_dict()[0]['md']
 
 
 def test_get_well_linked_typewells(project):
     well = project.wells.find_by_name(WELL_NAME)
     typewell = project.typewells.find_by_name(TYPEWELL_NAME)
-
     assert well is not None
     assert typewell is not None
 
     linked_typewells = well.linked_typewells.to_dict()
-
     assert linked_typewells[0]['uuid'] == typewell.uuid
 
 
 def test_ei_last_segment_extended(project):
     well = project.wells.find_by_name(WELL_NAME)
-
     assert well is not None
 
     interpretation = well.starred_interpretation
     endless_interpretation = well.interpretations.find_by_id(EI_LAST_SEGMENT_EXTENDED_ID)
-
     assert interpretation is not None
     assert endless_interpretation is not None
 
@@ -437,18 +402,16 @@ def test_ei_last_segment_extended(project):
         well=well,
         interpretation=interpretation,
         endless_interpretation=endless_interpretation,
-        measure_units=project.measure_unit
+        measure_units=project.measure_unit,
     )
 
 
 def test_ei_last_segment_out(project):
     well = project.wells.find_by_name(WELL_NAME)
-
     assert well is not None
 
-    interpretation = well.starred_interpretation
+    interpretation = well.interpretations.find_by_id(INTERPRETATION_LAST_SEGMENT_ONE_POINT_ID)
     endless_interpretation = well.interpretations.find_by_id(EI_LAST_SEGMENT_OUT_ID)
-
     assert interpretation is not None
     assert endless_interpretation is not None
 
@@ -456,23 +419,39 @@ def test_ei_last_segment_out(project):
         well=well,
         interpretation=interpretation,
         endless_interpretation=endless_interpretation,
-        measure_units=project.measure_unit
+        measure_units=project.measure_unit,
+    )
+
+
+def test_ei_absent_horizons_last_segment_out(project):
+    well = project.wells.find_by_name(WELL_NAME)
+    assert well is not None
+
+    absent_horizons_interpretation = well.interpretations.find_by_id(
+        INTERPRETATION_LAST_SEGMENT_ONE_POINT_ABSENT_HORIZONS_ID
+    )
+    endless_interpretation = well.interpretations.find_by_id(EI_ABSENT_HORIZONS_LAST_SEGMENT_OUT_ID)
+    assert absent_horizons_interpretation is not None
+    assert endless_interpretation is not None
+
+    _test_ei_case(
+        well=well,
+        interpretation=absent_horizons_interpretation,
+        endless_interpretation=endless_interpretation,
+        measure_units=project.measure_unit,
     )
 
 
 def test_ei_all_segments_out(project):
     well = project.wells.find_by_name(WELL_NAME)
-
     assert well is not None
 
     interpretation = well.starred_interpretation
     endless_interpretation = well.interpretations.find_by_id(EI_ALL_SEGMENTS_OUT_ID)
-
     assert interpretation is not None
     assert endless_interpretation is not None
 
     endless_interpretation_data = endless_interpretation.to_dict()
-
     assert endless_interpretation_data['horizons'] is None
     assert endless_interpretation_data['segments'] is None
 
@@ -483,18 +462,111 @@ def _test_ei_case(well, interpretation, endless_interpretation, measure_units):
 
     last_segment = interpretation_data['segments'][-1]
     ei_last_segment = endless_interpretation_data['segments'][-1]
-
     assert last_segment['md'] == ei_last_segment['md']
 
     last_segment_dip = get_last_segment_dip(
-        well=well,
-        assembled_segments=interpretation.assembled_segments,
-        measure_units=measure_units
+        well=well, assembled_segments=interpretation.assembled_segments, measure_units=measure_units
     )
     ei_last_segment_dip = get_last_segment_dip(
-        well=well,
-        assembled_segments=endless_interpretation.assembled_segments,
-        measure_units=measure_units
+        well=well, assembled_segments=endless_interpretation.assembled_segments, measure_units=measure_units
     )
-
     assert fabs(last_segment_dip - ei_last_segment_dip) < DELTA_EI_DIP
+
+
+def test_interpretation_segments_vs(project):
+    well = project.wells.find_by_name(WELL_NAME)
+    assert well is not None
+
+    interpretation = well.starred_interpretation
+    assert interpretation is not None
+
+    interpretation_data = interpretation.to_dict()
+
+    for segment in interpretation_data['segments']:
+        assert segment['vs'] is not None
+
+
+def test_get_well_comments(project):
+    well = project.wells.find_by_name(WELL_NAME)
+    assert well is not None
+
+    comments = well.comments
+    assert comments is not None
+
+    comments_data = comments.to_dict()
+    comments_df = comments.to_df()
+    assert comments_data
+    assert not comments_df.empty
+
+
+def test_get_comment_boxes(project):
+    well = project.wells.find_by_name(WELL_NAME)
+    assert well is not None
+
+    comments = well.comments
+    assert comments is not None
+
+    first_comment = comments[0]
+    comment_boxes = first_comment.comment_boxes
+    assert comment_boxes is not None
+
+    comment_boxes_data = comment_boxes.to_dict()
+    comment_boxes_df = comment_boxes.to_df()
+    assert comment_boxes_data
+    assert not comment_boxes_df.empty
+
+    second_comment = comments[1]
+    comment_boxes = second_comment.comment_boxes
+    assert comment_boxes is not None
+
+    comment_boxes_data = comment_boxes.to_dict()
+    comment_boxes_df = comment_boxes.to_df()
+    assert not comment_boxes_data
+    assert comment_boxes_df.empty
+
+
+def test_get_well_attributes(project):
+    well = project.wells.find_by_name(WELL_NAME)
+    assert well is not None
+
+    attributes = well.attributes
+    assert attributes is not None
+
+    attributes_data = attributes.to_dict()
+    attributes_df = attributes.to_df()
+    assert attributes_data
+    assert not attributes_df.empty
+
+    assert attributes_data['Name']
+    assert attributes_data['API']
+    assert attributes_data['Operator']
+    assert attributes_data['KB']
+    assert attributes_data['Azimuth VS']
+    assert attributes_data['Convergence']
+    assert attributes_data['X-srf']
+    assert attributes_data['Y-srf']
+
+
+def test_get_earth_model(project):
+    starred_interpretation = project.wells.find_by_name(WELL_NAME).starred_interpretation
+    earth_model = starred_interpretation.earth_models.find_by_name(EARTH_MODEL_NAME)
+    assert earth_model is not None
+
+    earth_model_data = earth_model.to_dict()
+    earth_model_df = earth_model.to_df()
+    assert earth_model_data
+    assert not earth_model_df.empty
+
+    sections = earth_model.sections
+    sections_data = sections.to_dict()
+    sections_df = sections.to_df()
+    assert sections_data
+    assert not sections_df.empty
+    assert len(sections_data) == len(sections_df)
+
+    layers = sections[0].layers
+    layers_data = layers.to_dict()
+    layers_df = layers.to_df()
+    assert layers_data
+    assert not layers_df.empty
+    assert len(layers) == len(layers_data)

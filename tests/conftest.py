@@ -1,40 +1,54 @@
 from os import environ
+
 import pytest
 
 from rogii_solo import SoloClient
 from tests.papi_data import (
-    METER_PROJECT_NAME,
-    FOOT_PROJECT_NAME,
-    FOOT_METER_PROJECT_NAME,
-    PROJECTS_DATA_RESPONSE,
-    VIRTUAL_PROJECTS_DATA_RESPONSE,
-    WELLS_DATA_RESPONSE,
-    TRAJECTORY_DATA_RESPONSE,
-    INTERPRETATIONS_DATA_RESPONSE,
-    HORIZONS_DATA_RESPONSE,
+    ABSENT_HORIZONS_DATA_RESPONSE,
     ASSEMBLED_SEGMENTS_DATA_RESPONSE,
-    TARGET_LINES_DATA_RESPONSE,
-    NESTED_WELLS_DATA_RESPONSE,
-    LOGS_DATA_RESPONSE,
-    LOG_POINTS_DATA_RESPONSE,
+    ASSEMBLED_SEGMENTS_LAST_SEGMENT_ONE_POINT_ABSENT_HORIZONS_DATA_RESPONSE,
+    ASSEMBLED_SEGMENTS_LAST_SEGMENT_ONE_POINT_DATA_RESPONSE,
+    CALC_TRACE_DATA_RESPONSE,
+    COMMENTS_DATA_RESPONSE,
+    EARTH_MODEL_SECTIONS_DATA_RESPONSE,
+    EARTH_MODELS_DATA_RESPONSE,
+    EI_ABSENT_HORIZONS_LAST_SEGMENT_OUT_ASSEMBLED_SEGMENTS_DATA_RESPONSE,
+    EI_ABSENT_HORIZONS_LAST_SEGMENT_OUT_ID,
+    EI_ALL_SEGMENTS_OUT_ASSEMBLED_SEGMENTS_DATA_RESPONSE,
+    EI_ALL_SEGMENTS_OUT_ID,
+    EI_LAST_SEGMENT_EXTENDED_ASSEMBLED_SEGMENTS_DATA_RESPONSE,
+    EI_LAST_SEGMENT_EXTENDED_ID,
+    EI_LAST_SEGMENT_OUT_ASSEMBLED_SEGMENTS_DATA_RESPONSE,
+    EI_LAST_SEGMENT_OUT_ID,
+    FOOT_METER_PROJECT_NAME,
+    FOOT_PROJECT_NAME,
+    HORIZONS_DATA_RESPONSE,
     HORIZONS_TVT_DATA_RESPONSE,
-    TYPEWELLS_DATA_RESPONSE,
-    TOPSETS_DATA_RESPONSE,
-    TOPS_DATA_RESPONSE,
+    INTERPRETATION_LAST_SEGMENT_ONE_POINT_ABSENT_HORIZONS_ID,
+    INTERPRETATION_LAST_SEGMENT_ONE_POINT_ID,
+    INTERPRETATIONS_DATA_RESPONSE,
+    LOG_POINTS_DATA_RESPONSE,
+    LOGS_DATA_RESPONSE,
+    MAPPED_CALC_TRACES_DATA_RESPONSE,
+    MAPPED_TIME_TRACES_DATA_RESPONSE,
+    METER_PROJECT_NAME,
+    MUDLOG_DATA_RESPONSE,
+    MUDLOGS_DATA_RESPONSE,
+    NESTED_WELLS_DATA_RESPONSE,
+    PROJECTS_DATA_RESPONSE,
     STARRED_HORIZONS_DATA_RESPONSE,
     STARRED_TOPS_DATA_RESPONSE,
-    MUDLOGS_DATA_RESPONSE,
-    MUDLOG_DATA_RESPONSE,
-    TRACES_DATA_RESPONSE,
-    MAPPED_TRACES_DATA_RESPONSE,
+    TARGET_LINES_DATA_RESPONSE,
     TIME_TRACE_DATA_RESPONSE,
-    EI_LAST_SEGMENT_EXTENDED_ID,
-    EI_LAST_SEGMENT_EXTENDED_ASSEMBLED_SEGMENTS_DATA_RESPONSE,
-    EI_LAST_SEGMENT_OUT_ID,
-    EI_LAST_SEGMENT_OUT_ASSEMBLED_SEGMENTS_DATA_RESPONSE,
-    EI_ALL_SEGMENTS_OUT_ID,
-    EI_ALL_SEGMENTS_OUT_ASSEMBLED_SEGMENTS_DATA_RESPONSE,
+    TOPS_DATA_RESPONSE,
+    TOPSETS_DATA_RESPONSE,
+    TRACES_DATA_RESPONSE,
+    TRAJECTORY_DATA_RESPONSE,
+    TYPEWELLS_DATA_RESPONSE,
+    VIRTUAL_PROJECTS_DATA_RESPONSE,
+    WELL_ATTRIBUTES_DATA_RESPONSE,
     WELL_LINKED_TYPEWELLS_DATA_RESPONSE,
+    WELLS_DATA_RESPONSE,
 )
 
 
@@ -46,7 +60,7 @@ def fetch_virtual_projects(**kwargs):
     return VIRTUAL_PROJECTS_DATA_RESPONSE
 
 
-def fetch_project_wells(**kwargs):
+def fetch_project_raw_wells(**kwargs):
     return WELLS_DATA_RESPONSE
 
 
@@ -59,6 +73,11 @@ def fetch_well_raw_interpretations(**kwargs):
 
 
 def fetch_interpretation_horizons(**kwargs):
+    if kwargs['interpretation_id'] == EI_ABSENT_HORIZONS_LAST_SEGMENT_OUT_ID:
+        return ABSENT_HORIZONS_DATA_RESPONSE
+    elif kwargs['interpretation_id'] == INTERPRETATION_LAST_SEGMENT_ONE_POINT_ABSENT_HORIZONS_ID:
+        return ABSENT_HORIZONS_DATA_RESPONSE
+
     return HORIZONS_DATA_RESPONSE
 
 
@@ -69,6 +88,12 @@ def fetch_interpretation_assembled_segments(**kwargs):
         return EI_LAST_SEGMENT_OUT_ASSEMBLED_SEGMENTS_DATA_RESPONSE['assembled_segments']
     elif kwargs['interpretation_id'] == EI_ALL_SEGMENTS_OUT_ID:
         return EI_ALL_SEGMENTS_OUT_ASSEMBLED_SEGMENTS_DATA_RESPONSE['assembled_segments']
+    elif kwargs['interpretation_id'] == EI_ABSENT_HORIZONS_LAST_SEGMENT_OUT_ID:
+        return EI_ABSENT_HORIZONS_LAST_SEGMENT_OUT_ASSEMBLED_SEGMENTS_DATA_RESPONSE['assembled_segments']
+    elif kwargs['interpretation_id'] == INTERPRETATION_LAST_SEGMENT_ONE_POINT_ID:
+        return ASSEMBLED_SEGMENTS_LAST_SEGMENT_ONE_POINT_DATA_RESPONSE['assembled_segments']
+    elif kwargs['interpretation_id'] == INTERPRETATION_LAST_SEGMENT_ONE_POINT_ABSENT_HORIZONS_ID:
+        return ASSEMBLED_SEGMENTS_LAST_SEGMENT_ONE_POINT_ABSENT_HORIZONS_DATA_RESPONSE['assembled_segments']
 
     return ASSEMBLED_SEGMENTS_DATA_RESPONSE['assembled_segments']
 
@@ -133,15 +158,44 @@ def fetch_traces(**kwargs):
     return TRACES_DATA_RESPONSE['content']
 
 
-def fetch_well_mapped_traces(**kwargs):
-    return MAPPED_TRACES_DATA_RESPONSE['content']
+def fetch_well_mapped_time_traces(**kwargs):
+    return MAPPED_TIME_TRACES_DATA_RESPONSE['content']
 
 
 def fetch_well_time_trace(**kwargs):
     return TIME_TRACE_DATA_RESPONSE['content']
 
+
+def fetch_well_mapped_calc_traces(**kwargs):
+    return MAPPED_CALC_TRACES_DATA_RESPONSE['content']
+
+
+def fetch_well_calc_trace(**kwargs):
+    return CALC_TRACE_DATA_RESPONSE['content']
+
+
+def get_well_time_trace_data(**kwargs):
+    return TIME_TRACE_DATA_RESPONSE['content']
+
+
 def fetch_well_linked_typewells(**kwargs):
     return WELL_LINKED_TYPEWELLS_DATA_RESPONSE
+
+
+def fetch_well_comments(**kwargs):
+    return COMMENTS_DATA_RESPONSE
+
+
+def fetch_well_attributes(**kwargs):
+    return WELL_ATTRIBUTES_DATA_RESPONSE
+
+
+def fetch_interpretation_earth_models(**kwargs):
+    return EARTH_MODELS_DATA_RESPONSE
+
+
+def fetch_earth_model_sections(**kwargs):
+    return EARTH_MODEL_SECTIONS_DATA_RESPONSE
 
 
 @pytest.fixture(scope='function')
@@ -150,7 +204,7 @@ def solo_client():
 
     solo_client._papi_client.fetch_projects = fetch_projects
     solo_client._papi_client.fetch_virtual_projects = fetch_virtual_projects
-    solo_client._papi_client.fetch_project_wells = fetch_project_wells
+    solo_client._papi_client.fetch_project_raw_wells = fetch_project_raw_wells
     solo_client._papi_client.fetch_well_raw_trajectory = fetch_well_raw_trajectory
     solo_client._papi_client.fetch_well_raw_interpretations = fetch_well_raw_interpretations
     solo_client._papi_client.fetch_interpretation_horizons = fetch_interpretation_horizons
@@ -170,9 +224,16 @@ def solo_client():
     solo_client._papi_client.fetch_well_mudlogs = fetch_well_mudlogs
     solo_client._papi_client.fetch_mudlog_logs = fetch_mudlog_logs
     solo_client._papi_client.fetch_traces = fetch_traces
-    solo_client._papi_client.fetch_well_mapped_traces = fetch_well_mapped_traces
+    solo_client._papi_client.fetch_well_mapped_time_traces = fetch_well_mapped_time_traces
+    solo_client._papi_client.fetch_well_mapped_calc_traces = fetch_well_mapped_calc_traces
     solo_client._papi_client.fetch_well_time_trace = fetch_well_time_trace
+    solo_client._papi_client.fetch_well_calc_trace = fetch_well_calc_trace
+    solo_client._papi_client.get_well_time_trace_data = get_well_time_trace_data
     solo_client._papi_client.fetch_well_linked_typewells = fetch_well_linked_typewells
+    solo_client._papi_client.fetch_well_comments = fetch_well_comments
+    solo_client._papi_client.fetch_well_attributes = fetch_well_attributes
+    solo_client._papi_client.fetch_interpretation_earth_models = fetch_interpretation_earth_models
+    solo_client._papi_client.fetch_earth_model_sections = fetch_earth_model_sections
 
     return solo_client
 
@@ -203,7 +264,7 @@ def solo_client_papi():
     papi_solo_client = SoloClient(
         client_id=environ.get('ROGII_SOLO_CLIENT_ID'),
         client_secret=environ.get('ROGII_SOLO_CLIENT_SECRET'),
-        papi_domain_name=environ.get('ROGII_SOLO_PAPI_DOMAIN_NAME')
+        papi_domain_name=environ.get('ROGII_SOLO_PAPI_DOMAIN_NAME'),
     )
 
     return papi_solo_client
@@ -211,6 +272,6 @@ def solo_client_papi():
 
 @pytest.fixture(scope='module')
 def project_papi(solo_client_papi):
-    solo_client_papi.set_project_by_name(METER_PROJECT_NAME)
+    solo_client_papi.set_project_by_name(environ.get('ROGII_SOLO_PROJECT_NAME'))
 
     return solo_client_papi.project

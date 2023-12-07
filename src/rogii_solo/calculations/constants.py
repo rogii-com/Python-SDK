@@ -1,3 +1,7 @@
 FEET_TO_METERS = 0.3048
 
 DELTA = 0.000001
+
+ANGLE_EQUALITY_PRECISION: float = 1e-10  # taken from SS source code
+
+ROUNDING_PRECISION = 3

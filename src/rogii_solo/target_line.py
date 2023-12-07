@@ -38,28 +38,36 @@ class TargetLine(BaseObject):
         return {
             'uuid': self.uuid,
             'name': self.name,
-            'azimuth': self.azimuth,
-            'delta_tvd': self.delta_tvd,
-            'delta_vs': self.delta_vs,
-            'inclination': self.inclination,
-            'length': self.length,
-            'origin_base_corridor_tvd': self.origin_base_corridor_tvd,
-            'origin_md': self.origin_md,
-            'origin_top_corridor_tvd': self.origin_top_corridor_tvd,
-            'origin_tvd': self.origin_tvd,
-            'origin_vs': self.origin_vs,
-            'origin_x': self.origin_x,
-            'origin_y': self.origin_y,
-            'origin_z': self.origin_z,
-            'target_base_corridor_tvd': self.target_base_corridor_tvd,
-            'target_md': self.target_md,
-            'target_top_corridor_tvd': self.target_top_corridor_tvd,
-            'target_tvd': self.target_tvd,
-            'target_vs': self.target_vs,
-            'target_x': self.target_x,
-            'target_y': self.target_y,
-            'target_z': self.target_z,
-            'tvd_vs': self.tvd_vs,
+            'azimuth': self.safe_round(self.azimuth) if get_converted else self.azimuth,
+            'delta_tvd': self.safe_round(self.delta_tvd) if get_converted else self.delta_tvd,
+            'delta_vs': self.safe_round(self.delta_vs) if get_converted else self.delta_vs,
+            'inclination': self.safe_round(self.inclination) if get_converted else self.inclination,
+            'length': self.safe_round(self.length) if get_converted else self.length,
+            'origin_base_corridor_tvd': self.safe_round(self.origin_base_corridor_tvd)
+            if get_converted
+            else self.origin_base_corridor_tvd,
+            'origin_md': self.safe_round(self.origin_md) if get_converted else self.origin_md,
+            'origin_top_corridor_tvd': self.safe_round(self.origin_top_corridor_tvd)
+            if get_converted
+            else self.origin_top_corridor_tvd,
+            'origin_tvd': self.safe_round(self.origin_tvd) if get_converted else self.origin_tvd,
+            'origin_vs': self.safe_round(self.origin_vs) if get_converted else self.origin_vs,
+            'origin_x': self.safe_round(self.origin_x) if get_converted else self.origin_x,
+            'origin_y': self.safe_round(self.origin_y) if get_converted else self.origin_y,
+            'origin_z': self.safe_round(self.origin_z) if get_converted else self.origin_z,
+            'target_base_corridor_tvd': self.safe_round(self.target_base_corridor_tvd)
+            if get_converted
+            else self.target_base_corridor_tvd,
+            'target_md': self.safe_round(self.target_md) if get_converted else self.target_md,
+            'target_top_corridor_tvd': self.safe_round(self.target_top_corridor_tvd)
+            if get_converted
+            else self.target_top_corridor_tvd,
+            'target_tvd': self.safe_round(self.target_tvd) if get_converted else self.target_tvd,
+            'target_vs': self.safe_round(self.target_vs) if get_converted else self.target_vs,
+            'target_x': self.safe_round(self.target_x) if get_converted else self.target_x,
+            'target_y': self.safe_round(self.target_y) if get_converted else self.target_y,
+            'target_z': self.safe_round(self.target_z) if get_converted else self.target_z,
+            'tvd_vs': self.safe_round(self.tvd_vs) if get_converted else self.tvd_vs,
         }
 
     def to_df(self, get_converted: bool = True) -> DataFrame:

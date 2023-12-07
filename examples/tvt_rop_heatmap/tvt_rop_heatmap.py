@@ -19,9 +19,7 @@ from rogii_solo.interpretation import Interpretation
 def get_interpolated_trajectory(solo_client: SoloClient, well: 'rogii_solo.well.Well') -> List[Dict[str, float]]:
     well_data = well.to_dict()
     calculated_trajectory = calculate_trajectory(
-        raw_trajectory=well.trajectory.to_dict(),
-        well=well_data,
-        measure_units=solo_client.project.measure_unit
+        raw_trajectory=well.trajectory.to_dict(), well=well_data, measure_units=solo_client.project.measure_unit
     )
     # get md range for interpolation
     md_range = range(int(calculated_trajectory[0]['md']), int(calculated_trajectory[-1]['md']) + 1)
@@ -89,9 +87,7 @@ def get_horizons_data_by_md(horizons: List[Dict[str, Any]], md: float) -> Dict[s
     return horizons[idx]
 
 
-def add_tvt_to_trajectory(trajectory: List[Dict[str, float]],
-                          horizons: List[Dict[str, Any]]
-                          ) -> List[Dict[str, float]]:
+def add_tvt_to_trajectory(trajectory: List[Dict[str, float]], horizons: List[Dict[str, Any]]) -> List[Dict[str, float]]:
     start_md = horizons[0]['md']
     end_md = horizons[-1]['md']
 
@@ -116,21 +112,22 @@ def get_trajectory_tvt_by_md(trajectory: List[Dict[str, float]], md: float) -> f
 
 
 def filter_log(log: List[Dict[str, Any]], filter_window: int, idx: int) -> float:
-    filtered_value = log[idx]['data']
+    filtered_value = log[idx]['value']
 
     for j in range(-1 * filter_window, filter_window):
-        filtered_value = filtered_value + log[idx + j]['data']
+        filtered_value = filtered_value + log[idx + j]['value']
 
     return filtered_value / (filter_window * 2 + 1)
 
 
-def get_heatmap_data(trajectory: List[Dict[str, float]],
-                     filter_window: int,
-                     x_log: List[Dict[str, Any]],
-                     tvt_min: int,
-                     tvt_max: int,
-                     bins: int
-                     ) -> Tuple[Any, Any, Any, float, float]:
+def get_heatmap_data(
+    trajectory: List[Dict[str, float]],
+    filter_window: int,
+    x_log: List[Dict[str, Any]],
+    tvt_min: int,
+    tvt_max: int,
+    bins: int,
+) -> Tuple[Any, Any, Any, float, float]:
     x, y = [], []
 
     for i in range(filter_window, len(x_log) - 1 - filter_window):
@@ -148,13 +145,7 @@ def get_heatmap_data(trajectory: List[Dict[str, float]],
             'Try to extend the TVT range (tvt_min, tvt_max) or check logs for values and MD ranges.'
         )
 
-    histogram2d, xedges2, yedges2, _ = stats.binned_statistic_2d(
-        x=x,
-        y=y,
-        values=y,
-        statistic='count',
-        bins=bins
-    )
+    histogram2d, xedges2, yedges2, _ = stats.binned_statistic_2d(x=x, y=y, values=y, statistic='count', bins=bins)
     histogram2d = histogram2d.T
 
     for i in range(bins):
@@ -167,11 +158,9 @@ def get_heatmap_data(trajectory: List[Dict[str, float]],
     return histogram2d, xedges2, yedges2, x[-1], y[-1]
 
 
-def get_horizon_scatters(xedges2: Any,
-                         yedges2: Any,
-                         horizons: List[Dict[str, Any]],
-                         zero_horizon_uuid: str
-                         ) -> List[go.Scatter]:
+def get_horizon_scatters(
+    xedges2: Any, yedges2: Any, horizons: List[Dict[str, Any]], zero_horizon_uuid: str
+) -> List[go.Scatter]:
     tvt_margin = 0.1
     y_min, y_max = np.nanmin(yedges2), np.nanmax(yedges2)
     x_min, x_max = np.nanmin(xedges2), np.nanmax(xedges2)
@@ -197,7 +186,7 @@ def get_horizon_scatters(xedges2: Any,
                     text=['', horizon['name']],
                     textposition='top left',
                     showlegend=False,
-                    textfont={'size': 14, 'color': 'rgb(0, 175, 0)'}
+                    textfont={'size': 14, 'color': 'rgb(0, 175, 0)'},
                 )
             )
 
@@ -206,20 +195,24 @@ def get_horizon_scatters(xedges2: Any,
 
 def get_last_rop_point_scatter(last_x: float, last_y: float) -> go.Scatter:
     return go.Scatter(
-        x=[last_x, ],
-        y=[last_y, ],
+        x=[
+            last_x,
+        ],
+        y=[
+            last_y,
+        ],
         mode='markers',
         marker={
             'color': 'White',
             'size': 20,
             'line': {'width': 2, 'color': 'Red'},
         },
-        showlegend=False
+        showlegend=False,
     )
 
 
 def refine_log_points(log_points: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
-    return [point for point in log_points if point['data'] is not None]
+    return [point for point in log_points if point['value'] is not None]
 
 
 def build_tvt_rop_heatmap(script_settings: Dict[str, Any]):
@@ -231,7 +224,7 @@ def build_tvt_rop_heatmap(script_settings: Dict[str, Any]):
     solo_client = SoloClient(
         client_id=environ.get('ROGII_SOLO_CLIENT_ID'),
         client_secret=environ.get('ROGII_SOLO_CLIENT_SECRET'),
-        papi_domain_name=environ.get('ROGII_SOLO_PAPI_DOMAIN_NAME')
+        papi_domain_name=environ.get('ROGII_SOLO_PAPI_DOMAIN_NAME'),
     )
     solo_client.set_project_by_name(project_name)
 
@@ -266,10 +259,10 @@ def build_tvt_rop_heatmap(script_settings: Dict[str, Any]):
     histogram2d, xedges2, yedges2, last_x, last_y = get_heatmap_data(
         trajectory=trajectory,
         filter_window=filter_window,
-        x_log=refine_log_points(x_log.to_dict()['points']),
+        x_log=refine_log_points(x_log.points.to_dict()),
         tvt_min=tvt_min,
         tvt_max=tvt_max,
-        bins=bins
+        bins=bins,
     )
     data.append(go.Heatmap(x=xedges2, y=yedges2, z=histogram2d, showscale=False))
 
@@ -278,7 +271,7 @@ def build_tvt_rop_heatmap(script_settings: Dict[str, Any]):
         xedges2=xedges2,
         yedges2=yedges2,
         horizons=horizon_tvts,
-        zero_horizon_uuid=interpretation_data['meta']['properties']['zero_horizon_uuid']
+        zero_horizon_uuid=interpretation_data['meta']['properties']['zero_horizon_uuid'],
     )
     data.extend(horizon_scatters)
 
@@ -292,10 +285,12 @@ def build_tvt_rop_heatmap(script_settings: Dict[str, Any]):
             'title': 'TVT',
             'range': [yedges2[-1], yedges2[0]],
             # set yaxes tick value format to xxxxx, not to xx.xxk
-            'tickformatstops': [{'dtickrange': [-1000000, 1000000], 'value': ':d'}, ],
+            'tickformatstops': [
+                {'dtickrange': [-1000000, 1000000], 'value': ':d'},
+            ],
             'showticklabels': True,
             'tickcolor': 'rgb(127, 127, 127)',
-            'ticks': 'outside'
+            'ticks': 'outside',
         },
         xaxis={
             'zeroline': False,
@@ -304,8 +299,8 @@ def build_tvt_rop_heatmap(script_settings: Dict[str, Any]):
             'showticklabels': True,
             'tickcolor': 'rgb(127, 127, 127)',
             'ticks': 'outside',
-            'range': [xedges2[0], xedges2[-1]]
-        }
+            'range': [xedges2[0], xedges2[-1]],
+        },
     )
     figure = go.Figure(data=data, layout=layout)
     config = {'showLink': True, 'linkText': "Edit Plot", 'scrollZoom': True}
@@ -320,7 +315,7 @@ if __name__ == '__main__':
         'tvt_min': -1,
         'tvt_max': 1,
         'filter_window': 5,
-        'bins': 60
+        'bins': 60,
     }
 
     build_tvt_rop_heatmap(script_settings)

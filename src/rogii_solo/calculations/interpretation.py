@@ -7,27 +7,31 @@ from rogii_solo.calculations.base import (
     find_last_by_md,
     get_most_common,
     get_nearest_values,
-    interpolate_linear
+    interpolate_linear,
 )
 from rogii_solo.calculations.constants import DELTA
 from rogii_solo.calculations.enums import EMeasureUnits
-from rogii_solo.calculations.trajectory import calculate_trajectory, interpolate_trajectory_point
+from rogii_solo.calculations.trajectory import (
+    calculate_trajectory,
+    interpolate_trajectory_point,
+)
 from rogii_solo.calculations.types import (
     AssembledHorizons,
     Segment,
     SegmentBoundaries,
     SegmentsBoundaries,
     SegmentWithDip,
-    Trajectory
+    Trajectory,
 )
 from rogii_solo.papi.types import PapiAssembledSegments
 
 
-def get_segments(well: Dict[str, Any],
-                 calculated_trajectory: Trajectory,
-                 assembled_segments: PapiAssembledSegments,
-                 measure_units: EMeasureUnits
-                 ) -> List[Segment]:
+def get_segments(
+    well: Dict[str, Any],
+    calculated_trajectory: Trajectory,
+    assembled_segments: PapiAssembledSegments,
+    measure_units: EMeasureUnits,
+) -> List[Segment]:
     segments = []
     mds, mds_map = [], {}
 
@@ -36,10 +40,7 @@ def get_segments(well: Dict[str, Any],
         mds_map[point['md']] = i
 
     for assembled_segment in assembled_segments:
-        nearest_mds = get_nearest_values(
-            value=assembled_segment['md'],
-            input_list=mds
-        )
+        nearest_mds = get_nearest_values(value=assembled_segment['md'], input_list=mds)
 
         if len(nearest_mds) < 2:
             # Interpretation start MD = calculated trajectory start MD
@@ -59,36 +60,42 @@ def get_segments(well: Dict[str, Any],
                 measure_units=measure_units,
             )
 
-        segments.append(Segment(
-            md=assembled_segment['md'],
-            vs=interpolated_point['vs'],
-            start=assembled_segment['start'],
-            end=assembled_segment['end'],
-            x=interpolated_point['x'],
-            y=interpolated_point['y'],
-            horizon_shifts=assembled_segment['horizon_shifts'],
-            boundary_type=assembled_segment['boundary_type'],
-        ))
+        segments.append(
+            Segment(
+                uuid=None,
+                md=assembled_segment['md'],
+                vs=interpolated_point['vs'],
+                start=assembled_segment['start'],
+                end=assembled_segment['end'],
+                x=interpolated_point['x'],
+                y=interpolated_point['y'],
+                horizon_shifts=assembled_segment['horizon_shifts'],
+                boundary_type=assembled_segment['boundary_type'],
+            )
+        )
 
     last_trajectory_point = calculated_trajectory[-1]
-    segments.append(Segment(
-        md=last_trajectory_point['md'],
-        vs=last_trajectory_point['vs'],
-        start=None,
-        end=None,
-        x=last_trajectory_point['x'],
-        y=last_trajectory_point['y'],
-        horizon_shifts=segments[-1]['horizon_shifts'],
-        boundary_type=segments[-1]['boundary_type'],
-    ))
+
+    if segments[-1]['md'] != last_trajectory_point['md']:
+        segments.append(
+            Segment(
+                uuid=None,
+                md=last_trajectory_point['md'],
+                vs=last_trajectory_point['vs'],
+                start=None,
+                end=None,
+                x=last_trajectory_point['x'],
+                y=last_trajectory_point['y'],
+                horizon_shifts=segments[-1]['horizon_shifts'],
+                boundary_type=segments[-1]['boundary_type'],
+            )
+        )
 
     return segments
 
 
 def get_segments_with_dip(segments: List[Segment], assembled_horizons: AssembledHorizons) -> List[SegmentWithDip]:
-    segments_with_dip = [
-        SegmentWithDip(**segment, dip=None) for segment in segments
-    ]
+    segments_with_dip = [SegmentWithDip(**segment, dip=None) for segment in segments]
 
     for i in range(len(segments) - 1):
         left_point = segments[i]
@@ -99,8 +106,7 @@ def get_segments_with_dip(segments: List[Segment], assembled_horizons: Assembled
             sorted_assembled_horizons = {
                 uuid: assembled_horizon
                 for uuid, assembled_horizon in sorted(
-                    assembled_horizons.items(),
-                    key=lambda horizon_: horizon_[1]['tvd']
+                    assembled_horizons.items(), key=lambda horizon_: horizon_[1]['tvd']
                 )
             }
 
@@ -115,8 +121,7 @@ def get_segments_with_dip(segments: List[Segment], assembled_horizons: Assembled
                 shift_end = horizon_shifts['end']
 
                 segment_dip = calc_segment_dip(
-                    delta_x=fabs(right_point['vs'] - left_point['vs']),
-                    delta_y=shift_end - shift_start
+                    delta_x=fabs(right_point['vs'] - left_point['vs']), delta_y=shift_end - shift_start
                 )
                 segment_dips.append(segment_dip)
 
@@ -126,16 +131,12 @@ def get_segments_with_dip(segments: List[Segment], assembled_horizons: Assembled
             shift_end = left_point['end']
 
             result_dip = calc_segment_dip(
-                delta_x=fabs(right_point['vs'] - left_point['vs']),
-                delta_y=shift_end - shift_start
+                delta_x=fabs(right_point['vs'] - left_point['vs']), delta_y=shift_end - shift_start
             )
         segments_with_dip[i]['dip'] = result_dip
 
     if len(segments) > 0:
-        segments_with_dip[-1]['dip'] = (
-            90 if len(segments) == 1
-            else segments_with_dip[-2]['dip']
-        )
+        segments_with_dip[-1]['dip'] = 90 if len(segments) == 1 else segments_with_dip[-2]['dip']
 
     return segments_with_dip
 
@@ -158,7 +159,7 @@ def get_segments_boundaries(assembled_segments: List[Segment], calculated_trajec
                         md=calculated_point_md,
                         left_point=None,
                         right_point=None,
-                        interpolated_point=calculated_trajectory_point
+                        interpolated_point=calculated_trajectory_point,
                     )
                 )
                 continue
@@ -176,7 +177,7 @@ def get_segments_boundaries(assembled_segments: List[Segment], calculated_trajec
                 md=calculated_point_md,
                 left_point=left_point,
                 right_point=right_point,
-                interpolated_point=calculated_trajectory_point
+                interpolated_point=calculated_trajectory_point,
             )
         )
 
@@ -186,20 +187,15 @@ def get_segments_boundaries(assembled_segments: List[Segment], calculated_trajec
 def get_last_segment_dip(well: Any, assembled_segments: Any, measure_units: EMeasureUnits):
     well_data = well.to_dict(get_converted=False)
     calculated_trajectory = calculate_trajectory(
-        raw_trajectory=well.trajectory.to_dict(get_converted=False),
-        well=well_data,
-        measure_units=measure_units
+        raw_trajectory=well.trajectory.to_dict(get_converted=False), well=well_data, measure_units=measure_units
     )
     segments = get_segments(
         well=well_data,
         assembled_segments=assembled_segments['segments'],
         calculated_trajectory=calculated_trajectory,
-        measure_units=measure_units
+        measure_units=measure_units,
     )
-    segments_with_dip = get_segments_with_dip(
-        segments=segments,
-        assembled_horizons=assembled_segments['horizons']
-    )
+    segments_with_dip = get_segments_with_dip(segments=segments, assembled_horizons=assembled_segments['horizons'])
 
     return segments_with_dip[-1]['dip']
 
@@ -214,10 +210,7 @@ def interpolate_horizon(segments_boundaries: SegmentsBoundaries, horizon_uuid: s
         interpolated_point = segment_boundaries['interpolated_point']
 
         if left_point is None:
-            points.append({
-                'md': md,
-                'tvd': None
-            })
+            points.append({'md': md, 'tvd': None})
             continue
 
         horizon_shift_start = left_point['horizon_shifts'][horizon_uuid]['start']
@@ -227,16 +220,9 @@ def interpolate_horizon(segments_boundaries: SegmentsBoundaries, horizon_uuid: s
         right_point_tvd = horizon_tvd + horizon_shift_end
 
         tvd = interpolate_linear(
-            x0=left_point['vs'],
-            y0=left_point_tvd,
-            x1=right_point['vs'],
-            y1=right_point_tvd,
-            x=interpolated_point['vs']
+            x0=left_point['vs'], y0=left_point_tvd, x1=right_point['vs'], y1=right_point_tvd, x=interpolated_point['vs']
         )
 
-        points.append({
-            'md': md,
-            'tvd': tvd
-        })
+        points.append({'md': md, 'tvd': tvd})
 
     return points

@@ -1,7 +1,7 @@
 from typing import Any, Dict, Iterator, List, Literal, NamedTuple, TypedDict
 
 Scheme = Literal['http', 'https']
-TraceType = Literal['DEPTH', 'TIME']
+TraceType = Literal['DEPTH', 'TIME', 'CALC']
 
 
 class ProxyData(TypedDict):
@@ -41,8 +41,11 @@ class PapiLogPoint(TypedDict):
     value: PapiVar
 
 
-PapiTrajectory = List[PapiTrajectoryPoint]
+class PapiObjectCreationResult(TypedDict):
+    uuid: str
 
+
+PapiTrajectory = List[PapiTrajectoryPoint]
 PapiData = Dict[str, Any]
 PapiDataList = List[Dict[str, Any]]
 PapiDataIterator = Iterator[Dict[str, Any]]

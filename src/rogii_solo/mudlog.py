@@ -1,10 +1,12 @@
-from typing import Any, Dict, Union
+from typing import Dict, Optional, Union
 
 from pandas import DataFrame
 
 import rogii_solo.well
-from rogii_solo.base import ComplexObject
+from rogii_solo.base import BaseObject, ComplexObject, ObjectRepository
+from rogii_solo.log import LogPoint, LogPointRepository
 from rogii_solo.papi.client import PapiClient
+from rogii_solo.types import DataList
 
 WellType = Union[
     'rogii_solo.well.Well',
@@ -23,55 +25,63 @@ class Mudlog(ComplexObject):
 
         self.__dict__.update(kwargs)
 
-    def to_dict(self, get_converted: bool = True) -> Dict[str, Any]:
-        return self._get_data(get_converted)
+        self._logs: Optional['LithologyLogRepository'] = None
 
-    def to_df(self, get_converted: bool = True) -> DataFrame:
-        logs_data = self._get_logs(get_converted)
-        data, columns = [], []
+    def to_dict(self) -> Dict:
+        return {'uuid': self.uuid, 'name': self.name}
 
-        if logs_data:
-            columns = ['MD'] + [log['name'] for log in logs_data]
-            first_log_points = logs_data[0]['points']
-            points_length = len(first_log_points)
+    def to_df(self) -> DataFrame:
+        return DataFrame([self.to_dict()])
 
-            for i in range(points_length):
-                row = [first_log_points[i]['md']] + [log['points'][i]['data'] for log in logs_data]
-                data.append(row)
-
-        return DataFrame(data, columns=columns)
-
-    def _get_data(self, get_converted: bool):
-        meta = {
-            'uuid': self.uuid,
-            'name': self.name,
-        }
-        logs = self._get_logs(get_converted)
-
-        return {
-            'meta': meta,
-            'logs': logs,
-        }
-
-    def _get_logs(self, get_converted: bool):
-        logs_data = self._papi_client.get_mudlog_data(self.uuid)
-
-        logs_data = [
-            {
-                'uuid': log['uuid'],
-                'name': log['name'],
-                'points': log['log_points'] if not get_converted else [
-                    {
-                        'md': self.convert_z(
-                            value=log_point['md'],
-                            measure_units=self.well.project.measure_unit
-                        ),
-                        'data': log_point['data']
-                    }
-                    for log_point in log['log_points']
+    @property
+    def logs(self) -> 'LithologyLogRepository':
+        if self._logs is None:
+            self._logs = LithologyLogRepository(
+                [
+                    LithologyLog(mudlog=self, _points_data=item['log_points'], **item)
+                    for item in self._papi_client.get_mudlog_data(self.uuid)
                 ]
-            }
-            for log in logs_data
-        ]
+            )
 
-        return logs_data
+        return self._logs
+
+
+class LithologyLog(BaseObject):
+    def __init__(self, mudlog: Mudlog, **kwargs):
+        self.mudlog = mudlog
+
+        self.uuid = None
+        self.name = None
+        self._points: Optional[LogPointRepository] = None
+        self._points_data: Optional[DataList] = None
+
+        self.__dict__.update(kwargs)
+
+    def to_dict(self) -> Dict:
+        return {'uuid': self.uuid, 'name': self.name}
+
+    def to_df(self) -> DataFrame:
+        return DataFrame([self.to_dict()])
+
+    @property
+    def points(self) -> 'LogPointRepository':
+        if self._points is None:
+            self._points = LogPointRepository(
+                [
+                    LogPoint(measure_units=self.mudlog.well.project.measure_unit, md=point['md'], value=point['data'])
+                    for point in self._points_data
+                ]
+            )
+
+        return self._points
+
+
+class LithologyLogRepository(ObjectRepository):
+    def to_df(self) -> DataFrame:
+        mudlog_df = DataFrame(columns=('MD',))
+
+        for log in self:
+            log_df = log.points.to_df().rename(columns={'md': 'MD', 'value': log.name})
+            mudlog_df = mudlog_df.merge(right=log_df, on='MD', how='outer')
+
+        return mudlog_df

@@ -3,6 +3,7 @@ from typing import Any, Dict, Iterable, List, Optional, Set, Tuple, TypeVar
 
 from pandas import DataFrame
 
+from rogii_solo.calculations.constants import ROUNDING_PRECISION
 from rogii_solo.calculations.converters import convert_value, radians_to_degrees
 from rogii_solo.calculations.enums import EMeasureUnits
 from rogii_solo.papi.client import PapiClient
@@ -24,6 +25,11 @@ class Convertible:
     def convert_angle(value: float) -> Optional[float]:
         if value is not None:
             return radians_to_degrees(value)
+
+    @staticmethod
+    def safe_round(value, precision: int = ROUNDING_PRECISION):
+        if value is not None:
+            return round(value, ndigits=precision) + 0  # Convert negative zero to positive
 
 
 class BaseObject(ABC, Convertible):
@@ -47,14 +53,15 @@ class BaseObject(ABC, Convertible):
         """
         pass
 
-    def _find_by_path(self,
-                      obj: Dict or Iterable[Dict],
-                      path: str or Iterable[str],
-                      default: Any = None,
-                      divider: str = None,
-                      check_none: bool = False,
-                      to_list: bool = False,
-                      ) -> Any:
+    def _find_by_path(
+        self,
+        obj: Dict or Iterable[Dict],
+        path: str or Iterable[str],
+        default: Any = None,
+        divider: str = None,
+        check_none: bool = False,
+        to_list: bool = False,
+    ) -> Any:
         """
         Find nested key value in dict
         :param obj:
@@ -93,14 +100,15 @@ class BaseObject(ABC, Convertible):
 
         return result
 
-    def __find_by_path(self,
-                       obj: Dict,
-                       path: str,
-                       default: Any = None,
-                       divider: str = None,
-                       check_none: bool = False,
-                       to_list: bool = False,
-                       ) -> Any:
+    def __find_by_path(
+        self,
+        obj: Dict,
+        path: str,
+        default: Any = None,
+        divider: str = None,
+        check_none: bool = False,
+        to_list: bool = False,
+    ) -> Any:
         if not obj:
             return None if not to_list else []
 
@@ -120,6 +128,7 @@ class ComplexObject(BaseObject):
     """
     Object with access to PAPI
     """
+
     def __init__(self, papi_client: PapiClient):
         super().__init__()
 
@@ -139,25 +148,26 @@ class ObjectRepository(list[T]):
     """
     List of objects with utility methods
     """
+
     def __init__(self, objects: List[T] = None):
         if objects is None:
             objects = []
 
         super().__init__(objects)
 
-    def to_dict(self, get_converted: bool = True) -> DataList:
+    def to_dict(self, *args, **kwargs) -> DataList:
         """
         Return list of dicts
         :return:
         """
-        return [object_.to_dict(get_converted) for object_ in self]
+        return [object_.to_dict(*args, **kwargs) for object_ in self]
 
-    def to_df(self, get_converted: bool = True) -> DataFrame:
+    def to_df(self, *args, **kwargs) -> DataFrame:
         """
         Convert list to Pandas DataFrame
         :return:
         """
-        return DataFrame(self.to_dict(get_converted))
+        return DataFrame(self.to_dict(*args, **kwargs))
 
     def find_by_id(self, value) -> Optional[T]:
         """

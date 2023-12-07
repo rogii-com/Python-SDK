@@ -4,7 +4,7 @@ from pandas import DataFrame
 
 from rogii_solo.base import ComplexObject, ObjectRepository
 from rogii_solo.papi.client import PapiClient
-from rogii_solo.types import DataList
+from rogii_solo.utils.objects import find_by_uuid
 from rogii_solo.well import Typewell, Well
 
 
@@ -25,11 +25,8 @@ class Project(ComplexObject):
 
         self.__dict__.update(kwargs)
 
-        self._wells_data: Optional[DataList] = None
         self._wells: Optional[ObjectRepository[Well]] = None
-
-        self._typewells_data: Optional[DataList] = None
-        self._typewells: Optional[ObjectRepository[Well]] = None
+        self._typewells: Optional[ObjectRepository[Typewell]] = None
 
     def to_dict(self, get_converted: bool = True) -> Dict[str, Any]:
         return {
@@ -52,7 +49,10 @@ class Project(ComplexObject):
     def wells(self) -> ObjectRepository[Well]:
         if self._wells is None:
             self._wells = ObjectRepository(
-                objects=[Well(papi_client=self._papi_client, project=self, **item) for item in self._get_wells_data()]
+                objects=[
+                    Well(papi_client=self._papi_client, project=self, **item)
+                    for item in self._papi_client.get_project_wells_data(project_id=self.uuid)
+                ]
             )
 
         return self._wells
@@ -63,28 +63,29 @@ class Project(ComplexObject):
             self._typewells = ObjectRepository(
                 objects=[
                     Typewell(papi_client=self._papi_client, project=self, **item)
-                    for item in self._get_typewells_data()
+                    for item in self._papi_client.get_project_typewells_data(project_id=self.uuid)
                 ]
             )
 
         return self._typewells
 
-    def create_well(self,
-                    well_name: str,
-                    operator: str,
-                    api: str,
-                    convergence: float,
-                    azimuth: float,
-                    kb: float,
-                    tie_in_tvd: float,
-                    tie_in_ns: float,
-                    tie_in_ew: float,
-                    xsrf_real: float,
-                    ysrf_real: float,
-                    ):
-        result = self._papi_client.create_well(
+    def create_well(
+        self,
+        name: str,
+        api: str,
+        operator: str,
+        convergence: float,
+        azimuth: float,
+        kb: float,
+        tie_in_tvd: float,
+        tie_in_ns: float,
+        tie_in_ew: float,
+        xsrf_real: float,
+        ysrf_real: float,
+    ):
+        well_id = self._papi_client.create_well(
             project_id=self.uuid,
-            well_name=well_name,
+            name=name,
             operator=operator,
             api=api,
             convergence=self._papi_client.prepare_papi_var(convergence),
@@ -94,29 +95,29 @@ class Project(ComplexObject):
             tie_in_ns=self._papi_client.prepare_papi_var(tie_in_ns),
             tie_in_ew=self._papi_client.prepare_papi_var(tie_in_ew),
             xsrf_real=self._papi_client.prepare_papi_var(xsrf_real),
-            ysrf_real=self._papi_client.prepare_papi_var(ysrf_real)
+            ysrf_real=self._papi_client.prepare_papi_var(ysrf_real),
         )
+        well_data = self._papi_client.get_project_well_data(well_id=well_id['uuid'])
 
-        self._wells_data = None
-        self._wells = None
+        if self._wells is not None:
+            self._wells.append(Well(papi_client=self._papi_client, project=self, **well_data))
 
-        return result
-
-    def create_typewell(self,
-                        typewell_name: str,
-                        operator: str,
-                        api: str,
-                        convergence: float,
-                        kb: float,
-                        tie_in_tvd: float,
-                        tie_in_ns: float,
-                        tie_in_ew: float,
-                        xsrf_real: float,
-                        ysrf_real: float,
-                        ):
-        result = self._papi_client.create_typewell(
+    def create_typewell(
+        self,
+        name: str,
+        operator: str,
+        api: str,
+        convergence: float,
+        kb: float,
+        tie_in_tvd: float,
+        tie_in_ns: float,
+        tie_in_ew: float,
+        xsrf_real: float,
+        ysrf_real: float,
+    ):
+        typewell_id = self._papi_client.create_typewell(
             project_id=self.uuid,
-            typewell_name=typewell_name,
+            name=name,
             operator=operator,
             api=api,
             convergence=self._papi_client.prepare_papi_var(convergence),
@@ -125,22 +126,13 @@ class Project(ComplexObject):
             tie_in_ns=self._papi_client.prepare_papi_var(tie_in_ns),
             tie_in_ew=self._papi_client.prepare_papi_var(tie_in_ew),
             xsrf_real=self._papi_client.prepare_papi_var(xsrf_real),
-            ysrf_real=self._papi_client.prepare_papi_var(ysrf_real)
+            ysrf_real=self._papi_client.prepare_papi_var(ysrf_real),
+        )
+        # No raw method for typewell
+        typewell_data = find_by_uuid(
+            value=typewell_id['uuid'],
+            input_list=self._papi_client.get_project_typewells_data(project_id=self.uuid, query=name),
         )
 
-        self._typewells_data = None
-        self._typewells = None
-
-        return result
-
-    def _get_wells_data(self) -> DataList:
-        if self._wells_data is None:
-            self._wells_data = self._papi_client.get_project_wells_data(project_id=self.uuid)
-
-        return self._wells_data
-
-    def _get_typewells_data(self) -> DataList:
-        if self._typewells_data is None:
-            self._typewells_data = self._papi_client.get_project_typewells_data(project_id=self.uuid)
-
-        return self._typewells_data
+        if self._typewells is not None:
+            self._typewells.append(Typewell(papi_client=self._papi_client, project=self, **typewell_data))
