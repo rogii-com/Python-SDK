@@ -213,16 +213,24 @@ class Interpretation(ComplexObject):
                     )
                 )
             else:
-                nearest_left_point, nearest_right_point = get_nearest_values(
+                nearest_points = get_nearest_values(
                     value=left_segment['md'], input_list=calculated_trajectory, key=lambda it: it['md']
                 )
-                interpolated_point = interpolate_trajectory_point(
-                    left_point=nearest_left_point,
-                    right_point=nearest_right_point,
-                    md=left_segment['md'],
-                    well=well,
-                    measure_units=measure_units,
-                )
+
+                if len(nearest_points) < 2:
+                    # Interpretation start MD = calculated trajectory start MD
+                    # Otherwise (MD approximately equal or equal the last trajectory point MD) two points are found
+                    interpolated_point = calculated_trajectory[0]
+                else:
+                    nearest_left_point, nearest_right_point = nearest_points
+                    interpolated_point = interpolate_trajectory_point(
+                        left_point=nearest_left_point,
+                        right_point=nearest_right_point,
+                        md=left_segment['md'],
+                        well=well,
+                        measure_units=measure_units,
+                    )
+
                 left_segment['vs'] = interpolated_point['vs']
                 fitted_segments.append(left_segment)
 
@@ -235,17 +243,23 @@ class Interpretation(ComplexObject):
         segment_vs_length = calc_segment_vs_length(
             x1=left['x'], y1=left['y'], x2=right['x'], y2=right['y'], azimuth_vs=well['azimuth']
         )
-        nearest_left_point, nearest_right_point = get_nearest_values(
-            value=left['md'], input_list=trajectory, key=lambda it: it['md']
-        )
-        left_point = interpolate_trajectory_point(
-            left_point=nearest_left_point,
-            right_point=nearest_right_point,
-            md=left['md'],
-            well=well,
-            measure_units=measure_units,
-        )
-        left_point_vs = left_point['vs']
+        nearest_points = get_nearest_values(value=left['md'], input_list=trajectory, key=lambda it: it['md'])
+
+        if len(nearest_points) < 2:
+            # Interpretation start MD = calculated trajectory start MD
+            # Otherwise (MD approximately equal or equal the last trajectory point MD) two points are found
+            interpolated_point = trajectory[0]
+        else:
+            nearest_left_point, nearest_right_point = nearest_points
+            interpolated_point = interpolate_trajectory_point(
+                left_point=nearest_left_point,
+                right_point=nearest_right_point,
+                md=left['md'],
+                well=well,
+                measure_units=measure_units,
+            )
+
+        left_point_vs = interpolated_point['vs']
         right_point_vs = trajectory[-1]['vs']
 
         truncated_segment_vs_length = fabs(right_point_vs - left_point_vs)
