@@ -18,6 +18,8 @@ from rogii_solo.trajectory import TrajectoryPoint, TrajectoryPointRepository
 from rogii_solo.types import DataList
 from rogii_solo.utils.objects import find_by_uuid
 
+keep_value = object()
+
 
 class Well(ComplexObject):
     def __init__(self, papi_client: PapiClient, project: 'rogii_solo.project.Project', **kwargs):
@@ -72,28 +74,40 @@ class Well(ComplexObject):
             'name': self.name,
             'api': self.api,
             'operator': self.operator,
-            'xsrf': self.safe_round(self.convert_xy(value=self.xsrf, measure_units=measure_units, force_to_meters=True))
-            if get_converted
-            else self.xsrf,
-            'ysrf': self.safe_round(self.convert_xy(value=self.ysrf, measure_units=measure_units, force_to_meters=True))
-            if get_converted
-            else self.ysrf,
+            'xsrf': (
+                self.safe_round(self.convert_xy(value=self.xsrf, measure_units=measure_units, force_to_meters=True))
+                if get_converted
+                else self.xsrf
+            ),
+            'ysrf': (
+                self.safe_round(self.convert_xy(value=self.ysrf, measure_units=measure_units, force_to_meters=True))
+                if get_converted
+                else self.ysrf
+            ),
             'xsrf_real': self.safe_round(self.xsrf_real) if get_converted else feet_to_meters(self.xsrf_real),
             'ysrf_real': self.safe_round(self.ysrf_real) if get_converted else feet_to_meters(self.ysrf_real),
-            'kb': self.safe_round(self.convert_z(value=self.kb, measure_units=measure_units))
-            if get_converted
-            else self.kb,
+            'kb': (
+                self.safe_round(self.convert_z(value=self.kb, measure_units=measure_units))
+                if get_converted
+                else self.kb
+            ),
             'azimuth': self.safe_round(self.convert_angle(self.azimuth)) if get_converted else self.azimuth,
             'convergence': self.safe_round(self.convert_angle(self.convergence)) if get_converted else self.convergence,
-            'tie_in_tvd': self.safe_round(self.convert_z(value=self.tie_in_tvd, measure_units=measure_units))
-            if get_converted
-            else self.tie_in_tvd,
-            'tie_in_ns': self.safe_round(self.convert_xy(value=self.tie_in_ns, measure_units=measure_units))
-            if get_converted
-            else self.tie_in_ns,
-            'tie_in_ew': self.safe_round(self.convert_xy(value=self.tie_in_ew, measure_units=measure_units))
-            if get_converted
-            else self.tie_in_ew,
+            'tie_in_tvd': (
+                self.safe_round(self.convert_z(value=self.tie_in_tvd, measure_units=measure_units))
+                if get_converted
+                else self.tie_in_tvd
+            ),
+            'tie_in_ns': (
+                self.safe_round(self.convert_xy(value=self.tie_in_ns, measure_units=measure_units))
+                if get_converted
+                else self.tie_in_ns
+            ),
+            'tie_in_ew': (
+                self.safe_round(self.convert_xy(value=self.tie_in_ew, measure_units=measure_units))
+                if get_converted
+                else self.tie_in_ew
+            ),
             'starred': self.starred,
         }
 
@@ -362,7 +376,14 @@ class Well(ComplexObject):
         self._papi_client.replace_log(log_id=log_id['uuid'], index_unit=units, log_points=prepared_points)
 
         if self._logs is not None:
-            self._logs.append(Log(papi_client=self._papi_client, well=self, uuid=log_id['uuid'], name=name))
+            self._logs.append(
+                Log(
+                    papi_client=self._papi_client,
+                    well=self,
+                    uuid=log_id['uuid'],
+                    name=name,
+                )
+            )
 
     def create_target_line(
         self,
@@ -387,7 +408,8 @@ class Well(ComplexObject):
 
         # No raw method for target line
         target_line_data = find_by_uuid(
-            value=target_line_id['uuid'], input_list=self._papi_client.get_well_target_lines_data(well_id=self.uuid)
+            value=target_line_id['uuid'],
+            input_list=self._papi_client.get_well_target_lines_data(well_id=self.uuid),
         )
 
         if self._target_lines is not None:
@@ -395,31 +417,33 @@ class Well(ComplexObject):
 
     def update_meta(
         self,
-        name: Optional[str] = None,
-        operator: Optional[str] = None,
-        api: Optional[str] = None,
-        xsrf: Optional[float] = None,
-        ysrf: Optional[float] = None,
-        kb: Optional[float] = None,
-        azimuth: Optional[float] = None,
-        convergence: Optional[float] = None,
-        tie_in_tvd: Optional[float] = None,
-        tie_in_ns: Optional[float] = None,
-        tie_in_ew: Optional[float] = None,
+        name: Optional[str] = keep_value,
+        operator: Optional[str] = keep_value,
+        api: Optional[str] = keep_value,
+        xsrf: Optional[float] = keep_value,
+        ysrf: Optional[float] = keep_value,
+        kb: Optional[float] = keep_value,
+        azimuth: Optional[float] = keep_value,
+        convergence: Optional[float] = keep_value,
+        tie_in_tvd: Optional[float] = keep_value,
+        tie_in_ns: Optional[float] = keep_value,
+        tie_in_ew: Optional[float] = keep_value,
     ):
         is_updated = self._papi_client.update_well_meta(
             well_id=self.uuid,
-            name=name,
-            api=api,
-            operator=operator,
-            xsrf=self._papi_client.prepare_papi_var(xsrf),
-            ysrf=self._papi_client.prepare_papi_var(ysrf),
-            kb=self._papi_client.prepare_papi_var(kb),
-            azimuth=self._papi_client.prepare_papi_var(azimuth),
-            convergence=self._papi_client.prepare_papi_var(convergence),
-            tie_in_tvd=self._papi_client.prepare_papi_var(tie_in_tvd),
-            tie_in_ns=self._papi_client.prepare_papi_var(tie_in_ns),
-            tie_in_ew=self._papi_client.prepare_papi_var(tie_in_ew),
+            name=self.name if name is keep_value else name,
+            api=self.api if api is keep_value else api,
+            operator=self.operator if operator is keep_value else operator,
+            xsrf=self._papi_client.prepare_papi_var(self.xsrf if xsrf is keep_value else xsrf),
+            ysrf=self._papi_client.prepare_papi_var(self.ysrf if ysrf is keep_value else ysrf),
+            kb=self._papi_client.prepare_papi_var(self.kb if kb is keep_value else kb),
+            azimuth=self._papi_client.prepare_papi_var(self.azimuth if azimuth is keep_value else azimuth),
+            convergence=self._papi_client.prepare_papi_var(
+                self.convergence if convergence is keep_value else convergence
+            ),
+            tie_in_tvd=self._papi_client.prepare_papi_var(self.tie_in_tvd if tie_in_tvd is keep_value else tie_in_tvd),
+            tie_in_ns=self._papi_client.prepare_papi_var(self.tie_in_ns if tie_in_ns is keep_value else tie_in_ns),
+            tie_in_ew=self._papi_client.prepare_papi_var(self.tie_in_ew if tie_in_ew is keep_value else tie_in_ew),
         )
 
         if is_updated:
@@ -443,15 +467,17 @@ class WellAttributes(BaseObject):
             'Name': data['Name'],
             'API': data['API'],
             'Operator': data['Operator'],
-            'KB': self.safe_round(self.convert_z(value=data['KB'], measure_units=measure_units))
-            if get_converted
-            else data['KB'],
-            'Azimuth VS': self.safe_round(self.convert_angle(data['Azimuth VS']))
-            if get_converted
-            else data['Azimuth VS'],
-            'Convergence': self.safe_round(self.convert_angle(data['Convergence']))
-            if get_converted
-            else data['Convergence'],
+            'KB': (
+                self.safe_round(self.convert_z(value=data['KB'], measure_units=measure_units))
+                if get_converted
+                else data['KB']
+            ),
+            'Azimuth VS': (
+                self.safe_round(self.convert_angle(data['Azimuth VS'])) if get_converted else data['Azimuth VS']
+            ),
+            'Convergence': (
+                self.safe_round(self.convert_angle(data['Convergence'])) if get_converted else data['Convergence']
+            ),
             'X-srf': self.safe_round(data['X-srf']) if get_converted else feet_to_meters(data['X-srf']),
             'Y-srf': self.safe_round(data['Y-srf']) if get_converted else feet_to_meters(data['Y-srf']),
         }
@@ -501,28 +527,40 @@ class NestedWell(ComplexObject):
             'name': self.name,
             'api': self.api,
             'operator': self.operator,
-            'xsrf': self.safe_round(self.convert_xy(value=self.xsrf, measure_units=measure_units, force_to_meters=True))
-            if get_converted
-            else self.xsrf,
-            'ysrf': self.safe_round(self.convert_xy(value=self.ysrf, measure_units=measure_units, force_to_meters=True))
-            if get_converted
-            else self.ysrf,
+            'xsrf': (
+                self.safe_round(self.convert_xy(value=self.xsrf, measure_units=measure_units, force_to_meters=True))
+                if get_converted
+                else self.xsrf
+            ),
+            'ysrf': (
+                self.safe_round(self.convert_xy(value=self.ysrf, measure_units=measure_units, force_to_meters=True))
+                if get_converted
+                else self.ysrf
+            ),
             'xsrf_real': self.safe_round(self.xsrf_real) if get_converted else feet_to_meters(self.xsrf_real),
             'ysrf_real': self.safe_round(self.ysrf_real) if get_converted else feet_to_meters(self.ysrf_real),
-            'kb': self.safe_round(self.convert_z(value=self.kb, measure_units=measure_units))
-            if get_converted
-            else self.kb,
+            'kb': (
+                self.safe_round(self.convert_z(value=self.kb, measure_units=measure_units))
+                if get_converted
+                else self.kb
+            ),
             'azimuth': self.safe_round(self.convert_angle(self.azimuth)) if get_converted else self.azimuth,
             'convergence': self.safe_round(self.convert_angle(self.convergence)) if get_converted else self.convergence,
-            'tie_in_tvd': self.safe_round(self.convert_z(value=self.tie_in_tvd, measure_units=measure_units))
-            if get_converted
-            else self.tie_in_tvd,
-            'tie_in_ns': self.safe_round(self.convert_xy(value=self.tie_in_ns, measure_units=measure_units))
-            if get_converted
-            else self.tie_in_ns,
-            'tie_in_ew': self.safe_round(self.convert_xy(value=self.tie_in_ew, measure_units=measure_units))
-            if get_converted
-            else self.tie_in_ew,
+            'tie_in_tvd': (
+                self.safe_round(self.convert_z(value=self.tie_in_tvd, measure_units=measure_units))
+                if get_converted
+                else self.tie_in_tvd
+            ),
+            'tie_in_ns': (
+                self.safe_round(self.convert_xy(value=self.tie_in_ns, measure_units=measure_units))
+                if get_converted
+                else self.tie_in_ns
+            ),
+            'tie_in_ew': (
+                self.safe_round(self.convert_xy(value=self.tie_in_ew, measure_units=measure_units))
+                if get_converted
+                else self.tie_in_ew
+            ),
         }
 
     def to_df(self, get_converted: bool = True) -> DataFrame:
@@ -580,7 +618,14 @@ class NestedWell(ComplexObject):
         topset_id = self._papi_client.create_nested_well_topset(nested_well_id=self.uuid, name=name)
 
         if self._topsets is not None:
-            self._topsets.append(Topset(papi_client=self._papi_client, well=self, uuid=topset_id['uuid'], name=name))
+            self._topsets.append(
+                Topset(
+                    papi_client=self._papi_client,
+                    well=self,
+                    uuid=topset_id['uuid'],
+                    name=name,
+                )
+            )
 
     def update_meta(
         self,
@@ -660,27 +705,39 @@ class Typewell(ComplexObject):
             'name': self.name,
             'api': self.api,
             'operator': self.operator,
-            'xsrf': self.safe_round(self.convert_xy(value=self.xsrf, measure_units=measure_units, force_to_meters=True))
-            if get_converted
-            else self.xsrf,
-            'ysrf': self.safe_round(self.convert_xy(value=self.ysrf, measure_units=measure_units, force_to_meters=True))
-            if get_converted
-            else self.ysrf,
+            'xsrf': (
+                self.safe_round(self.convert_xy(value=self.xsrf, measure_units=measure_units, force_to_meters=True))
+                if get_converted
+                else self.xsrf
+            ),
+            'ysrf': (
+                self.safe_round(self.convert_xy(value=self.ysrf, measure_units=measure_units, force_to_meters=True))
+                if get_converted
+                else self.ysrf
+            ),
             'xsrf_real': self.safe_round(self.xsrf_real) if get_converted else feet_to_meters(self.xsrf_real),
             'ysrf_real': self.safe_round(self.ysrf_real) if get_converted else feet_to_meters(self.ysrf_real),
-            'kb': self.safe_round(self.convert_z(value=self.kb, measure_units=measure_units))
-            if get_converted
-            else self.kb,
+            'kb': (
+                self.safe_round(self.convert_z(value=self.kb, measure_units=measure_units))
+                if get_converted
+                else self.kb
+            ),
             'convergence': self.safe_round(self.convert_angle(self.convergence)) if get_converted else self.convergence,
-            'tie_in_tvd': self.safe_round(self.convert_z(value=self.tie_in_tvd, measure_units=measure_units))
-            if get_converted
-            else self.tie_in_tvd,
-            'tie_in_ns': self.safe_round(self.convert_xy(value=self.tie_in_ns, measure_units=measure_units))
-            if get_converted
-            else self.tie_in_ns,
-            'tie_in_ew': self.safe_round(self.convert_xy(value=self.tie_in_ew, measure_units=measure_units))
-            if get_converted
-            else self.tie_in_ew,
+            'tie_in_tvd': (
+                self.safe_round(self.convert_z(value=self.tie_in_tvd, measure_units=measure_units))
+                if get_converted
+                else self.tie_in_tvd
+            ),
+            'tie_in_ns': (
+                self.safe_round(self.convert_xy(value=self.tie_in_ns, measure_units=measure_units))
+                if get_converted
+                else self.tie_in_ns
+            ),
+            'tie_in_ew': (
+                self.safe_round(self.convert_xy(value=self.tie_in_ew, measure_units=measure_units))
+                if get_converted
+                else self.tie_in_ew
+            ),
             # Shift is returned in project units
             'shift': self.safe_round(self.shift) if get_converted else feet_to_meters(value=self.shift),
         }
@@ -785,7 +842,14 @@ class Typewell(ComplexObject):
         topset_id = self._papi_client.create_typewell_topset(typewell_id=self.uuid, name=name)
 
         if self._topsets is not None:
-            self._topsets.append(Topset(papi_client=self._papi_client, well=self, uuid=topset_id['uuid'], name=name))
+            self._topsets.append(
+                Topset(
+                    papi_client=self._papi_client,
+                    well=self,
+                    uuid=topset_id['uuid'],
+                    name=name,
+                )
+            )
 
     def create_log(self, name: str, points: DataList):
         log_id = self._papi_client.create_typewell_log(typewell_id=self.uuid, name=name)
@@ -797,4 +861,11 @@ class Typewell(ComplexObject):
         self._papi_client.replace_log(log_id=log_id['uuid'], index_unit=units, log_points=prepared_points)
 
         if self._logs is not None:
-            self._logs.append(Log(papi_client=self._papi_client, well=self, uuid=log_id['uuid'], name=name))
+            self._logs.append(
+                Log(
+                    papi_client=self._papi_client,
+                    well=self,
+                    uuid=log_id['uuid'],
+                    name=name,
+                )
+            )
