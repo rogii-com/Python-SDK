@@ -1028,7 +1028,7 @@ class PapiClient(BasePapiClient):
         headers: Optional[Dict] = None,
     ):
         return self._update_meta(
-            url=f'wells/{well_id}',
+            url=f'wells/{well_id}/raw',
             name=name,
             operator=operator,
             api=api,
