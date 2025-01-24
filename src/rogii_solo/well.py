@@ -462,25 +462,33 @@ class WellAttributes(BaseObject):
     def to_dict(self, get_converted: bool = True) -> Dict:
         measure_units = self.well.project.measure_unit
         data = self.__dict__
+        result = {}
 
-        return {
-            'Name': data['Name'],
-            'API': data['API'],
-            'Operator': data['Operator'],
-            'KB': (
-                self.safe_round(self.convert_z(value=data['KB'], measure_units=measure_units))
-                if get_converted
-                else data['KB']
-            ),
-            'Azimuth VS': (
-                self.safe_round(self.convert_angle(data['Azimuth VS'])) if get_converted else data['Azimuth VS']
-            ),
-            'Convergence': (
-                self.safe_round(self.convert_angle(data['Convergence'])) if get_converted else data['Convergence']
-            ),
-            'X-srf': self.safe_round(data['X-srf']) if get_converted else feet_to_meters(data['X-srf']),
-            'Y-srf': self.safe_round(data['Y-srf']) if get_converted else feet_to_meters(data['Y-srf']),
-        }
+        for k, v in data.items():
+            if k == 'KB':
+                result[k] = (
+                    self.safe_round(self.convert_z(value=data['KB'], measure_units=measure_units))
+                    if get_converted
+                    else data['KB']
+                )
+            elif k == 'Azimuth VS':
+                result[k] = (
+                    self.safe_round(self.convert_angle(data['Azimuth VS'])) if get_converted else data['Azimuth VS']
+                )
+            elif k == 'Convergence':
+                result[k] = (
+                    self.safe_round(self.convert_angle(data['Convergence'])) if get_converted else data['Convergence']
+                )
+            elif k == 'X-srf':
+                result[k] = self.safe_round(data['X-srf']) if get_converted else feet_to_meters(data['X-srf'])
+            elif k == 'Y-srf':
+                result[k] = self.safe_round(data['Y-srf']) if get_converted else feet_to_meters(data['Y-srf'])
+            elif k == 'well':
+                continue
+            else:
+                result[k] = v
+
+        return result
 
     def to_df(self, get_converted: bool = True) -> DataFrame:
         return DataFrame(self.to_dict(get_converted), index=[0])
