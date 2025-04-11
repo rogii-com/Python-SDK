@@ -1,0 +1,16 @@
+section_titles = [
+    'base',
+    'client',
+    'comment',
+    'earth_model',
+    'horizon',
+    'interpretation',
+    'log',
+    'mudlog',
+    'project',
+    'target_line',
+    'topset',
+    'trajectory',
+    'types',
+    'well',
+    ]

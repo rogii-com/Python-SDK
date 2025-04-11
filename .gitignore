@@ -134,3 +134,6 @@ dmypy.json
 .DS_Store
 .AppleDouble
 .LSOverride
+
+### Documentation ###
+docs/syntax_folder/

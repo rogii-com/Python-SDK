@@ -1,0 +1,22 @@
+<div class="sidebar-tree">
+    {% for item in main_section_titles_and_links %}
+    <section>
+        <ul class="title-list">
+            <li class="title-item">
+                <a href="{{ item.link }}">{{ item.title }}</a>
+            </li>
+            {% if item.title == 'Wells' %}
+                {% for well_item in wells_section_titles_and_links %}
+                <section>
+                    <ul class="class-list">
+                        <li class="class-item">
+                            <a href="{{ well_item.link }}">{{ well_item.title }}</a>
+                        </li>
+                    </ul>
+                </section>
+                {% endfor %}
+            {% endif %}
+        </ul>
+    </section>
+    {% endfor %}
+</div>

@@ -1,0 +1,101 @@
+p{
+    text-align: justify;
+}
+
+.sidebar-brand-text{
+    text-align: center;
+}
+
+a:visited {
+    color: var(--color-link);
+}
+
+.sidebar-logo {
+    width: 100%;
+    height: auto; /* Сохраняет пропорции SVG */
+    display: block; /* Убирает лишнее пространство снизу SVG */
+}
+
+
+.sidebar-drawer {
+   width: calc(50% - 32em);
+}
+
+.content {
+  width: 59em;
+}
+
+table.summarytable {
+    width: 100%;
+}
+
+table.summarytable tr td:first-child, /* Для ячеек данных */
+table.summarytable tr th:first-child { /* Для ячеек заголовков */
+    width: 270px;
+}
+
+.caption-text {
+    font-size: 160%;
+    font-weight: bold;
+}
+
+span.summarylabel-method, span.summarylabel-property{
+    color: var(--color-background-secondary);
+    font-size: 70%;
+    padding-left: 2px;
+    padding-right: 2px;
+    border-radius: 3px;
+    vertical-align: 15%;
+    padding-bottom: 2px;
+    filter: opacity(40%);
+}
+
+span.summarylabel-method {
+   background-color: #0B9100;
+}
+
+span.summarylabel-property {
+   background-color: #FF6C00;
+}
+
+ul {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+
+.sidebar-tree ul{
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.module-list li {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.title-list ul{
+    padding-left: 20px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.title-item {
+    padding-left: 20px;
+    font-size: 15px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.class-list {
+    margin-left: 35px;
+    margin-top: 50px;
+    margin-bottom: 50px;
+}
+
+.class-item {
+    margin-left: 40px;
+    font-size: 15px;
+    margin-top: 40px;
+    margin-bottom: 40px;
+}
