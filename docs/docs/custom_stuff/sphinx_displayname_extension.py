@@ -25,6 +25,7 @@ class ReplaceDescNameWithDisplayname(SphinxTransform):
         if self.debug:
             # Saving a document to a file
             path = rf'_doc_debug/{self.document.children[0]["names"][0]}.xml'
+
             with open(path, 'w', encoding='utf-8') as f:
                 f.write(self.document.pformat())
 
@@ -34,7 +35,6 @@ class ReplaceDescNameWithDisplayname(SphinxTransform):
         self.process_tables(self.document)
 
         if self.debug:
-
             # Saving a document to a file
             path = rf'_doc_debug/{self.document.children[0]["names"][0]}_result.xml'
             with open(path, 'w', encoding='utf-8') as f:
@@ -47,24 +47,28 @@ class ReplaceDescNameWithDisplayname(SphinxTransform):
 
                 if displayname:
                     desc_name_node = self.get_desc_name_from_desc(child)
+
                     if desc_name_node:
                         original_name = desc_name_node.astext()
+
                         if self.debug:
                             print(f'Replacing desc_name "{original_name}" with "{displayname}"')
+
                         desc_name_node.clear()
                         desc_name_node += nodes.Text(displayname)
-
                         desc_signature = child.next_node(addnodes.desc_signature)
-                        if desc_signature:
-                            ids_dict = self.update_signature_attributes(desc_signature, original_name, displayname)
 
+                        if desc_signature:
                             parameter_list_node = desc_signature.next_node(addnodes.desc_parameterlist)
+
                             if parameter_list_node:
                                 desc_signature.remove(parameter_list_node)
+
                                 if self.debug:
                                     print('Removed desc_parameterlist from desc_signature')
 
                     index_node = self.find_previous_index_node(child)
+
                     if index_node:
                         self.update_index_entries(index_node, original_name, displayname)
 
@@ -82,12 +86,11 @@ class ReplaceDescNameWithDisplayname(SphinxTransform):
             if isinstance(node, (nodes.reference, nodes.target)):
                 original_refuri = node['refuri'].replace('#', '')
                 if original_refuri in self.ids_dict:
-
                     # Replace attributes
                     new_refuri = '#' + self.ids_dict[original_refuri]
                     new_text = self.ids_dict[original_refuri].split('.')[-1]
-
                     node['refuri'] = new_refuri
+
                     if 'name' in node and node['name']:
                         node['name'] = new_refuri
 
@@ -99,7 +102,8 @@ class ReplaceDescNameWithDisplayname(SphinxTransform):
                         node['ids'] = [new_text]
                         node['dupnames'] = [new_text]
 
-                        # remove the function signature, including everything inside the parentheses and the parentheses themselves
+                        # remove the function signature, including everything inside the
+                        # parentheses and the parentheses themselves
                         for par_node in node.parent:
                             if isinstance(par_node, nodes.Text) and par_node.astext() != ' ':
                                 par_node.parent.remove(par_node)
@@ -120,8 +124,10 @@ class ReplaceDescNameWithDisplayname(SphinxTransform):
                     if isinstance(field_list, nodes.field_list):
                         for field in field_list.children:
                             field_name_node = field.next_node(nodes.field_name)
+
                             if field_name_node and field_name_node.astext().strip().lower() == 'displayname':
                                 displayname = self.extract_displayname_from_field(field)
+
                                 if field in field_list.children:
                                     field_list.remove(field)
                                     if self.debug:
@@ -134,6 +140,7 @@ class ReplaceDescNameWithDisplayname(SphinxTransform):
 
     def get_desc_name_from_desc(self, desc_node):
         desc_signature = desc_node.next_node(addnodes.desc_signature)
+
         if desc_signature:
             return desc_signature.next_node(addnodes.desc_name)
         return None
@@ -141,22 +148,28 @@ class ReplaceDescNameWithDisplayname(SphinxTransform):
     def extract_displayname_from_field(self, field_node: nodes.field) -> str:
         field_body = field_node.next_node(nodes.field_body)
         paragraph = field_body.next_node(nodes.paragraph)
+
         return paragraph.astext().strip()
 
     def update_signature_attributes(self, desc_signature, original_name, displayname):
         ids_dict = {}
+
         for attr_name, attr_value in desc_signature.attributes.items():
             if isinstance(attr_value, str) and original_name in attr_value:
                 new_value = attr_value.replace(original_name, displayname)
+
                 if attr_name == '_toc_name':
                     new_value = new_value.replace('()', '')
 
                 if self.debug:
                     print(f'Updating attribute "{attr_name}": "{attr_value}" -> "{new_value}"')
+
                 desc_signature[attr_name] = new_value
             elif isinstance(attr_value, list):
                 new_value_list = [
-                    item.replace(original_name, displayname).replace('()', '') if isinstance(item, str) and original_name in item else item
+                    item.replace(original_name, displayname).replace('()', '')
+                    if isinstance(item, str) and original_name in item
+                    else item
                     for item in attr_value
                 ]
                 if attr_name == 'ids':
@@ -168,18 +181,22 @@ class ReplaceDescNameWithDisplayname(SphinxTransform):
 
         if self.debug:
             print(f'Updating fullname: "{original_name}" -> "{displayname}"')
+
         desc_signature['fullname'] = displayname
         self.ids_dict.update(ids_dict)
 
     def update_index_entries(self, index_node, original_name, displayname):
         for i, entry in enumerate(index_node['entries']):
             updated_entry = tuple(
-                item.replace(original_name, displayname).replace('()', '') if isinstance(item, str) and original_name in item else item
+                item.replace(original_name, displayname).replace('()', '')
+                if isinstance(item, str) and original_name in item
+                else item
                 for item in entry
             )
             if updated_entry != entry and self.debug:
                 print(f'Updating index entry {i}: "{entry}" -> "{updated_entry}"')
             index_node['entries'][i] = updated_entry
+
 
 def setup(app):
     app.add_transform(ReplaceDescNameWithDisplayname)

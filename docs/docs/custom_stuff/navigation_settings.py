@@ -1,7 +1,23 @@
-from .python_doc_names import section_titles
 from sphinx.util.osutil import relative_uri
 
-main_classes = ['Base', 'Client', 'Comment', 'Earth model', 'Horizon', 'Interpretation', 'Log', 'Mudlog', 'Project', 'Target line', 'Topset', 'Trajectory', 'Types', 'Well']
+from .python_doc_names import section_titles
+
+main_classes = [
+    'Base',
+    'Client',
+    'Comment',
+    'Earth model',
+    'Horizon',
+    'Interpretation',
+    'Log',
+    'Mudlog',
+    'Project',
+    'Target line',
+    'Topset',
+    'Trajectory',
+    'Types',
+    'Well',
+]
 
 
 def capitalize_after_space(s: str) -> str:

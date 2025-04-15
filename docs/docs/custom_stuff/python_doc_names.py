@@ -13,4 +13,4 @@ section_titles = [
     'trajectory',
     'types',
     'well',
-    ]
+]
