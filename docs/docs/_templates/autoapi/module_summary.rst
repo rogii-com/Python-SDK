@@ -20,7 +20,7 @@
    :widths: 40 60
    :class: summarytable
 
-  {% for obj in cls.children|rejectattr("skip")|list -%}
+{% for obj in cls.children | rejectattr("skip") if not obj.name.startswith('_') -%}
     {%- set sig = (obj.type in ['method', 'function'] and not 'property' in obj.properties) -%}
 
     {%- if obj.type in ['class'] -%}

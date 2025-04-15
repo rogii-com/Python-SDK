@@ -1,23 +1,11 @@
 def skip_methods(app, what, name, obj, skip, options):
     """
-    Delete the selected methods from the documentation.
-    Delete type hints from method arguments.
+    Skip all dunder methods from the documentation.
     """
-    exclusions = (
-        '__iadd__',
-        '__isub__',
-    )
+    if what in ('method', 'attribute'):
+        method_name = name.rsplit('.', 1)[-1]
 
-    exclude = False
+        if method_name.startswith('__') or method_name.startswith('_'):
+            return True
 
-    if '__init__' in name:
-        return False
-
-    if what == 'method':
-        method_name = name.split('.')[2]
-        exclude = method_name in exclusions
-        obj.args = ', '.join([val[1] for val in obj.obj['args']])
-
-    obj.skip = exclude
-
-    return True if exclude else None
+    return None

@@ -13,21 +13,45 @@ from rogii_solo.types import DataList
 class Convertible:
     @staticmethod
     def convert_xy(value: float, measure_units: EMeasureUnits, force_to_meters: bool = False) -> Optional[float]:
+        """Converts a given XY coordinate value based on the specified measurement units.
+
+        :param value: The XY coordinate value to be converted.
+        :param measure_units: The measurement units to use for the conversion.
+        :param force_to_meters: If True, forces the conversion to meters regardless of the current units.
+        :return: The converted XY coordinate value, or None if the input value is None.
+        """
         if value is not None:
             return convert_value(value, measure_units=measure_units, force_to_meters=force_to_meters)
 
     @staticmethod
     def convert_z(value: float, measure_units: EMeasureUnits) -> Optional[float]:
+        """Converts a given Z coordinate value based on the specified measurement units.
+
+        :param value: The Z coordinate value to be converted.
+        :param measure_units: The measurement units to use for the conversion.
+        :return: The converted Z coordinate value, or None if the input value is None.
+        """
         if value is not None:
             return convert_value(value=value, measure_units=measure_units)
 
     @staticmethod
     def convert_angle(value: float) -> Optional[float]:
+        """Converts a given angle value from radians to degrees.
+
+        :param value: The angle value in radians to be converted.
+        :return: The converted angle value in degrees, or None if the input value is None.
+        """
         if value is not None:
             return radians_to_degrees(value)
 
     @staticmethod
     def safe_round(value, precision: int = ROUNDING_PRECISION):
+        """Safely rounds a given value to the specified number of decimal places.
+
+        :param value: The value to be rounded.
+        :param precision: The number of decimal places to round to.
+        :return: The rounded value, or None if the input value is None.
+        """
         if value is not None:
             return round(value, ndigits=precision) + 0  # Convert negative zero to positive
 
@@ -40,16 +64,18 @@ class BaseObject(ABC, Convertible):
     @abstractmethod
     def to_dict(self, *args, **kwargs) -> Dict[str, Any]:
         """
-        Convert object to dict
-        :return
+        Convert the object to a dictionary.
+
+        :return: A dictionary representation of the object.
         """
         pass
 
     @abstractmethod
     def to_df(self, *args, **kwargs) -> DataFrame:
         """
-        Convert object to DataFrame
-        :return
+        Converts the object to a Pandas DataFrame.
+
+        :return: A DataFrame representation of the object.
         """
         pass
 
@@ -171,17 +197,19 @@ class ObjectRepository(list[T]):
 
     def find_by_id(self, value) -> Optional[T]:
         """
-        Find object by ID
-        :param value:
-        :return:
+        Find an object by its unique identifier (UUID).
+
+        :param value: The UUID value to search for.
+        :return: The object with the matching UUID, or None if not found.
         """
         return self._find_by_attr(attr='uuid', value=value)
 
     def find_by_name(self, value) -> Optional[T]:
         """
-        Find object by name
-        :param value:
-        :return:
+        Find an object by its name.
+
+        :param value: The name of the object to search for.
+        :return: The object with the matching name, or None if not found.
         """
         return self._find_by_attr(attr='name', value=value)
 
