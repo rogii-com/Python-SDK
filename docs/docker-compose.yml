@@ -1,7 +1,7 @@
 services:
   sdk-docs:
     build:
-      context: ../
+      context: ..
       dockerfile: docs/Dockerfile
     ports:
       - "80:80"

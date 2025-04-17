@@ -1,8 +1,19 @@
+FROM python:3.10-slim AS builder
+
+WORKDIR /app
+ENV IN_DOCKER=true
+
+COPY docs/requirements.txt ./
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY docs/docs /app/docs
+
+COPY src /app/src
+
+RUN sphinx-build -b html /app/docs /app/syntax_folder
 
 FROM nginx:alpine
 
-# Copy prebuilt Sphinx docs from syntax_folder/ into NGINX web root
-COPY docs/syntax_folder /usr/share/nginx/html
+COPY --from=builder /app/syntax_folder /usr/share/nginx/html
 
-# Custom NGINX config
 COPY docs/nginx/default.conf /etc/nginx/templates/default.conf.template
