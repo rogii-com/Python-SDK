@@ -6,12 +6,12 @@
 import os
 import sys
 
-from custom_stuff.navigation_settings import sidebar_settings
-from custom_stuff.skip_methods import skip_methods
-
 curr_path = os.path.abspath(os.path.dirname(__file__))
 sys.path.insert(0, curr_path)
 sys.path.insert(0, os.path.abspath(os.path.join(curr_path, '../../src')))
+
+from custom_stuff.skip_methods import skip_methods
+from custom_stuff.navigation_settings import sidebar_settings
 
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
