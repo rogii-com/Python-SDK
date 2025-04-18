@@ -7,10 +7,22 @@ default:
     - pip install --upgrade pip
     - pip install .[dev]
 
+include:
+  - project: "infra/ci-templates"
+    ref: "master"
+    file:
+      - rules.yml
+      - vault_auth.yml
+      - build.yml
+      - deploy_k8s.yml
+      - deploy_k8s/envs/deploy_kubesolo_k8s.yml
+      - deploy_k8s/envs/deploy_aws_k8s.yml
+
 stages:
   - test
   - build
   - publish
+  - deploy
 
 test:
   stage: test
@@ -41,3 +53,40 @@ publish:
     TWINE_PASSWORD: $PYPI_TOKEN
   script:
     - twine upload dist/* --verbose
+
+build_python_docs:
+  before_script: []
+  extends:
+    - .build_docker_template
+  variables:
+    BUILD_CONTEXT: ${CI_PROJECT_DIR}
+    DOCKER_FILE: ${CI_PROJECT_DIR}/docs/Dockerfile
+    DOCKER_REPO: ${CI_REGISTRY_IMAGE}/python-docs
+  rules:
+    - !reference [.rules_template, web_manual]
+
+.deploy_variables:
+  variables:
+    KUBERNETES_NAMESPACE_OVERWRITE: python-docs
+    K8S_DEPLOYMENT_DIR: rogii/python-docs
+    DEPLOY_COMPONENTS: "python-docs"
+    IMAGE_NAME: ${CI_REGISTRY_IMAGE}/python-docs
+  needs:
+    - build_python_docs
+  rules:
+    - !reference [.rules_template, web_manual]
+
+deploy_awsstaging_k8s:
+  rules: [when: never]
+
+deploy_kubesolo_k8s:
+  before_script: []
+  environment:
+    name: kubesolo
+    url: https://python.rogii.net
+
+deploy_awsprod_k8s:
+  before_script: []
+  environment:
+    name: awsprod
+    url: https://python.solo.cloud
