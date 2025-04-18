@@ -12,21 +12,48 @@ from rogii_solo.types import DataList
 
 class EarthModel(ComplexObject):
     """
-    Represents an Earth Model, which is a collection of sections and layers
-    associated with a geological interpretation.
+    Represents an :class:`EarthModel`, which is a collection of :class:`EarthModelSection` and :class:`EarthModelLayer`
+    associated with an :class:`~rogii_solo.interpretation.Interpretation`.
+
+    :example:
+
+        .. code-block:: python
+
+            from rogii_solo import SoloClient
+
+            client_id = ... # Input your client ID
+            client_secret = ... # Input your client secret
+
+            solo_client = SoloClient(client_id=client_id, client_secret=client_secret)
+            projects = solo_client.set_project_by_name('Project1')
+            well = projects.wells.find_by_name('Well1')
+            interpretation = well.interpretations.find_by_name('Interpretation1')
+            earth_model = interpretation.earth_models.find_by_name('EarthModel1')
+
+            # Get the Interpretation associated with this Earth Model
+            interpretation = earth_model.interpretation
+            print(interpretation.name)
+
+            # Get the unique ID of the Earth Model
+            earth_model_uuid = earth_model.uuid
+            print(earth_model_uuid)
+
+            # Get the name of the Earth Model
+            earth_model_name = earth_model.name
+            print(earth_model_name)
     """
 
     def __init__(self, papi_client: PapiClient, interpretation: 'rogii_solo.interpretation.Interpretation', **kwargs):
         super().__init__(papi_client)
 
         self.interpretation = interpretation
-        """Geological interpretation object associated with the :class:`EarthModel`."""
+        """:class:`~rogii_solo.interpretation.Interpretation` object associated with the :class:`EarthModel`."""
 
         self.uuid: Optional[str] = None
         """Unique identifier of the :class:`EarthModel`."""
 
         self.name: Optional[str] = None
-        """:class:`EarthModel` name."""
+        """Name of the :class:`EarthModel`."""
 
         self.__dict__.update(kwargs)
 
@@ -35,9 +62,28 @@ class EarthModel(ComplexObject):
     @property
     def sections(self) -> ObjectRepository['EarthModelSection']:
         """
-        Retrieves the sections of the :class:`EarthModel`.
+        Get the Sections of the :class:`EarthModel`.
 
         :return: :class:`ObjectRepository` containing :class:`EarthModelSection` instances.
+
+        :example:
+
+        .. code-block:: python
+
+            from rogii_solo import SoloClient
+
+            client_id = ... # Input your client ID
+            client_secret = ... # Input your client secret
+
+            solo_client = SoloClient(client_id=client_id, client_secret=client_secret)
+            projects = solo_client.set_project_by_name('Project1')
+            well = projects.wells.find_by_name('Well1')
+            interpretation = well.interpretations.find_by_name('Interpretation1')
+            earth_model = interpretation.earth_models.find_by_name('EarthModel1')
+
+            # Get the Sections of the Earth Model
+            sections = earth_model.sections
+            print(sections.to_dict())
         """
         if self._sections is None:
             self._sections = ObjectRepository(
@@ -51,6 +97,25 @@ class EarthModel(ComplexObject):
         Converts the :class:`EarthModel` instance to a dictionary.
 
         :return: Dictionary representation of the :class:`EarthModel`.
+
+        :example:
+
+        .. code-block:: python
+
+            from rogii_solo import SoloClient
+
+            client_id = ... # Input your client ID
+            client_secret = ... # Input your client secret
+
+            solo_client = SoloClient(client_id=client_id, client_secret=client_secret)
+            projects = solo_client.set_project_by_name('Project1')
+            well = projects.wells.find_by_name('Well1')
+            interpretation = well.interpretations.find_by_name('Interpretation1')
+            earth_model = interpretation.earth_models.find_by_name('EarthModel1')
+
+            # Convert the Earth Model to a dictionary
+            earth_model_dict = earth_model.to_dict()
+            print(earth_model_dict)
         """
         return {'uuid': self.uuid, 'name': self.name}
 
@@ -59,6 +124,25 @@ class EarthModel(ComplexObject):
         Converts the :class:`EarthModelLayer` instance to a Pandas DataFrame.
 
         :return: DataFrame representation of the :class:`EarthModel`.
+
+        :example:
+
+        .. code-block:: python
+
+            from rogii_solo import SoloClient
+
+            client_id = ... # Input your client ID
+            client_secret = ... # Input your client secret
+
+            solo_client = SoloClient(client_id=client_id, client_secret=client_secret)
+            projects = solo_client.set_project_by_name('Project1')
+            well = projects.wells.find_by_name('Well1')
+            interpretation = well.interpretations.find_by_name('Interpretation1')
+            earth_model = interpretation.earth_models.find_by_name('EarthModel1')
+
+            # Convert the Earth Model to a DataFrame
+            earth_model_df = earth_model.to_df()
+            print(earth_model_df)
         """
         return DataFrame([self.to_dict()])
 
@@ -84,34 +168,71 @@ class EarthModel(ComplexObject):
 class EarthModelSection(BaseObject):
     """
     Represents a section of an :class:`EarthModel`, containing :class:`EarthModelLayer` and metadata.
+
+    :example:
+
+    .. code-block:: python
+
+        from rogii_solo import SoloClient
+
+        client_id = ... # Input your client ID
+        client_secret = ... # Input your client secret
+
+        solo_client = SoloClient(client_id=client_id, client_secret=client_secret)
+        projects = solo_client.set_project_by_name('Project1')
+        well = projects.wells.find_by_name('Well1')
+        interpretation = well.interpretations.find_by_name('Interpretation1')
+        earth_model = interpretation.earth_models.find_by_name('EarthModel1')
+
+        # Get the first Section of the Earth Model
+        section = earth_model.sections[0]
+        print(section.to_dict())
+
+        # Get the unique ID of the Section
+        section_uuid = section.uuid
+        print(section_uuid)
+
+        # Get the measure units of the project
+        measure_units = section.measure_units
+        print(measure_units)
+
+        # Get the measured depth of the Section
+        section_md = section.md
+        print(section_md)
+
+        # Get the dip angle of the Section
+        section_dip = section.dip
+        print(section_dip)
+
+        # Get the interpretation segment associated with the Section
+        interpretation_segment = section.interpretation_segment
+        print(interpretation_segment)
     """
 
     def __init__(self, earth_model: EarthModel, **kwargs):
         self.earth_model = earth_model
-        """Reference to the :class:`EarthModel` instance this section belongs to."""
+        """Reference to the :class:`EarthModel` instance this :class:`EarthModelSection` belongs to."""
 
         self.measure_units = earth_model.interpretation.well.project.measure_unit
         """Measurement units used in the project."""
 
         self.uuid: Optional[str] = None
-        """Unique identifier of the section."""
+        """Unique identifier of the :class:`EarthModelSection`."""
 
         self.md: Optional[float] = None
-        """Measured depth at which this section is located."""
+        """Measured depth at which this :class:`EarthModelSection` is located."""
 
         self.dip: Optional[float] = None
-        """Dip angle of the formation at this section."""
+        """Dip angle of the formation at this :class:`EarthModelSection`."""
 
         self.interpretation_segment: Optional[Segment] = None
-        """Segment of the interpretation associated with this section."""
+        """Segment of the interpretation associated with this :class:`EarthModelSection`."""
 
         self._raw_layers: DataList = []
-        """Raw layer data as fetched from PAPI."""
 
         self.__dict__.update(kwargs)
 
         self._layers: Optional[ObjectRepository[EarthModelLayer]] = None
-        """Repository of :class:`EarthModelLayer` instances."""
 
     @property
     def layers(self) -> ObjectRepository['EarthModelLayer']:
@@ -119,6 +240,28 @@ class EarthModelSection(BaseObject):
         Retrieves the layers of the :class:`EarthModelSection`.
 
         :return: :class:`ObjectRepository` containing :class:`EarthModelLayer` instances.
+
+        :example:
+
+        .. code-block:: python
+
+            from rogii_solo import SoloClient
+
+            client_id = ... # Input your client ID
+            client_secret = ... # Input your client secret
+
+            solo_client = SoloClient(client_id=client_id, client_secret=client_secret)
+            projects = solo_client.set_project_by_name('Project1')
+            well = projects.wells.find_by_name('Well1')
+            interpretation = well.interpretations.find_by_name('Interpretation1')
+            earth_model = interpretation.earth_models.find_by_name('EarthModel1')
+
+            # Get the first Section of the Earth Model
+            section = earth_model.sections[0]
+
+            # Get the Layers of the Section
+            layers = section.layers
+            print(layers.to_dict())
         """
         if self._layers is None:
             layers = [EarthModelLayer(earth_model_section=self, **self._raw_layers[0])]
@@ -138,8 +281,30 @@ class EarthModelSection(BaseObject):
         """
         Converts the :class:`EarthModelSection` instance to a dictionary.
 
-        :param get_converted: Whether to convert measure units.
+        :param get_converted: (Optional) Whether to convert measure units. Default is True.
         :return: Dictionary representation of the :class:`EarthModelSection`.
+
+        :example:
+
+        .. code-block:: python
+
+            from rogii_solo import SoloClient
+
+            client_id = ... # Input your client ID
+            client_secret = ... # Input your client secret
+
+            solo_client = SoloClient(client_id=client_id, client_secret=client_secret)
+            projects = solo_client.set_project_by_name('Project1')
+            well = projects.wells.find_by_name('Well1')
+            interpretation = well.interpretations.find_by_name('Interpretation1')
+            earth_model = interpretation.earth_models.find_by_name('EarthModel1')
+
+            # Get the first Section of the Earth Model
+            section = earth_model.sections[0]
+
+            # Convert the Section to a dictionary
+            section_dict = section.to_dict()
+            print(section_dict)
         """
         return {
             'uuid': self.uuid,
@@ -153,8 +318,30 @@ class EarthModelSection(BaseObject):
         """
         Converts the :class:`EarthModelSection` instance to a Pandas DataFrame.
 
-        :param get_converted: Whether to convert measure units.
+        :param get_converted: (Optional) Whether to convert measure units. Default is True.
         :return: DataFrame representation of the :class:`EarthModelSection`.
+
+        :example:
+
+        .. code-block:: python
+
+            from rogii_solo import SoloClient
+
+            client_id = ... # Input your client ID
+            client_secret = ... # Input your client secret
+
+            solo_client = SoloClient(client_id=client_id, client_secret=client_secret)
+            projects = solo_client.set_project_by_name('Project1')
+            well = projects.wells.find_by_name('Well1')
+            interpretation = well.interpretations.find_by_name('Interpretation1')
+            earth_model = interpretation.earth_models.find_by_name('EarthModel1')
+
+            # Get the first Section of the Earth Model
+            section = earth_model.sections[0]
+
+            # Convert the Section to a DataFrame
+            section_df = section.to_df()
+            print(section_df)
         """
         return DataFrame([self.to_dict(get_converted)])
 
@@ -172,33 +359,82 @@ class EarthModelSection(BaseObject):
 
 class EarthModelLayer(BaseObject):
     """
-    Represents a layer within an :class:`EarthModelSection`, containing physical properties.
+    Represents a :class:`EarthModelLayer` within an :class:`EarthModelSection`, containing physical properties.
+
+    :example:
+
+    .. code-block:: python
+
+        from rogii_solo import SoloClient
+
+        client_id = ... # Input your client ID
+        client_secret = ... # Input your client secret
+
+        solo_client = SoloClient(client_id=client_id, client_secret=client_secret)
+        projects = solo_client.set_project_by_name('Project1')
+        well = projects.wells.find_by_name('Well1')
+        interpretation = well.interpretations.find_by_name('Interpretation1')
+        earth_model = interpretation.earth_models.find_by_name('EarthModel1')
+
+        # Get the first Section of the Earth Model
+        section = earth_model.sections[0]
+
+        # Get the first Earth Model Layer of the Section
+        layer = section.layers[0]
+
+        # Get the measure units of the project
+        measure_units = layer.measure_units
+        print(measure_units)
+
+        # Get the unique ID of the Earth Model Layer
+        layer_uuid = layer.uuid
+        print(layer_uuid)
+
+        # Get the vertical resistivity of the Earth Model Layer
+        layer_resistivity_vertical = layer.resistivity_vertical
+        print(layer_resistivity_vertical)
+
+        # Get the horizontal resistivity of the Earth Model Layer
+        layer_resistivity_horizontal = layer.resistivity_horizontal
+        print(layer_resistivity_horizontal)
+
+        # Get the true vertical thickness of the Earth Model Layer
+        layer_tvt = layer.tvt
+        print(layer_tvt)
+
+        # Get the calculated thickness of the Earth Model Layer
+        layer_thickness = layer.thickness
+        print(layer_thickness)
+
+        # Get the anisotropy of the Earth Model Layer
+        layer_anisotropy = layer.anisotropy
+        print(layer_anisotropy)
     """
 
     def __init__(self, earth_model_section: EarthModelSection, **kwargs):
         self.earth_model_section: EarthModelSection = earth_model_section
-        """Reference to the EarthModelSection this layer belongs to."""
+        """Reference to the :class:`EarthModelSection` this :class:`EarthModelLayer` belongs to."""
 
         self.measure_units: EMeasureUnits = earth_model_section.earth_model.interpretation.well.project.measure_unit
         """Measurement units used in the project."""
 
         self.uuid: Optional[str] = None
-        """Unique identifier of the layer."""
+        """Unique identifier of the :class:`EarthModelLayer`."""
 
         self.resistivity_vertical: Optional[float] = None
-        """Vertical resistivity of the layer."""
+        """Vertical resistivity of the :class:`EarthModelLayer`."""
 
         self.resistivity_horizontal: Optional[float] = None
-        """Horizontal resistivity of the layer."""
+        """Horizontal resistivity of the :class:`EarthModelLayer`."""
 
         self.tvt: Optional[float] = None  # TODO Replace with TVD when PAPI method is available
-        """True vertical thickness."""
+        """True vertical thickness of the :class:`EarthModelLayer`."""
 
         self.thickness: float = float('inf')
-        """Calculated thickness of the layer."""
+        """Calculated thickness of the :class:`EarthModelLayer`."""
 
         self.anisotropy: Optional[float] = None
-        """Anisotropy of the layer."""
+        """Anisotropy of the :class:`EarthModelLayer`."""
 
         self.__dict__.update(kwargs)
 
@@ -212,8 +448,33 @@ class EarthModelLayer(BaseObject):
         """
         Converts the :class:`EarthModelLayer` instance to a dictionary.
 
-        :param get_converted: Whether to convert measure units.
+        :param get_converted: (Optional) Whether to convert measure units. Default is True.
         :return: Dictionary representation of the :class:`EarthModelLayer`.
+
+        :example:
+
+        .. code-block:: python
+
+            from rogii_solo import SoloClient
+
+            client_id = ... # Input your client ID
+            client_secret = ... # Input your client secret
+
+            solo_client = SoloClient(client_id=client_id, client_secret=client_secret)
+            projects = solo_client.set_project_by_name('Project1')
+            well = projects.wells.find_by_name('Well1')
+            interpretation = well.interpretations.find_by_name('Interpretation1')
+            earth_model = interpretation.earth_models.find_by_name('EarthModel1')
+
+            # Get the first Section of the Earth Model
+            section = earth_model.sections[0]
+
+            # Get the first Earth Model Layer of the Section
+            layer = section.layers[0]
+
+            # Convert the Earth Model Layer to a dictionary
+            layer_dict = layer.to_dict()
+            print(layer_dict)
         """
         return {
             'tvt': self.safe_round(self.convert_z(self.tvt, measure_units=self.measure_units))
@@ -228,7 +489,32 @@ class EarthModelLayer(BaseObject):
         """
         Converts the :class:`EarthModelLayer` instance to a Pandas DataFrame.
 
-        :param get_converted: Whether to convert measure units.
+        :param get_converted: (Optional) Whether to convert measure units. Default is True.
         :return: DataFrame representation of the :class:`EarthModelLayer`.
+
+        :example:
+
+        .. code-block:: python
+
+            from rogii_solo import SoloClient
+
+            client_id = ... # Input your client ID
+            client_secret = ... # Input your client secret
+
+            solo_client = SoloClient(client_id=client_id, client_secret=client_secret)
+            projects = solo_client.set_project_by_name('Project1')
+            well = projects.wells.find_by_name('Well1')
+            interpretation = well.interpretations.find_by_name('Interpretation1')
+            earth_model = interpretation.earth_models.find_by_name('EarthModel1')
+
+            # Get the first Section of the Earth Model
+            section = earth_model.sections[0]
+
+            # Get the first Earth Model Layer of the Section
+            layer = section.layers[0]
+
+            # Convert the Earth Model Layer to a DataFrame
+            layer_df = layer.to_df()
+            print(layer_df)
         """
         return DataFrame([self.to_dict(get_converted)])
