@@ -3,10 +3,10 @@ services:
     build:
       context: ..
       dockerfile: docs/Dockerfile
+      args:
+        - PYTHONPATH=${PYTHONPATH}
     ports:
       - "80:80"
     container_name: sdk-docs
-    env_file:
-      - .env
     environment:
       - DOCS_DOMAIN=${DOCS_DOMAIN}

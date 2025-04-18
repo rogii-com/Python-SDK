@@ -2,6 +2,8 @@ FROM python:3.10-slim AS builder
 
 WORKDIR /app
 ENV IN_DOCKER=true
+ARG PYTHONPATH
+ENV PYTHONPATH=${PYTHONPATH}
 
 COPY docs/requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
@@ -9,8 +11,6 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY docs/docs /app/docs
 
 COPY src /app/src
-
-ENV PYTHONPATH=/app/docs
 
 RUN sphinx-build -b html /app/docs /app/syntax_folder
 
