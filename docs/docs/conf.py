@@ -1,11 +1,12 @@
+
 # Configuration file for the Sphinx documentation builder.
 #
 # For the full list of built-in configuration values, see the documentation:
 # https://www.sphinx-doc.org/en/master/usage/configuration.html
-
 import os
-from custom_stuff.skip_methods import skip_methods
+
 from custom_stuff.navigation_settings import sidebar_settings
+from custom_stuff.skip_methods import skip_methods
 
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
@@ -30,7 +31,6 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
-
 html_static_path = ['_static']
 html_theme = 'furo'
 html_favicon = '_static/favicon.svg'
@@ -51,7 +51,6 @@ html_sidebars = {
         "sidebar/scroll-end.html",
     ]
 }
-
 # Creating html for property/method
 rst_prolog = """
 .. role:: summarylabel-method
