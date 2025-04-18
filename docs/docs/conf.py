@@ -4,8 +4,8 @@
 # https://www.sphinx-doc.org/en/master/usage/configuration.html
 
 import os
-from custom_stuff.skip_methods import skip_methods  # noqa: E402
-from custom_stuff.navigation_settings import sidebar_settings  # noqa: E402
+from custom_stuff.skip_methods import skip_methods
+from custom_stuff.navigation_settings import sidebar_settings
 
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
