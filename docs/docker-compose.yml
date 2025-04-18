@@ -6,5 +6,7 @@ services:
     ports:
       - "80:80"
     container_name: sdk-docs
+    env_file:
+      - .env
     environment:
       - DOCS_DOMAIN=${DOCS_DOMAIN}
