@@ -3,14 +3,15 @@
 # For the full list of built-in configuration values, see the documentation:
 # https://www.sphinx-doc.org/en/master/usage/configuration.html
 
+# isort: off
 import os
 import sys
 
 curr_path = os.path.abspath(os.path.dirname(__file__))
 sys.path.insert(0, curr_path)
 sys.path.insert(0, os.path.abspath(os.path.join(curr_path, '../../src')))
+# isort: on
 
-# noqa: E402 — отключаем flake8 ругань только тут
 from custom_stuff.skip_methods import skip_methods  # noqa: E402
 from custom_stuff.navigation_settings import sidebar_settings  # noqa: E402
 
