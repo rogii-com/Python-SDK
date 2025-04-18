@@ -8,10 +8,7 @@ from rogii_solo.log import LogPoint, LogPointRepository
 from rogii_solo.papi.client import PapiClient
 from rogii_solo.types import DataList
 
-WellType = Union[
-    'rogii_solo.well.Well',
-    'rogii_solo.well.Typewell',
-]
+WellType = Union['rogii_solo.well.Well', 'rogii_solo.well.Typewell']
 
 
 class Mudlog(ComplexObject):
