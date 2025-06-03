@@ -1,0 +1,4 @@
+sphinx==7.4.7
+sphinx-autoapi==3.2.1
+sphinx-copybutton==0.5.2
+furo==2024.8.6
