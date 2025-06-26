@@ -11,7 +11,7 @@ COPY docs/docs /app/docs
 
 COPY src /app/src
 
-RUN sphinx-build -b html /app/docs /app/syntax_folder
+RUN sphinx-build -a -E -b html /app/docs /app/syntax_folder
 
 FROM public.ecr.aws/rogii/nginx:mainline
 

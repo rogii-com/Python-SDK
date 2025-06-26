@@ -5,7 +5,7 @@
 import os
 
 from custom_stuff.navigation_settings import sidebar_settings
-from custom_stuff.skip_methods import skip_methods
+from custom_stuff.skip_methods import skip_inline_theme_script, skip_methods
 
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
@@ -35,7 +35,7 @@ html_theme = 'furo'
 html_favicon = '_static/favicon.svg'
 html_logo = '_static/logo.svg'
 html_css_files = ['custom.css']
-html_js_files = ['replace_logo.js']
+html_js_files = ['replace_logo.js', 'theme-init.js']
 html_title = project_name
 html_show_sourcelink = False
 html_show_sphinx = False
@@ -84,5 +84,6 @@ autoapi_options = [
 
 
 def setup(sphinx):
+    sphinx.connect('build-finished', skip_inline_theme_script)
     sphinx.connect('html-page-context', sidebar_settings)
     sphinx.connect('autoapi-skip-member', skip_methods)
