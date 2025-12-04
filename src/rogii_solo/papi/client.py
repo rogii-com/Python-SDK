@@ -1460,6 +1460,41 @@ class PapiClient(SdkPapiClient):
         """
         return self.parse_papi_data(self.fetch_well_attributes(well_id=well_id, **kwargs))
 
+    def get_typewell_data(self, typewell_id: str, **kwargs) -> PapiData:
+        """
+        Get data for a specific type well.
+
+        :param typewell_id: UUID of the type well.
+
+        :return: Type well data.
+
+        :example:
+
+        .. code-block:: python
+
+            from rogii_solo.papi.client import PapiClient
+            from rogii_solo.papi.types import SettingsAuth
+
+            client_id = ... # Input your client ID
+            client_secret = ... # Input your client secret
+            papi_domain_name = ... # Input your papi domain name
+            proxies = ... # Input your proxy or None
+
+            client_auth = SettingsAuth(
+                client_id=client_id,
+                client_secret=client_secret,
+                papi_domain_name=papi_domain_name,
+                proxies=None
+            )
+            client = PapiClient(client_auth)
+            typewell_id = 'TypewellUUID'
+
+            # Get data for a specific type well
+            typewell = client.get_typewell_data(typewell_id=typewell_id)
+            print(typewell)
+        """
+        return self.parse_papi_data(self.fetch_typewell(typewell_id=typewell_id, **kwargs))
+
     def _gen_data_page(self, func: Callable, **kwargs) -> PapiDataIterator:
         offset = kwargs.pop('offset', None) or self.DEFAULT_OFFSET
         limit = kwargs.pop('limit', None) or self.DEFAULT_LIMIT
