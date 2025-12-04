@@ -1835,3 +1835,8 @@ EARTH_MODEL_SECTIONS_DATA_RESPONSE = {
         'uuid': '461ac4d4-3e2a-433b-8708-961ce9806375',
     },
 }
+
+TYPEWELL_DATA_RESPONSE = {
+    'shift': {'val': 100.0},
+    'uuid': TYPEWELL_ID,
+}

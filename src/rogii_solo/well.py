@@ -858,16 +858,11 @@ class Well(ComplexObject):
 
     def _get_linked_typewells_data(self) -> DataList:
         linked_typewells_data = []
-        project_typewells_data = self._papi_client.get_project_typewells_data(project_id=self.project.uuid)
         well_typewells_data = self._papi_client.get_well_linked_typewells_data(well_id=self.uuid)
 
-        def get_shift(typewell_id: str, typewells_data: DataList) -> Optional[float]:
-            for typewell_data in typewells_data:
-                if typewell_data['typewell_id'] == typewell_id:
-                    return typewell_data['shift']
-
-        for typewell_data in project_typewells_data:
-            shift = get_shift(typewell_id=typewell_data['uuid'], typewells_data=well_typewells_data)
+        for linked_typewell_data in well_typewells_data:
+            typewell_data = self._papi_client.get_typewell_data(typewell_id=linked_typewell_data['typewell_id'])
+            shift = linked_typewell_data.get('shift')
 
             if shift is not None:
                 linked_typewells_data.append({**typewell_data, 'shift': shift})

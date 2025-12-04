@@ -2214,6 +2214,25 @@ class PapiClient(BasePapiClient):
             headers=headers,
         )
 
+    def fetch_typewell(self, typewell_id: str, headers: Optional[Dict] = None):
+        """
+        Fetches type well data
+
+        :param typewell_id: UUID of the type well.
+        :param headers: Optional additional HTTP headers.
+
+        :example:
+
+        .. code-block:: python
+
+            # Fetch type well data
+            client.fetch_typewell(typewell_id='TypewellUUID')
+        """
+        return self._send_request(
+            url=f'typewells/{typewell_id}/raw',
+            headers=headers,
+        )
+
     def replace_well_trajectory(
         self,
         well_id: str,
